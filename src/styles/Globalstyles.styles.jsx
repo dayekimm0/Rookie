@@ -20,6 +20,7 @@ const GlobalStyles = createGlobalStyle`
   :root {
     --light: #fff;
     --dark: #111;
+    --bg: #222;
   }
 
   html {
@@ -27,7 +28,16 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    font-family: "Figtree", "Pretendard", sans-serif;
     font-size: 1.6rem;
+  }
+
+  .inner {
+    margin: 0 5%;
+
+    @media screen and (max-width: 1024px) {
+      
+    }
   }
 `;
 
