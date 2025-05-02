@@ -20,6 +20,18 @@ const GlobalStyles = createGlobalStyle`
   :root {
     --light: #fff;
     --dark: #111;
+    --bg: #222;
+    --main:#FFEC00;
+    --gray1: #111;
+    --gray3: #333;
+    --gray6: #666;
+    --gray8: #888;
+    --grayC: #ccc;
+    --grayD: #ddd;
+    --grayE: #eee;
+    --grayF5: #f5f5f5;
+    --grayFA: #fafafa;
+    --red: #E22531;
   }
 
   html {
@@ -27,8 +39,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    font-family: "Figtree", "Pretendard", sans-serif;
     font-size: 1.6rem;
   }
+
 `;
 
 export default GlobalStyles;
