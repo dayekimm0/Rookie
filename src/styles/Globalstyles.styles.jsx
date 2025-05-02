@@ -43,6 +43,19 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.6rem;
   }
 
+  .inner {
+    margin: 0 5%;
+
+    @media screen and (max-width: 1024px) {
+      
+    }
+  }
+.dIZTvc  {
+  border-bottom: none;
+}
+.iqcOxY:not(:last-of-type) {
+  border-bottom: none;
+}
 `;
 
 export default GlobalStyles;
