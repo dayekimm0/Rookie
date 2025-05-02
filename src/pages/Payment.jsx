@@ -1,7 +1,8 @@
 import React from "react";
+import styled from "styled-components";
 
 const Payment = () => {
-  return <div>명관</div>;
+  return <></>;
 };
 
 export default Payment;
