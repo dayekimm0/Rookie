@@ -88,6 +88,8 @@ const User = styled.div`
   height: 300px;
   border-radius: 8px;
   border: 1px solid var(--gray6);
+  background: var(--light);
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.1);
   right: -3%;
   top: 90%;
   position: absolute;
