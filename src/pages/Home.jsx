@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import RankingTable from "../components/Home/RankingTable";
+import Header from "../components/Header";
 
 const Container = styled.div`
   width: 100%;
@@ -11,6 +12,7 @@ const Container = styled.div`
 const Home = () => {
   return (
     <Container>
+      <Header />
       Home 폰트 테스트
       <RankingTable />
     </Container>

@@ -1,16 +1,15 @@
-import { useState } from "react";
 import GlobalStyles from "./styles/Globalstyles.styles";
-import Cart from "./pages/Cart";
+import { Outlet } from "react-router-dom";
 import Home from "./pages/Home";
 
-function App() {
+function Root() {
   return (
     <>
       <GlobalStyles />
-      <Cart />
+      <Outlet />
       <Home />
     </>
   );
 }
 
-export default App;
+export default Root;
