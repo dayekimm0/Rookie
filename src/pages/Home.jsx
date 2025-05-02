@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import RankingTable from "../components/Home/RankingTable";
-import Header from "../components/Header";
+import MainSlide from "../components/Home/MainSlide";
 
 const Container = styled.div`
+  padding-top: 220px;
   width: 100%;
   height: 100vh;
   background: var(--bg);
@@ -12,8 +13,7 @@ const Container = styled.div`
 const Home = () => {
   return (
     <Container>
-      <Header />
-      Home 폰트 테스트
+      <MainSlide />
       <RankingTable />
     </Container>
   );
