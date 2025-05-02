@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import rookie_logo from "../images/logos/Rookie_logo.svg";
 import google_icon from "../images/icons/google_icon.svg";
 import kakao_talk from "../images/icons/kakao-talk.svg";
@@ -146,7 +147,9 @@ const Login = () => {
             <Input type="text" placeholder="아이디" />
             <Input type="password" placeholder="비밀번호" />
             <UnderInputWrapper>
-              <UnderInputBtn>계정만들기</UnderInputBtn>
+              <Link to={"/logon"}>
+                <UnderInputBtn>계정만들기</UnderInputBtn>
+              </Link>
               <UnderInputLine />
               <UnderInputBtn>아이디 • 비밀번호 찾기</UnderInputBtn>
             </UnderInputWrapper>
