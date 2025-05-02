@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { getEmblem } from "../../util";
+import DataTable from "react-data-table-component";
+import { kboTableCol, kboTableData } from "./kboTableDB";
 
 const Section = styled.section`
   margin-top: 40px;
@@ -10,48 +12,54 @@ const Section = styled.section`
   }
 `;
 
-console.log(getEmblem(3));
+const customStyles = {
+  table: {
+    style: {
+      borderTop: "1px solid #333",
+      borderRight: "1px solid #333",
+    },
+  },
+  headCells: {
+    style: {
+      backgroundColor: "var(--dark)",
+      borderLeft: "1px solid #333",
+      borderBottom: "1px solid #333",
+      color: "#ddd",
+      fontSize: "1.6rem",
+      minHeight: "64px",
+    },
+  },
+  cells: {
+    style: {
+      backgroundColor: "var(--bg)",
+      borderBottom: "none",
+      borderLeft: "1px solid #333",
+      fontSize: "1.5rem",
+      color: "#eee",
+      padding: "0",
+    },
+  },
+  rows: {
+    style: {
+      // border: "1px solid #fff",
+      borderBottom: "1px solid #333",
+      backgroundColor: "var(--bg)",
+      color: "var(--light)",
+      minHeight: "64px", // 행 높이
+    },
+  },
+};
 
 const RankingTable = () => {
   return (
     <Section>
       <div className="inner">
         <h3>리그 순위표</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>팀순위</th>
-              <th>경기</th>
-              <th>승</th>
-              <th>패</th>
-              <th>무</th>
-              <th>승률</th>
-              <th>게임차</th>
-              <th>연속</th>
-              <th>타율</th>
-              <th>평균자책</th>
-              <th>최근 10경기</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>
-                <span>1</span>
-                <img src={getEmblem(3)} alt="" />
-              </th>
-              <th>경기</th>
-              <th>승</th>
-              <th>패</th>
-              <th>무</th>
-              <th>승률</th>
-              <th>게임차</th>
-              <th>연속</th>
-              <th>타율</th>
-              <th>평균자책</th>
-              <th>최근 10경기</th>
-            </tr>
-          </tbody>
-        </table>
+        <DataTable
+          columns={kboTableCol}
+          data={kboTableData}
+          customStyles={customStyles}
+        />
       </div>
     </Section>
   );

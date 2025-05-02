@@ -39,6 +39,12 @@ const GlobalStyles = createGlobalStyle`
       
     }
   }
+.dIZTvc  {
+  border-bottom: none;
+}
+.iqcOxY:not(:last-of-type) {
+  border-bottom: none;
+}
 `;
 
 export default GlobalStyles;

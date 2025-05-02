@@ -1,3 +1,4 @@
+import emblem_kbo from "./images/emblem/emblem_kbo.svg";
 import emblem_kiaT from "./images/emblem/emblem_kiaT.svg";
 import emblem_samsungL from "./images/emblem/emblem_samsungL.svg";
 import emblem_lgT from "./images/emblem/emblem_lgT.svg";
@@ -12,6 +13,8 @@ import emblem_kiwoomH from "./images/emblem/emblem_kiwoomH.svg";
 export const getEmblem = (emblemName) => {
   const targetEmblem = String(emblemName);
   switch (targetEmblem) {
+    case "0":
+      return emblem_kbo;
     case "1":
       return emblem_kiaT;
     case "2":
