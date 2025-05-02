@@ -1,12 +1,13 @@
+import Header from "./components/Header";
 import GlobalStyles from "./styles/Globalstyles.styles";
 
-function App() {
+function Root() {
   return (
     <>
       <GlobalStyles />
-      <h1>hello</h1>
+      <Header />
     </>
   );
 }
 
-export default App;
+export default Root;
