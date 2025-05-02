@@ -4,6 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
   width: 100%;
   height: 100vh;
+  font-family: "Pretendard";
 `;
 
 const WingBanner = styled.div`
@@ -13,7 +14,16 @@ const WingBanner = styled.div`
   width: 100%;
   max-width: 570px;
   padding: 60px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
+  background: var(--grayFA);
+`;
+
+const SubTitle = styled.h2`
+  font-size: 1.8rem;
+  font-weight: 600;
 `;
 
 const SaleInfo = styled.div`
@@ -29,8 +39,65 @@ const CouponList = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--grayC);
   border-radius: 4px;
+  background: var(--light);
+`;
+
+const PriceInfo = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  span {
+    width: 100%;
+    height: 1px;
+    background: var(--grayC);
+  }
+`;
+
+const PriceList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    li {
+      font-size: 1.4rem;
+    }
+  }
+`;
+
+const TotalPrice = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  p {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  gap: 10px;
+  input {
+    width: 220px;
+    height: 60px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.8rem;
+    font-weight: 500;
+    &:nth-child(1) {
+      background: var(--main);
+    }
+    &:nth-child(2) {
+      background: var(--dark);
+      color: var(--light);
+    }
+  }
 `;
 
 const Cart = () => {
@@ -38,11 +105,37 @@ const Cart = () => {
     <Container>
       <WingBanner>
         <SaleInfo>
-          <h2>할인 정보</h2>
+          <SubTitle>할인 정보</SubTitle>
           <CouponList>
             <h2>사용 가능한 쿠폰 3장</h2>
           </CouponList>
         </SaleInfo>
+        <PriceInfo>
+          <SubTitle>결제 정보</SubTitle>
+          <PriceList>
+            <ul>
+              <li>상품금액</li>
+              <li>50,000원</li>
+            </ul>
+            <ul>
+              <li>할인금액</li>
+              <li>2,000원</li>
+            </ul>
+            <ul>
+              <li>배송비</li>
+              <li>무료</li>
+            </ul>
+          </PriceList>
+          <span></span>
+          <TotalPrice>
+            <p>총 결제금액</p>
+            <p>48,000원</p>
+          </TotalPrice>
+        </PriceInfo>
+        <Buttons>
+          <input type="submit" value="선택상품주문" />
+          <input type="submit" value="전체상품주문" />
+        </Buttons>
       </WingBanner>
     </Container>
   );
