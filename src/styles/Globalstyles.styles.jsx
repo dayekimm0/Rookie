@@ -43,6 +43,10 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.6rem;
   }
 
+  #root {
+    height: 100%;
+  }
+  
   .inner {
     margin: 0 5%;
 
