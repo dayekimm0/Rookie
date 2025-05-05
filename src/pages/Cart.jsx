@@ -14,7 +14,7 @@ const ItemList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
-  padding-top: 15%;
+  padding-top: 5%;
 `;
 
 const Title = styled.h2`
