@@ -4,11 +4,12 @@ import DataTable from "react-data-table-component";
 import { kboTableCol, kboTableData } from "./kboTableDB";
 
 const Section = styled.section`
-  margin-top: 40px;
+  margin-top: 120px;
   color: #fff;
   h3 {
     font-size: 3rem;
     font-weight: bold;
+    margin-bottom: 40px;
   }
 `;
 
