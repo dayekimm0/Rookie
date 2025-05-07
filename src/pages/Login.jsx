@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import rookie_logo from "../images/logos/Rookie_logo.svg";
 import google_icon from "../images/icons/google_icon.svg";
 import kakao_talk from "../images/icons/kakao-talk.svg";
 import naver_icon from "../images/icons/naver_icon.svg";
 
+//style 시작
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -96,7 +97,7 @@ const SnsWrapper = styled.div`
   margin-bottom: 30px;
 `;
 
-const SnsLine = styled.span`
+const Line = styled.span`
   display: inline-block;
   width: 100%;
   height: 1px;
@@ -135,6 +136,11 @@ const LoginBtn = styled.button`
 `;
 
 const Login = () => {
+const logonnavigation = useNavigate();
+const handlelogonclick = ()=>{
+  logonnavigation("/logon")
+};
+
   return (
     <Container>
       <Inner>
@@ -147,15 +153,13 @@ const Login = () => {
             <Input type="text" placeholder="아이디" />
             <Input type="password" placeholder="비밀번호" />
             <UnderInputWrapper>
-              <Link to={"/logon"}>
-                <UnderInputBtn>계정만들기</UnderInputBtn>
-              </Link>
+                <UnderInputBtn onClick={handlelogonclick}>계정만들기</UnderInputBtn>
               <UnderInputLine />
               <UnderInputBtn>아이디 • 비밀번호 찾기</UnderInputBtn>
             </UnderInputWrapper>
           </InputWrapper>
           <SnsWrapper>
-            <SnsLine />
+            <Line />
             <SnsLogin>SNS 로그인</SnsLogin>
           </SnsWrapper>
           <SnsLogoWrapper>
