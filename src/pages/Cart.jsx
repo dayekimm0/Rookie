@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -274,10 +275,11 @@ const TotalPrice = styled.div`
 `;
 
 const Buttons = styled.div`
+  width: 100%;
   display: flex;
   gap: 10px;
   input {
-    width: 220px;
+    width: 100%;
     height: 60px;
     border: none;
     border-radius: 4px;
@@ -493,7 +495,7 @@ const Cart = () => {
         </PriceInfo>
         <Buttons>
           <input type="submit" value="선택상품주문" />
-          <input type="submit" value="전체상품주문" />
+          <input type="submit" value="선택상품주문" />
         </Buttons>
       </WingBanner>
     </Container>
