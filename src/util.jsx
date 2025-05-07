@@ -4,7 +4,7 @@ import emblem_samsungL from "./images/emblem/emblem_samsungL.svg";
 import emblem_lgT from "./images/emblem/emblem_lgT.svg";
 import emblem_doosanB from "./images/emblem/emblem_doosanB.svg";
 import emblem_ktW from "./images/emblem/emblem_ktW.svg";
-import emblem_ssgL from "./images/emblem/emblem_samsungL.svg";
+import emblem_ssgL from "./images/emblem/emblem_ssgL.svg";
 import emblem_lotteG from "./images/emblem/emblem_lotteG.svg";
 import emblem_hanwhaE from "./images/emblem/emblem_hanwhaE.svg";
 import emblem_ncD from "./images/emblem/emblem_ncD.svg";
