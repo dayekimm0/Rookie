@@ -1,8 +1,8 @@
 import GlobalStyles from "./styles/Globalstyles.styles";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Lenis from "lenis";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const ContentWrapper = styled.div`
@@ -14,6 +14,8 @@ const ContentWrapper = styled.div`
 function Root() {
   const [isHeaderActive, setIsHeaderActive] = useState(false);
   const [prevScroll, setPrevScroll] = useState(0);
+  const location = useLocation();
+  const hideHeaderPath = ["/login","/logon"];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +31,7 @@ function Root() {
 
       setPrevScroll(currentScroll);
     };
+
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -51,10 +54,15 @@ function Root() {
   return (
     <>
       <GlobalStyles />
-      <Header isActive={isHeaderActive} />
-      <ContentWrapper>
-        <Outlet />
-      </ContentWrapper>
+      {!hideHeaderPath.includes(location.pathname) &&  
+      (<>
+        <Header isActive={isHeaderActive} />
+          <ContentWrapper>
+          <Outlet />
+        </ContentWrapper>
+        </>
+      )}
+      {hideHeaderPath.includes(location.pathname) && <Outlet />}
     </>
   );
 }
