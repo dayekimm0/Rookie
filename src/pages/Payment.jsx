@@ -27,6 +27,7 @@ const DeliveryInfo = styled.form`
   flex-direction: column;
   width: 100%;
   max-width: 1010px;
+  gap: 20px;
   span {
     width: 100%;
     height: 1px;
@@ -38,7 +39,105 @@ const InfoTitle = styled.h2`
   font-size: 2.4rem;
   font-weight: 600;
   padding-left: 1%;
-  margin-bottom: 10px;
+  margin-bottom: 1%;
+`;
+
+const DeliveryTitle = styled.h2`
+  font-size: 1.8rem;
+  font-weight: 600;
+  transform: translateY(150%);
+`;
+
+const DeliveryDetail = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding: 0 1%;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  max-width: 800px;
+  height: 70px;
+  padding-left: 2%;
+  border: 1px solid var(--grayC);
+  border-radius: 4px;
+  font-size: 1.6rem;
+  font-weight: 400;
+  &::placeholder {
+    opacity: 1;
+    font-family: "Pretendard";
+    font-size: 1.6rem;
+    font-weight: 400;
+    transition: all 0.3s;
+  }
+  &:focus {
+    &::placeholder {
+      opacity: 0;
+    }
+  }
+`;
+
+const DeliveryPlace = styled.div`
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const PostInput = styled.div`
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  input[type="text"] {
+    width: 100%;
+    max-width: 540px;
+  }
+  input[type="button"] {
+    width: 100%;
+    max-width: 240px;
+    background: var(--dark);
+    color: var(--light);
+    cursor: pointer;
+  }
+`;
+
+const CallInput = styled.div`
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  select {
+    width: 100%;
+    padding: 0 2%;
+    background: var(--grayF5);
+    border: 1px solid var(--grayC);
+    border-radius: 4px;
+    font-family: "Pretendard";
+    font-size: 1.6rem;
+    font-weight: 400;
+  }
+  input[type="text"] {
+    padding: 0;
+    text-align: center;
+  }
+`;
+
+const Request = styled.select`
+  width: 100%;
+  max-width: 800px;
+  height: 70px;
+  padding: 0 2%;
+  background: var(--grayF5);
+  border: 1px solid var(--grayC);
+  border-radius: 4px;
+  font-family: "Pretendard";
+  font-size: 1.6rem;
+  font-weight: 400;
 `;
 
 const WingBanner = styled.form`
@@ -133,6 +232,51 @@ const Payment = () => {
         <DeliveryInfo>
           <InfoTitle>배송지 정보</InfoTitle>
           <span></span>
+          <DeliveryDetail>
+            <DeliveryTitle>배송지명</DeliveryTitle>
+            <Input placeholder="배송지 이름을 입력해주세요." />
+          </DeliveryDetail>
+          <DeliveryDetail>
+            <DeliveryTitle>수령인</DeliveryTitle>
+            <Input placeholder="수령인 이름을 입력해주세요." />
+          </DeliveryDetail>
+          <DeliveryDetail>
+            <DeliveryTitle>배송주소</DeliveryTitle>
+            <DeliveryPlace>
+              <PostInput>
+                <Input type="text" placeholder="우편번호" />
+                <Input type="button" value="우편번호 검색" />
+              </PostInput>
+              <Input placeholder="주소" />
+              <Input placeholder="상세주소" />
+            </DeliveryPlace>
+          </DeliveryDetail>
+          <DeliveryDetail>
+            <DeliveryTitle>연락처</DeliveryTitle>
+            <CallInput>
+              <select>
+                <option selected disabled></option>
+                <option value="010">010</option>
+                <option value="011">011</option>
+                <option value="012">012</option>
+                <option value="013">013</option>
+              </select>
+              <Input type="text" placeholder="1234" />
+              <Input type="text" placeholder="5678" />
+            </CallInput>
+          </DeliveryDetail>
+          <DeliveryDetail>
+            <DeliveryTitle>수령인</DeliveryTitle>
+            <Request>
+              <option selected disabled>
+                배송 요청사항을 선택해주세요.
+              </option>
+              <option value="guard">경비실에 맡겨주세요.</option>
+              <option value="door">문 앞에 놔주세요.</option>
+              <option value="call">배송 전에 연락 주세요.</option>
+              <option value="box">택배함에 넣어주세요.</option>
+            </Request>
+          </DeliveryDetail>
         </DeliveryInfo>
       </ItemList>
       <WingBanner>
