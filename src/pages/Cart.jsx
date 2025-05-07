@@ -49,6 +49,9 @@ const Menu = styled.div`
         display: flex;
         align-items: center;
         gap: 5px;
+        input[type="checkbox"] {
+          margin-left: 5%;
+        }
       }
       &:nth-child(2) {
         width: 100%;
@@ -86,6 +89,7 @@ const CustomCheckbox = styled.input`
   height: 20px;
   appearance: none;
   border: 1px solid var(--grayD);
+  border-radius: 2px;
   cursor: pointer;
   position: relative;
   &:checked {
@@ -124,20 +128,18 @@ const Thumbnail = styled.div`
   max-width: 140px;
   height: 140px;
   position: relative;
-  border-radius: 8px;
-  overflow: hidden;
+  border: none;
   input[type="checkbox"] {
     position: absolute;
     top: 2%;
     left: 2%;
+    border-radius: 2px;
   }
 `;
 
 const ItemImage = styled.img`
   width: 100%;
   height: 100%;
-  background: var(--dark);
-  object-fit: cover;
 `;
 
 const ItemInfo = styled.ul`
@@ -317,7 +319,7 @@ const Cart = () => {
           </Menu>
           <Item>
             <Thumbnail>
-              <ItemImage />
+              <ItemImage src="https://twinscorestore.co.kr/web/product/big/202504/5e799a1aeb0467ed583120db13e790db.jpg" />
               <CustomCheckbox type="checkbox" />
             </Thumbnail>
             <ItemInfo>
@@ -338,112 +340,7 @@ const Cart = () => {
           </Item>
           <Item>
             <Thumbnail>
-              <ItemImage />
-              <CustomCheckbox type="checkbox" />
-            </Thumbnail>
-            <ItemInfo>
-              <TeamName>LG트윈스</TeamName>
-              <ProductName>
-                최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)
-              </ProductName>
-            </ItemInfo>
-            <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
-              <OptionChange>옵션 변경</OptionChange>
-            </ItemOption>
-            <ItemPrice>50,000원</ItemPrice>
-            <MultiPrice>50,000원</MultiPrice>
-          </Item>
-          <Item>
-            <Thumbnail>
-              <ItemImage />
-              <CustomCheckbox type="checkbox" />
-            </Thumbnail>
-            <ItemInfo>
-              <TeamName>LG트윈스</TeamName>
-              <ProductName>
-                최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)
-              </ProductName>
-            </ItemInfo>
-            <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
-              <OptionChange>옵션 변경</OptionChange>
-            </ItemOption>
-            <ItemPrice>50,000원</ItemPrice>
-            <MultiPrice>50,000원</MultiPrice>
-          </Item>
-          <Item>
-            <Thumbnail>
-              <ItemImage />
-              <CustomCheckbox type="checkbox" />
-            </Thumbnail>
-            <ItemInfo>
-              <TeamName>LG트윈스</TeamName>
-              <ProductName>
-                최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)
-              </ProductName>
-            </ItemInfo>
-            <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
-              <OptionChange>옵션 변경</OptionChange>
-            </ItemOption>
-            <ItemPrice>50,000원</ItemPrice>
-            <MultiPrice>50,000원</MultiPrice>
-          </Item>
-          <Item>
-            <Thumbnail>
-              <ItemImage />
-              <CustomCheckbox type="checkbox" />
-            </Thumbnail>
-            <ItemInfo>
-              <TeamName>LG트윈스</TeamName>
-              <ProductName>
-                최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)
-              </ProductName>
-            </ItemInfo>
-            <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
-              <OptionChange>옵션 변경</OptionChange>
-            </ItemOption>
-            <ItemPrice>50,000원</ItemPrice>
-            <MultiPrice>50,000원</MultiPrice>
-          </Item>
-          <Item>
-            <Thumbnail>
-              <ItemImage />
-              <CustomCheckbox type="checkbox" />
-            </Thumbnail>
-            <ItemInfo>
-              <TeamName>LG트윈스</TeamName>
-              <ProductName>
-                최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)
-              </ProductName>
-            </ItemInfo>
-            <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
-              <OptionChange>옵션 변경</OptionChange>
-            </ItemOption>
-            <ItemPrice>50,000원</ItemPrice>
-            <MultiPrice>50,000원</MultiPrice>
-          </Item>
-          <Item>
-            <Thumbnail>
-              <ItemImage />
+              <ItemImage src="https://twinscorestore.co.kr/web/product/big/202504/afe063e607c5f8c4ff6fda3a8c4fb1ed.jpg" />
               <CustomCheckbox type="checkbox" />
             </Thumbnail>
             <ItemInfo>
@@ -495,7 +392,7 @@ const Cart = () => {
         </PriceInfo>
         <Buttons>
           <input type="submit" value="선택상품주문" />
-          <input type="submit" value="선택상품주문" />
+          <input type="submit" value="전체상품주문" />
         </Buttons>
       </WingBanner>
     </Container>
