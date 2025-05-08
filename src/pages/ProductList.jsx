@@ -1,38 +1,51 @@
 import React from "react";
 import styled from "styled-components";
 import ReactPlayer from "react-player";
+import headerbg from "../images/banners/banner-headerbg.png";
+import ProductCard from "../components/ProductCard";
 
 const Container = styled.div`
   width: 1920px;
   height: 1000%;
   position: relative;
 `;
+const BannerBox = styled.div`
+  position: relative;
+  height: 500px;
+`;
 
 const Banner = styled.div`
   width: 100%;
-  height: 600px;
+  height: 500px;
   overflow: hidden;
-  position: relative;
-  background: #111;
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 500px;
+    background: rgba(0, 0, 0, 0.8);
+    top: 0;
+    left: 0;
+  }
 `;
 
-// const BannerPlayer = styled(ReactPlayer)`
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   width: 100vw !important;
-//   height: auto !important;
-//   transform: translate(-50%, -50%);
-//   video {
-//     object-fit: cover;
-//   }
-// `;
+const BannerPlayer = styled(ReactPlayer)`
+  position: absolute;
+
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px !important;
+  height: 500px !important;
+  video {
+    object-fit: cover;
+  }
+`;
 
 const Category = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 20px;
   gap: 20px;
 `;
 
@@ -68,7 +81,7 @@ const SelectSort = styled.option`
 
 const Products = styled.div`
   position: absolute;
-  top: 10%;
+  top: 8%;
   gap: 10%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -76,48 +89,22 @@ const Products = styled.div`
   align-items: center;
 `;
 
-const ProductCard = styled.div`
-  width: 240px;
-  display: flex;
-  flex-direction: column;
-
-  img {
-    width: 240px;
-    height: 320px;
-    margin-bottom: 27px;
-    object-fit: cover;
-  }
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  .brand {
-    margin-bottom: 4px;
-  }
-  .name {
-    margin-bottom: 10px;
-  }
-  .price {
-    font-size: 1.8rem;
-  }
-`;
-
 const ProductList = () => {
   return (
     <>
       <Container>
-        <Banner>
-          {/* <BannerPlayer
+        <BannerBox>
+          <Banner>
+            <img src={headerbg} alt="bg" />
+          </Banner>
+          <BannerPlayer
             url="/videos/banner_kbo.mov"
             playing
             loop
             muted
             // controls={false}
-          /> */}
-        </Banner>
+          />
+        </BannerBox>
         <Sort>
           <SelectSort value="newest">신상품순</SelectSort>
           <SelectSort value="popular">인기순</SelectSort>
@@ -133,50 +120,7 @@ const ProductList = () => {
           <Item>COLLABORATION</Item>
         </Category>
         <Products>
-          <ProductCard>
-            <img
-              src="https://www.twinscorestore.co.kr/web/product/medium/202504/02d39da816205124f12937d598399de4.jpg"
-              alt="lgtwins"
-            />
-            <ProductInfo>
-              <div className="brand">LG 트윈스</div>
-              <div className="name">최고심 콜라보 캐릭터 유니폼(PINK)</div>
-              <div className="price">99,000원</div>
-            </ProductInfo>
-          </ProductCard>
-          <ProductCard>
-            <img
-              src="https://www.twinscorestore.co.kr/web/product/medium/202504/02d39da816205124f12937d598399de4.jpg"
-              alt="lgtwins"
-            />
-            <ProductInfo>
-              <div className="brand">LG 트윈스</div>
-              <div className="name">최고심 콜라보 캐릭터 유니폼(PINK)</div>
-              <div className="price">99,000원</div>
-            </ProductInfo>
-          </ProductCard>
-          <ProductCard>
-            <img
-              src="https://www.twinscorestore.co.kr/web/product/medium/202504/02d39da816205124f12937d598399de4.jpg"
-              alt="lgtwins"
-            />
-            <ProductInfo>
-              <div className="brand">LG 트윈스</div>
-              <div className="name">최고심 콜라보 캐릭터 유니폼(PINK)</div>
-              <div className="price">99,000원</div>
-            </ProductInfo>
-          </ProductCard>
-          <ProductCard>
-            <img
-              src="https://www.twinscorestore.co.kr/web/product/medium/202504/02d39da816205124f12937d598399de4.jpg"
-              alt="lgtwins"
-            />
-            <ProductInfo>
-              <div className="brand">LG 트윈스</div>
-              <div className="name">최고심 콜라보 캐릭터 유니폼(PINK)</div>
-              <div className="price">99,000원</div>
-            </ProductInfo>
-          </ProductCard>
+          <ProductCard />
         </Products>
       </Container>
     </>
