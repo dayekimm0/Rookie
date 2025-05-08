@@ -20,7 +20,6 @@ function Root() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
-      console.log(currentScroll);
 
       if (currentScroll > prevScroll) {
         setIsHeaderActive(true); // 아래로 스크롤 시 active
