@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import rookie_logo from "../images/logos/Rookie_logo.svg";
 import google_icon from "../images/icons/google_icon.svg";
 import kakao_talk from "../images/icons/kakao-talk.svg";
@@ -21,7 +21,6 @@ const Inner = styled.div`
   justify-content: center;
   align-items: center;
   gap: 40px;
-  border: 1px solid #f00;
 `;
 
 const LogoWrapper = styled.div`
@@ -71,6 +70,7 @@ const UnderInputWrapper = styled.div`
   justify-content: end;
   align-items: center;
   gap: 6px;
+  margin-bottom: 40px;
 `;
 
 const UnderInputBtn = styled.button`
@@ -136,10 +136,10 @@ const LoginBtn = styled.button`
 `;
 
 const Login = () => {
-const logonnavigation = useNavigate();
-const handlelogonclick = ()=>{
-  logonnavigation("/logon")
-};
+  const logonnavigation = useNavigate();
+  const handlelogonclick = () => {
+    logonnavigation("/logon");
+  };
 
   return (
     <Container>
@@ -153,7 +153,9 @@ const handlelogonclick = ()=>{
             <Input type="text" placeholder="아이디" />
             <Input type="password" placeholder="비밀번호" />
             <UnderInputWrapper>
-                <UnderInputBtn onClick={handlelogonclick}>계정만들기</UnderInputBtn>
+              <UnderInputBtn onClick={handlelogonclick}>
+                계정만들기
+              </UnderInputBtn>
               <UnderInputLine />
               <UnderInputBtn>아이디 • 비밀번호 찾기</UnderInputBtn>
             </UnderInputWrapper>
@@ -167,7 +169,9 @@ const handlelogonclick = ()=>{
             <img src={kakao_talk} alt="kakao_talk" />
             <img src={naver_icon} alt="naver_icon" />
           </SnsLogoWrapper>
-          <LoginBtn>로그인</LoginBtn>
+          <Link to="/">
+            <LoginBtn>로그인</LoginBtn>
+          </Link>
         </Form>
       </Inner>
     </Container>
