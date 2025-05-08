@@ -9,31 +9,27 @@ const Container = styled.div`
   padding-top: 40px;
 
   .slideWrap {
-    border: 1px solid #0f0;
     display: flex;
     justify-content: space-between;
     gap: 20px;
   }
 
   .slider-container {
-    height: 650px;
+    height: 620px;
     width: 100%;
-    border: 1px solid #0ff;
+    overflow: hidden;
   }
 
   .swiper {
-    height: 100%; /* 이거 꼭 필요 */
+    height: 100%;
+    overflow: visible !important;
   }
 
   .swiper-wrapper {
-    height: 100%; /* 이거도 추가 */
+    height: 100%;
   }
 
   .swiper-slide {
-    height: calc((100% - 40px) / 3); /* 예: 3개 보일 때 슬라이드 높이 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   h6 {
@@ -121,12 +117,7 @@ const MyhomeMainSlide = () => {
           <div className="video"></div>
         </Myhome>
         <div className="slider-container">
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={20}
-            direction="vertical"
-            mousewheel={true}
-          >
+          <Swiper slidesPerView={2} direction="vertical" mousewheel={true}>
             <SwiperSlide>
               <MainCard />
             </SwiperSlide>

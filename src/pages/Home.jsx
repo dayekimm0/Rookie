@@ -8,11 +8,20 @@ import HomeList from "../components/Home/HomeList";
 import HighlightSlide from "../components/Home/HighlightSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
+import ProductCard from "../components/ProductCard";
 
 const Container = styled.div`
   width: 100%;
   background: var(--bg);
   color: #fff;
+
+  .main_cardList {
+    .brandGo {
+      svg {
+        stroke: var(--light);
+      }
+    }
+  }
 `;
 
 const Banner = styled.div`
@@ -37,6 +46,9 @@ const Home = () => {
       <RankingTable />
       <PopularPlayer />
       <CollaboBanner />
+      <div className="main_cardList">
+        <ProductCard />
+      </div>
     </Container>
   );
 };
