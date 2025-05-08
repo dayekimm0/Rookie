@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import RankingTable from "../components/Home/RankingTable";
 import MainSlide from "../components/Home/MainSlide";
+import MyhomeMainSlide from "../components/Home/MyhomeMainSlide";
 import bannerStrike from "../images/banners/banner-strike.png";
 import PlaySlide from "../components/Home/PlaySlide";
 import HomeList from "../components/Home/HomeList";
@@ -25,6 +26,7 @@ const Banner = styled.div`
 const Home = () => {
   return (
     <Container>
+      <MyhomeMainSlide />
       <MainSlide />
       <Banner className="inner">
         <img src={bannerStrike} alt="banner" />

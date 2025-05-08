@@ -42,6 +42,12 @@ const Card = styled.div`
   aspect-ratio: 9 / 12;
   border-radius: 8px;
   background: var(--grayC);
+  cursor: pointer;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const HighlightSlide = () => {
@@ -81,25 +87,68 @@ const HighlightSlide = () => {
           slidesOffsetAfter={offset}
         >
           <SwiperSlide>
-            <Card>Slide 1</Card>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/QyNVfDBaPf4/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLCdF-Xa8uz-UBswx0diS1vqA4uViA"
+                alt="mockup"
+              />
+            </Card>
           </SwiperSlide>
           <SwiperSlide>
-            <Card>Slide 2</Card>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/RDmWndBi8qE/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLCdf6JqNmK7PcVCBfxMyQO1VjmMHQ"
+                alt="mockup"
+              />
+            </Card>
           </SwiperSlide>
           <SwiperSlide>
-            <Card>Slide 3</Card>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/0RpSTfcftZ4/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLCN5rSQG6cXLCBvXY2XxayMFADgKw"
+                alt="mockup"
+              />
+            </Card>
           </SwiperSlide>
           <SwiperSlide>
-            <Card>Slide 4</Card>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/XualNGD_-ck/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLB0itLTXjbBxI4C7aPv-DYnLNS1BQ"
+                alt="mockup"
+              />
+            </Card>
           </SwiperSlide>
           <SwiperSlide>
-            <Card>Slide 5</Card>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/QFO7eoy_E5U/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBzhKsQg0RXKm8hxfMYZtuaH5y9Bg"
+                alt="mockup"
+              />
+            </Card>
           </SwiperSlide>
           <SwiperSlide>
-            <Card>Slide 6</Card>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/IZNL0vilqF0/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLDmvx2og6Gs72wj7LK8nP8mXh8Wmw"
+                alt="mockup"
+              />
+            </Card>
           </SwiperSlide>
           <SwiperSlide>
-            <Card>Slide 7</Card>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/2CeLUTXZuLw/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBNkvYs4ytrqYj8andwTv3qtS-BIA"
+                alt="mockup"
+              />
+            </Card>
+          </SwiperSlide>
+          <SwiperSlide>
+            <Card>
+              <img
+                src="https://i.ytimg.com/vi/9wQ6DlIF2a4/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBwxfa1uNDYt94dZ_-oNx8yzlkfBA"
+                alt="mockup"
+              />
+            </Card>
           </SwiperSlide>
         </Swiper>
       </Container>
