@@ -13,6 +13,7 @@ const Container = styled.div`
   top: 0;
   left: 0;
   z-index: 1000;
+  transform: translate(0);
   transition: transform 0.3s ease;
   &.active {
     transform: translateY(-100%);

@@ -1,6 +1,7 @@
 import GlobalStyles from "./styles/Globalstyles.styles";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Lenis from "lenis";
 import { useEffect, useState } from "react";
 import styled from "styled-components";

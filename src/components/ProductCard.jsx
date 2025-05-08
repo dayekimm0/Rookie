@@ -5,11 +5,13 @@ const CardContainer = styled.div`
   width: 240px;
   display: flex;
   flex-direction: column;
+  padding: 10px;
   img {
     width: 240px;
     height: 320px;
     margin-bottom: 27px;
     object-fit: cover;
+    cursor: pointer;
   }
 `;
 
@@ -19,13 +21,16 @@ const ProductInfo = styled.div`
   justify-content: center;
   align-items: start;
   .brand {
+    font-size: 1.4rem;
     margin-bottom: 4px;
   }
   .name {
     margin-bottom: 10px;
+    cursor: pointer;
   }
   .price {
     font-size: 1.8rem;
+    cursor: pointer;
   }
 `;
 
