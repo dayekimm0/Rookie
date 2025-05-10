@@ -19,18 +19,26 @@ const GameBox = styled.div`
 `;
 
 const GameBoxBackground = styled.div`
+  width: 130px;
+  height: 130px;
   background: var(--light);
   border-radius: 7px;
   justify-content: center;
   align-content: center;
   padding: 5px;
+  /* 임시 */
+  transition: all 0.5s;
+  &:hover {
+    background: var(--main);
+  }
+  /* 임시 */
 `;
 
 const GameBoxContent = styled.img`
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
-  padding: 15px;
+  padding: 14px;
   background: var(--gray8);
   border-radius: 8px;
 `;
