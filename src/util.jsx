@@ -12,6 +12,7 @@ import emblem_kiwoomH from "./images/emblem/emblem_kiwoomH.svg";
 
 export const getEmblem = (emblemName) => {
   const targetEmblem = String(emblemName);
+
   switch (targetEmblem) {
     case "0":
       return emblem_kbo;
