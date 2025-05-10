@@ -9,21 +9,11 @@ import emblem_lotteG from "./images/emblem/emblem_lotteG.svg";
 import emblem_hanwhaE from "./images/emblem/emblem_hanwhaE.svg";
 import emblem_ncD from "./images/emblem/emblem_ncD.svg";
 import emblem_kiwoomH from "./images/emblem/emblem_kiwoomH.svg";
-import mascort_doosan from "./images/mascort/mascort_doosanB.svg";
-import mascort_hanwha from "./images/mascort/mascort_hanwhaE.svg";
-import mascort_kia from "./images/mascort/mascort_kiaT.svg";
-import mascort_kiwoom from "./images/mascort/mascort_kiwoomH.svg";
-import mascort_kt from "./images/mascort/mascort_ktW.svg";
-import mascort_lg from "./images/mascort/mascort_lgT.svg";
-import mascort_lotte from "./images/mascort/mascort_lotteG.svg";
-import mascort_nc from "./images/mascort/mascort_ncD.svg";
-import mascort_samsung from "./images/mascort/mascort_samsungL.svg";
-import mascort_ssg from "./images/mascort/mascort_ssgL.svg";
 
-export const getEmblem = (emblemName, mascortName) => {
+export const getEmblem = (emblemName) => {
   const targetEmblem = String(emblemName);
-  const targetMascort = String(mascortName);
-  switch ((targetEmblem, targetMascort)) {
+
+  switch (targetEmblem) {
     case "0":
       return emblem_kbo;
     case "1":
@@ -46,26 +36,6 @@ export const getEmblem = (emblemName, mascortName) => {
       return emblem_ncD;
     case "10":
       return emblem_kiwoomH;
-    case "11":
-      return mascort_doosan;
-    case "12":
-      return mascort_hanwha;
-    case "13":
-      return mascort_kia;
-    case "14":
-      return mascort_kiwoom;
-    case "15":
-      return mascort_kt;
-    case "16":
-      return mascort_lg;
-    case "17":
-      return mascort_lotte;
-    case "18":
-      return mascort_nc;
-    case "19":
-      return mascort_samsung;
-    case "20":
-      return mascort_ssg;
     default:
       return null;
   }
