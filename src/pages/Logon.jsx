@@ -1,9 +1,10 @@
+import { useState } from "react";
 import styled from "styled-components";
-import RGarrow from "../images/icons/RGarrow_logo.svg"; 
+import RGarrow from "../images/icons/RGarrow_logo.svg";
+import RBarrow from "../images/icons/RBarrow_logo.svg";
 import LogonFirst from "../components/Loginon/LogonFirst";
 import LogonSecond from "../components/Loginon/LogonSecond";
 import LogonThird from "../components/Loginon/LogonThird";
-
 
 const Container = styled.div`
   width: 100%;
@@ -27,7 +28,7 @@ const LogonTitle = styled.div`
 `;
 
 const TitleSWrapper = styled.div`
-width: 350px;
+  width: 350px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,36 +47,52 @@ const Line = styled.span`
   background: var(--gray1);
 `;
 
-const LoginBtn = styled.button`
-  width: 100%;
-  height: 70px;
-  background: var(--grayE);
-  border: none;
-  border-radius: 4px;
-  font-size: 2.4rem;
-  color: var(--grayC);
-  cursor: pointer;
-`;
-
 const Logon = () => {
+  const [step, setStep] = useState(1);
+  const nextStep = () => {
+    setStep((prev) => prev + 1);
+  };
 
   return (
-    <Container>
+    <Container
+      style={{
+        height: step === 2 ? "100%" : "100vh",
+        margin: step === 2 ? "40px 0" : "0",
+      }}
+    >
       <Inner>
         <LogonTitle>정보입력</LogonTitle>
-      <TitleSWrapper>
-          <LogonTitleS>1. 정보입력</LogonTitleS>
-          <img src={RGarrow} alt="RGarrow" />
-          <LogonTitleS>2. 계정생성</LogonTitleS>
-          <img src={RGarrow} alt="RGarrow" />
-          <LogonTitleS>3. 가입완료</LogonTitleS>
-      </TitleSWrapper>
-<Line/>
-
-<LogonFirst/>
-<LogonSecond/>
-<LogonThird/>
-      <LoginBtn>다음</LoginBtn>
+        <TitleSWrapper>
+          <LogonTitleS
+            style={{ color: step >= 1 ? "var(--dark)" : "var(--grayC)" }}
+          >
+            1. 정보입력
+          </LogonTitleS>
+          {step >= 2 ? (
+            <img src={RBarrow} alt="RBarrow" />
+          ) : (
+            <img src={RGarrow} alt="RBarrow" />
+          )}
+          <LogonTitleS
+            style={{ color: step >= 2 ? "var(--dark)" : "var(--grayC)" }}
+          >
+            2. 계정생성
+          </LogonTitleS>
+          {step >= 3 ? (
+            <img src={RBarrow} alt="RBarrow" />
+          ) : (
+            <img src={RGarrow} alt="RBarrow" />
+          )}
+          <LogonTitleS
+            style={{ color: step >= 3 ? "var(--dark)" : "var(--grayC)" }}
+          >
+            3. 가입완료
+          </LogonTitleS>
+        </TitleSWrapper>
+        <Line />
+        {step === 1 && <LogonFirst nextStep={nextStep} />}
+        {step === 2 && <LogonSecond nextStep={nextStep} />}
+        {step === 3 && <LogonThird />}
       </Inner>
     </Container>
   );

@@ -3,6 +3,8 @@ import { Link, useMatch, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getEmblem } from "../util";
 import styled from "styled-components";
+import headermockup from "../images/banners/banner-headermockup.png";
+import logo from "../images/logos/Rookie_logo.svg";
 
 const Container = styled.div`
   width: 100%;
@@ -244,14 +246,11 @@ const Header = ({ isActive }) => {
   return (
     <Container className={isActive ? "active" : ""}>
       <HeaderGameList>
-        <HeaderMockup
-          src="./src/images/banners/banner-headermockup.png"
-          alt="header-mockup"
-        />
+        <HeaderMockup src={headermockup} alt="헤더목업" />
       </HeaderGameList>
       <Nav>
         <Logo onClick={goToMain}>
-          <LogoImg src="./src/images/logos/Rookie_logo.svg" alt="rookielogo" />
+          <LogoImg src={logo} alt="rookielogo" />
         </Logo>
         <Items>
           <Item>

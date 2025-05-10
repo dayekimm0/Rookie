@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import Gmarketsans from "../font/GmarketSansTTFBold.ttf";
 import reset from "styled-reset";
 
 const GlobalStyles = createGlobalStyle`
@@ -32,6 +33,14 @@ const GlobalStyles = createGlobalStyle`
     --grayF5: #f5f5f5;
     --grayFA: #fafafa;
     --red: #E22531;
+    --eventtext: #0068ae;
+  }
+
+  @font-face {
+    font-family: 'GmarketSans';
+    src: url(${Gmarketsans}) format('truetype');
+    font-weight: normal;
+    font-style: normal;
   }
 
   html {
@@ -39,9 +48,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    font-family: "Figtree", "Pretendard", sans-serif;
+    font-family: "Figtree", "Pretendard", "Gmarketsans", sans-serif;
     font-size: 1.6rem;
   }
+
 
   #root {
     height: 100%;
