@@ -6,6 +6,9 @@ const Container = styled.div`
   height: 100vh;
   padding: 0 5%;
   font-family: "Pretendard";
+  display: flex;
+  gap: 10%;
+  align-items: start;
 `;
 
 const ItemList = styled.div`
@@ -233,22 +236,55 @@ const MultiPrice = styled.p`
 `;
 
 const WingBanner = styled.form`
-  position: fixed;
-  top: 35%;
-  right: 5%;
+  position: sticky;
+  top: 20%;
   width: 100%;
   max-width: 570px;
   padding: 60px;
+  margin-top: 10%;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   background: var(--grayFA);
+
+  @media screen and (max-width: 1700px) {
+    max-width: 480px;
+    padding: 50px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    max-width: 360px;
+    padding: 40px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    max-width: 270px;
+    padding: 30px;
+    gap: 10px;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 610px;
+    padding: 10px;
+  }
 `;
 
 const SubTitle = styled.h2`
   font-size: 1.8rem;
   font-weight: 600;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
 const SaleInfo = styled.div`
@@ -256,6 +292,10 @@ const SaleInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media screen and (max-width: 1024px) {
+    gap: 10px;
+  }
 `;
 
 const CouponList = styled.div`
@@ -267,6 +307,16 @@ const CouponList = styled.div`
   border: 1px solid var(--grayC);
   border-radius: 4px;
   background: var(--light);
+
+  @media screen and (max-width: 1440px) {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: 40px;
+    font-size: 1rem;
+  }
 `;
 
 const PriceInfo = styled.div`
@@ -278,6 +328,10 @@ const PriceInfo = styled.div`
     width: 100%;
     height: 1px;
     background: var(--grayC);
+  }
+
+  @media screen and (max-width: 1024px) {
+    gap: 10px;
   }
 `;
 
@@ -293,6 +347,22 @@ const PriceList = styled.div`
       font-size: 1.4rem;
     }
   }
+
+  @media screen and (max-width: 1440px) {
+    ul {
+      li {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    ul {
+      li {
+        font-size: 1rem;
+      }
+    }
+  }
 `;
 
 const TotalPrice = styled.div`
@@ -302,6 +372,18 @@ const TotalPrice = styled.div`
   p {
     font-size: 1.8rem;
     font-weight: 600;
+  }
+
+  @media screen and (max-width: 1440px) {
+    p {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    p {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -315,6 +397,20 @@ const Button = styled.input`
   font-weight: 500;
   cursor: pointer;
   background: var(--main);
+
+  @media screen and (max-width: 1440px) {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    height: 30px;
+  }
 `;
 
 const Payment = () => {
