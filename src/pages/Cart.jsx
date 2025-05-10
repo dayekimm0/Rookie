@@ -1,12 +1,49 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
   height: 100vh;
   padding: 0 5%;
   font-family: "Pretendard";
+  display: flex;
+  gap: 10%;
+  align-items: start;
+
+  @media screen and (max-width: 1800px) {
+    gap: 9%;
+  }
+
+  @media screen and (max-width: 1700px) {
+    gap: 8%;
+  }
+
+  @media screen and (max-width: 1600px) {
+    gap: 7%;
+  }
+
+  @media screen and (max-width: 1500px) {
+    gap: 6%;
+  }
+
+  @media screen and (max-width: 1440px) {
+    gap: 5%;
+    padding: 0 3%;
+  }
+
+  @media screen and (max-width: 1024px) {
+    gap: 4%;
+  }
+
+  @media screen and (max-width: 960px) {
+    gap: 3%;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
 `;
 
 const ItemList = styled.div`
@@ -16,6 +53,14 @@ const ItemList = styled.div`
   flex-direction: column;
   gap: 50px;
   padding-top: 5%;
+
+  @media screen and (max-width: 1440px) {
+    max-width: 810px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    max-width: 610px;
+  }
 `;
 
 const Title = styled.h2`
@@ -41,12 +86,16 @@ const Menu = styled.div`
     justify-content: space-between;
     align-items: center;
     li {
+      width: 100px;
+      display: flex;
+      justify-content: center;
       font-size: 1.8rem;
       font-weight: 600;
       &:nth-child(1) {
         width: 100%;
         max-width: 140px;
         display: flex;
+        justify-content: start;
         align-items: center;
         gap: 5px;
         input[type="checkbox"] {
@@ -54,26 +103,10 @@ const Menu = styled.div`
         }
       }
       &:nth-child(2) {
-        width: 100%;
-        max-width: 300px;
-      }
-      &:nth-child(3) {
-        width: 100%;
-        max-width: 100px;
+        width: 300px;
         display: flex;
-        justify-content: center;
-      }
-      &:nth-child(4) {
-        width: 100%;
-        max-width: 100px;
-        display: flex;
-        justify-content: center;
-      }
-      &:nth-child(5) {
-        width: 100%;
-        max-width: 100px;
-        display: flex;
-        justify-content: center;
+        justify-content: start;
+        align-items: center;
       }
     }
   }
@@ -81,6 +114,80 @@ const Menu = styled.div`
     width: 100%;
     height: 1px;
     background: var(--gray1);
+  }
+
+  @media screen and (max-width: 1600px) {
+    ul {
+      li {
+        &:nth-child(2) {
+          width: 260px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 1500px) {
+    ul {
+      li {
+        &:nth-child(2) {
+          width: 240px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 1440px) {
+    ul {
+      li {
+        width: 90px;
+        font-size: 1.6rem;
+        &:nth-child(1) {
+          width: 120px;
+        }
+        &:nth-child(2) {
+          width: 200px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    ul {
+      li {
+        &:nth-child(1) {
+          width: 120px;
+        }
+        &:nth-child(2) {
+          width: 200px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    ul {
+      li {
+        font-size: 1.4rem;
+        &:nth-child(1) {
+          width: 100px;
+        }
+        &:nth-child(2) {
+          width: 180px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 960px) {
+    ul {
+      li {
+        width: 70px;
+        font-size: 1.2rem;
+        &:nth-child(2) {
+          width: 120px;
+        }
+      }
+    }
   }
 `;
 
@@ -107,6 +214,11 @@ const CustomCheckbox = styled.input`
     border-width: 0 2px 2px 0;
     transform: translate(-50%, -70%) rotate(45deg);
   }
+
+  @media screen and (max-width: 1440px) {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 const Item = styled.div`
@@ -124,8 +236,7 @@ const Item = styled.div`
 `;
 
 const Thumbnail = styled.div`
-  width: 100%;
-  max-width: 140px;
+  width: 140px;
   height: 140px;
   position: relative;
   border: none;
@@ -135,19 +246,58 @@ const Thumbnail = styled.div`
     left: 2%;
     border-radius: 2px;
   }
+
+  @media screen and (max-width: 1440px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ItemImage = styled.img`
-  width: 100%;
+  width: 140px;
   height: 100%;
+
+  @media screen and (max-width: 1440px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ItemInfo = styled.ul`
-  width: 100%;
-  max-width: 300px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+
+  @media screen and (max-width: 1600px) {
+    width: 260px;
+  }
+
+  @media screen and (max-width: 1500px) {
+    width: 240px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    width: 200px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 180px;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 120px;
+  }
 `;
 
 const TeamName = styled.li`
@@ -156,22 +306,63 @@ const TeamName = styled.li`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
 const ProductName = styled.li`
   width: 100%;
   font-size: 1.8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
-const ItemOption = styled.ul`
+const ItemOption = styled.div`
   width: 100%;
-  max-width: 100px;
+  width: 100px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    width: 90px;
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 70px;
+    font-size: 1rem;
+  }
 `;
 
 const OptionChange = styled.button`
@@ -183,43 +374,113 @@ const OptionChange = styled.button`
   font-family: "Pretendard";
   font-size: 1.4rem;
   cursor: pointer;
+
+  @media screen and (max-width: 1024px) {
+    height: 30px;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
 const ItemPrice = styled.p`
   width: 100%;
-  max-width: 100px;
+  width: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+
+  @media screen and (max-width: 1440px) {
+    width: 90px;
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 70px;
+    font-size: 1rem;
+  }
 `;
 
 const MultiPrice = styled.p`
   width: 100%;
-  max-width: 100px;
+  width: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+
+  @media screen and (max-width: 1440px) {
+    width: 90px;
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 70px;
+    font-size: 1rem;
+  }
 `;
 
 const WingBanner = styled.form`
-  position: fixed;
-  top: 35%;
-  right: 5%;
+  position: sticky;
+  top: 20%;
   width: 100%;
   max-width: 570px;
   padding: 60px;
+  margin-top: 10%;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   background: var(--grayFA);
+
+  @media screen and (max-width: 1700px) {
+    max-width: 480px;
+    padding: 50px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    max-width: 360px;
+    padding: 40px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    max-width: 270px;
+    padding: 30px;
+    gap: 10px;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 610px;
+    padding: 10px;
+  }
 `;
 
 const SubTitle = styled.h2`
   font-size: 1.8rem;
   font-weight: 600;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
 const SaleInfo = styled.div`
@@ -227,6 +488,10 @@ const SaleInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media screen and (max-width: 1024px) {
+    gap: 10px;
+  }
 `;
 
 const CouponList = styled.div`
@@ -238,6 +503,16 @@ const CouponList = styled.div`
   border: 1px solid var(--grayC);
   border-radius: 4px;
   background: var(--light);
+
+  @media screen and (max-width: 1440px) {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: 40px;
+    font-size: 1rem;
+  }
 `;
 
 const PriceInfo = styled.div`
@@ -249,6 +524,10 @@ const PriceInfo = styled.div`
     width: 100%;
     height: 1px;
     background: var(--grayC);
+  }
+
+  @media screen and (max-width: 1024px) {
+    gap: 10px;
   }
 `;
 
@@ -264,6 +543,22 @@ const PriceList = styled.div`
       font-size: 1.4rem;
     }
   }
+
+  @media screen and (max-width: 1440px) {
+    ul {
+      li {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    ul {
+      li {
+        font-size: 1rem;
+      }
+    }
+  }
 `;
 
 const TotalPrice = styled.div`
@@ -273,6 +568,18 @@ const TotalPrice = styled.div`
   p {
     font-size: 1.8rem;
     font-weight: 600;
+  }
+
+  @media screen and (max-width: 1440px) {
+    p {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    p {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -294,6 +601,20 @@ const Buttons = styled.div`
     &:nth-child(2) {
       background: var(--dark);
       color: var(--light);
+    }
+
+    @media screen and (max-width: 1440px) {
+      height: 50px;
+      font-size: 1.2rem;
+    }
+
+    @media screen and (max-width: 1024px) {
+      height: 40px;
+      font-size: 1rem;
+    }
+
+    @media screen and (max-width: 960px) {
+      height: 30px;
     }
   }
 `;
@@ -329,10 +650,11 @@ const Cart = () => {
               </ProductName>
             </ItemInfo>
             <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
+              <ul>
+                <li className="size">XL</li>
+                <li>/</li>
+                <li className="quantity">1개</li>
+              </ul>
               <OptionChange>옵션 변경</OptionChange>
             </ItemOption>
             <ItemPrice>50,000원</ItemPrice>
@@ -350,10 +672,11 @@ const Cart = () => {
               </ProductName>
             </ItemInfo>
             <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
+              <ul>
+                <li className="size">XL</li>
+                <li>/</li>
+                <li className="quantity">1개</li>
+              </ul>
               <OptionChange>옵션 변경</OptionChange>
             </ItemOption>
             <ItemPrice>50,000원</ItemPrice>
