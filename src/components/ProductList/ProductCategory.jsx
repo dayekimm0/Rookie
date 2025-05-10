@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, LayoutGroup } from "framer-motion";
 import styled from "styled-components";
 
-const CategoryContainer = styled.div``;
+const CategoryContainer = styled.div`
+  width: 100%;
+  background: var(--light);
+`;
 
 const Category = styled.div`
   height: 50px;
@@ -10,10 +13,11 @@ const Category = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 const CollaboCategory = styled.div`
-  position: relative;
+  position: absolute;
   width: 680px;
   height: 50px;
   display: flex;
@@ -27,7 +31,6 @@ const CollaboCategory = styled.div`
 `;
 
 const CollaboBrand = styled.div`
-  position: relative;
   padding: 10px 18px;
   display: flex;
   align-items: center;

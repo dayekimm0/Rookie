@@ -8,18 +8,25 @@ const Container = styled.div`
   width: 1920px;
   height: 1000%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--light);
+`;
+
+const ProductsList = styled.div`
+  width: 100%;
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Products = styled.div`
-  position: absolute;
-  top: 7%;
-  left: 50%;
-  transform: translateX(-50%);
   display: grid;
+  gap: 20px;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
-  align-content: center;
-  align-items: center;
 `;
 
 const ProductList = () => {
@@ -28,16 +35,18 @@ const ProductList = () => {
       <Container>
         <ProductBanner />
         <ProductCategory />
-        <Products>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </Products>
+        <ProductsList>
+          <Products>
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+          </Products>
+        </ProductsList>
       </Container>
     </>
   );
