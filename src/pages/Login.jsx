@@ -32,7 +32,9 @@ const LogoWrapper = styled.div`
   gap: 40px;
 `;
 
-const Logo = styled.img``;
+const Logo = styled.img`
+cursor: pointer;
+`;
 
 const LogoLogin = styled.div`
   font-size: 3rem;
@@ -137,15 +139,19 @@ const LoginBtn = styled.button`
 
 const Login = () => {
   const logonnavigation = useNavigate();
+    const mainnavigation = useNavigate();
   const handlelogonclick = () => {
     logonnavigation("/logon");
+  };
+  const handleMainclick = () => {
+    mainnavigation("/");
   };
 
   return (
     <Container>
       <Inner>
         <LogoWrapper>
-          <Logo src={rookie_logo} />
+          <Logo onClick={handleMainclick} src={rookie_logo} />
           <LogoLogin>로그인</LogoLogin>
         </LogoWrapper>
         <Form>

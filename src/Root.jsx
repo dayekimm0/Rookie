@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Lenis from "lenis";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+// import { auth } from "./firebase";
 
 const ContentWrapper = styled.div`
   position: relative;
@@ -16,6 +17,12 @@ function Root() {
   const [prevScroll, setPrevScroll] = useState(0);
   const location = useLocation();
   const hideHeaderPath = ["/login", "/logon"];
+  // const [isLoading, setIsLoading] = useState(true);
+
+  // const init = async()=>{
+  //   await auth.authStateReady();
+  //   setIsLoading(false);
+  // }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +43,10 @@ function Root() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScroll]);
+
+  // useEffect (()=>{
+  //   init();
+  // },[]);
 
   // lenis 적용
   useEffect(() => {
@@ -62,7 +73,7 @@ function Root() {
           </ContentWrapper>
         </>
       )}
-      {hideHeaderPath.includes(location.pathname) && <Outlet />}
+      {hideHeaderPath.includes(location.pathname) &&  <Outlet />}
     </>
   );
 }
