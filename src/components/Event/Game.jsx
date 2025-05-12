@@ -16,6 +16,12 @@ const GameBox = styled.div`
   align-content: center;
   gap: 8px;
   padding: 22px 0px 81px 0px;
+
+  @media screen and (max-width: 1024px) {
+  }
+  @media screen and (max-width: 375px) {
+    padding: 22px 0px 60px 0px;
+  }
 `;
 
 const GameBoxBackground = styled.div`
@@ -32,6 +38,14 @@ const GameBoxBackground = styled.div`
     background: var(--main);
   }
   /* 임시 */
+  @media screen and (max-width: 1024px) {
+    width: 120px;
+    height: 120px;
+  }
+  @media screen and (max-width: 375px) {
+    width: 98px;
+    height: 98px;
+  }
 `;
 
 const GameBoxContent = styled.img`
@@ -41,13 +55,21 @@ const GameBoxContent = styled.img`
   padding: 14px;
   background: var(--gray8);
   border-radius: 8px;
+  @media screen and (max-width: 375px) {
+  }
+`;
+
+const TextBoxImg = styled.img`
+  @media screen and (max-width: 375px) {
+    width: 80%;
+  }
 `;
 
 const Game = () => {
   return (
     <>
       <Container>
-        <img src={TextBox} />
+        <TextBoxImg src={TextBox} />
         <GameBox>
           <GameBoxBackground>
             <GameBoxContent src={BallImg} />

@@ -27,6 +27,14 @@ const Products = styled.div`
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(4, 1fr);
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const ProductList = () => {
