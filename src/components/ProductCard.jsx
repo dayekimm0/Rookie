@@ -14,6 +14,23 @@ const CardContainer = styled.div`
     cursor: pointer;
     border-radius: 8px;
   }
+  @media (max-width: 1024px) {
+    width: 200px;
+
+    img {
+      width: 200px;
+      height: 280px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 `;
 
 const ProductInfo = styled.div`
@@ -48,6 +65,41 @@ const ProductInfo = styled.div`
   .price {
     font-size: 1.8rem;
     cursor: pointer;
+  }
+  @media (max-width: 1024px) {
+    .brand {
+      font-size: 1.3rem;
+    }
+    .name {
+      font-size: 1.5rem;
+    }
+    .price {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .brand {
+      font-size: 1.2rem;
+    }
+    .name {
+      font-size: 1.4rem;
+    }
+    .price {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .brand {
+      font-size: 1.1rem;
+    }
+    .name {
+      font-size: 1.3rem;
+    }
+    .price {
+      font-size: 1.4rem;
+    }
   }
 `;
 
