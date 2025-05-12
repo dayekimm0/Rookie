@@ -5,6 +5,7 @@ import styled from "styled-components";
 const CategoryContainer = styled.div`
   width: 100%;
   background: var(--light);
+  overflow-x: auto;
 `;
 
 const Category = styled.div`
@@ -28,6 +29,20 @@ const CollaboCategory = styled.div`
   margin-top: 2%;
   left: 50%;
   transform: translateX(-50%);
+
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
+
+  @media (max-width: 500px) {
+    width: 95%;
+    height: 40px;
+  }
+
+  @media (max-width: 375px) {
+    width: 95%;
+    height: 36px;
+  }
 `;
 
 const CollaboBrand = styled.div`
@@ -91,6 +106,19 @@ const Sort = styled.select`
   background-position: right 2px center;
   background-size: 16px auto;
   z-index: 3;
+  @media (max-width: 1024px) {
+    right: 10%;
+  }
+
+  @media (max-width: 500px) {
+    font-size: 1.2rem;
+    right: 5%;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 1.1rem;
+    right: 5%;
+  }
 `;
 
 const SelectSort = styled.option`
