@@ -9,6 +9,41 @@ const Container = styled.div`
   display: flex;
   gap: 10%;
   align-items: start;
+
+  @media screen and (max-width: 1800px) {
+    gap: 9%;
+  }
+
+  @media screen and (max-width: 1700px) {
+    gap: 8%;
+  }
+
+  @media screen and (max-width: 1600px) {
+    gap: 7%;
+  }
+
+  @media screen and (max-width: 1500px) {
+    gap: 6%;
+  }
+
+  @media screen and (max-width: 1440px) {
+    gap: 5%;
+    padding: 0 3%;
+  }
+
+  @media screen and (max-width: 1024px) {
+    gap: 4%;
+  }
+
+  @media screen and (max-width: 960px) {
+    gap: 3%;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
 `;
 
 const ItemList = styled.div`
@@ -167,8 +202,7 @@ const Item = styled.div`
 `;
 
 const Thumbnail = styled.div`
-  width: 100%;
-  max-width: 140px;
+  width: 140px;
   height: 140px;
   position: relative;
   border: none;
@@ -178,19 +212,58 @@ const Thumbnail = styled.div`
     left: 2%;
     border-radius: 2px;
   }
+
+  @media screen and (max-width: 1440px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ItemImage = styled.img`
-  width: 100%;
+  width: 140px;
   height: 100%;
+
+  @media screen and (max-width: 1440px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ItemInfo = styled.ul`
-  width: 100%;
-  max-width: 300px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+
+  @media screen and (max-width: 1600px) {
+    width: 260px;
+  }
+
+  @media screen and (max-width: 1500px) {
+    width: 240px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    width: 200px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 180px;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 120px;
+  }
 `;
 
 const TeamName = styled.li`
@@ -199,40 +272,109 @@ const TeamName = styled.li`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
 const ProductName = styled.li`
   width: 100%;
   font-size: 1.8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
-const ItemOption = styled.ul`
+const ItemOption = styled.div`
   width: 100%;
-  max-width: 100px;
+  width: 100px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    width: 90px;
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 70px;
+    font-size: 1rem;
+  }
 `;
 
 const ItemPrice = styled.p`
   width: 100%;
-  max-width: 100px;
+  width: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+
+  @media screen and (max-width: 1440px) {
+    width: 90px;
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 70px;
+    font-size: 1rem;
+  }
 `;
 
 const MultiPrice = styled.p`
   width: 100%;
-  max-width: 100px;
+  width: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+
+  @media screen and (max-width: 1440px) {
+    width: 90px;
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 70px;
+    font-size: 1rem;
+  }
 `;
 
 const WingBanner = styled.form`
@@ -517,10 +659,11 @@ const Payment = () => {
               </ProductName>
             </ItemInfo>
             <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
+              <ul>
+                <li className="size">XL</li>
+                <li>/</li>
+                <li className="quantity">1개</li>
+              </ul>
             </ItemOption>
             <ItemPrice>50,000원</ItemPrice>
             <MultiPrice>50,000원</MultiPrice>
@@ -536,10 +679,11 @@ const Payment = () => {
               </ProductName>
             </ItemInfo>
             <ItemOption>
-              <li className="option-list">
-                <p className="size">사이즈 [XL]</p>
-                <p className="quantity">1개</p>
-              </li>
+              <ul>
+                <li className="size">XL</li>
+                <li>/</li>
+                <li className="quantity">1개</li>
+              </ul>
             </ItemOption>
             <ItemPrice>50,000원</ItemPrice>
             <MultiPrice>50,000원</MultiPrice>

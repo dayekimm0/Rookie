@@ -7,35 +7,16 @@ const Container = styled.div`
   padding: 0 5%;
   font-family: "Pretendard";
   display: flex;
-  gap: 10%;
   align-items: start;
-
-  @media screen and (max-width: 1800px) {
-    gap: 9%;
-  }
-
-  @media screen and (max-width: 1700px) {
-    gap: 8%;
-  }
-
-  @media screen and (max-width: 1600px) {
-    gap: 7%;
-  }
-
-  @media screen and (max-width: 1500px) {
-    gap: 6%;
-  }
+  gap: 10%;
+  background: var(--light);
 
   @media screen and (max-width: 1440px) {
     gap: 5%;
-    padding: 0 3%;
   }
 
   @media screen and (max-width: 1024px) {
-    gap: 4%;
-  }
-
-  @media screen and (max-width: 960px) {
+    padding: 0 3%;
     gap: 3%;
   }
 
@@ -55,17 +36,33 @@ const ItemList = styled.div`
   padding-top: 5%;
 
   @media screen and (max-width: 1440px) {
-    max-width: 810px;
+    max-width: 910px;
   }
 
   @media screen and (max-width: 1024px) {
-    max-width: 610px;
+    max-width: 810px;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 710px;
   }
 `;
 
 const Title = styled.h2`
   font-size: 3.6rem;
   font-weight: 600;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 3.2rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 2.8rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 2.4rem;
+  }
 `;
 
 const Items = styled.div`
@@ -76,24 +73,25 @@ const Items = styled.div`
 
 const Menu = styled.div`
   width: 100%;
-  max-width: 1010px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   ul {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
     li {
-      width: 100px;
+      width: 100%;
+      max-width: 100px;
+      min-width: 90px;
       display: flex;
       justify-content: center;
-      font-size: 1.8rem;
       font-weight: 600;
       &:nth-child(1) {
         width: 100%;
-        max-width: 140px;
+        min-width: 140px;
         display: flex;
         justify-content: start;
         align-items: center;
@@ -103,7 +101,9 @@ const Menu = styled.div`
         }
       }
       &:nth-child(2) {
-        width: 300px;
+        width: 100%;
+        max-width: 300px;
+        min-width: 290px;
         display: flex;
         justify-content: start;
         align-items: center;
@@ -116,49 +116,19 @@ const Menu = styled.div`
     background: var(--gray1);
   }
 
-  @media screen and (max-width: 1600px) {
-    ul {
-      li {
-        &:nth-child(2) {
-          width: 260px;
-        }
-      }
-    }
-  }
-
-  @media screen and (max-width: 1500px) {
-    ul {
-      li {
-        &:nth-child(2) {
-          width: 240px;
-        }
-      }
-    }
-  }
-
   @media screen and (max-width: 1440px) {
     ul {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
       li {
-        width: 90px;
-        font-size: 1.6rem;
+        max-width: 90px;
+        min-width: 80px;
         &:nth-child(1) {
-          width: 120px;
+          min-width: 120px;
         }
         &:nth-child(2) {
-          width: 200px;
-        }
-      }
-    }
-  }
-
-  @media screen and (max-width: 1200px) {
-    ul {
-      li {
-        &:nth-child(1) {
-          width: 120px;
-        }
-        &:nth-child(2) {
-          width: 200px;
+          max-width: 200px;
+          min-width: 190px;
         }
       }
     }
@@ -166,25 +136,35 @@ const Menu = styled.div`
 
   @media screen and (max-width: 1024px) {
     ul {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
       li {
-        font-size: 1.4rem;
+        max-width: 80px;
+        min-width: 70px;
         &:nth-child(1) {
-          width: 100px;
+          min-width: 100px;
         }
         &:nth-child(2) {
-          width: 180px;
+          max-width: 100px;
+          min-width: 90px;
         }
       }
     }
   }
 
-  @media screen and (max-width: 960px) {
+  @media screen and (max-width: 768px) {
     ul {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
       li {
-        width: 70px;
-        font-size: 1.2rem;
+        max-width: 70px;
+        min-width: 60px;
+        &:nth-child(1) {
+          min-width: 80px;
+        }
         &:nth-child(2) {
-          width: 120px;
+          max-width: 90px;
+          min-width: 80px;
         }
       }
     }
@@ -218,6 +198,19 @@ const CustomCheckbox = styled.input`
   @media screen and (max-width: 1440px) {
     width: 16px;
     height: 16px;
+    &:checked::after {
+      width: 5px;
+      height: 9px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 12px;
+    height: 12px;
+    &:checked::after {
+      width: 4px;
+      height: 7px;
+    }
   }
 `;
 
@@ -226,17 +219,10 @@ const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .option-list {
-    display: flex;
-    justify-content: space-between;
-    p {
-      font-size: 1.4rem;
-    }
-  }
 `;
 
 const Thumbnail = styled.div`
-  width: 140px;
+  min-width: 140px;
   height: 140px;
   position: relative;
   border: none;
@@ -248,55 +234,47 @@ const Thumbnail = styled.div`
   }
 
   @media screen and (max-width: 1440px) {
-    width: 120px;
+    min-width: 120px;
     height: 120px;
   }
 
   @media screen and (max-width: 1024px) {
-    width: 100px;
+    min-width: 100px;
     height: 100px;
+  }
+
+  @media screen and (max-width: 768px) {
+    min-width: 80px;
+    height: 80px;
   }
 `;
 
 const ItemImage = styled.img`
-  width: 140px;
+  width: 100%;
   height: 100%;
-
-  @media screen and (max-width: 1440px) {
-    width: 120px;
-    height: 120px;
-  }
-
-  @media screen and (max-width: 1024px) {
-    width: 100px;
-    height: 100px;
-  }
 `;
 
 const ItemInfo = styled.ul`
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
+  min-width: 290px;
   display: flex;
   flex-direction: column;
   gap: 5px;
 
-  @media screen and (max-width: 1600px) {
-    width: 260px;
-  }
-
-  @media screen and (max-width: 1500px) {
-    width: 240px;
-  }
-
   @media screen and (max-width: 1440px) {
-    width: 200px;
+    max-width: 200px;
+    min-width: 190px;
   }
 
   @media screen and (max-width: 1024px) {
-    width: 180px;
+    max-width: 100px;
+    min-width: 90px;
   }
 
-  @media screen and (max-width: 960px) {
-    width: 120px;
+  @media screen and (max-width: 768px) {
+    max-width: 90px;
+    min-width: 80px;
   }
 `;
 
@@ -305,7 +283,10 @@ const TeamName = styled.li`
   font-size: 1.6rem;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: keep-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 
   @media screen and (max-width: 1440px) {
     font-size: 1.4rem;
@@ -315,31 +296,39 @@ const TeamName = styled.li`
     font-size: 1.2rem;
   }
 
-  @media screen and (max-width: 960px) {
-    font-size: 1rem;
+  @media screen and (max-width: 768px) {
+    font-size: 1.3rem;
   }
 `;
 
 const ProductName = styled.li`
   width: 100%;
   font-size: 1.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 
   @media screen and (max-width: 1440px) {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 
   @media screen and (max-width: 1024px) {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
-  @media screen and (max-width: 960px) {
-    font-size: 1rem;
+  @media screen and (max-width: 768px) {
+    font-size: 1.2rem;
   }
 `;
 
 const ItemOption = styled.div`
   width: 100%;
-  width: 100px;
+  max-width: 100px;
+  min-width: 90px;
+  font-size: 1.6rem;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -351,83 +340,103 @@ const ItemOption = styled.div`
   }
 
   @media screen and (max-width: 1440px) {
-    width: 90px;
+    max-width: 90px;
+    min-width: 80px;
     font-size: 1.4rem;
   }
 
   @media screen and (max-width: 1024px) {
+    max-width: 80px;
+    min-width: 70px;
     font-size: 1.2rem;
   }
 
-  @media screen and (max-width: 960px) {
-    width: 70px;
+  @media screen and (max-width: 768px) {
+    max-width: 70px;
+    min-width: 60px;
     font-size: 1rem;
   }
 `;
 
 const OptionChange = styled.button`
   width: 100%;
-  height: 37px;
+  height: 40px;
   background: var(--grayF5);
   border: none;
   border-radius: 4px;
   font-family: "Pretendard";
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   cursor: pointer;
+
+  @media screen and (max-width: 1440px) {
+    height: 35px;
+    font-size: 1.4rem;
+  }
 
   @media screen and (max-width: 1024px) {
     height: 30px;
     font-size: 1.2rem;
   }
 
-  @media screen and (max-width: 960px) {
+  @media screen and (max-width: 768px) {
+    height: 25px;
     font-size: 1rem;
   }
 `;
 
 const ItemPrice = styled.p`
   width: 100%;
-  width: 100px;
+  max-width: 100px;
+  min-width: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
 
   @media screen and (max-width: 1440px) {
-    width: 90px;
-    font-size: 1.4rem;
+    max-width: 90px;
+    min-width: 80px;
+    font-size: 1.6rem;
   }
 
   @media screen and (max-width: 1024px) {
-    font-size: 1.2rem;
+    max-width: 80px;
+    min-width: 70px;
+    font-size: 1.4rem;
   }
 
-  @media screen and (max-width: 960px) {
-    width: 70px;
-    font-size: 1rem;
+  @media screen and (max-width: 768px) {
+    max-width: 70px;
+    min-width: 60px;
+    font-size: 1.2rem;
   }
 `;
 
 const MultiPrice = styled.p`
   width: 100%;
-  width: 100px;
+  max-width: 100px;
+  min-width: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
 
   @media screen and (max-width: 1440px) {
-    width: 90px;
-    font-size: 1.4rem;
+    max-width: 90px;
+    min-width: 80px;
+    font-size: 1.6rem;
   }
 
   @media screen and (max-width: 1024px) {
-    font-size: 1.2rem;
+    max-width: 80px;
+    min-width: 70px;
+    font-size: 1.4rem;
   }
 
-  @media screen and (max-width: 960px) {
-    width: 70px;
-    font-size: 1rem;
+  @media screen and (max-width: 768px) {
+    max-width: 70px;
+    min-width: 60px;
+    font-size: 1.2rem;
   }
 `;
 
@@ -444,25 +453,21 @@ const WingBanner = styled.form`
   gap: 20px;
   background: var(--grayFA);
 
-  @media screen and (max-width: 1700px) {
-    max-width: 480px;
-    padding: 50px;
-  }
-
   @media screen and (max-width: 1440px) {
-    max-width: 360px;
+    max-width: 410px;
     padding: 40px;
+    margin-top: 13%;
   }
 
   @media screen and (max-width: 1024px) {
-    max-width: 270px;
+    max-width: 250px;
     padding: 30px;
-    gap: 10px;
+    margin-top: 15%;
   }
 
   @media screen and (max-width: 768px) {
-    max-width: 610px;
-    padding: 10px;
+    max-width: 100%;
+    margin-top: 0;
   }
 `;
 
@@ -475,11 +480,11 @@ const SubTitle = styled.h2`
   }
 
   @media screen and (max-width: 1024px) {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
-  @media screen and (max-width: 960px) {
-    font-size: 1rem;
+  @media screen and (max-width: 768px) {
+    font-size: 1.2rem;
   }
 `;
 
@@ -488,6 +493,10 @@ const SaleInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media screen and (max-width: 1440px) {
+    gap: 15px;
+  }
 
   @media screen and (max-width: 1024px) {
     gap: 10px;
@@ -499,6 +508,7 @@ const CouponList = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1.6rem;
   padding: 10px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
@@ -506,11 +516,16 @@ const CouponList = styled.div`
 
   @media screen and (max-width: 1440px) {
     height: 50px;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
   @media screen and (max-width: 1024px) {
     height: 40px;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 30px;
     font-size: 1rem;
   }
 `;
@@ -524,6 +539,10 @@ const PriceInfo = styled.div`
     width: 100%;
     height: 1px;
     background: var(--grayC);
+  }
+
+  @media screen and (max-width: 1440px) {
+    gap: 15px;
   }
 
   @media screen and (max-width: 1024px) {
@@ -540,11 +559,19 @@ const PriceList = styled.div`
     justify-content: space-between;
     align-items: center;
     li {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
   }
 
   @media screen and (max-width: 1440px) {
+    ul {
+      li {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
     ul {
       li {
         font-size: 1.2rem;
@@ -552,7 +579,7 @@ const PriceList = styled.div`
     }
   }
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     ul {
       li {
         font-size: 1rem;
@@ -578,6 +605,12 @@ const TotalPrice = styled.div`
 
   @media screen and (max-width: 1024px) {
     p {
+      font-size: 1.4rem;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    p {
       font-size: 1.2rem;
     }
   }
@@ -590,31 +623,37 @@ const Buttons = styled.div`
   input {
     width: 100%;
     height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none;
     border-radius: 4px;
-    font-size: 1.8rem;
-    font-weight: 500;
+    font-size: 1.6rem;
+
     cursor: pointer;
     &:nth-child(1) {
       background: var(--main);
+      font-weight: 500;
     }
     &:nth-child(2) {
       background: var(--dark);
       color: var(--light);
+      font-weight: 400;
     }
 
     @media screen and (max-width: 1440px) {
       height: 50px;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
     }
 
     @media screen and (max-width: 1024px) {
       height: 40px;
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
 
-    @media screen and (max-width: 960px) {
+    @media screen and (max-width: 768px) {
       height: 30px;
+      font-size: 1rem;
     }
   }
 `;
