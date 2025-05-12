@@ -15,7 +15,7 @@ function Root() {
   const [isHeaderActive, setIsHeaderActive] = useState(false);
   const [prevScroll, setPrevScroll] = useState(0);
   const location = useLocation();
-  const hideHeaderPath = ["/login","/logon"];
+  const hideHeaderPath = ["/login", "/logon"];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +31,6 @@ function Root() {
 
       setPrevScroll(currentScroll);
     };
-
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -54,12 +53,12 @@ function Root() {
   return (
     <>
       <GlobalStyles />
-      {!hideHeaderPath.includes(location.pathname) &&  
-      (<>
-        <Header isActive={isHeaderActive} />
+      {!hideHeaderPath.includes(location.pathname) && (
+        <>
+          <Header isActive={isHeaderActive} />
           <ContentWrapper>
-          <Outlet />
-        </ContentWrapper>
+            <Outlet />
+          </ContentWrapper>
         </>
       )}
       {hideHeaderPath.includes(location.pathname) && <Outlet />}
