@@ -32,6 +32,16 @@ function Root() {
       }
     };
 
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [prevScroll]);
+
+  // lenis 적용
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      smooth: true,
+    });
     // Lenis 이벤트로 스크롤값 받아서 상태 변경
     lenis.on("scroll", handleScroll);
 
