@@ -3,11 +3,11 @@ import { getEmblem } from "../../util";
 
 const Card = styled.div`
   width: 100%;
-  height: 100%;
   overflow: hidden;
   border-radius: 8px;
   .head {
-    padding: 15px 10px;
+    padding: 10px;
+    height: 120px;
     font-weight: 300;
     background: var(--dark);
     position: relative;
@@ -17,6 +17,7 @@ const Card = styled.div`
       width: 80%;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       li {
         display: flex;
         flex-direction: column;
@@ -46,6 +47,52 @@ const Card = styled.div`
     width: 100%;
     aspect-ratio: 16 / 9;
     position: relative;
+  }
+
+  @media screen and (max-width: 1440px) {
+    .head {
+      padding: 8px;
+      height: 100px;
+      ul {
+        width: 75%;
+        li {
+          font-size: 1.4rem;
+          img {
+            width: 60px;
+            margin-bottom: 2px;
+          }
+        }
+      }
+      .timetable {
+        font-size: 1.4rem;
+        .ground {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .head {
+      padding: 8px;
+      height: 80px;
+      ul {
+        width: 75%;
+        li {
+          font-size: 1.1rem;
+          img {
+            width: 50px;
+            margin-bottom: 2px;
+          }
+        }
+      }
+      .timetable {
+        font-size: 1.2rem;
+        .ground {
+          font-size: 1rem;
+        }
+      }
+    }
   }
 `;
 
