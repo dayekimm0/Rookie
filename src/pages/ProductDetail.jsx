@@ -911,7 +911,7 @@ const ProductDetail = () => {
                   ))}
                 </ReviewList>
 
-                <MoreButton>리뷰 더보기</MoreButton>
+                <MoreButton>더 보기</MoreButton>
               </div>
             )}
 
@@ -924,7 +924,7 @@ const ProductDetail = () => {
                   </SectionTitle>
                   <InquiryButton>
                     <FontAwesomeIcon icon={faEdit} />
-                    문의 드립니다!
+                    문의하기
                   </InquiryButton>
                 </InquiryHeader>
 
