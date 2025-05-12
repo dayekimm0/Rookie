@@ -10,6 +10,9 @@ const Container = styled.div`
   text-align: center;
   color: var(--light);
   padding: 160px 0px 270px 0px;
+  @media screen and (max-width: 1024px) {
+    padding: 160px 0px 97px 0px;
+  }
 `;
 
 const ContentOne = styled.div`
@@ -27,10 +30,25 @@ const ContentOne = styled.div`
 
 const TitleText = styled.div`
   font-size: 5rem;
+  margin-bottom: 10px;
+  @media screen and (max-width: 1024px) {
+    font-size: 4rem;
+    margin-bottom: 8px;
+  }
+  @media screen and (max-width: 375px) {
+    font-size: 2.8rem;
+    margin-bottom: 8px;
+  }
 `;
 const MediumText = styled.div`
   font-size: 7rem;
-  padding-bottom: 20px;
+  padding-bottom: 3%;
+  @media screen and (max-width: 1024px) {
+    font-size: 6rem;
+  }
+  @media screen and (max-width: 375px) {
+    font-size: 3.8rem;
+  }
   & b {
     font-weight: bold;
     color: var(--main);
@@ -39,6 +57,14 @@ const MediumText = styled.div`
 const LastText = styled.div`
   font-size: 1.8rem;
   font-family: "Pretendard";
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+    margin-bottom: 5%;
+  }
+  @media screen and (max-width: 375px) {
+    font-size: 1.1rem;
+    margin-bottom: 3%;
+  }
   b {
     font-weight: bold;
   }
@@ -48,22 +74,76 @@ const ContentTwo = styled.div`
   margin-bottom: 26px;
   font-family: "Pretendard";
   user-select: none;
+  @media screen and (max-width: 1024px) {
+    margin-bottom: 3%;
+  }
 `;
 
 const TextFirst = styled.div`
   font-size: 2.4rem;
   padding-bottom: 1.2rem;
+  @media screen and (max-width: 1024px) {
+    font-size: 2.2rem;
+  }
+
+  @media screen and (max-width: 375px) {
+    font-size: 1.2rem;
+  }
+
   b {
     font-weight: bold;
   }
 `;
 const TextLast = styled.div`
   font-size: 1.6rem;
+  @media screen and (max-width: 375px) {
+    display: none;
+  }
 `;
 
 const Coupons = styled.div`
   img {
     margin-right: 30px;
+  }
+
+  @media screen and (max-width: 1176px) {
+    margin: 0 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 0fr);
+    grid-template-rows: repeat(2, 130px);
+    justify-content: center;
+    align-content: center;
+  }
+
+  @media screen and (max-width: 1024px) {
+    margin: 0 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 0fr);
+    grid-template-rows: repeat(2, 130px);
+    justify-content: center;
+    align-content: center;
+  }
+  @media screen and (max-width: 500px) {
+    margin: 0 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 220px);
+    grid-template-rows: repeat(2, 130px);
+    justify-content: center;
+    align-content: center;
+    img {
+      margin-right: 0px;
+    }
+  }
+  @media screen and (max-width: 375px) {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 120px);
+    grid-template-rows: repeat(2, 60px);
+    justify-content: center;
+    align-content: center;
+    img {
+      margin-right: 0px;
+    }
   }
 `;
 
