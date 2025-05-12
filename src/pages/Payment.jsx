@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -6,6 +6,9 @@ const Container = styled.div`
   height: 100vh;
   padding: 0 5%;
   font-family: "Pretendard";
+  display: flex;
+  gap: 10%;
+  align-items: start;
 `;
 
 const ItemList = styled.div`
@@ -28,18 +31,21 @@ const DeliveryInfo = styled.form`
   width: 100%;
   max-width: 1010px;
   gap: 20px;
+`;
+
+const InfoTitle = styled.div`
+  width: 100%;
+  h2 {
+    font-size: 2.4rem;
+    font-weight: 600;
+    padding-left: 1%;
+  }
   span {
+    display: inline-block;
     width: 100%;
     height: 1px;
     background: var(--gray1);
   }
-`;
-
-const InfoTitle = styled.h2`
-  font-size: 2.4rem;
-  font-weight: 600;
-  padding-left: 1%;
-  margin-bottom: 1%;
 `;
 
 const DeliveryTitle = styled.h2`
@@ -105,22 +111,12 @@ const PostInput = styled.div`
   }
 `;
 
-const CallInput = styled.div`
+const PhoneInput = styled.div`
   width: 100%;
   max-width: 800px;
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  select {
-    width: 100%;
-    padding: 0 2%;
-    background: var(--grayF5);
-    border: 1px solid var(--grayC);
-    border-radius: 4px;
-    font-family: "Pretendard";
-    font-size: 1.6rem;
-    font-weight: 400;
-  }
   input[type="text"] {
     padding: 0;
     text-align: center;
@@ -132,7 +128,10 @@ const Request = styled.select`
   max-width: 800px;
   height: 70px;
   padding: 0 2%;
-  background: var(--grayF5);
+  background: ${({ isRequestPlaceholder }) =>
+    isRequestPlaceholder ? "var(--grayF5)" : "var(--light)"};
+  color: ${({ isRequestPlaceholder }) =>
+    isRequestPlaceholder ? "var(--grayC)" : "var(--dark)"};
   border: 1px solid var(--grayC);
   border-radius: 4px;
   font-family: "Pretendard";
@@ -140,23 +139,152 @@ const Request = styled.select`
   font-weight: 400;
 `;
 
+const ProductInfo = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1010px;
+  gap: 20px;
+  span {
+    width: 100%;
+    height: 1px;
+    background: var(--gray1);
+  }
+`;
+
+const Item = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .option-list {
+    display: flex;
+    justify-content: space-between;
+    p {
+      font-size: 1.4rem;
+    }
+  }
+`;
+
+const Thumbnail = styled.div`
+  width: 100%;
+  max-width: 140px;
+  height: 140px;
+  position: relative;
+  border: none;
+  input[type="checkbox"] {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    border-radius: 2px;
+  }
+`;
+
+const ItemImage = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
+const ItemInfo = styled.ul`
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const TeamName = styled.li`
+  width: 100%;
+  font-size: 1.6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const ProductName = styled.li`
+  width: 100%;
+  font-size: 1.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const ItemOption = styled.ul`
+  width: 100%;
+  max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const ItemPrice = styled.p`
+  width: 100%;
+  max-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+`;
+
+const MultiPrice = styled.p`
+  width: 100%;
+  max-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+`;
+
 const WingBanner = styled.form`
-  position: fixed;
-  top: 35%;
-  right: 5%;
+  position: sticky;
+  top: 20%;
   width: 100%;
   max-width: 570px;
   padding: 60px;
+  margin-top: 10%;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   background: var(--grayFA);
+
+  @media screen and (max-width: 1700px) {
+    max-width: 480px;
+    padding: 50px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    max-width: 360px;
+    padding: 40px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    max-width: 270px;
+    padding: 30px;
+    gap: 10px;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 610px;
+    padding: 10px;
+  }
 `;
 
 const SubTitle = styled.h2`
   font-size: 1.8rem;
   font-weight: 600;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 1rem;
+  }
 `;
 
 const SaleInfo = styled.div`
@@ -164,6 +292,10 @@ const SaleInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media screen and (max-width: 1024px) {
+    gap: 10px;
+  }
 `;
 
 const CouponList = styled.div`
@@ -175,6 +307,16 @@ const CouponList = styled.div`
   border: 1px solid var(--grayC);
   border-radius: 4px;
   background: var(--light);
+
+  @media screen and (max-width: 1440px) {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: 40px;
+    font-size: 1rem;
+  }
 `;
 
 const PriceInfo = styled.div`
@@ -186,6 +328,10 @@ const PriceInfo = styled.div`
     width: 100%;
     height: 1px;
     background: var(--grayC);
+  }
+
+  @media screen and (max-width: 1024px) {
+    gap: 10px;
   }
 `;
 
@@ -201,6 +347,22 @@ const PriceList = styled.div`
       font-size: 1.4rem;
     }
   }
+
+  @media screen and (max-width: 1440px) {
+    ul {
+      li {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    ul {
+      li {
+        font-size: 1rem;
+      }
+    }
+  }
 `;
 
 const TotalPrice = styled.div`
@@ -211,10 +373,23 @@ const TotalPrice = styled.div`
     font-size: 1.8rem;
     font-weight: 600;
   }
+
+  @media screen and (max-width: 1440px) {
+    p {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    p {
+      font-size: 1.2rem;
+    }
+  }
 `;
 
 const Button = styled.input`
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   height: 60px;
   border: none;
   border-radius: 4px;
@@ -222,16 +397,51 @@ const Button = styled.input`
   font-weight: 500;
   cursor: pointer;
   background: var(--main);
+
+  @media screen and (max-width: 1440px) {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    height: 30px;
+  }
 `;
 
 const Payment = () => {
+  const [request, setRequest] = useState("배송 요청사항을 입력해주세요.");
+  const handleRequestChange = (e) => {
+    setRequest(e.target.value);
+  };
+
+  const [phone1, setPhone1] = useState("");
+  const [phone2, setPhone2] = useState("");
+  const [phone3, setPhone3] = useState("");
+
+  const handlePhone1Change = (e) => {
+    setPhone1(e.target.value.replace(/\D/g, ""));
+  };
+  const handlePhone2Change = (e) => {
+    setPhone2(e.target.value.replace(/\D/g, ""));
+  };
+  const handlePhone3Change = (e) => {
+    setPhone3(e.target.value.replace(/\D/g, ""));
+  };
+
   return (
     <Container>
       <ItemList>
         <Title>Payment</Title>
         <DeliveryInfo>
-          <InfoTitle>배송지 정보</InfoTitle>
-          <span></span>
+          <InfoTitle>
+            <h2>배송지 정보</h2>
+            <span></span>
+          </InfoTitle>
           <DeliveryDetail>
             <DeliveryTitle>배송지명</DeliveryTitle>
             <Input placeholder="배송지 이름을 입력해주세요." />
@@ -253,21 +463,34 @@ const Payment = () => {
           </DeliveryDetail>
           <DeliveryDetail>
             <DeliveryTitle>연락처</DeliveryTitle>
-            <CallInput>
-              <select>
-                <option selected disabled></option>
-                <option value="010">010</option>
-                <option value="011">011</option>
-                <option value="012">012</option>
-                <option value="013">013</option>
-              </select>
-              <Input type="text" placeholder="1234" />
-              <Input type="text" placeholder="5678" />
-            </CallInput>
+            <PhoneInput>
+              <Input
+                type="text"
+                maxLength={3}
+                value={phone1}
+                onChange={handlePhone1Change}
+              />
+              <Input
+                type="text"
+                maxLength={4}
+                value={phone2}
+                onChange={handlePhone2Change}
+              />
+              <Input
+                type="text"
+                maxLength={4}
+                value={phone3}
+                onChange={handlePhone3Change}
+              />
+            </PhoneInput>
           </DeliveryDetail>
           <DeliveryDetail>
-            <DeliveryTitle>수령인</DeliveryTitle>
-            <Request>
+            <DeliveryTitle>요청사항</DeliveryTitle>
+            <Request
+              value={request}
+              onChange={handleRequestChange}
+              isRequestPlaceholder={request === "배송 요청사항을 선택해주세요."}
+            >
               <option selected disabled>
                 배송 요청사항을 선택해주세요.
               </option>
@@ -278,6 +501,50 @@ const Payment = () => {
             </Request>
           </DeliveryDetail>
         </DeliveryInfo>
+        <ProductInfo>
+          <InfoTitle>
+            <h2>주문정보</h2>
+            <span></span>
+          </InfoTitle>
+          <Item>
+            <Thumbnail>
+              <ItemImage src="https://twinscorestore.co.kr/web/product/big/202504/5e799a1aeb0467ed583120db13e790db.jpg" />
+            </Thumbnail>
+            <ItemInfo>
+              <TeamName>LG트윈스</TeamName>
+              <ProductName>
+                최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)
+              </ProductName>
+            </ItemInfo>
+            <ItemOption>
+              <li className="option-list">
+                <p className="size">사이즈 [XL]</p>
+                <p className="quantity">1개</p>
+              </li>
+            </ItemOption>
+            <ItemPrice>50,000원</ItemPrice>
+            <MultiPrice>50,000원</MultiPrice>
+          </Item>
+          <Item>
+            <Thumbnail>
+              <ItemImage src="https://twinscorestore.co.kr/web/product/big/202504/afe063e607c5f8c4ff6fda3a8c4fb1ed.jpg" />
+            </Thumbnail>
+            <ItemInfo>
+              <TeamName>LG트윈스</TeamName>
+              <ProductName>
+                최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)
+              </ProductName>
+            </ItemInfo>
+            <ItemOption>
+              <li className="option-list">
+                <p className="size">사이즈 [XL]</p>
+                <p className="quantity">1개</p>
+              </li>
+            </ItemOption>
+            <ItemPrice>50,000원</ItemPrice>
+            <MultiPrice>50,000원</MultiPrice>
+          </Item>
+        </ProductInfo>
       </ItemList>
       <WingBanner>
         <SaleInfo>
