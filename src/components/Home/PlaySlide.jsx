@@ -4,15 +4,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
+import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
 
 const Title = styled.div`
   margin-top: 120px;
   display: flex;
   justify-content: space-between;
+  align-items: start;
 
   h3 {
     font-size: 3rem;
     font-weight: 700;
+    margin-bottom: 40px;
   }
 
   .more {
@@ -25,10 +28,47 @@ const Title = styled.div`
       font-weight: 300;
     }
   }
+
+  @media screen and (max-width: 1024px) {
+    margin-top: 90px;
+    h3 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+    .more {
+      span {
+        font-size: 1.6rem;
+      }
+      img {
+        width: 18px;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    margin-top: 80px;
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    margin-top: 60px;
+    h3 {
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+    }
+    .more {
+      span {
+        font-size: 1.1rem;
+      }
+      img {
+        width: 13px;
+      }
+    }
+  }
 `;
 
 const Container = styled.div`
-  padding-top: 40px;
   overflow: hidden;
   position: relative;
   .swiper {
@@ -36,71 +76,28 @@ const Container = styled.div`
   }
 `;
 
-const NaviLeftBtn = styled.button`
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  width: 5%;
-  height: 100%;
-  background: linear-gradient(90deg, #222 0%, rgba(255, 255, 255, 0) 100%);
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  visibility: ${({ disabled }) => (disabled ? "hidden" : "visible")};
-  cursor: pointer;
-  img {
-    transform: rotate(-180deg);
-    margin-right: 10px;
-    display: inline-block;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-  }
-  &:hover {
-    img {
-      opacity: 1;
-    }
-  }
-`;
-
-const NaviRightBtn = styled.button`
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  right: 0;
-  width: 5%;
-  height: 100%;
-  background: linear-gradient(-90deg, #222 0%, rgba(255, 255, 255, 0) 100%);
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  visibility: ${({ disabled }) => (disabled ? "hidden" : "visible")};
-  cursor: pointer;
-  img {
-    margin-left: 10px;
-    display: inline-block;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-  }
-  &:hover {
-    img {
-      opacity: 1;
-    }
-  }
-`;
-
 const CardWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-
+  cursor: pointer;
   h5 {
     font-size: 1.6rem;
     font-weight: 300;
     line-height: 1.4;
     color: var(--grayD);
+  }
+  @media screen and (max-width: 1024px) {
+    gap: 12px;
+    h5 {
+      font-size: 1.4rem;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    gap: 10px;
+    h5 {
+      font-size: 1.1rem;
+    }
   }
 `;
 
@@ -170,6 +167,28 @@ const PlaySlide = () => {
           }}
           onReachEnd={() => setIsEnd(true)}
           onFromEdge={() => setIsEnd(false)}
+          breakpoints={{
+            0: {
+              spaceBetween: 1,
+              spaceBetween: 6,
+            },
+            500: {
+              slidesPerView: 2,
+              spaceBetween: 14,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 14,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+            1440: {
+              slidesPerView: 5,
+              spaceBetween: 20,
+            },
+          }}
         >
           <SwiperSlide>
             <CardWrap>
