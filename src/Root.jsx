@@ -5,25 +5,21 @@ import Footer from "./components/Footer";
 import Lenis from "lenis";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-
 const ContentWrapper = styled.div`
   position: relative;
   padding-top: 180px;
   background: var(--bg);
 `;
-
 function Root() {
   const [isHeaderActive, setIsHeaderActive] = useState(false);
   // const [prevScroll, setPrevScroll] = useState(0);
   const location = useLocation();
   const hideHeaderPath = ["/login", "/logon"];
-
   useEffect(() => {
     const lenis = new Lenis({
       smooth: true,
       lerp: 0.08, // 부드러움 정도
     });
-
     const handleScroll = ({ scroll }) => {
       if (scroll > 50) {
         setIsHeaderActive(true);
@@ -31,31 +27,17 @@ function Root() {
         setIsHeaderActive(false);
       }
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [prevScroll]);
-
-  // lenis 적용
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      smooth: true,
-    });
     // Lenis 이벤트로 스크롤값 받아서 상태 변경
     lenis.on("scroll", handleScroll);
-
     const raf = (time) => {
       lenis.raf(time);
       requestAnimationFrame(raf);
     };
     requestAnimationFrame(raf);
-
     return () => {
       lenis.destroy();
     };
   }, []);
-
   return (
     <>
       <GlobalStyles />
@@ -71,5 +53,4 @@ function Root() {
     </>
   );
 }
-
 export default Root;
