@@ -3,6 +3,7 @@ import RankingTable from "../components/Home/RankingTable";
 import MainSlide from "../components/Home/MainSlide";
 import MyhomeMainSlide from "../components/Home/MyhomeMainSlide";
 import bannerStrike from "../images/banners/banner-strike.png";
+import bannerStrike_m from "../images/banners/bannerStrike_mh.png";
 import PlaySlide from "../components/Home/PlaySlide";
 import HomeList from "../components/Home/HomeList";
 import HighlightSlide from "../components/Home/HighlightSlide";
@@ -29,6 +30,23 @@ const Banner = styled.div`
   img {
     width: 100%;
     max-width: 100%;
+    &:nth-of-type(1) {
+      display: block;
+    }
+    &:nth-of-type(2) {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    margin-top: 35px;
+    img {
+      &:nth-of-type(1) {
+        display: none;
+      }
+      &:nth-of-type(2) {
+        display: block;
+      }
+    }
   }
 `;
 
@@ -39,6 +57,7 @@ const Home = () => {
       <MainSlide />
       <Banner className="inner">
         <img src={bannerStrike} alt="banner" />
+        <img src={bannerStrike_m} alt="banner" />
       </Banner>
       <HighlightSlide />
       <PlaySlide />
