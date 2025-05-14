@@ -27,6 +27,7 @@ function Root() {
         setIsHeaderActive(false);
       }
     };
+
     // Lenis 이벤트로 스크롤값 받아서 상태 변경
     lenis.on("scroll", handleScroll);
     const raf = (time) => {

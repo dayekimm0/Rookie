@@ -61,12 +61,15 @@ const GlobalStyles = createGlobalStyle`
     margin: 0 5%;
 
     @media screen and (max-width: 1024px) {
-      
+      margin: 0 3%;
+    }
+    @media screen and (max-width: 500px) {
+      margin: 0 15px;
     }
   }
-.dIZTvc  {
-  border-bottom: none;
-}
+  .bJeycj{
+    border: none !important;
+  }
 .iqcOxY:not(:last-of-type) {
   border-bottom: none;
 }
