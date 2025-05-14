@@ -3,26 +3,26 @@ import { Link, useMatch, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getEmblem } from "../util";
 import styled from "styled-components";
+import headermockup from "../images/banners/banner-headermockup.png";
+import logo from "../images/logos/Rookie_logo.svg";
 
 const Container = styled.div`
   width: 100%;
+  top: 0;
   height: 180px;
   position: fixed;
-  top: 0;
-  left: 0;
   z-index: 1000;
-  transition: transform 0.3s ease;
-  &.active {
-    transform: translateY(-100%);
-  }
 `;
 
 const HeaderGameList = styled.div`
+  position: fixed;
+  top: 0;
   width: 100%;
   height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--bg);
+  transform: ${({ $hide }) => ($hide ? "translateY(-110px)" : "translateY(0)")};
+  transition: transform 0.3s ease-out;
+  z-index: 100;
 `;
 
 const HeaderMockup = styled.img`
@@ -32,11 +32,15 @@ const HeaderMockup = styled.img`
 `;
 
 const Nav = styled.div`
+  position: fixed;
+  top: ${({ $hide }) => ($hide ? "0" : "110px")};
+  left: 0;
   width: 100%;
   height: 70px;
   padding: 0 5%;
-  position: relative;
   background: var(--main);
+  z-index: 101;
+  transition: top 0.3s ease;
 `;
 
 const Logo = styled.div`
@@ -110,9 +114,10 @@ const Emblem = styled.div`
 `;
 
 const StoreContainer = styled.div`
+  position: absolute;
   width: 100%;
   height: 160px;
-  top: 100px;
+  top: ${({ $hide }) => ($hide ? "70px" : "180px")};
   z-index: 10;
   background: rgba(0, 0, 0, 0.7);
 `;
@@ -243,15 +248,12 @@ const Header = ({ isActive }) => {
 
   return (
     <Container className={isActive ? "active" : ""}>
-      <HeaderGameList>
-        <HeaderMockup
-          src="./src/images/banners/banner-headermockup.png"
-          alt="header-mockup"
-        />
+      <HeaderGameList $hide={isActive}>
+        <HeaderMockup src={headermockup} alt="헤더목업" />
       </HeaderGameList>
-      <Nav>
+      <Nav $hide={isActive}>
         <Logo onClick={goToMain}>
-          <LogoImg src="./src/images/logos/Rookie_logo.svg" alt="rookielogo" />
+          <LogoImg src={logo} alt="rookielogo" />
         </Logo>
         <Items>
           <Item>
@@ -308,6 +310,7 @@ const Header = ({ isActive }) => {
       </Nav>
       {isStoreOpen && (
         <StoreContainer
+          $hide={isActive}
           onMouseEnter={() => setIsStoreOpen(true)}
           onMouseLeave={() => setIsStoreOpen(false)}
         >
