@@ -13,6 +13,12 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   background: var(--light);
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const ProductsList = styled.div`
@@ -21,19 +27,27 @@ const ProductsList = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 3%;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    justify-content: end;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const Products = styled.div`
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(4, 1fr);
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
+  @media screen and (max-width: 1024px) {
+    margin-left: 10%;
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  @media (max-width: 500px) {
-    grid-template-columns: repeat(1, 1fr);
+  @media screen and (max-width: 500px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 

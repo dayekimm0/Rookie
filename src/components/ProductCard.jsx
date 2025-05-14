@@ -5,6 +5,8 @@ const CardContainer = styled.div`
   width: 240px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
   img {
     margin-bottom: 27px;

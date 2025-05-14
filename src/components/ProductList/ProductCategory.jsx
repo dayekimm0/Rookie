@@ -5,7 +5,14 @@ import styled from "styled-components";
 const CategoryContainer = styled.div`
   width: 100%;
   background: var(--light);
-  overflow-x: auto;
+  @media screen and (max-width: 1024px) {
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const Category = styled.div`
@@ -15,6 +22,19 @@ const Category = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  @media screen and (max-width: 1024px) {
+    width: auto;
+    flex-direction: column;
+    align-items: start;
+    background: none;
+    top: 120px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const CollaboCategory = styled.div`
@@ -29,19 +49,15 @@ const CollaboCategory = styled.div`
   margin-top: 2%;
   left: 50%;
   transform: translateX(-50%);
-
-  @media (max-width: 1024px) {
-    width: 90%;
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
+    background: none;
   }
 
-  @media (max-width: 500px) {
-    width: 95%;
-    height: 40px;
+  @media screen and (max-width: 500px) {
   }
 
-  @media (max-width: 375px) {
-    width: 95%;
-    height: 36px;
+  @media screen and (max-width: 375px) {
   }
 `;
 
@@ -60,6 +76,14 @@ const CollaboBrand = styled.div`
     color: var(--main);
     font-weight: 600;
   }
+  @media screen and (max-width: 1024px) {
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const MotionBg = styled(motion.div)`
@@ -69,6 +93,15 @@ const MotionBg = styled(motion.div)`
   background: var(--dark);
   border-radius: 26px;
   z-index: 1;
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const Item = styled.div`
@@ -85,6 +118,14 @@ const Item = styled.div`
     background: var(--main);
     color: var(--dark);
     font-weight: 600;
+  }
+  @media screen and (max-width: 1024px) {
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
   }
 `;
 
@@ -106,16 +147,16 @@ const Sort = styled.select`
   background-position: right 2px center;
   background-size: 16px auto;
   z-index: 3;
-  @media (max-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     right: 10%;
   }
 
-  @media (max-width: 500px) {
+  @media screen and (max-width: 500px) {
     font-size: 1.2rem;
     right: 5%;
   }
 
-  @media (max-width: 375px) {
+  @media screen and (max-width: 375px) {
     font-size: 1.1rem;
     right: 5%;
   }

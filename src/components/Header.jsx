@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { getEmblem } from "../util";
 import styled from "styled-components";
 import headermockup from "../images/banners/banner-headermockup.png";
+import headertab from "../images/banners/banner-header-tab.png";
 import logo from "../images/logos/Rookie_logo.svg";
 
 const Container = styled.div`
@@ -12,10 +13,22 @@ const Container = styled.div`
   height: 180px;
   position: fixed;
   z-index: 1000;
+  @media screen and (max-width: 1024px) {
+    height: 160px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const HeaderGameList = styled.div`
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 0;
   width: 100%;
   height: 110px;
@@ -23,12 +36,29 @@ const HeaderGameList = styled.div`
   transform: ${({ $hide }) => ($hide ? "translateY(-110px)" : "translateY(0)")};
   transition: transform 0.3s ease-out;
   z-index: 100;
+  @media screen and (max-width: 1024px) {
+    height: 80px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const HeaderMockup = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  @media screen and (max-width: 1024px) {
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const Nav = styled.div`
@@ -41,6 +71,15 @@ const Nav = styled.div`
   background: var(--main);
   z-index: 101;
   transition: top 0.3s ease;
+  @media screen and (max-width: 1024px) {
+    top: ${({ $hide }) => ($hide ? "0" : "80px")};
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const Logo = styled.div`
