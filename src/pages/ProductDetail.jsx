@@ -66,7 +66,7 @@ const SliderContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f8f8f8;
+  background: var(--grayC);
   position: relative;
   overflow: visible;
 `;
@@ -99,8 +99,8 @@ const TabMenu = styled.div`
   width: 700px;
   height: 60px;
   display: flex;
-  border-bottom: 1px solid #e5e5e5;
-  margin-bottom: 30px;
+  border-bottom: 1px solid var(--grayC);
+  margin-bottom: 20px;
 `;
 
 const TabButton = styled.button`
@@ -116,7 +116,7 @@ const TabButton = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    color: #333;
+    color: var(--gray3);
   }
 `;
 
@@ -131,7 +131,7 @@ const TabContent = styled.div`
 const ContentGradient = styled.div`
   display: ${(props) => (props.show ? "block" : "none")};
   position: absolute;
-  bottom: 90px; // 위치 조정
+  bottom: 0px; // 위치 조정
   left: 0;
   width: 100%;
   height: 150px;
@@ -163,12 +163,12 @@ const DetailImage = styled.img`
 const ToggleButton = styled.button`
   width: 700px;
   height: 60px;
-  background: #f8f8f8;
-  border: 1px solid #e5e5e5;
+  background: var(--grayFA);
+  border: 1px solid var(--grayE);
   border-radius: 4px;
-  color: #333;
+  color: var(--gray3);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
@@ -177,11 +177,6 @@ const ToggleButton = styled.button`
   display: flex; /* 텍스트와 아이콘을 가로로 배열 */
   justify-content: center; /* 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
-
-  &:hover {
-    background: #f0f0f0;
-  }
-
   /* 아이콘 왼쪽 여백 */
   svg {
     margin-left: 8px;
@@ -256,14 +251,14 @@ const RatingContainer = styled.div`
 `;
 
 const StarIcon = styled.span`
-  color: #ffd700;
+  color: var(--main);
   font-size: 14px;
   margin-right: 4px;
 `;
 
 const RatingText = styled.span`
   font-size: 14px;
-  color: #333;
+  color: var(--gray3);
 `;
 
 // 옵션 선택 영역
@@ -307,8 +302,8 @@ const SelectArrowContainer = styled.div`
 // 배송 정보
 const ShippingInfo = styled.div`
   font-size: 14px;
-  color: #666;
-  margin-bottom: 69px;
+  color: var(--gray6);
+  margin-bottom: 70px;
 `;
 
 // 수량 선택 영역
@@ -341,7 +336,7 @@ const QuantityButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: #f5f5f5;
+    background: var(--grayF5);
   }
 `;
 
@@ -406,26 +401,131 @@ const BuyButton = styled.button`
   margin-left: 5px;
 
   &:hover {
-    background: #ffc100;
+    background: var(--main);
   }
 `;
 
-// 연관 상품 영역
+// 추천 상품 영역
 const RelatedProductsSection = styled.div`
   width: 100%;
   margin-top: 60px;
   padding-top: 40px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--grayE);
 `;
 
-// 리뷰 섹션 관련 스타일
+// 추천 상품 타이틀
+const RelatedProductsTitle = styled.h3`
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 23px; // 제목과 상품 컨테이너 사이 간격
+`;
+
+// 추천 상품 컨테이너 그리드
+const RelatedProductsGrid = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 420px;
+`;
+
+// 개별 추천 상품 컨테이너
+const RelatedProductItem = styled.div`
+  width: 238px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+`;
+
+// 추천 상품 이미지 컨테이너
+const RelatedProductImageContainer = styled.div`
+  width: 238px;
+  height: 317px;
+  background-color: var(--light);
+  margin-bottom: 27px; // 이미지와 텍스트 사이 gap
+  overflow: hidden;
+`;
+
+// 추천 상품 이미지
+const RelatedProductImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+// 추천 상품 정보 컨테이너
+const RelatedProductInfo = styled.div`
+  width: 238px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+`;
+
+// 추천 상품 이름
+const RelatedProductName = styled.h4`
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+`;
+
+// 추천 상품 가격
+const RecommendedProductPrice = styled.span`
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gray3);
+`;
+
+// 추천 상품 영역 하단 구분선
+const BottomDivider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: var(--grayC);
+  margin-top: 58px;
+`;
+
+// 리뷰 섹션 스타일
 const SectionTitle = styled.h3`
   font-size: 24px;
   font-weight: 700;
   margin-top: 80px; // 토글 버튼과의 간격
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   display: flex;
   align-items: center;
+`;
+
+const SubSectionTitle = styled.h4`
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 49px;
+  margin-bottom: 17px;
+`;
+
+const HorizontalDivider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: var(--grayC);
+  /* margin: 18px 0; */
+`;
+
+const PhotoReviewGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 13px;
+  margin-bottom: 18px;
+`;
+
+const PhotoReviewItem = styled.div`
+  width: 106px;
+  height: 106px;
+  border-radius: 4px;
+  overflow: hidden;
 `;
 
 const ReviewCount = styled.span`
@@ -437,11 +537,9 @@ const ReviewCount = styled.span`
 const ReviewRating = styled.div`
   display: flex;
   align-items: center;
-  align-items: center;
   justify-content: center;
   margin-bottom: 30px;
   width: 100%;
-  background-color: #fafafa;
   height: 70px;
   border-radius: 8px;
   padding: 10px 0;
@@ -449,9 +547,9 @@ const ReviewRating = styled.div`
 
 const StarRating = styled.div`
   display: flex;
-  color: #ffd700;
+  color: var(--main);
   font-size: 20px;
-  margin-right: 10px;
+  align-items: center;
 `;
 
 const ReviewList = styled.div`
@@ -460,7 +558,7 @@ const ReviewList = styled.div`
 
 const ReviewItem = styled.div`
   width: 100%;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--grayC);
   padding: 20px 0;
 `;
 
@@ -478,17 +576,17 @@ const ReviewerInfo = styled.div`
 const ReviewerName = styled.span`
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: var(--gray3);
 `;
 
 const ReviewDate = styled.span`
   font-size: 14px;
-  color: #888;
+  color: var(--gray8);
   margin-left: 15px;
 `;
 
 const ReviewContent = styled.div`
-  margin: 10px 0;
+  margin: 20px 0 30px;
 `;
 
 const ReviewText = styled.p`
@@ -506,61 +604,67 @@ const ReviewImages = styled.div`
 const ReviewImage = styled.div`
   width: 70px;
   height: 70px;
-  background-color: #e0e0e0;
+  background-color: var(--grayF5);
   border-radius: 4px;
 `;
 
-// 더보기 버튼
+// 리뷰 쓰기 버튼
 const MoreButton = styled.button`
   width: 100%;
   height: 50px;
-  background: white;
-  border: 1px solid #e5e5e5;
+  background: var(--light);
+  border: 1px solid var(--grayC);
   border-radius: 4px;
-  color: #333;
+  color: var(--gray3);
   font-size: 16px;
-  margin-top: 20px;
+  margin-top: 65px;
   cursor: pointer;
   transition: all 0.2s;
+  justify-content: center;
+  align-content: center;
 
   &:hover {
-    background: #f8f8f8;
+    background: var(--grayF5);
+  }
+
+  svg {
+    margin-right: 8px;
   }
 `;
 
 // 문의하기 섹션 관련 스타일
 const InquirySection = styled.div`
   width: 100%;
-  margin-top: 80px; // 리뷰 섹션과의 간격
-  margin-bottom: 50px; // 하단 여백
+  margin-bottom: 15px; // 하단 여백
 `;
 
 const InquiryHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 `;
 
 const InquiryButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 10px 20px;
-  background: white;
+  background: var(--light);
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s;
-
-  svg {
-    margin-right: 5px;
-  }
+  width: 100%;
+  height: 50px;
+  margin-top: 65px;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
-    background: #f5f5f5;
+    background: var(--grayF5);
+  }
+
+  svg {
+    margin-right: 10px;
   }
 `;
 
@@ -571,7 +675,7 @@ const InquiryList = styled.div`
 const InquiryItem = styled.div`
   width: 100%;
   border-bottom: 1px solid #e5e5e5;
-  padding: 20px 10px;
+  padding: 20px 0;
 `;
 
 const InquiryTitle = styled.div`
@@ -584,12 +688,35 @@ const InquiryTitle = styled.div`
 const InquiryInfo = styled.div`
   display: flex;
   font-size: 14px;
-  color: #888;
+  color: var(--gray8);
   margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const InquiryAuthor = styled.span`
   margin-right: 15px;
+`;
+
+// 스와이퍼 슬라이더 스타일
+const RelatedProductSlider = styled.div`
+  width: 100%;
+  position: relative;
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #333;
+    &:after {
+      font-size: 24px;
+    }
+  }
+
+  .swiper-button-next {
+    right: 0;
+  }
+
+  .swiper-button-prev {
+    left: 0;
+  }
 `;
 
 const ProductDetail = () => {
@@ -598,6 +725,9 @@ const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState("details");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   // 리뷰 모의 데이터
   const [reviews, setReviews] = useState([
@@ -631,6 +761,20 @@ const ProductDetail = () => {
       isSecret: true,
     },
   ]);
+
+  // 리뷰 모달 열기
+  const openReviewModal = () => {
+    setShowReviewModal(true);
+    // 추후 리뷰 작성 모달 구현 예정
+    console.log("리뷰 작성 모달 열기");
+  };
+
+  // 문의 모달 열기
+  const openInquiryModal = () => {
+    setShowInquiryModal(true);
+    // 추후 문의 작성 모달 구현 예정
+    console.log("문의 작성 모달 열기");
+  };
 
   // 탭 메뉴에 대한 ref
   const tabMenuRef = useRef(null);
@@ -697,6 +841,51 @@ const ProductDetail = () => {
     return stars;
   };
 
+  // 추천 상품 가져오기 함수
+  const fetchRelatedProducts = async (teamName) => {
+    try {
+      // 실제 구현에서는 API 호출로 대체
+      // 예: const response = await fetch(`/api/products/related?team=${teamName}&exclude=${product.id}`);
+      // const data = await response.json();
+
+      // 임시 데이터 (실제 구현 시 API 응답으로 대체)
+      const mockRelatedProducts = [
+        {
+          id: "2",
+          name: "LG트윈스 클래식 핑크 유니폼",
+          price: 99000,
+          image: doosanUniform1, // 임시 이미지
+          team: "LG Twins",
+        },
+        {
+          id: "3",
+          name: "LG트윈스 클래식 그린 유니폼",
+          price: 99000,
+          image: doosanUniform2, // 임시 이미지
+          team: "LG Twins",
+        },
+        {
+          id: "4",
+          name: "LG트윈스 빈티지 이지 티셔츠",
+          price: 33000,
+          image: doosanUniform3, // 임시 이미지
+          team: "LG Twins",
+        },
+        {
+          id: "5",
+          name: "LG트윈스 애플캐릭터 티셔츠",
+          price: 33000,
+          image: doosanUniform1, // 임시 이미지
+          team: "LG Twins",
+        },
+      ];
+
+      setRelatedProducts(mockRelatedProducts);
+    } catch (error) {
+      console.error("추천 상품 가져오기 오류:", error);
+    }
+  };
+
   // 제품 데이터 가져오기
   useEffect(() => {
     // 실제 데이터 가져오기 로직으로 대체될 예정
@@ -717,6 +906,9 @@ const ProductDetail = () => {
 
         setProduct(mockProduct);
         setLoading(false);
+
+        // 추천 상품 가져오기
+        fetchRelatedProducts(mockProduct.team);
       } catch (error) {
         console.error("제품 데이터 가져오기 오류:", error);
         setLoading(false);
@@ -816,6 +1008,15 @@ const ProductDetail = () => {
                   </span>
                 </ReviewRating>
 
+                {/* 사진 리뷰 섹션 추가 */}
+                <SubSectionTitle>사진 리뷰 전체보기</SubSectionTitle>
+                <PhotoReviewGrid>
+                  {[...Array(6)].map((_, index) => (
+                    <PhotoReviewItem key={index} />
+                  ))}
+                </PhotoReviewGrid>
+                <HorizontalDivider />
+
                 <ReviewList>
                   {reviews.map((review) => (
                     <ReviewItem key={review.id}>
@@ -838,7 +1039,10 @@ const ProductDetail = () => {
                   ))}
                 </ReviewList>
 
-                <MoreButton>리뷰 쓰기</MoreButton>
+                <MoreButton onClick={openReviewModal}>
+                  <FontAwesomeIcon icon={faEdit} />
+                  리뷰 쓰기
+                </MoreButton>
 
                 {/* 문의하기 섹션 시작 */}
                 <InquirySection>
@@ -846,11 +1050,12 @@ const ProductDetail = () => {
                     <SectionTitle>
                       문의하기 <ReviewCount>{inquiries.length}</ReviewCount>
                     </SectionTitle>
-                    <InquiryButton>
-                      <FontAwesomeIcon icon={faEdit} />
-                      문의하기
-                    </InquiryButton>
                   </InquiryHeader>
+
+                  {/* 문의하기 타이틀 아래 회색선 */}
+                  <div>
+                    <HorizontalDivider />
+                  </div>
 
                   <InquiryList>
                     {inquiries.map((inquiry) => (
@@ -871,6 +1076,11 @@ const ProductDetail = () => {
                       </InquiryItem>
                     ))}
                   </InquiryList>
+
+                  <InquiryButton onClick={openInquiryModal}>
+                    <FontAwesomeIcon icon={faEdit} />
+                    문의하기
+                  </InquiryButton>
                 </InquirySection>
               </div>
             )}
@@ -888,6 +1098,15 @@ const ProductDetail = () => {
                     5.0
                   </span>
                 </ReviewRating>
+
+                {/* 사진 리뷰 섹션 추가 */}
+                <SubSectionTitle>사진 리뷰 전체보기</SubSectionTitle>
+                <PhotoReviewGrid>
+                  {[...Array(6)].map((_, index) => (
+                    <PhotoReviewItem key={index} />
+                  ))}
+                </PhotoReviewGrid>
+                <HorizontalDivider />
 
                 <ReviewList>
                   {reviews.map((review) => (
@@ -911,7 +1130,10 @@ const ProductDetail = () => {
                   ))}
                 </ReviewList>
 
-                <MoreButton>더 보기</MoreButton>
+                <MoreButton onCllick={openReviewModal}>
+                  <FontAwesomeIcon icon={faEdit} />
+                  리뷰 쓰기
+                </MoreButton>
               </div>
             )}
 
@@ -922,11 +1144,11 @@ const ProductDetail = () => {
                   <SectionTitle>
                     문의하기 <ReviewCount>{inquiries.length}</ReviewCount>
                   </SectionTitle>
-                  <InquiryButton>
-                    <FontAwesomeIcon icon={faEdit} />
-                    문의하기
-                  </InquiryButton>
                 </InquiryHeader>
+
+                <div>
+                  <HorizontalDivider />
+                </div>
 
                 <InquiryList>
                   {inquiries.map((inquiry) => (
@@ -947,6 +1169,11 @@ const ProductDetail = () => {
                     </InquiryItem>
                   ))}
                 </InquiryList>
+
+                <InquiryButton onClick={openInquiryModal}>
+                  문의하기
+                  <FontAwesomeIcon icon={faEdit} />
+                </InquiryButton>
               </div>
             )}
           </TabContent>
@@ -1021,9 +1248,38 @@ const ProductDetail = () => {
         </PurchaseSection>
 
         <RelatedProductsSection>
-          <h3>같은 카테고리의 추천 상품</h3>
-          {/* 관련 제품이 들어갈 자리 */}
+          <RelatedProductsTitle>같은 카테고리의 추천 상품</RelatedProductsTitle>
+
+          {/* Swiper 슬라이더 추가 */}
+          <RelatedProductSlider>
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={23}
+              slidesPerView={4}
+              navigation
+              className="related-products-slider"
+            >
+              {relatedProducts.map((item) => (
+                <SwiperSlide key={item.id}>
+                  <RelatedProductItem>
+                    <RelatedProductImageContainer>
+                      <RelatedProductImage src={item.image} alt={item.name} />
+                    </RelatedProductImageContainer>
+                    <RelatedProductInfo>
+                      <RelatedProductName>{item.name}</RelatedProductName>
+                      <RecommendedProductPrice>
+                        {item.price.toLocaleString()} 원
+                      </RecommendedProductPrice>
+                    </RelatedProductInfo>
+                  </RelatedProductItem>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </RelatedProductSlider>
         </RelatedProductsSection>
+
+        {/* 추가: 하단 구분선 */}
+        <BottomDivider />
       </ContentWrapper>
       <Footer />
     </Container>
