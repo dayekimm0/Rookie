@@ -24,6 +24,12 @@ const Item = styled.div`
   grid-template-columns: ${DeskTopGrid};
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--grayC);
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   [class*="mobile"] {
     display: none;
@@ -35,7 +41,7 @@ const Item = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    max-height: 200px;
+    max-height: 220px;
     min-height: 100px;
     grid-template-columns: minmax(100px, 200px) minmax(200px, 400px);
     grid-auto-rows: min-content;
@@ -95,6 +101,7 @@ const Thumbnail = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  overflow: hidden;
   input {
     position: absolute;
     top: 0;
@@ -244,7 +251,7 @@ const MultiPrice = styled.li`
   }
 `;
 
-const CartItem = () => {
+const ProductItem = () => {
   return (
     <Item>
       <Thumbnail>
@@ -277,4 +284,4 @@ const CartItem = () => {
   );
 };
 
-export default CartItem;
+export default ProductItem;

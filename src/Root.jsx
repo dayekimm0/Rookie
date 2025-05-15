@@ -39,6 +39,7 @@ function Root() {
       lenis.destroy();
     };
   }, []);
+
   return (
     <>
       <GlobalStyles />

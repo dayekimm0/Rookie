@@ -2,9 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const Banner = styled.form`
-  position: sticky;
-  top: 50%;
-  transform: translateY(-50%);
   width: 100%;
   max-width: 600px;
   min-width: 300px;
@@ -24,11 +21,12 @@ const Banner = styled.form`
 
   @media screen and (max-width: 768px) {
     position: static;
+    bottom: 0;
     max-width: 100%;
-    padding: 50px 0;
+    padding: 50px 3%;
     gap: 20px;
     background: var(--light);
-    transform: translateY(0);
+    transform: none;
   }
 
   @media screen and (max-width: 375px) {
@@ -187,6 +185,46 @@ const TotalPrice = styled.div`
   }
 `;
 
+const Buttons = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  input {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.8rem;
+
+    cursor: pointer;
+    &:nth-child(1) {
+      background: var(--main);
+      font-weight: 500;
+    }
+    &:nth-child(2) {
+      background: var(--dark);
+      color: var(--light);
+      font-weight: 400;
+    }
+
+    @media screen and (max-width: 1024px) {
+      height: 50px;
+      font-size: 1.6rem;
+    }
+
+    @media screen and (max-width: 768px) {
+      font-size: 1.8rem;
+    }
+
+    @media screen and (max-width: 375px) {
+      font-size: 1.6rem;
+    }
+  }
+`;
+
 const Button = styled.input`
   width: 100%;
   height: 60px;
@@ -215,7 +253,7 @@ const Button = styled.input`
   }
 `;
 
-const PaymentBanner = () => {
+const WingBanner = ({ page }) => {
   return (
     <Banner>
       <SaleInfo>
@@ -246,9 +284,15 @@ const PaymentBanner = () => {
           <p>48,000원</p>
         </TotalPrice>
       </PriceInfo>
-      <Button type="submit" value="결제하기" />
+      {page === "cart" && (
+        <Buttons>
+          <input type="submit" value="선택상품주문" />
+          <input type="submit" value="전체상품주문" />
+        </Buttons>
+      )}
+      {page === "payment" && <Button type="submit" value="결제하기" />}
     </Banner>
   );
 };
 
-export default PaymentBanner;
+export default WingBanner;

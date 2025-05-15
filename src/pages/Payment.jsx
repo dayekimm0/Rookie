@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import ProductItem from "../components/Cart/ProductItem";
+import WingBanner from "../components/Cart/WingBanner";
 import PaymentAddress from "../components/Payment/PaymentDelivery";
-import PaymentItem from "../components/Payment/PaymentItem";
-import PaymentBanner from "../components/Payment/PaymentBanner";
 
 const Container = styled.div`
   width: 100%;
@@ -12,6 +12,14 @@ const Container = styled.div`
   align-items: start;
   gap: 5%;
   background: var(--light);
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  button {
+    display: none;
+  }
 
   @media screen and (max-width: 1024px) {
     padding: 0 3%;
@@ -32,6 +40,10 @@ const Section = styled.section`
   flex-direction: column;
   gap: 50px;
   padding-top: 5%;
+
+  OptionChangeButton {
+    display: none;
+  }
 `;
 
 const Title = styled.h2`
@@ -120,12 +132,15 @@ const Payment = () => {
             <h2>주문정보</h2>
             <span></span>
           </InfoTitle>
-          <PaymentItem />
-          <PaymentItem />
-          <PaymentItem />
+          <ProductItem showOptionButton={false} />
+          <ProductItem showOptionButton={false} />
+          <ProductItem showOptionButton={false} />
+          <ProductItem showOptionButton={false} />
+          <ProductItem showOptionButton={false} />
+          <ProductItem showOptionButton={false} />
         </ProductInfo>
       </Section>
-      <PaymentBanner />
+      <WingBanner page="payment" />
     </Container>
   );
 };

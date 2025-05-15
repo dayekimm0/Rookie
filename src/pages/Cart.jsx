@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import CartItem from "../components/Cart/CartItem";
-import CartBanner from "../components/Cart/CartBanner";
+import ProductItem from "../components/Cart/ProductItem";
+import WingBanner from "../components/Cart/WingBanner";
 import CartMenuBar from "../components/Cart/CartMenuBar";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
   padding: 0 5%;
   font-family: "Pretendard";
   display: flex;
-  align-items: start;
+  /* align-items: flex-start; */
+  align-items: end;
   gap: 5%;
   background: var(--light);
 
@@ -32,7 +32,7 @@ const Section = styled.section`
   display: flex;
   flex-direction: column;
   gap: 50px;
-  padding-top: 5%;
+  margin-top: 5%;
 `;
 
 const Title = styled.h2`
@@ -71,10 +71,29 @@ const List = styled.div`
   }
 `;
 
-const Items = styled.div`
+const Items = styled.div.attrs({
+  "data-lenis-prevent": true,
+})`
   width: 100%;
   display: flex;
   flex-direction: column;
+  max-height: 400px;
+  gap: 20px;
+  overflow-y: auto;
+
+  @media screen and (max-width: 1024px) {
+    gap: 15px;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-height: 100%;
+    gap: 20px;
+    overflow-y: visible;
+  }
+
+  @media screen and (max-width: 375px) {
+    gap: 20px;
+  }
 `;
 
 const Cart = () => {
@@ -85,11 +104,21 @@ const Cart = () => {
         <List>
           <CartMenuBar />
           <Items>
-            <CartItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
           </Items>
         </List>
       </Section>
-      <CartBanner />
+      <WingBanner page="cart" />
     </Container>
   );
 };
