@@ -5,6 +5,7 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  background: var(--light);
 `;
 
 const Inner = styled.div`

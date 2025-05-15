@@ -73,6 +73,7 @@ const GlobalStyles = createGlobalStyle`
 .iqcOxY:not(:last-of-type) {
   border-bottom: none;
 }
+
 `;
 
 export default GlobalStyles;
