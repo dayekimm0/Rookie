@@ -118,8 +118,14 @@ export const MyhomeNaviLeftBtn = styled.button`
     transform: none;
     img {
       transform: rotate(-180deg);
-      margin-right: 5px;
+      margin-right: 0px;
       width: 12px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    width: 4%;
+    img {
+      width: 10px;
     }
   }
 `;
@@ -157,8 +163,14 @@ export const MyhomeNaviRightBtn = styled.button`
     background: linear-gradient(-90deg, #222 0%, rgba(255, 255, 255, 0) 100%);
     img {
       transform: rotate(0deg);
-      margin-left: 5px;
+      margin-left: 0px;
       width: 12px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    width: 4%;
+    img {
+      width: 10px;
     }
   }
 `;
