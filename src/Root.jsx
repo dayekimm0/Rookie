@@ -5,7 +5,6 @@ import Footer from "./components/Footer";
 import lenis from "./lenisInstance";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-
 const ContentWrapper = styled.div`
   position: relative;
   padding-top: ${({ $isHeaderActive }) =>
@@ -49,16 +48,14 @@ function Root() {
     };
 
     lenis.on("scroll", handleScroll);
-
     const raf = (time) => {
       lenis.raf(time);
       requestAnimationFrame(raf);
     };
     requestAnimationFrame(raf);
-
     return () => {
-      lenis.off("scroll", handleScroll); // ✅ off 추가
-      lenis.stop(); // destroy 대신 stop
+      lenis.off("scroll", handleScroll);
+      lenis.stop();
     };
   }, []);
   return (
@@ -77,5 +74,4 @@ function Root() {
     </>
   );
 }
-
 export default Root;

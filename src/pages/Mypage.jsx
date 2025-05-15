@@ -12,7 +12,7 @@ const Inner = styled.div`
   width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
   margin-bottom: 100px;
 `;
 
@@ -25,7 +25,7 @@ const UpBox = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 30px;
-  margin: 70px 0 36px;
+  margin: 50px 0 20px;
 `;
 
 const UpBoxLeft = styled.div`
