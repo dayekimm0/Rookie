@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getEmblem } from "../util";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase";
 import styled from "styled-components";
 import headermockup from "../images/banners/banner-headermockup.png";
 import logo from "../images/logos/Rookie_logo.svg";
+import kbologo2 from "../images/emblem/emblem_kbo2.svg";
+import logonStore from "../stores/LogonStore";
 
 const Container = styled.div`
   width: 100%;
@@ -103,6 +107,19 @@ const Profile = styled.div`
 const Emblem = styled.div`
   width: 50px;
   height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const Emblem2 = styled.div`
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -223,14 +240,15 @@ const Gnb = styled.div`
 `;
 
 const Header = ({ isActive }) => {
-  const main = useNavigate();
+  const navigate = useNavigate();
   const goToMain = () => {
-    main("/");
+    navigate("/");
   };
   const homeMatch = useMatch("/");
   const playMatch = useMatch("/play");
   const storeMatch = useMatch("/store");
   const eventMatch = useMatch("/event");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // 토글 버튼을 누르면 유저 정보 오픈
   const [isopen, setIsOpen] = useState(false);
@@ -244,6 +262,20 @@ const Header = ({ isActive }) => {
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+
+    logonStore.getState().resetForm();
+    alert("로그아웃 되었습니다");
   };
 
   return (
@@ -278,34 +310,48 @@ const Header = ({ isActive }) => {
           </Item>
         </Items>
         <Profile>
-          <Emblem>
-            <TeamEmblem emblemId="2" />
-          </Emblem>
-          <UserName>
-            <Link to="/mypage">갓효바</Link>
-            <InfoBtn className="info-btn" onClick={toggleUserBox}>
-              {isopen ? "▼" : "▲"}
-            </InfoBtn>
-          </UserName>
-          <User $isopen={isopen}>
-            <UserInfo>
-              <UserTeam>
+          {isLoggedIn ? (
+            <>
+              <Emblem>
                 <TeamEmblem emblemId="2" />
-              </UserTeam>
-              <UserDesc>
-                <UserId>갓효바</UserId>
-                <SelectTeam>
-                  구단을 선택해주세요 <i className="fas fa-chevron-right"></i>
-                </SelectTeam>
-              </UserDesc>
-            </UserInfo>
-            <hr />
-            <Gnb>
-              <Link to="/mypage">마이페이지</Link>
-              <Link to="/cart">장바구니</Link>
-              <Link to="/login">로그아웃</Link>
-            </Gnb>
-          </User>
+              </Emblem>
+              <UserName>
+                <Link to="/mypage">갓효바</Link>
+                <InfoBtn className="info-btn" onClick={toggleUserBox}>
+                  {isopen ? "▼" : "▲"}
+                </InfoBtn>
+              </UserName>
+              <User $isopen={isopen}>
+                <UserInfo>
+                  <UserTeam>
+                    <TeamEmblem emblemId="2" />
+                  </UserTeam>
+                  <UserDesc>
+                    <UserId>갓효바</UserId>
+                    <SelectTeam>
+                      구단을 선택해주세요{" "}
+                      <i className="fas fa-chevron-right"></i>
+                    </SelectTeam>
+                  </UserDesc>
+                </UserInfo>
+                <hr />
+                <Gnb>
+                  <Link to="/mypage">마이페이지</Link>
+                  <Link to="/cart">장바구니</Link>
+                  <Link onClick={handleLogout}>로그아웃</Link>
+                </Gnb>
+              </User>
+            </>
+          ) : (
+            <>
+              <Emblem2>
+                <img src={kbologo2} alt="kbologo2" />
+              </Emblem2>
+              <UserName>
+                <Link to="/login">로그인</Link>
+              </UserName>
+            </>
+          )}
         </Profile>
       </Nav>
       {isStoreOpen && (
