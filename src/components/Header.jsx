@@ -159,6 +159,15 @@ const StoreContainer = styled.div`
   top: ${({ $hide }) => ($hide ? "70px" : "180px")};
   z-index: 10;
   background: rgba(0, 0, 0, 0.7);
+  @media screen and (max-width: 1024px) {
+    top: ${({ $hide }) => ($hide ? "70px" : "150px")};
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const Stores = styled.div`
@@ -368,6 +377,7 @@ const Header = ({ isActive }) => {
             <TeamEmblem emblemId="7" />
             <TeamEmblem emblemId="8" />
             <TeamEmblem emblemId="9" />
+            <TeamEmblem emblemId="10" />
           </Stores>
         </StoreContainer>
       )}

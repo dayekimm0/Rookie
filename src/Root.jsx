@@ -5,10 +5,20 @@ import Footer from "./components/Footer";
 import Lenis from "lenis";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+
 const ContentWrapper = styled.div`
   position: relative;
-  padding-top: 180px;
+  top: 180px;
   background: var(--bg);
+  @media screen and (max-width: 1024px) {
+    top: 150px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+
+  @media screen and (max-width: 375px) {
+  }
 `;
 function Root() {
   const [isHeaderActive, setIsHeaderActive] = useState(false);

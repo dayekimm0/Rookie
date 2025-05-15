@@ -1,74 +1,46 @@
 import React from "react";
 import styled from "styled-components";
-import ProductCard from "../components/ProductCard";
 import ProductBanner from "../components/ProductList/ProductBanner";
 import ProductCategory from "../components/ProductList/ProductCategory";
+import PaginateProduct from "../components/ProductList/PaginateProduct";
 
 const Container = styled.div`
   width: 1920px;
-  height: 1000%;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: var(--light);
+  @media screen and (max-width: 1440px) {
+    width: 100%;
+  }
   @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
+  @media screen and (max-width: 768px) {
     width: 100%;
   }
   @media screen and (max-width: 500px) {
     width: 100%;
   }
-`;
-
-const ProductsList = styled.div`
-  width: 100%;
-  margin-top: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 3%;
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 375px) {
     width: 100%;
-    justify-content: end;
-  }
-  @media screen and (max-width: 500px) {
-    width: 100%;
-  }
-`;
-
-const Products = styled.div`
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(4, 1fr);
-  @media screen and (max-width: 1024px) {
-    margin-left: 10%;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media screen and (max-width: 500px) {
-    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
 const ProductList = () => {
+  const dummyProducts = Array.from({ length: 32 }, (_, index) => ({
+    id: index,
+    name: `상품 ${index + 1}`,
+  }));
+
   return (
     <>
       <Container>
         <ProductBanner />
         <ProductCategory />
-        <ProductsList>
-          <Products>
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-          </Products>
-        </ProductsList>
+        <PaginateProduct items={dummyProducts} itemsPerPage={8} />
       </Container>
     </>
   );
