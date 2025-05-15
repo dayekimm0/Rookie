@@ -6,7 +6,7 @@ import MainCard from "./MainCard";
 import MyhomeCard from "./MyhomeCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { MyhomeNaviLeftBtn, MyhomeNaviRightBtn } from "./NaviBtnStyles";
-import { getTodayMatches } from "../../util";
+import { getTodayMatches, getTeamShortName } from "../../util";
 
 const Container = styled.div`
   width: 100%;
@@ -96,7 +96,7 @@ const Container = styled.div`
   }
 `;
 
-const MyhomeMainSlide = () => {
+const MyhomeMainSlide = ({ isMyhome }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -164,16 +164,27 @@ const MyhomeMainSlide = () => {
 
   const gameDay = getTodayMatches();
 
+  const myhome = getTeamShortName(isMyhome);
+
+  const matches = gameDay.matches;
+
+  const myMatch = matches.find(
+    (match) => match.homeTeam.name === myhome || match.awayTeam.name === myhome
+  );
+  const otherMatches = matches.filter(
+    (match) => match.homeTeam.name !== myhome && match.awayTeam.name !== myhome
+  );
+
   return (
     <Container>
       <div className="slideWrap inner">
         {!isMobile && (
           <MyhomeCard
-            hometeam={8}
-            awayteam={9}
-            stadium={"울산"}
-            date={"5월 21일"}
-            day={"수"}
+            hometeam={myMatch.homeTeam.code}
+            awayteam={myMatch.awayTeam.code}
+            stadium={myMatch.stadium}
+            date={gameDay.date}
+            day={gameDay.day}
           />
         )}
         <div className="slideArrWrap">
@@ -218,50 +229,25 @@ const MyhomeMainSlide = () => {
               {isMobile && (
                 <SwiperSlide>
                   <MyhomeCard
-                    hometeam={8}
-                    awayteam={9}
-                    stadium={"울산"}
-                    date={"5월 21일"}
-                    day={"수"}
+                    hometeam={myMatch.homeTeam.code}
+                    awayteam={myMatch.awayTeam.code}
+                    stadium={myMatch.stadium}
+                    date={gameDay.date}
+                    day={gameDay.day}
                   />
                 </SwiperSlide>
               )}
-              <SwiperSlide>
-                <MainCard
-                  hometeam={8}
-                  awayteam={9}
-                  stadium={"울산"}
-                  date={"5월 21일"}
-                  day={"수"}
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <MainCard
-                  hometeam={8}
-                  awayteam={9}
-                  stadium={"울산"}
-                  date={"5월 21일"}
-                  day={"수"}
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <MainCard
-                  hometeam={8}
-                  awayteam={9}
-                  stadium={"울산"}
-                  date={"5월 21일"}
-                  day={"수"}
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <MainCard
-                  hometeam={8}
-                  awayteam={9}
-                  stadium={"울산"}
-                  date={"5월 21일"}
-                  day={"수"}
-                />
-              </SwiperSlide>
+              {otherMatches.map((match, index) => (
+                <SwiperSlide key={index}>
+                  <MainCard
+                    hometeam={match.homeTeam.code}
+                    awayteam={match.awayTeam.code}
+                    stadium={match.stadium}
+                    date={gameDay.date}
+                    day={gameDay.day}
+                  />
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
           <MyhomeNaviLeftBtn onClick={handlePrev} disabled={isBeginning}>

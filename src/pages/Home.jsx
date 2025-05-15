@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import RankingTable from "../components/Home/RankingTable";
 import MainSlide from "../components/Home/MainSlide";
@@ -10,6 +11,8 @@ import HighlightSlide from "../components/Home/HighlightSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
 import ProductCard from "../components/ProductCard";
+import { auth, db } from "../firebase";
+import { getDoc, doc } from "firebase/firestore";
 
 const Container = styled.div`
   width: 100%;
@@ -51,10 +54,38 @@ const Banner = styled.div`
 `;
 
 const Home = () => {
+  const [isMyhome, setIsMyhome] = useState("");
+  const loginMhhomeCheck = async () => {
+    const user = auth.currentUser;
+
+    if (!user) return;
+    try {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+
+        if (userData.favoriteTeam) {
+          const myhomeTeam = userData.favoriteTeam;
+          setIsMyhome("두산 베어스"); //회원가입 수정되면 myhomeTeam 으로 넣기!!
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    loginMhhomeCheck();
+  }, []);
+
   return (
     <Container>
-      <MyhomeMainSlide />
-      <MainSlide />
+      {isMyhome !== "" && isMyhome !== null ? (
+        <MyhomeMainSlide isMyhome={isMyhome} />
+      ) : (
+        <MainSlide />
+      )}
       <Banner className="inner">
         <img src={bannerStrike} alt="banner" />
         <img src={bannerStrike_m} alt="banner" />
