@@ -3,12 +3,13 @@ import styled from "styled-components";
 
 const CardContainer = styled.div`
   width: 240px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 10px;
   img {
     margin-bottom: 27px;
     width: 240px;
+    max-width: 100%;
     height: 320px;
     object-fit: cover;
     cursor: pointer;
