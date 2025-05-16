@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const CardContainer = styled.div`
   width: 240px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,6 +12,7 @@ const CardContainer = styled.div`
   img {
     margin-bottom: 27px;
     width: 240px;
+    max-width: 100%;
     height: 320px;
     object-fit: cover;
     cursor: pointer;
@@ -105,16 +107,14 @@ const ProductInfo = styled.div`
   }
 `;
 
-const ProductCard = () => {
+const ProductCard = ({ data }) => {
+  const { thumbnail, name, price, team, link } = data;
   return (
     <CardContainer>
-      <img
-        src="https://www.twinscorestore.co.kr/web/product/medium/202504/02d39da816205124f12937d598399de4.jpg"
-        alt="lgtwins"
-      />
+      <img src={thumbnail} alt={name} />
       <ProductInfo>
         <div className="brandGo">
-          <div className="brand">LG 트윈스</div>
+          <div className="brand">{team}</div>
           <svg viewBox="0 0 8 15" fill="none">
             <path
               d="M1.48926 1.98944L6.99982 7.5L1.48926 13.0106"
@@ -123,9 +123,8 @@ const ProductCard = () => {
             />
           </svg>
         </div>
-
-        <div className="name">최고심 콜라보 캐릭터 유니폼(PINK)</div>
-        <div className="price">99,000원</div>
+        <div className="name">{name}</div>
+        <div className="price">{price}</div>
       </ProductInfo>
     </CardContainer>
   );

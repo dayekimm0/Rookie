@@ -64,7 +64,7 @@ const BannerPlayer = styled(ReactPlayer)`
     }
   }
   @media screen and (max-width: 1024px) {
-    width: 100%;
+    width: 1024px !important;
     height: 300px !important;
   }
 

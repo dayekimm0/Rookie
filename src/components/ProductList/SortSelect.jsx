@@ -15,6 +15,11 @@ const SortWrapper = styled.div`
     position: static;
     right: auto;
   }
+  @media screen and (max-width: 500px) {
+    padding-right: 3%;
+    width: 100%;
+    margin-top: 60px;
+  }
 `;
 
 const Sort = styled.select`

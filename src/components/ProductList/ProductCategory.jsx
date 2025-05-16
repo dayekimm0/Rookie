@@ -30,6 +30,7 @@ const CategoryContainer = styled.div`
 `;
 
 const Category = styled.div`
+  width: 100%;
   height: 50px;
   background: var(--dark);
   display: flex;
@@ -161,7 +162,11 @@ const TabletContainer = styled.div`
     margin-top: 5%;
   }
   @media screen and (max-width: 500px) {
+    width: 100%;
+    left: 0;
+    right: 0;
     display: block;
+    margin-top: 0;
   }
 `;
 
@@ -196,6 +201,7 @@ const Sidebar = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: 0;
     span {
       &:first-child {
         display: none;
@@ -217,23 +223,20 @@ const Sort = styled.div`
   margin-left: -10px;
 `;
 
-const ProductCategory = () => {
-  const brands = [
-    "최고심",
-    "빠더너스",
-    "마루는 강쥐",
-    "잔망루피",
-    "위글위글",
-    "1993STUDIO",
-    "키니키니",
-  ];
-  const [selectCollabo, setSelectCollabo] = useState("ALL");
-  const [selectedBrand, setSelectedBrand] = useState("최고심");
-  const [bgStyle, setBgStyle] = useState([0]);
+const ProductCategory = ({
+  brands,
+  selectCollabo,
+  setSelectCollabo,
+  selectedBrand,
+  setSelectedBrand,
+  sort,
+  setSort,
+}) => {
+  const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
   const [showCategories, setShowCategories] = useState(true);
   const [showCollaborationBrands, setShowCollaborationBrands] = useState(true);
   const brandRefs = useRef({});
-  const [sort, setSort] = useState("newest");
+
   const handleSortChange = (value) => {
     setSort(value);
   };
@@ -242,7 +245,8 @@ const ProductCategory = () => {
     if (selectCollabo === "COLLABORATION") {
       setSelectedBrand(brands[0]);
     }
-  }, [selectCollabo]);
+  }, [selectCollabo, brands, setSelectedBrand]);
+
   useEffect(() => {
     const el = brandRefs.current[selectedBrand];
     if (el) {
@@ -254,7 +258,7 @@ const ProductCategory = () => {
   return (
     <CategoryWrapper>
       <CategoryContainer>
-        <SortSelect defaultValue={sort} onChange={handleSortChange} />
+        <SortSelect value={sort} onChange={handleSortChange} />
         <Category>
           {["ALL", "유니폼", "응원용품", "의류", "잡화", "COLLABORATION"].map(
             (category) => (
@@ -307,7 +311,7 @@ const ProductCategory = () => {
         <Sidebar>
           <div
             className="sidebar-title"
-            onClick={() => setShowCategories(!showCategories)}
+            onClick={() => setShowCategories((prev) => !prev)}
           >
             <span>CATEGORY</span>
             <FontAwesomeIcon
@@ -326,7 +330,7 @@ const ProductCategory = () => {
                   onClick={() => {
                     setSelectCollabo(cat);
                     if (cat === "COLLABORATION") {
-                      (fontWeight = 600), setShowCollaborationBrands(true);
+                      setShowCollaborationBrands(true);
                     }
                   }}
                 >
@@ -334,26 +338,22 @@ const ProductCategory = () => {
                 </div>
               )
             )}
-          {selectCollabo === "COLLABORATION" && (
-            <>
-              {showCollaborationBrands &&
-                brands.map((brand) => (
-                  <div
-                    key={brand}
-                    className={`category-item ${
-                      selectedBrand === brand ? "active" : ""
-                    }`}
-                    onClick={() => setSelectedBrand(brand)}
-                  >
-                    {brand}
-                  </div>
-                ))}
-            </>
-          )}
-
+          {selectCollabo === "COLLABORATION" &&
+            showCollaborationBrands &&
+            brands.map((brand) => (
+              <div
+                key={brand}
+                className={`category-item ${
+                  selectedBrand === brand ? "active" : ""
+                }`}
+                onClick={() => setSelectedBrand(brand)}
+              >
+                {brand}
+              </div>
+            ))}
           <Sort style={{ marginTop: "10px" }}>
             <SortSelect
-              defaultValue={sort}
+              value={sort}
               onChange={handleSortChange}
               style={{ position: "static", marginTop: "10px" }}
             />
