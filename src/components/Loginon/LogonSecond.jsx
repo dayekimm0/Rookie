@@ -244,8 +244,9 @@ const LogonSecond = () => {
           "0"
         )}-${formData.birthdate.date.padStart(2, "0")}`,
         phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
+        nickname: formData.nickname,
         email: formData.email,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString().split("T")[0],
       });
 
       // Firestore에 사용자 정보 저장
@@ -260,8 +261,9 @@ const LogonSecond = () => {
           "0"
         )}-${formData.birthdate.date.padStart(2, "0")}`,
         phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
+        nickname: formData.nickname,
         email: formData.email,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString().split("T")[0],
       });
 
       await signOut(auth);

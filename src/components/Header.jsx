@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getEmblem } from "../util";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import authStore from "../stores/AuthStore";
+import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import styled from "styled-components";
 import headermockup from "../images/banners/banner-headermockup.png";
 import logo from "../images/logos/Rookie_logo.svg";
 import kbologo2 from "../images/emblem/emblem_kbo2.svg";
-import logonStore from "../stores/LogonStore";
 
 const Container = styled.div`
   width: 100%;
@@ -160,6 +160,7 @@ const Stores = styled.div`
     }
   }
 `;
+
 const RookieEmblem = styled.img`
   width: 100px;
   height: 70px;
@@ -178,7 +179,7 @@ const User = styled.div`
   background: var(--light);
   box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.1);
   right: -3%;
-  top: 54px;
+  top: 68px;
   position: absolute;
   display: ${(props) => (props.$isopen ? "block" : "none")};
 `;
@@ -187,6 +188,7 @@ const InfoBtn = styled.i`
   margin-left: 16px;
   cursor: pointer;
 `;
+
 const UserInfo = styled.div`
   display: flex;
   justify-content: center;
@@ -206,6 +208,7 @@ const UserDesc = styled.div`
 
 const UserId = styled.p`
   font-size: 2rem;
+  font-weight: 600;
 `;
 
 const SelectTeam = styled.span`
@@ -241,6 +244,18 @@ const Gnb = styled.div`
 
 const Header = ({ isActive }) => {
   const navigate = useNavigate();
+
+  const { user, userProfile, isLoading } = authStore();
+
+  console.log(
+    "🔵 Header 렌더링, isLoading:",
+    isLoading,
+    "user:",
+    user,
+    "userProfile:",
+    userProfile
+  );
+
   const goToMain = () => {
     navigate("/");
   };
@@ -248,7 +263,6 @@ const Header = ({ isActive }) => {
   const playMatch = useMatch("/play");
   const storeMatch = useMatch("/store");
   const eventMatch = useMatch("/event");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // 토글 버튼을 누르면 유저 정보 오픈
   const [isopen, setIsOpen] = useState(false);
@@ -264,18 +278,14 @@ const Header = ({ isActive }) => {
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(!!user);
-    });
-    return () => unsubscribe();
-  }, []);
-
   const handleLogout = async () => {
-    await signOut(auth);
-
-    logonStore.getState().resetForm();
-    alert("로그아웃 되었습니다");
+    try {
+      await signOut(auth);
+      authStore.getState().clearUser();
+      console.log("🟢 로그아웃 성공");
+    } catch (error) {
+      console.error("🔴 로그아웃 실패:", error);
+    }
   };
 
   return (
@@ -310,15 +320,24 @@ const Header = ({ isActive }) => {
           </Item>
         </Items>
         <Profile>
-          {isLoggedIn ? (
+          {isLoading ? (
+            <>
+              <Emblem2>
+                <img src={kbologo2} alt="kbologo2" />
+              </Emblem2>
+              <UserName>
+                <Link>Loading..</Link>
+              </UserName>
+            </>
+          ) : user && userProfile ? (
             <>
               <Emblem>
                 <TeamEmblem emblemId="2" />
               </Emblem>
               <UserName>
-                <Link to="/mypage">갓효바</Link>
+                <Link to="/mypage">{userProfile.nickname}</Link>
                 <InfoBtn className="info-btn" onClick={toggleUserBox}>
-                  {isopen ? "▼" : "▲"}
+                  {isopen ? "▲" : "▼"}
                 </InfoBtn>
               </UserName>
               <User $isopen={isopen}>
@@ -327,9 +346,9 @@ const Header = ({ isActive }) => {
                     <TeamEmblem emblemId="2" />
                   </UserTeam>
                   <UserDesc>
-                    <UserId>갓효바</UserId>
+                    <UserId>{userProfile.nickname}</UserId>
                     <SelectTeam>
-                      구단을 선택해주세요{" "}
+                      {userProfile.favoriteTeam}{" "}
                       <i className="fas fa-chevron-right"></i>
                     </SelectTeam>
                   </UserDesc>
