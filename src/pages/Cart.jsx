@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import CartItem from "../components/Cart/CartItem";
-import CartBanner from "../components/Cart/CartBanner";
+import ProductItem from "../components/Cart/ProductItem";
+import WingBanner from "../components/Cart/WingBanner";
 import CartMenuBar from "../components/Cart/CartMenuBar";
+import { mockItems } from "../components/Cart/MockupData";
 
-const Container = styled.div`
+const Container = styled.div.attrs({
+  "data-lenis-prevent": true,
+})`
   width: 100%;
-  height: 100vh;
   padding: 0 5%;
   font-family: "Pretendard";
   display: flex;
-  align-items: start;
   gap: 5%;
   background: var(--light);
 
@@ -32,7 +33,7 @@ const Section = styled.section`
   display: flex;
   flex-direction: column;
   gap: 50px;
-  padding-top: 5%;
+  margin-top: 5%;
 `;
 
 const Title = styled.h2`
@@ -72,24 +73,84 @@ const List = styled.div`
 `;
 
 const Items = styled.div`
-  width: 100%;
+  width: calc(100% + 15px);
   display: flex;
   flex-direction: column;
+  height: 400px;
+  gap: 20px;
+  overflow-y: auto;
+
+  scrollbar-gutter: stable;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--grayC);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--light);
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+    gap: 15px;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 100%;
+    gap: 20px;
+    overflow-y: visible;
+  }
+
+  @media screen and (max-width: 375px) {
+    gap: 20px;
+  }
 `;
 
 const Cart = () => {
+  const [checkedItems, setCheckedItems] = useState([]);
+
+  const handleToggleAll = (isChecked) => {
+    setCheckedItems(isChecked ? mockItems.map((item) => item.id) : []);
+  };
+
+  const handleToggleItem = (itemId) => {
+    setCheckedItems((prev) =>
+      prev.includes(itemId)
+        ? prev.filter((id) => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
   return (
     <Container>
       <Section>
         <Title>Shopping Cart</Title>
         <List>
-          <CartMenuBar />
+          <CartMenuBar
+            allChecked={checkedItems.length === mockItems.length}
+            onToggleAll={handleToggleAll}
+          />
           <Items>
-            <CartItem />
+            {mockItems.map((item) => (
+              <ProductItem
+                key={item.id}
+                item={item}
+                isChecked={checkedItems.includes(item.id)}
+                onToggle={() => handleToggleItem(item.id)}
+              />
+            ))}
           </Items>
         </List>
       </Section>
-      <CartBanner />
+      <WingBanner page="cart" />
     </Container>
   );
 };

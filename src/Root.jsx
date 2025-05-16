@@ -59,6 +59,7 @@ function Root() {
       lenis.stop();
     };
   }, []);
+
   return (
     <>
       <GlobalStyles />
