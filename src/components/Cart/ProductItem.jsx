@@ -24,6 +24,21 @@ const Item = styled.div`
   grid-template-columns: ${DeskTopGrid};
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 10px;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 99%;
+    border-bottom: 1px solid var(--grayC);
+  }
+
+  &:last-child:after {
+    content: none;
+  }
 
   [class*="mobile"] {
     display: none;
@@ -35,13 +50,17 @@ const Item = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    max-height: 200px;
+    max-height: 220px;
     min-height: 100px;
     grid-template-columns: minmax(100px, 200px) minmax(200px, 400px);
     grid-auto-rows: min-content;
     justify-content: space-between;
     align-items: center;
     row-gap: 5px;
+
+    &:after {
+      width: 100%;
+    }
 
     [class*="mobile"] {
       display: block;
@@ -56,14 +75,19 @@ const Item = styled.div`
     }
     :nth-child(3) {
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      ul {
-        justify-content: end;
-        max-width: 80px;
-        min-width: 60px;
-        gap: 3px;
+      li {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         height: min-content;
+        p {
+          &:nth-child(1) {
+            text-align: start;
+          }
+          &:nth-child(2) {
+            text-align: end;
+          }
+        }
       }
       button {
         display: none;
@@ -95,6 +119,7 @@ const Thumbnail = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  overflow: hidden;
   input {
     position: absolute;
     top: 0;
@@ -158,17 +183,27 @@ const ProductName = styled.li`
   }
 `;
 
-const ItemOption = styled.div`
+const ItemOption = styled.ul`
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  ul {
+  li {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
+    p {
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: keep-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
 
   @media screen and (max-width: 1024px) {
@@ -244,37 +279,41 @@ const MultiPrice = styled.li`
   }
 `;
 
-const CartItem = () => {
+const ProductItem = ({ item, isChecked, onToggle }) => {
+  const { name, team, price, quantity, image } = item;
+
   return (
     <Item>
       <Thumbnail>
-        <CustomCheckbox />
-        <ItemImage src="https://twinscorestore.co.kr/web/product/big/202504/5e799a1aeb0467ed583120db13e790db.jpg" />
+        {onToggle && <CustomCheckbox checked={isChecked} onChange={onToggle} />}
+        <ItemImage src={image} alt={name} />
       </Thumbnail>
       <ItemName>
-        <TeamName>LG트윈스</TeamName>
-        <ProductName>최고심 콜라보 반팔티셔츠(내가엘지팬하는이유)</ProductName>
+        <TeamName>{team}</TeamName>
+        <ProductName>{name}</ProductName>
       </ItemName>
       <ItemOption>
-        <p className="mobile">옵션</p>
-        <ul>
-          <li className="size">XL</li>
-          <li>/</li>
-          <li className="quantity">10개</li>
-        </ul>
+        <li>
+          <p className="mobile">옵션</p>
+          <p className="option">54.양현종(양현종)</p>
+        </li>
+        <li>
+          <p className="mobile">수량</p>
+          <p className="quantity">{quantity}개</p>
+        </li>
         <OptionChangeButton>옵션</OptionChangeButton>
       </ItemOption>
       <SinglePrice>
-        <p className="mobile">상품금액</p>
-        <p>100,000원</p>
+        <p className="mobile">상품가격</p>
+        <p>{price.toLocaleString()}원</p>
       </SinglePrice>
       <MultiPrice>
-        <p className="mobile">결제금액</p>
-        <p>1,000,000원</p>
+        <p className="mobile">결제가격</p>
+        <p>{(price * quantity).toLocaleString()}원</p>
       </MultiPrice>
       <OptionChangeButton className="mobile">옵션 변경</OptionChangeButton>
     </Item>
   );
 };
 
-export default CartItem;
+export default ProductItem;
