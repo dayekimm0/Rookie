@@ -263,7 +263,7 @@ const WingBanner = ({ page }) => {
       <SaleInfo>
         <SubTitle>할인 정보</SubTitle>
         <CouponList>
-          <h2>사용 가능한 쿠폰 3장</h2>
+          <h2>사용 가능한 쿠폰 1장</h2>
         </CouponList>
       </SaleInfo>
       <PriceInfo>
