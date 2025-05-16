@@ -2,15 +2,19 @@ import React from "react";
 import styled from "styled-components";
 
 const Banner = styled.form`
+  position: sticky;
+  top: 300px;
   width: 100%;
   max-width: 600px;
   min-width: 300px;
+  height: min-content;
   padding: 30px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   background: var(--grayFA);
+  margin-top: calc(5% + 110px);
 
   @media screen and (max-width: 1024px) {
     max-width: 300px;
@@ -26,7 +30,7 @@ const Banner = styled.form`
     padding: 50px 3%;
     gap: 20px;
     background: var(--light);
-    transform: none;
+    margin-top: 0;
   }
 
   @media screen and (max-width: 375px) {

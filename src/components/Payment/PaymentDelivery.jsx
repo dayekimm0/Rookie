@@ -20,39 +20,6 @@ const DeliveryInfo = styled.form`
   }
 `;
 
-const InfoTitle = styled.div`
-  width: 100%;
-  h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
-  }
-  span {
-    display: inline-block;
-    width: 102%;
-    height: 1px;
-    background: var(--gray1);
-    transform: translateX(-1%);
-  }
-
-  @media screen and (max-width: 1024px) {
-    h2 {
-      font-size: 1.6rem;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    h2 {
-      font-size: 1.8rem;
-    }
-  }
-
-  @media screen and (max-width: 375px) {
-    h2 {
-      font-size: 1.6rem;
-    }
-  }
-`;
-
 const DeliveryTitle = styled.h2`
   width: 80px;
   font-size: 1.6rem;
@@ -267,10 +234,6 @@ const PaymentAddress = () => {
 
   return (
     <DeliveryInfo>
-      <InfoTitle>
-        <h2>배송지 정보</h2>
-        <span></span>
-      </InfoTitle>
       <DeliveryDetail>
         <DeliveryTitle>배송지명</DeliveryTitle>
         <Input placeholder="배송지 이름을 입력해주세요." />
