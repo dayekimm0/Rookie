@@ -81,12 +81,16 @@ const MenuBar = styled.div`
   }
 `;
 
-const CartMenuBar = () => {
+const CartMenuBar = ({ allChecked, onToggleAll }) => {
   return (
     <MenuBar>
       <ul>
         <li>
-          <CustomCheckbox />
+          <CustomCheckbox
+            className="checkAll"
+            checked={allChecked}
+            onChange={(e) => onToggleAll(e.target.checked)}
+          />
           <p>전체선택</p>
         </li>
         <li>상품정보</li>
