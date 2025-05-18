@@ -12,7 +12,6 @@ import HomeList from "../components/Home/HomeList";
 import HighlightSlide from "../components/Home/HighlightSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
-import ProductCard from "../components/ProductCard";
 import HomeProducts from "../components/Home/HomeProducts";
 
 const Container = styled.div`

@@ -1,55 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { Link, useMatch, useNavigate } from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link, useMatch, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getEmblem } from "../util";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import styled from "styled-components";
-import headermockup from "../images/banners/banner-headermockup.png";
 import logo from "../images/logos/Rookie_logo.svg";
 import kbologo2 from "../images/emblem/emblem_kbo2.svg";
 import logonStore from "../stores/LogonStore";
+import TopSchedule from "./TopSchedule";
+import useHeaderStore from "../stores/headerStore";
 
 const Container = styled.div`
+  position: fixed;
   width: 100%;
   top: 0;
-  height: 180px;
-  position: fixed;
-  z-index: 1000;
-`;
-
-const HeaderGameList = styled.div`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 110px;
-  background: var(--bg);
-  transform: ${({ $hide }) => ($hide ? "translateY(-110px)" : "translateY(0)")};
-  transition: transform 0.3s ease-out;
-  z-index: 100;
-`;
-
-const HeaderMockup = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  left: 0;
+  z-index: 1500;
 `;
 
 const Nav = styled.div`
-  position: fixed;
-  top: ${({ $hide }) => ($hide ? "0" : "110px")};
-  left: 0;
+  position: relative;
   width: 100%;
   height: 70px;
   padding: 0 5%;
   background: var(--main);
   z-index: 101;
-  transition: top 0.3s ease;
 `;
 
 const Logo = styled.div`
   width: 130px;
-  height: 40px;
   top: 50%;
   cursor: pointer;
   position: absolute;
@@ -64,11 +44,11 @@ const LogoImg = styled.img`
 
 const Items = styled.div`
   position: absolute;
-  display: flex;
-  justify-content: center;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
   gap: 50px;
 `;
 
@@ -83,14 +63,10 @@ const Item = styled.div`
 `;
 
 const Line = styled(motion.span)`
-  width: 48px;
-  height: 6px;
-  left: 0;
-  right: 0;
-  bottom: -27px;
-  margin: 0 auto;
-  background: var(--dark);
   position: absolute;
+  height: 6px;
+  bottom: -27px;
+  background: var(--dark);
 `;
 
 const Profile = styled.div`
@@ -241,20 +217,41 @@ const Gnb = styled.div`
 
 const Header = ({ isActive }) => {
   const navigate = useNavigate();
-  const goToMain = () => {
-    navigate("/");
-  };
-  const homeMatch = useMatch("/");
-  const playMatch = useMatch("/play");
-  const storeMatch = useMatch("/store");
-  const eventMatch = useMatch("/event");
+  const goToMain = () => navigate("/");
+  const isHeaderFolded = useHeaderStore((state) => state.isHeaderFolded);
+
+  //메뉴 Line 스타일
+  const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
+  const itemRefs = useRef([]);
+  const menus = [
+    { label: "HOME", path: "/" },
+    { label: "PLAY", path: "/play", disabled: true },
+    { label: "STORE", path: "/store" },
+    { label: "EVENT", path: "/event" },
+  ];
+  const location = useLocation();
+
+  const activeIndex = menus.findIndex(({ path, disabled }) => {
+    if (disabled) return false;
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  });
+
+  useLayoutEffect(() => {
+    const activeEl = itemRefs.current[activeIndex];
+    if (activeEl) {
+      setLineStyle({
+        left: activeEl.offsetLeft,
+        width: activeEl.offsetWidth,
+      });
+    }
+  }, [location.pathname]);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // 토글 버튼을 누르면 유저 정보 오픈
   const [isopen, setIsOpen] = useState(false);
-  const toggleUserBox = () => {
-    setIsOpen((prev) => !prev);
-  };
+  const toggleUserBox = () => setIsOpen((prev) => !prev);
 
   // store 카테고리 오버하면 나오는 앰블럼
   const [isStoreOpen, setIsStoreOpen] = useState(false);
@@ -280,34 +277,42 @@ const Header = ({ isActive }) => {
 
   return (
     <Container className={isActive ? "active" : ""}>
-      <HeaderGameList $hide={isActive}>
-        <HeaderMockup src={headermockup} alt="헤더목업" />
-      </HeaderGameList>
-      <Nav $hide={isActive}>
+      <TopSchedule />
+      <Nav>
         <Logo onClick={goToMain}>
           <LogoImg src={logo} alt="rookielogo" />
         </Logo>
         <Items>
-          <Item>
-            <Link to="/">HOME</Link>
-            {homeMatch && <Line layoutId="line" />}
-          </Item>
-          <Item>
-            <Link to="/">PLAY</Link>
-            {playMatch && <Line layoutId="line" />}
-          </Item>
-          <Item
-            onMouseEnter={() => setIsStoreOpen(true)}
-            onMouseLeave={() => setIsStoreOpen(false)}
-          >
-            <Link to="/store">STORE</Link>
-
-            {storeMatch && <Line layoutId="line" />}
-          </Item>
-          <Item>
-            <Link to="/event">EVENT</Link>
-            {eventMatch && <Line layoutId="line" />}
-          </Item>
+          {menus.map((menu, i) => (
+            <Item
+              key={menu.label}
+              ref={(el) => (itemRefs.current[i] = el)}
+              onMouseEnter={
+                menu.label === "STORE" ? () => setIsStoreOpen(true) : undefined
+              }
+              onMouseLeave={
+                menu.label === "STORE" ? () => setIsStoreOpen(false) : undefined
+              }
+            >
+              <Link
+                to={menu.path}
+                onClick={(e) => {
+                  if (menu.disabled) {
+                    e.preventDefault();
+                    alert("준비 중입니다.");
+                  }
+                }}
+              >
+                {menu.label}
+              </Link>
+            </Item>
+          ))}
+          <Line
+            as={motion.div}
+            initial={false}
+            animate={lineStyle}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          />
         </Items>
         <Profile>
           {isLoggedIn ? (

@@ -5,6 +5,9 @@ import Footer from "./components/Footer";
 import lenis from "./lenisInstance";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import ScrollToTop from "./ScrollToTop";
+import useHeaderStore from "./stores/headerStore";
+
 const ContentWrapper = styled.div`
   position: relative;
   padding-top: ${({ $isHeaderActive }) =>
@@ -26,47 +29,50 @@ const getMode = (pathname) => {
 };
 
 function Root() {
-  const [isHeaderActive, setIsHeaderActive] = useState(false);
-  // const [prevScroll, setPrevScroll] = useState(0);
+  const foldIfScrolled = useHeaderStore((state) => state.foldIfScrolled);
+  const unfold = useHeaderStore((state) => state.unfold);
   const location = useLocation();
+
   const hideHeaderPath = ["/login", "/logon"];
   const isVisible = !hideHeaderPath.includes(location.pathname);
 
   const mode = getMode(location.pathname);
 
   useEffect(() => {
-    let ticking = false;
+    unfold(); // 페이지 이동 시 항상 펼침
+  }, [location.pathname]);
 
-    const handleScroll = ({ scroll }) => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setIsHeaderActive(scroll > 50);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    lenis.on("scroll", handleScroll);
+  useEffect(() => {
+    const scrollEl = document.querySelector("#lenis-root");
+    lenis.on("scroll", (e) => {
+      foldIfScrolled(e.scroll);
+    });
     const raf = (time) => {
       lenis.raf(time);
       requestAnimationFrame(raf);
     };
     requestAnimationFrame(raf);
     return () => {
-      lenis.off("scroll", handleScroll);
       lenis.stop();
     };
   }, []);
+
   return (
     <>
       <GlobalStyles />
+      <ScrollToTop />
       {isVisible && (
         <>
-          <Header isActive={isHeaderActive} />
-          <ContentWrapper $isHeaderActive={isHeaderActive} $mode={mode}>
+          <Header />
+          <div id="lenis-root">
+            <ScrollToTop />
+            <ContentWrapper $mode={mode}>
+              <Outlet />
+            </ContentWrapper>
+          </div>
+          {/* <ContentWrapper $mode={mode}>
             <Outlet />
-          </ContentWrapper>
+          </ContentWrapper> */}
           <Footer mode={mode} />
         </>
       )}
