@@ -5,11 +5,13 @@ const CardContainer = styled.div`
   width: 240px;
   display: flex;
   flex-direction: column;
+  padding: 10px;
   img {
     margin-bottom: 27px;
     width: 240px;
     height: 320px;
     object-fit: cover;
+    cursor: pointer;
     border-radius: 8px;
   }
 `;
@@ -39,11 +41,13 @@ const ProductInfo = styled.div`
   }
   .name {
     margin-bottom: 10px;
+    cursor: pointer;
     font-size: 1.6rem;
     line-height: 1.3;
   }
   .price {
     font-size: 1.8rem;
+    cursor: pointer;
   }
 `;
 

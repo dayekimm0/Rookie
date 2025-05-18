@@ -1,6 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+const Form = styled.form`
+display: flex;
+flex-direction: column;
+  gap: 40px;
+`
 const Input = styled.input`
   width: 100%;
   height: 70px;
@@ -110,6 +115,8 @@ const years = Array.from(
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
 const dates = Array.from({ length: 31 }, (_, i) => i + 1);
 
+//
+
 const LogonFirst = ({ nextStep }) => {
   const [selectedTeam, setSelectedTeam] =
     useState("응원하는 구단을 선택해 주세요");
@@ -136,94 +143,98 @@ const LogonFirst = ({ nextStep }) => {
 
   return (
     <>
-      <AllInputWrapper>
-        <Input type="text" placeholder="이름" />
-        <SubTWrapper>
-          <Subsubtitle>응원 팀 선택</Subsubtitle>
-          <StyledSelect
-            name="team"
-            value={selectedTeam}
-            onChange={handleTeamChange}
-            $isTeamPlaceholder={
-              selectedTeam === "응원하는 구단을 선택해 주세요"
-            }
-          >
-            <option value="응원하는 구단을 선택해 주세요" disabled>
-              응원하는 구단을 선택해 주세요
-            </option>
-            <option value="두산베어스">두산베어스</option>
-            <option value="엘지트윈스">엘지트윈스</option>
-            <option value="키움히어로즈">키움히어로즈</option>
-            <option value="한화이글스">한화이글스</option>
-            <option value="삼성라이온즈">삼성라이온즈</option>
-            <option value="케이티위즈">케이티위즈</option>
-            <option value="엔씨다이노스">엔씨다이노스</option>
-            <option value="쓱랜더스">쓱랜더스</option>
-            <option value="롯데자이언츠">롯데자이언츠</option>
-            <option value="기아타이거즈">기아타이거즈</option>
-            <option value="다음에 선택">다음에 선택</option>
-          </StyledSelect>
-        </SubTWrapper>
-        <SubTWrapper>
-          <Subsubtitle>생년월일</Subsubtitle>
-          <StyledSelect2Wrapper>
-            <StyledSelect2
-              name="year"
-              value={selectedYear}
-              onChange={handleYearChange}
-              $isBirthPlaceholder={selectedYear === "년"}
-            >
-              <option value="년" disabled>
-                년
-              </option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
+
+      <Form>
+          <AllInputWrapper>
+            <Input type="text" placeholder="이름" />
+            <SubTWrapper>
+              <Subsubtitle>응원 팀 선택</Subsubtitle>
+              <StyledSelect
+                name="team"
+                value={selectedTeam}
+                onChange={handleTeamChange}
+                $isTeamPlaceholder={
+                  selectedTeam === "응원하는 구단을 선택해 주세요"
+                }
+              >
+                <option value="응원하는 구단을 선택해 주세요" disabled>
+                  응원하는 구단을 선택해 주세요
                 </option>
-              ))}
-            </StyledSelect2>
-            <StyledSelect2
-              name="year"
-              value={selectedMonth}
-              onChange={handleMonthChange}
-              $isBirthPlaceholder={selectedMonth === "월"}
-            >
-              <option value="월" disabled>
-                월
-              </option>
-              {months.map((month) => (
-                <option key={month} value={month}>
-                  {month}
-                </option>
-              ))}
-            </StyledSelect2>
-            <StyledSelect2
-              name="year"
-              value={selectedDate}
-              onChange={handleDateChange}
-              $isBirthPlaceholder={selectedDate === "일"}
-            >
-              <option value="일" disabled>
-                일
-              </option>
-              {dates.map((date) => (
-                <option key={date} value={date}>
-                  {date}
-                </option>
-              ))}
-            </StyledSelect2>
-          </StyledSelect2Wrapper>
-        </SubTWrapper>
-        <SubTWrapper>
-          <Subsubtitle>휴대폰 번호</Subsubtitle>
-          <StyledSelect2Wrapper>
-            <Input2 placeholder="010" />
-            <Input2 />
-            <Input2 />
-          </StyledSelect2Wrapper>
-        </SubTWrapper>
-      </AllInputWrapper>
-      <LoginBtn onClick={nextStep}>다음</LoginBtn>
+                <option value="두산베어스">두산베어스</option>
+                <option value="엘지트윈스">엘지트윈스</option>
+                <option value="키움히어로즈">키움히어로즈</option>
+                <option value="한화이글스">한화이글스</option>
+                <option value="삼성라이온즈">삼성라이온즈</option>
+                <option value="케이티위즈">케이티위즈</option>
+                <option value="엔씨다이노스">엔씨다이노스</option>
+                <option value="쓱랜더스">쓱랜더스</option>
+                <option value="롯데자이언츠">롯데자이언츠</option>
+                <option value="기아타이거즈">기아타이거즈</option>
+                <option value="다음에 선택">다음에 선택</option>
+              </StyledSelect>
+            </SubTWrapper>
+            <SubTWrapper>
+              <Subsubtitle>생년월일</Subsubtitle>
+              <StyledSelect2Wrapper>
+                <StyledSelect2
+                  name="year"
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                  $isBirthPlaceholder={selectedYear === "년"}
+                >
+                  <option value="년" disabled>
+                    년
+                  </option>
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </StyledSelect2>
+                <StyledSelect2
+                  name="year"
+                  value={selectedMonth}
+                  onChange={handleMonthChange}
+                  $isBirthPlaceholder={selectedMonth === "월"}
+                >
+                  <option value="월" disabled>
+                    월
+                  </option>
+                  {months.map((month) => (
+                    <option key={month} value={month}>
+                      {month}
+                    </option>
+                  ))}
+                </StyledSelect2>
+                <StyledSelect2
+                  name="year"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  $isBirthPlaceholder={selectedDate === "일"}
+                >
+                  <option value="일" disabled>
+                    일
+                  </option>
+                  {dates.map((date) => (
+                    <option key={date} value={date}>
+                      {date}
+                    </option>
+                  ))}
+                </StyledSelect2>
+              </StyledSelect2Wrapper>
+            </SubTWrapper>
+            <SubTWrapper>
+              <Subsubtitle>휴대폰 번호</Subsubtitle>
+              <StyledSelect2Wrapper>
+                <Input2 placeholder="010" />
+                <Input2 />
+                <Input2 />
+              </StyledSelect2Wrapper>
+            </SubTWrapper>
+          </AllInputWrapper>
+          <LoginBtn type="submit" onClick={nextStep}>다음</LoginBtn>
+      </Form>
+
     </>
   );
 };

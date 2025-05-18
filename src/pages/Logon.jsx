@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useState, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+// import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import {auth} from "../firebase"
+
 import styled from "styled-components";
 import RGarrow from "../images/icons/RGarrow_logo.svg";
 import RBarrow from "../images/icons/RBarrow_logo.svg";
+
 import LogonFirst from "../components/Loginon/LogonFirst";
 import LogonSecond from "../components/Loginon/LogonSecond";
 import LogonThird from "../components/Loginon/LogonThird";
@@ -47,7 +53,17 @@ const Line = styled.span`
   background: var(--gray1);
 `;
 
+const initialData = {
+  name:"",
+  phone:"",
+  email:"",
+  password:"",
+}
+
+// const reducer =(state, action)
+
 const Logon = () => {
+  const [data, dispatch] = useReducer(reducer, initialData)
   const [step, setStep] = useState(1);
   const nextStep = () => {
     setStep((prev) => prev + 1);
