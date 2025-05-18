@@ -1,6 +1,9 @@
 import styled from "styled-components";
-import profile_mok from "../images/mockup/mypage_profilemok.svg";
 import authStore from "../stores/AuthStore";
+import { getEmblem, getTeamColor } from "../util";
+// FontAwesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.div`
   width: 100%;
@@ -35,8 +38,15 @@ const UpBoxLeft = styled.div`
   align-items: center;
 `;
 
-const Profile = styled.img`
+const UserTeam = styled.div`
   width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const UpBoxTitle = styled.h4`
@@ -125,6 +135,11 @@ const InfoDetail = styled.h4`
   }
 `;
 
+const InfoDetailDetail = styled.h5`
+  font-size: 1.4rem;
+  color: var(--gray8);
+`
+
 const InfoButton = styled.button`
   width: 80px;
   height: 40px;
@@ -171,8 +186,47 @@ const LoadingSpinner = styled.div`
   align-items: center;
 `;
 
+const InquiryLink = styled.a`
+  padding: 10px 20px;
+  background: var(--light);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background: var(--grayF5);
+  }
+  svg {
+    margin-right: 10px;
+  }
+`;
+
+  const teamToEmblemId = {
+  "두산베어스": "4",
+  "엘지트윈스": "3",
+  "키움히어로즈": "10",
+  "한화이글스": "8",
+  "삼성라이온즈": "2",
+  "케이티위즈": "5",
+  "엔씨다이노스": "9",
+  "쓱랜더스": "6",
+  "롯데자이언츠": "7",
+  "기아타이거즈": "1",
+};
+
 const Mypage = () => {
-  const { user, userProfile, isLoading } = authStore();
+  const { userProfile, isLoading } = authStore();
+
+  const TeamEmblem = ({ emblemId }) => {
+    const emblem = getEmblem(emblemId);
+    return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
+  };
 
   return (
     <Container>
@@ -182,9 +236,12 @@ const Mypage = () => {
         <Inner>
           <UpBox>
             <UpBoxLeft>
-              <Profile src={profile_mok} alt={profile_mok} />
+              <UserTeam style={{
+              backgroundColor: getTeamColor(teamToEmblemId[userProfile.favoriteTeam] || "#fff"),}}>
+            <TeamEmblem emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"} />
+          </UserTeam>
               <UpBoxTitle>
-                {userProfile.nickname}
+                {userProfile.username}
                 <br />
                 <span>계정 생성일 {userProfile.createdAt}</span>
               </UpBoxTitle>
@@ -213,7 +270,7 @@ const Mypage = () => {
               </MyShoppingDetail>
               <MyShoppingLine />
               <MyShoppingDetail>
-                <b>0</b>
+                <b>1</b>
                 <br />
                 쿠폰
               </MyShoppingDetail>
@@ -226,7 +283,7 @@ const Mypage = () => {
               <InfoDetail>
                 <b> 이메일</b>
                 <br />
-                {userProfile.nickname}
+                {userProfile.email}
               </InfoDetail>
               <InfoButton>변경</InfoButton>
             </InfoElement>
@@ -240,18 +297,35 @@ const Mypage = () => {
             </InfoElement>
             <InfoElement>
               <InfoDetail>
-                <b> 닉네임</b>
+                <b>닉네임</b>
                 <br />
                 {userProfile.nickname}
               </InfoDetail>
               <InfoButton>변경</InfoButton>
             </InfoElement>
-            <MyInfoLine />
+            <InfoElement>
+              <InfoDetail>
+                <b>주소</b>
+                <br />
+                우편번호 {userProfile.address}
+                <br />
+                <InfoDetailDetail>우편번호 {userProfile.detailedAddress}</InfoDetailDetail>
+              </InfoDetail>
+              <InfoButton>변경</InfoButton>
+            </InfoElement>
             <Delete>
-              <h6>계정 삭제하기</h6>
+              <h6 onClick={()=>{alert("준비중인 서비스 입니다.")}}>계정 삭제하기</h6>
               <DeleteLine />
             </Delete>
           </MyInfo>
+          <InquiryLink
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfS2-2IsVBBub-rmSk97nz1Fsw0eYLMsd5iOHtNdUNwH1HgKQ/viewform?usp=header"
+            target="_blank"
+            rel="noopener noreferrer" // 📌 보안
+          >
+            <FontAwesomeIcon icon={faEdit} />
+              ROOKie 파트너 입점신청 관련 공지
+        </InquiryLink>
         </Inner>
       )}
     </Container>
