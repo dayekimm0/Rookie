@@ -2,42 +2,55 @@ import React from "react";
 import styled from "styled-components";
 
 const CardContainer = styled.div`
-  width: 240px;
+  width: 290px;
   max-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  img {
-    margin-bottom: 27px;
+
+  @media screen and (max-width: 1440px) {
+    width: 250px;
+  }
+  @media screen and (max-width: 1024px) {
     width: 240px;
-    max-width: 100%;
-    height: 320px;
-    object-fit: cover;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  @media (max-width: 1024px) {
-    width: 200px;
-
-    img {
-      width: 200px;
-      height: 280px;
-    }
   }
 
-  @media (max-width: 500px) {
+  @media screen and (max-width: 500px) {
     width: 100%;
+  }
+`;
 
-    img {
-      width: 100%;
-      height: auto;
-    }
+const ProductImg = styled.div`
+  width: 290px;
+  height: 310px;
+  margin-bottom: 27px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  @media screen and (max-width: 1440px) {
+    width: 270px;
+    height: 290px;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 250px;
+    height: 270px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 230px;
+    height: 250px;
   }
 `;
 
 const ProductInfo = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -56,23 +69,21 @@ const ProductInfo = styled.div`
       stroke: var(--dark);
     }
   }
-
   .brand {
-    font-size: 1.4rem;
   }
   .name {
     margin-bottom: 10px;
     cursor: pointer;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     line-height: 1.3;
   }
   .price {
     font-size: 1.8rem;
     cursor: pointer;
   }
-  @media (max-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     .brand {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
     }
     .name {
       font-size: 1.5rem;
@@ -82,7 +93,7 @@ const ProductInfo = styled.div`
     }
   }
 
-  @media (max-width: 500px) {
+  @media screen and (max-width: 500px) {
     .brand {
       font-size: 1.2rem;
     }
@@ -94,7 +105,7 @@ const ProductInfo = styled.div`
     }
   }
 
-  @media (max-width: 375px) {
+  @media screen and (max-width: 375px) {
     .brand {
       font-size: 1.1rem;
     }
@@ -108,10 +119,13 @@ const ProductInfo = styled.div`
 `;
 
 const ProductCard = ({ data }) => {
-  const { thumbnail, name, price, team, link } = data;
+  if (!data) return null;
+  const { thumbnail, name, price, team } = data;
   return (
     <CardContainer>
-      <img src={thumbnail} alt={name} />
+      <ProductImg>
+        <img src={thumbnail} alt={name} />
+      </ProductImg>
       <ProductInfo>
         <div className="brandGo">
           <div className="brand">{team}</div>

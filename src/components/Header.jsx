@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getEmblem } from "../util";
+import { getEmblem, getTeamJsonCode } from "../util";
 import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
@@ -322,8 +322,26 @@ const Header = ({ isActive }) => {
   const [isStoreOpen, setIsStoreOpen] = useState(false);
 
   const TeamEmblem = ({ emblemId }) => {
+    const navigate = useNavigate();
     const emblem = getEmblem(emblemId);
-    return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
+
+    const handleClick = () => {
+      const teamCode = getTeamJsonCode(emblemId);
+      if (teamCode) {
+        navigate(`/store/${teamCode}`);
+      }
+    };
+
+    return emblem ? (
+      <img
+        src={emblem}
+        alt="Team Emblem"
+        onClick={handleClick}
+        style={{ cursor: "pointer" }}
+      />
+    ) : (
+      <p>엠블럼 없음</p>
+    );
   };
 
   const handleLogout = async () => {
