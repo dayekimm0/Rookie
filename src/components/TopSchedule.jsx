@@ -11,7 +11,7 @@ const Container = styled.div`
   max-height: ${({ $folded }) => ($folded ? "0px" : "110px")};
   overflow: hidden;
   ${({ $disableTransition }) =>
-    !$disableTransition && "transition: max-height 0.4s ease;"};
+    !$disableTransition && "transition: max-height 0.4s ease;"}
 `;
 
 const List = styled.div`
@@ -27,27 +27,24 @@ const List = styled.div`
       }
     }
   }
+  @media screen and (max-width: 1024px) {
+    margin: 0 3%;
+  }
   @media screen and (max-width: 768px) {
     & > div {
       &:nth-of-type(3) {
         display: none;
       }
     }
+    @media screen and (max-width: 500px) {
+      margin: 0 15px;
+    }
   }
 `;
 
 const TopSchedule = () => {
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
-
-  const [initialFolded, setInitialFolded] = useState(true);
-
-  useLayoutEffect(() => {
-    // 첫 렌더링 후 transition 켜기
-    const timer = requestAnimationFrame(() => setInitialFolded(false));
-    return () => cancelAnimationFrame(timer);
-  }, []);
-
-  const folded = initialFolded ? false : isFolded;
+  const disableTransition = useHeaderStore((state) => state.disableTransition);
 
   const baseDate = "2025-05-21";
   const baseIndex = scheduleData.findIndex((item) => item.date === baseDate);
@@ -58,7 +55,7 @@ const TopSchedule = () => {
   ].filter(Boolean);
 
   return (
-    <Container $folded={folded} $disableTransition={initialFolded}>
+    <Container $folded={isFolded} $disableTransition={disableTransition}>
       <List>
         {threeDaySlice.map((day, index) => (
           <ScheduleBox key={index} schedule={day} />
