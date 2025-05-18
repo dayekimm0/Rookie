@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getEmblem } from "../util";
+import authStore from "../stores/AuthStore";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 import styled from "styled-components";
 import headermockup from "../images/banners/banner-headermockup.png";
 import logo from "../images/logos/Rookie_logo.svg";
+import kbologo2 from "../images/emblem/emblem_kbo2.svg";
 
 const Container = styled.div`
   width: 100%;
@@ -113,6 +117,19 @@ const Emblem = styled.div`
   }
 `;
 
+const Emblem2 = styled.div`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
 const StoreContainer = styled.div`
   position: absolute;
   width: 100%;
@@ -143,6 +160,7 @@ const Stores = styled.div`
     }
   }
 `;
+
 const RookieEmblem = styled.img`
   width: 100px;
   height: 70px;
@@ -161,7 +179,7 @@ const User = styled.div`
   background: var(--light);
   box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.1);
   right: -3%;
-  top: 54px;
+  top: 68px;
   position: absolute;
   display: ${(props) => (props.$isopen ? "block" : "none")};
 `;
@@ -170,6 +188,7 @@ const InfoBtn = styled.i`
   margin-left: 16px;
   cursor: pointer;
 `;
+
 const UserInfo = styled.div`
   display: flex;
   justify-content: center;
@@ -189,6 +208,7 @@ const UserDesc = styled.div`
 
 const UserId = styled.p`
   font-size: 2rem;
+  font-weight: 600;
 `;
 
 const SelectTeam = styled.span`
@@ -223,9 +243,21 @@ const Gnb = styled.div`
 `;
 
 const Header = ({ isActive }) => {
-  const main = useNavigate();
+  const navigate = useNavigate();
+
+  const { user, userProfile, isLoading } = authStore();
+
+  console.log(
+    "🔵 Header 렌더링, isLoading:",
+    isLoading,
+    "user:",
+    user,
+    "userProfile:",
+    userProfile
+  );
+
   const goToMain = () => {
-    main("/");
+    navigate("/");
   };
   const homeMatch = useMatch("/");
   const playMatch = useMatch("/play");
@@ -244,6 +276,16 @@ const Header = ({ isActive }) => {
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      authStore.getState().clearUser();
+      console.log("🟢 로그아웃 성공");
+    } catch (error) {
+      console.error("🔴 로그아웃 실패:", error);
+    }
   };
 
   return (
@@ -278,34 +320,57 @@ const Header = ({ isActive }) => {
           </Item>
         </Items>
         <Profile>
-          <Emblem>
-            <TeamEmblem emblemId="2" />
-          </Emblem>
-          <UserName>
-            <Link to="/mypage">갓효바</Link>
-            <InfoBtn className="info-btn" onClick={toggleUserBox}>
-              {isopen ? "▼" : "▲"}
-            </InfoBtn>
-          </UserName>
-          <User $isopen={isopen}>
-            <UserInfo>
-              <UserTeam>
+          {isLoading ? (
+            <>
+              <Emblem2>
+                <img src={kbologo2} alt="kbologo2" />
+              </Emblem2>
+              <UserName>
+                <Link>Loading..</Link>
+              </UserName>
+            </>
+          ) : user && userProfile ? (
+            <>
+              <Emblem>
                 <TeamEmblem emblemId="2" />
-              </UserTeam>
-              <UserDesc>
-                <UserId>갓효바</UserId>
-                <SelectTeam>
-                  구단을 선택해주세요 <i className="fas fa-chevron-right"></i>
-                </SelectTeam>
-              </UserDesc>
-            </UserInfo>
-            <hr />
-            <Gnb>
-              <Link to="/mypage">마이페이지</Link>
-              <Link to="/cart">장바구니</Link>
-              <Link to="/login">로그아웃</Link>
-            </Gnb>
-          </User>
+              </Emblem>
+              <UserName>
+                <Link to="/mypage">{userProfile.nickname}</Link>
+                <InfoBtn className="info-btn" onClick={toggleUserBox}>
+                  {isopen ? "▲" : "▼"}
+                </InfoBtn>
+              </UserName>
+              <User $isopen={isopen}>
+                <UserInfo>
+                  <UserTeam>
+                    <TeamEmblem emblemId="2" />
+                  </UserTeam>
+                  <UserDesc>
+                    <UserId>{userProfile.nickname}</UserId>
+                    <SelectTeam>
+                      {userProfile.favoriteTeam}{" "}
+                      <i className="fas fa-chevron-right"></i>
+                    </SelectTeam>
+                  </UserDesc>
+                </UserInfo>
+                <hr />
+                <Gnb>
+                  <Link to="/mypage">마이페이지</Link>
+                  <Link to="/cart">장바구니</Link>
+                  <Link onClick={handleLogout}>로그아웃</Link>
+                </Gnb>
+              </User>
+            </>
+          ) : (
+            <>
+              <Emblem2>
+                <img src={kbologo2} alt="kbologo2" />
+              </Emblem2>
+              <UserName>
+                <Link to="/login">로그인</Link>
+              </UserName>
+            </>
+          )}
         </Profile>
       </Nav>
       {isStoreOpen && (

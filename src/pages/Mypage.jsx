@@ -1,17 +1,19 @@
 import styled from "styled-components";
 import profile_mok from "../images/mockup/mypage_profilemok.svg";
+import authStore from "../stores/AuthStore";
 
 const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  background: var(--light);
 `;
 
 const Inner = styled.div`
   width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
   margin-bottom: 100px;
 `;
 
@@ -24,7 +26,7 @@ const UpBox = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 30px;
-  margin: 70px 0 36px;
+  margin: 50px 0 20px;
 `;
 
 const UpBoxLeft = styled.div`
@@ -57,6 +59,7 @@ const MyShopping = styled.div`
   flex-direction: column;
   justify-content: start;
   gap: 30px;
+  margin-bottom: 30px;
 `;
 
 const MyShoppingTitle = styled.h4`
@@ -128,6 +131,7 @@ const InfoButton = styled.button`
   background: var(--dark);
   color: var(--light);
   border-radius: 4px;
+  border: none;
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
@@ -160,83 +164,96 @@ const DeleteLine = styled.span`
   transition: opacity 0.3s;
 `;
 
+const LoadingSpinner = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Mypage = () => {
+  const { user, userProfile, isLoading } = authStore();
+
   return (
     <Container>
-      <Inner>
-        <UpBox>
-          <UpBoxLeft>
-            <Profile src={profile_mok} alt={profile_mok} />
-            <UpBoxTitle>
-              갓효바
-              <br />
-              <span>계정 생성일 2025.04.23</span>
-            </UpBoxTitle>
-          </UpBoxLeft>
-          <UpBoxSub>구단변경 ›</UpBoxSub>
-        </UpBox>
-        <MyShopping>
-          <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
-          <MyShoppingInner>
-            <MyShoppingDetail>
-              <b>2</b>
-              <br />
-              장바구니
-            </MyShoppingDetail>
-            <MyShoppingLine />
-            <MyShoppingDetail>
-              <b>1</b>
-              <br />
-              구매완료
-            </MyShoppingDetail>
-            <MyShoppingLine />
-            <MyShoppingDetail>
-              <b>0</b>
-              <br />
-              배송완료
-            </MyShoppingDetail>
-            <MyShoppingLine />
-            <MyShoppingDetail>
-              <b>0</b>
-              <br />
-              쿠폰
-            </MyShoppingDetail>
-          </MyShoppingInner>
-        </MyShopping>
-        <MyInfo>
-          <MyInfoTitle>계정 상세정보</MyInfoTitle>
-          <MyInfoLine style={{ marginBottom: "40px" }} />
-          <InfoElement>
-            <InfoDetail>
-              <b> 이메일</b>
-              <br />
-              j******k@daum.net
-            </InfoDetail>
-            <InfoButton>변경</InfoButton>
-          </InfoElement>
-          <InfoElement>
-            <InfoDetail>
-              <b> 비밀번호</b>
-              <br />
-              *********
-            </InfoDetail>
-            <InfoButton>변경</InfoButton>
-          </InfoElement>
-          <InfoElement>
-            <InfoDetail>
-              <b> 닉네임</b>
-              <br />
-              갓효바
-            </InfoDetail>
-            <InfoButton>변경</InfoButton>
-          </InfoElement>
-          <MyInfoLine />
-          <Delete>
-            <h6>계정 삭제하기</h6>
-            <DeleteLine />
-          </Delete>
-        </MyInfo>
-      </Inner>
+      {isLoading ? (
+        <LoadingSpinner>Loading...</LoadingSpinner>
+      ) : (
+        <Inner>
+          <UpBox>
+            <UpBoxLeft>
+              <Profile src={profile_mok} alt={profile_mok} />
+              <UpBoxTitle>
+                {userProfile.nickname}
+                <br />
+                <span>계정 생성일 {userProfile.createdAt}</span>
+              </UpBoxTitle>
+            </UpBoxLeft>
+            <UpBoxSub>구단변경 ›</UpBoxSub>
+          </UpBox>
+          <MyShopping>
+            <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
+            <MyShoppingInner>
+              <MyShoppingDetail>
+                <b>2</b>
+                <br />
+                장바구니
+              </MyShoppingDetail>
+              <MyShoppingLine />
+              <MyShoppingDetail>
+                <b>1</b>
+                <br />
+                구매완료
+              </MyShoppingDetail>
+              <MyShoppingLine />
+              <MyShoppingDetail>
+                <b>0</b>
+                <br />
+                배송완료
+              </MyShoppingDetail>
+              <MyShoppingLine />
+              <MyShoppingDetail>
+                <b>0</b>
+                <br />
+                쿠폰
+              </MyShoppingDetail>
+            </MyShoppingInner>
+          </MyShopping>
+          <MyInfo>
+            <MyInfoTitle>계정 상세정보</MyInfoTitle>
+            <MyInfoLine style={{ marginBottom: "40px" }} />
+            <InfoElement>
+              <InfoDetail>
+                <b> 이메일</b>
+                <br />
+                {userProfile.nickname}
+              </InfoDetail>
+              <InfoButton>변경</InfoButton>
+            </InfoElement>
+            <InfoElement>
+              <InfoDetail>
+                <b> 비밀번호</b>
+                <br />
+                *********
+              </InfoDetail>
+              <InfoButton>변경</InfoButton>
+            </InfoElement>
+            <InfoElement>
+              <InfoDetail>
+                <b> 닉네임</b>
+                <br />
+                {userProfile.nickname}
+              </InfoDetail>
+              <InfoButton>변경</InfoButton>
+            </InfoElement>
+            <MyInfoLine />
+            <Delete>
+              <h6>계정 삭제하기</h6>
+              <DeleteLine />
+            </Delete>
+          </MyInfo>
+        </Inner>
+      )}
     </Container>
   );
 };

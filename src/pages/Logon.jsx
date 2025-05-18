@@ -11,6 +11,11 @@ import RBarrow from "../images/icons/RBarrow_logo.svg";
 import LogonFirst from "../components/Loginon/LogonFirst";
 import LogonSecond from "../components/Loginon/LogonSecond";
 import LogonThird from "../components/Loginon/LogonThird";
+import logonStore from "../stores/LogonStore";
+
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { auth } from "../firebase";
 
 const Container = styled.div`
   width: 100%;
@@ -63,6 +68,7 @@ const initialData = {
 // const reducer =(state, action)
 
 const Logon = () => {
+  const { step } = logonStore();
   const [data, dispatch] = useReducer(reducer, initialData)
   const [step, setStep] = useState(1);
   const nextStep = () => {
@@ -106,8 +112,8 @@ const Logon = () => {
           </LogonTitleS>
         </TitleSWrapper>
         <Line />
-        {step === 1 && <LogonFirst nextStep={nextStep} />}
-        {step === 2 && <LogonSecond nextStep={nextStep} />}
+        {step === 1 && <LogonFirst />}
+        {step === 2 && <LogonSecond />}
         {step === 3 && <LogonThird />}
       </Inner>
     </Container>

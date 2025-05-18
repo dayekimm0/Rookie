@@ -1,9 +1,14 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import rookie_logo from "../images/logos/Rookie_logo.svg";
 import google_icon from "../images/icons/google_icon.svg";
 import kakao_talk from "../images/icons/kakao-talk.svg";
 import naver_icon from "../images/icons/naver_icon.svg";
+import logonStore from "../stores/LogonStore";
 
 //style 시작
 const Container = styled.div`
@@ -137,33 +142,160 @@ const LoginBtn = styled.button`
   cursor: pointer;
 `;
 
+const ErrorMessage = styled.p`
+  color: var(--red);
+  font-size: 1.4rem;
+`;
+
+//
+
 const Login = () => {
-  const logonnavigation = useNavigate();
-    const mainnavigation = useNavigate();
+  const { setFormData } = logonStore();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/");
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
+
+    if (!form.email) {
+      newErrors.email = "이메일을 입력해주세요.";
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+      newErrors.email = "유효한 이메일 형식이 아닙니다.";
+    }
+    if (!form.password) {
+      newErrors.password = "비밀번호를 입력해주세요.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+      console.log("✅ 로그인 성공:", userCredential);
+
+      const user = userCredential.user;
+
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      console.log("📄 Firestore 문서 요청:", user.uid);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        console.log("📦 Firestore 유저 데이터:", userData);
+
+        const birthdateParts = userData.birthdate?.match(
+          /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+        const phoneParts = userData.phoneNumber?.match(
+          /^(\d{3})-(\d{3,4})-(\d{4})$/
+        );
+        if (!birthdateParts || !phoneParts) {
+          console.warn("⚠️ Invalid birthdate or phoneNumber format");
+        } else {
+          setFormData({
+            email: user.email,
+            username: userData.username || "",
+            nickname: userData.nickname || "",
+            favoriteTeam: userData.favoriteTeam || "",
+            birthdate: { year: "", month: "", date: "" },
+            phoneNumber: { part1: "", part2: "", part3: "" },
+            postalCode: userData.postalCode || "",
+            address: userData.address || "",
+            detailedAddress: userData.detailedAddress || "",
+          });
+        }
+      } else {
+        console.warn("⚠️ Firestore 유저 데이터 없음");
+      }
+
+      setErrors({});
+      navigate("/");
+    } catch (err) {
+      if (
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/wrong-password"
+      ) {
+        setErrors({ general: "이메일 또는 비밀번호가 올바르지 않습니다." });
+      } else if (err.code === "auth/network-request-failed") {
+        setErrors({
+          general: "네트워크 오류가 발생했습니다. 다시 시도해주세요.",
+        });
+      } else {
+        setErrors({ general: "오류가 발생했습니다. 다시 시도해주세요." });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handlelogonclick = () => {
-    logonnavigation("/logon");
+    navigate("/logon");
   };
   const handleMainclick = () => {
     mainnavigation("/");
   };
 
+  const isFormValid =
+    form.email && /\S+@\S+\.\S+/.test(form.email) && form.password;
+
   return (
     <Container>
       <Inner>
         <LogoWrapper>
-          <Logo onClick={handleMainclick} src={rookie_logo} />
+          <Link to="/">
+            <Logo src={rookie_logo} alt="rookie_logo" />
+          </Link>
           <LogoLogin>로그인</LogoLogin>
         </LogoWrapper>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <InputWrapper>
-            <Input type="text" placeholder="아이디" />
-            <Input type="password" placeholder="비밀번호" />
+            <Input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="이메일"
+            />
+            {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+            <Input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="비밀번호"
+            />
+            {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
+            {errors.general && <ErrorMessage>{errors.general}</ErrorMessage>}
             <UnderInputWrapper>
-              <UnderInputBtn onClick={handlelogonclick}>
+              <UnderInputBtn type="button" onClick={handlelogonclick}>
                 계정만들기
               </UnderInputBtn>
               <UnderInputLine />
-              <UnderInputBtn>아이디 • 비밀번호 찾기</UnderInputBtn>
+              <UnderInputBtn>이메일 • 비밀번호 찾기</UnderInputBtn>
             </UnderInputWrapper>
           </InputWrapper>
           <SnsWrapper>
@@ -175,9 +307,17 @@ const Login = () => {
             <img src={kakao_talk} alt="kakao_talk" />
             <img src={naver_icon} alt="naver_icon" />
           </SnsLogoWrapper>
-          <Link to="/">
-            <LoginBtn>로그인</LoginBtn>
-          </Link>
+          <LoginBtn
+            type="submit"
+            style={{
+              background:
+                isFormValid && !isLoading ? "var(--dark)" : "var(--grayE)",
+              color:
+                isFormValid && !isLoading ? "var(--light)" : "var(--grayC)",
+            }}
+          >
+            {isLoading ? "로딩중..." : "로그인"}
+          </LoginBtn>
         </Form>
       </Inner>
     </Container>

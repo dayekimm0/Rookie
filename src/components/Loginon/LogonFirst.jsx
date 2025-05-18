@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import logonStore from "../../stores/LogonStore";
 
 const Form = styled.form`
 display: flex;
@@ -105,6 +106,12 @@ const LoginBtn = styled.button`
   font-size: 2.4rem;
   color: var(--grayC);
   cursor: pointer;
+  margin-top: 30px;
+`;
+
+const ErrorMessage = styled.p`
+  color: var(--red);
+  font-size: 1.4rem;
 `;
 
 const currentyear = new Date().getFullYear();
@@ -117,124 +124,208 @@ const dates = Array.from({ length: 31 }, (_, i) => i + 1);
 
 //
 
-const LogonFirst = ({ nextStep }) => {
-  const [selectedTeam, setSelectedTeam] =
-    useState("응원하는 구단을 선택해 주세요");
+//
 
-  const [selectedYear, setSelectedYear] = useState("년");
-  const [selectedMonth, setSelectedMonth] = useState("월");
-  const [selectedDate, setSelectedDate] = useState("일");
+const LogonFirst = () => {
+  const { formData, setFormData, nextStep } = logonStore();
+  const [errors, setErrors] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
 
-  const handleTeamChange = (e) => {
-    setSelectedTeam(e.target.value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = {};
+
+    // 검증
+    if (!formData.username) {
+      newErrors.username = "이름을 입력해주세요.";
+    }
+    if (!formData.favoriteTeam) {
+      newErrors.favoriteTeam = "응원 팀을 선택해주세요.";
+    }
+    if (
+      !formData.birthdate.year ||
+      !formData.birthdate.month ||
+      !formData.birthdate.date
+    ) {
+      newErrors.birthdate = "생년월일을 모두 선택해 주세요.";
+    }
+    if (
+      !formData.phoneNumber.part1 ||
+      !formData.phoneNumber.part2 ||
+      !formData.phoneNumber.part3
+    ) {
+      newErrors.phoneNumber = "휴대폰 번호를 모두 입력해주세요.";
+    } else if (
+      !/^\d{3}$/.test(formData.phoneNumber.part1) ||
+      !/^\d{4}$/.test(formData.phoneNumber.part2) ||
+      !/^\d{4}$/.test(formData.phoneNumber.part3)
+    ) {
+      newErrors.phoneNumber = "유효한 휴대폰 번호를 입력해주세요.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
+    nextStep();
   };
 
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "username" || name === "favoriteTeam") {
+      setFormData({ [name]: value });
+    } else if (name.startsWith("birthdate")) {
+      const field = name.split(".")[1];
+      setFormData({
+        birthdate: { ...formData.birthdate, [field]: value },
+      });
+    } else if (name.startsWith("phoneNumber")) {
+      const field = name.split(".")[1];
+      setFormData({
+        phoneNumber: { ...formData.phoneNumber, [field]: value },
+      });
+    }
   };
 
-  const handleMonthChange = (e) => {
-    setSelectedMonth(e.target.value);
-  };
+  useEffect(() => {
+    const isFormValid =
+      formData.username &&
+      formData.favoriteTeam &&
+      formData.birthdate.year &&
+      formData.birthdate.month &&
+      formData.birthdate.date &&
+      /^\d{3}$/.test(formData.phoneNumber.part1) &&
+      /^\d{4}$/.test(formData.phoneNumber.part2) &&
+      /^\d{4}$/.test(formData.phoneNumber.part3);
 
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
+    setIsFormValid(isFormValid);
+  }, [formData]);
 
   return (
     <>
-
-      <Form>
-          <AllInputWrapper>
-            <Input type="text" placeholder="이름" />
-            <SubTWrapper>
-              <Subsubtitle>응원 팀 선택</Subsubtitle>
-              <StyledSelect
-                name="team"
-                value={selectedTeam}
-                onChange={handleTeamChange}
-                $isTeamPlaceholder={
-                  selectedTeam === "응원하는 구단을 선택해 주세요"
-                }
+      <form onSubmit={handleSubmit}>
+        <AllInputWrapper>
+          <Input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="이름"
+          />
+          {errors.username && <ErrorMessage>{errors.username}</ErrorMessage>}
+          <SubTWrapper>
+            <Subsubtitle>응원 팀 선택</Subsubtitle>
+            <StyledSelect
+              name="favoriteTeam"
+              value={formData.favoriteTeam}
+              onChange={handleChange}
+              $isTeamPlaceholder={!formData.favoriteTeam}
+            >
+              <option value="" disabled>
+                응원하는 구단을 선택해 주세요
+              </option>
+              <option value="두산베어스">두산베어스</option>
+              <option value="엘지트윈스">엘지트윈스</option>
+              <option value="키움히어로즈">키움히어로즈</option>
+              <option value="한화이글스">한화이글스</option>
+              <option value="삼성라이온즈">삼성라이온즈</option>
+              <option value="케이티위즈">케이티위즈</option>
+              <option value="엔씨다이노스">엔씨다이노스</option>
+              <option value="쓱랜더스">쓱랜더스</option>
+              <option value="롯데자이언츠">롯데자이언츠</option>
+              <option value="기아타이거즈">기아타이거즈</option>
+            </StyledSelect>
+          </SubTWrapper>
+          {errors.favoriteTeam && (
+            <ErrorMessage>{errors.favoriteTeam}</ErrorMessage>
+          )}
+          <SubTWrapper>
+            <Subsubtitle>생년월일</Subsubtitle>
+            <StyledSelect2Wrapper>
+              <StyledSelect2
+                name="birthdate.year"
+                value={formData.birthdate.year}
+                onChange={handleChange}
+                $isBirthPlaceholder={formData.birthdate.year === ""}
               >
-                <option value="응원하는 구단을 선택해 주세요" disabled>
-                  응원하는 구단을 선택해 주세요
+                <option value="" disabled>
+                  년
                 </option>
-                <option value="두산베어스">두산베어스</option>
-                <option value="엘지트윈스">엘지트윈스</option>
-                <option value="키움히어로즈">키움히어로즈</option>
-                <option value="한화이글스">한화이글스</option>
-                <option value="삼성라이온즈">삼성라이온즈</option>
-                <option value="케이티위즈">케이티위즈</option>
-                <option value="엔씨다이노스">엔씨다이노스</option>
-                <option value="쓱랜더스">쓱랜더스</option>
-                <option value="롯데자이언츠">롯데자이언츠</option>
-                <option value="기아타이거즈">기아타이거즈</option>
-                <option value="다음에 선택">다음에 선택</option>
-              </StyledSelect>
-            </SubTWrapper>
-            <SubTWrapper>
-              <Subsubtitle>생년월일</Subsubtitle>
-              <StyledSelect2Wrapper>
-                <StyledSelect2
-                  name="year"
-                  value={selectedYear}
-                  onChange={handleYearChange}
-                  $isBirthPlaceholder={selectedYear === "년"}
-                >
-                  <option value="년" disabled>
-                    년
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
                   </option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </StyledSelect2>
-                <StyledSelect2
-                  name="year"
-                  value={selectedMonth}
-                  onChange={handleMonthChange}
-                  $isBirthPlaceholder={selectedMonth === "월"}
-                >
-                  <option value="월" disabled>
-                    월
+                ))}
+              </StyledSelect2>
+              <StyledSelect2
+                name="birthdate.month"
+                value={formData.birthdate.month}
+                onChange={handleChange}
+                $isBirthPlaceholder={formData.birthdate.month === ""}
+              >
+                <option value="" disabled>
+                  월
+                </option>
+                {months.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
                   </option>
-                  {months.map((month) => (
-                    <option key={month} value={month}>
-                      {month}
-                    </option>
-                  ))}
-                </StyledSelect2>
-                <StyledSelect2
-                  name="year"
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  $isBirthPlaceholder={selectedDate === "일"}
-                >
-                  <option value="일" disabled>
-                    일
+                ))}
+              </StyledSelect2>
+              <StyledSelect2
+                name="birthdate.date"
+                value={formData.birthdate.date}
+                onChange={handleChange}
+                $isBirthPlaceholder={formData.birthdate.date === ""}
+              >
+                <option value="" disabled>
+                  일
+                </option>
+                {dates.map((date) => (
+                  <option key={date} value={date}>
+                    {date}
                   </option>
-                  {dates.map((date) => (
-                    <option key={date} value={date}>
-                      {date}
-                    </option>
-                  ))}
-                </StyledSelect2>
-              </StyledSelect2Wrapper>
-            </SubTWrapper>
-            <SubTWrapper>
-              <Subsubtitle>휴대폰 번호</Subsubtitle>
-              <StyledSelect2Wrapper>
-                <Input2 placeholder="010" />
-                <Input2 />
-                <Input2 />
-              </StyledSelect2Wrapper>
-            </SubTWrapper>
-          </AllInputWrapper>
-          <LoginBtn type="submit" onClick={nextStep}>다음</LoginBtn>
-      </Form>
-
+                ))}
+              </StyledSelect2>
+            </StyledSelect2Wrapper>
+          </SubTWrapper>
+          {errors.birthdate && <ErrorMessage>{errors.birthdate}</ErrorMessage>}
+          <SubTWrapper>
+            <Subsubtitle>휴대폰 번호</Subsubtitle>
+            <StyledSelect2Wrapper>
+              <Input2
+                name="phoneNumber.part1"
+                value={formData.phoneNumber.part1}
+                onChange={handleChange}
+                placeholder="010"
+              />
+              <Input2
+                name="phoneNumber.part2"
+                value={formData.phoneNumber.part2}
+                onChange={handleChange}
+              />
+              <Input2
+                name="phoneNumber.part3"
+                value={formData.phoneNumber.part3}
+                onChange={handleChange}
+              />
+            </StyledSelect2Wrapper>
+            {errors.phoneNumber && (
+              <ErrorMessage>{errors.phoneNumber}</ErrorMessage>
+            )}
+          </SubTWrapper>
+        </AllInputWrapper>
+        <LoginBtn
+          type="submit"
+          style={{
+            background: isFormValid ? "var(--dark)" : "var(--grayE)",
+            color: isFormValid ? "var(--light)" : "var(--grayC)",
+          }}
+        >
+          다음
+        </LoginBtn>
+      </form>
     </>
   );
 };

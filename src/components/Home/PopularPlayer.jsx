@@ -24,8 +24,10 @@ const Container = styled.div`
       grid-template-columns: repeat(5, 1fr);
       gap: 20px;
       li {
+        width: 100%;
+        max-width: 100%;
         & > div {
-          width: 218px;
+          max-width: 218px;
           aspect-ratio: 1;
           border-radius: 50%;
           overflow: hidden;
@@ -64,6 +66,112 @@ const Container = styled.div`
             .layout {
               opacity: 1;
               visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 1500px) {
+    & > .inner {
+      flex-direction: column;
+      gap: 30px;
+      .popular-list {
+        li {
+          & > div {
+            /* max-width: 170px; */
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    margin-top: 90px;
+    & > .inner {
+      h3 {
+        font-size: 2.5rem;
+      }
+      .popular-list {
+        gap: 14px;
+        li {
+          & > div {
+            .layout {
+              p {
+                font-size: 1.4rem;
+                span {
+                  font-size: 2rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    margin-top: 80px;
+    & > .inner {
+      margin: 0;
+      h3 {
+        margin: 0 3%;
+        font-size: 2rem;
+      }
+      .popular-list {
+        overflow-x: scroll;
+        padding: 0 3%;
+        grid-template-columns: repeat(10, 1fr);
+        white-space: nowrap;
+
+        &::-webkit-scrollbar {
+          height: 6px;
+        }
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+          background: #bbb;
+          border-radius: 10px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+          background: #888;
+        }
+        scrollbar-width: thin;
+        scrollbar-color: #bbb transparent;
+        li {
+          & > div {
+            width: calc(120px + 5vw);
+            .layout {
+              p {
+                font-size: 1.4rem;
+                span {
+                  font-size: 2rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 500px) {
+    margin-top: 60px;
+    & > .inner {
+      gap: 15px;
+      h3 {
+        font-size: 1.6rem;
+        margin: 0 15px;
+      }
+      .popular-list {
+        padding: 0 15px;
+        li {
+          & > div {
+            .layout {
+              p {
+                font-size: 1.2rem;
+                span {
+                  font-size: 1.6rem;
+                }
+              }
             }
           }
         }

@@ -7,11 +7,32 @@ const Container = styled.div`
   h3 {
     font-size: 3rem;
     font-weight: 700;
+    margin-bottom: 40px;
+  }
+  @media screen and (max-width: 1024px) {
+    margin-top: 90px;
+    h3 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    margin-top: 80px;
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    margin-top: 50px;
+    h3 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
   }
 `;
 
 const Lists = styled.ul`
-  margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
   li {
@@ -23,6 +44,19 @@ const Lists = styled.ul`
     cursor: pointer;
     img {
       width: 100%;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    li {
+      width: 20%;
+      padding: 10px;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    li {
+      width: 20%;
+      padding: 2px;
     }
   }
 `;

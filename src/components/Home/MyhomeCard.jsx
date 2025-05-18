@@ -2,29 +2,37 @@ import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import { getEmblem, getTeamName, getTeamColor } from "../../util";
 
-const Card = styled.div`
-  width: 100%;
-  overflow: hidden;
+const Myhome = styled.div`
+  position: relative;
   border-radius: 8px;
+  overflow: hidden;
+  width: calc(100% - 520px - 20px);
+  aspect-ratio: 16 / 9;
   cursor: pointer;
 
   .head {
-    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 120px;
     font-weight: 300;
-    background: var(--dark);
+    background: rgba(0, 0, 0, 0.7);
     position: relative;
     display: flex;
     justify-content: center;
     ul {
-      width: 80%;
+      width: 60%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       li {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
+        font-size: 1.6rem;
         figure {
           width: 80px;
           height: 70px;
@@ -53,18 +61,18 @@ const Card = styled.div`
     }
   }
   .video {
+    position: absolute;
+    top: 0;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    position: relative;
-    overflow: hidden;
+    height: 100%;
   }
 
   @media screen and (max-width: 1440px) {
+    width: calc(100% - 350px - 20px);
     .head {
-      padding: 8px;
       height: 100px;
       ul {
-        width: 75%;
+        width: 60%;
         li {
           font-size: 1.4rem;
           figure {
@@ -82,6 +90,23 @@ const Card = styled.div`
     }
   }
 
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    aspect-ratio: auto;
+    height: auto;
+    padding: 0 3%;
+    border-radius: 0px;
+    .head {
+      height: 100px;
+      position: relative;
+      border-radius: 8px 8px 0 0;
+    }
+    .video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 0 0 8px 8px;
+    }
+  }
   @media screen and (max-width: 768px) {
     .head {
       padding: 8px;
@@ -103,6 +128,10 @@ const Card = styled.div`
         }
       }
     }
+  }
+
+  @media screen and (max-width: 500px) {
+    padding: 0;
   }
 `;
 
@@ -126,7 +155,7 @@ const VideoInner = styled.div`
     z-index: 2;
     top: 50%;
     transform: translateY(-50%);
-    width: 125px;
+    width: 20%;
   }
   .homeEmblem {
     left: 5%;
@@ -136,7 +165,7 @@ const VideoInner = styled.div`
   }
   @media screen and (max-width: 1024px) {
     img {
-      width: 110px;
+      width: 28%;
     }
     .homeEmblem {
       left: 4%;
@@ -145,7 +174,7 @@ const VideoInner = styled.div`
       right: 4%;
     }
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 500px) {
     img {
       width: 100px;
     }
@@ -160,6 +189,7 @@ const HomeBg = styled.div`
   top: 0;
   font-size: 0;
   svg {
+    /* border: 1px solid #fff; */
     height: 100%;
     width: 60%;
     position: absolute;
@@ -172,13 +202,13 @@ const HomeBg = styled.div`
   }
 `;
 
-const MainCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
+const MyhomeCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
   const [isVideo, setIsVideo] = useState(false);
   const homeEmblem = useMemo(() => getEmblem(hometeam), [hometeam]);
   const awayEmblem = useMemo(() => getEmblem(awayteam), [awayteam]);
   const homeColor = useMemo(() => getTeamColor(hometeam), [hometeam]);
   const awayColor = useMemo(() => getTeamColor(awayteam), [awayteam]);
-  const homeName = useMemo(() => getTeamName(hometeam), [hometeam]);
+  const homeName = useMemo(() => getTeamName(hometeam), [awayteam]);
   const awayName = useMemo(() => getTeamName(awayteam), [awayteam]);
 
   const formattedDate = useMemo(() => {
@@ -190,7 +220,7 @@ const MainCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
   }, [date]);
 
   return (
-    <Card>
+    <Myhome>
       <div className="head">
         <ul>
           <li className="teams">
@@ -215,7 +245,6 @@ const MainCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
         </div>
       </div>
       <div className="video">
-        {" "}
         {isVideo ? (
           ""
         ) : (
@@ -236,8 +265,8 @@ const MainCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
           </VideoInner>
         )}
       </div>
-    </Card>
+    </Myhome>
   );
 });
 
-export default MainCard;
+export default MyhomeCard;
