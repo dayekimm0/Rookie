@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getEmblem } from "../util";
+import { getEmblem, getTeamColor } from "../util";
 import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
@@ -9,6 +9,7 @@ import styled from "styled-components";
 import headermockup from "../images/banners/banner-headermockup.png";
 import logo from "../images/logos/Rookie_logo.svg";
 import kbologo2 from "../images/emblem/emblem_kbo2.svg";
+import logonStore from "../stores/LogonStore";
 
 const Container = styled.div`
   width: 100%;
@@ -219,7 +220,6 @@ const SelectTeam = styled.span`
 const UserTeam = styled.div`
   width: 60px;
   height: 60px;
-  background: #0066b3;
   border-radius: 6px;
   img {
     width: 100%;
@@ -242,19 +242,23 @@ const Gnb = styled.div`
   }
 `;
 
+  const teamToEmblemId = {
+  "두산베어스": "4",
+  "엘지트윈스": "3",
+  "키움히어로즈": "10",
+  "한화이글스": "8",
+  "삼성라이온즈": "2",
+  "케이티위즈": "5",
+  "엔씨다이노스": "9",
+  "쓱랜더스": "6",
+  "롯데자이언츠": "7",
+  "기아타이거즈": "1",
+};
+
 const Header = ({ isActive }) => {
   const navigate = useNavigate();
 
   const { user, userProfile, isLoading } = authStore();
-
-  console.log(
-    "🔵 Header 렌더링, isLoading:",
-    isLoading,
-    "user:",
-    user,
-    "userProfile:",
-    userProfile
-  );
 
   const goToMain = () => {
     navigate("/");
@@ -278,13 +282,16 @@ const Header = ({ isActive }) => {
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
+const { resetForm } = logonStore();
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
       authStore.getState().clearUser();
-      console.log("🟢 로그아웃 성공");
-    } catch (error) {
-      console.error("🔴 로그아웃 실패:", error);
+      alert("로그아웃 되었습니다.");
+      resetForm()
+    } catch (e) {
+      alert("로그아웃 실패", e);
     }
   };
 
@@ -326,13 +333,13 @@ const Header = ({ isActive }) => {
                 <img src={kbologo2} alt="kbologo2" />
               </Emblem2>
               <UserName>
-                <Link>Loading..</Link>
+                <Link>로딩중..</Link>
               </UserName>
             </>
           ) : user && userProfile ? (
             <>
               <Emblem>
-                <TeamEmblem emblemId="2" />
+                <TeamEmblem emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"} />
               </Emblem>
               <UserName>
                 <Link to="/mypage">{userProfile.nickname}</Link>
@@ -342,14 +349,15 @@ const Header = ({ isActive }) => {
               </UserName>
               <User $isopen={isopen}>
                 <UserInfo>
-                  <UserTeam>
-                    <TeamEmblem emblemId="2" />
+                  <UserTeam style={{
+                      backgroundColor: getTeamColor(teamToEmblemId[userProfile.favoriteTeam] || "#fff"),
+                    }}>
+                    <TeamEmblem emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"} />
                   </UserTeam>
                   <UserDesc>
                     <UserId>{userProfile.nickname}</UserId>
                     <SelectTeam>
-                      {userProfile.favoriteTeam}{" "}
-                      <i className="fas fa-chevron-right"></i>
+                      {userProfile.favoriteTeam}
                     </SelectTeam>
                   </UserDesc>
                 </UserInfo>
