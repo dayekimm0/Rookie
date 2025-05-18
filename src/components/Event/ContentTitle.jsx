@@ -1,9 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Coupon_Ultra from "./Coupon_Ultra";
-import Coupon_High from "./Coupon_High";
-import Coupon_Medium from "./Coupon_Medium";
-import Coupon_Low from "./Coupon_Low";
+import Coupons from "./Coupons";
 
 const Container = styled.div`
   width: 100%;
@@ -101,18 +98,18 @@ const TextLast = styled.div`
   }
 `;
 
-const Coupons = styled.div`
+const CouponBox = styled.div`
   img {
     margin-right: 30px;
   }
 
   @media screen and (max-width: 1176px) {
-    margin: 0 30px;
     display: grid;
     grid-template-columns: repeat(2, 0fr);
     grid-template-rows: repeat(2, 130px);
     justify-content: center;
     align-content: center;
+    padding-left: 10px;
   }
 
   @media screen and (max-width: 1024px) {
@@ -165,12 +162,9 @@ const ContentsTitle = () => {
         </TextFirst>
         <TextLast>그 한번의 기회에 당신의 운을 확인해보세요!</TextLast>
       </ContentTwo>
-      <Coupons>
-        <Coupon_Ultra />
-        <Coupon_High />
-        <Coupon_Medium />
-        <Coupon_Low />
-      </Coupons>
+      <CouponBox>
+        <Coupons />
+      </CouponBox>
     </Container>
   );
 };
