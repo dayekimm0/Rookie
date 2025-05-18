@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Buttons = styled.div`
@@ -10,7 +11,9 @@ const Buttons = styled.div`
   height: 70px;
   color: var(--gray1);
   padding-bottom: 13%;
+
   @media screen and (max-width: 1024px) {
+    padding-bottom: 15%;
   }
   @media screen and (max-width: 500px) {
     padding-bottom: 26%;
@@ -19,6 +22,7 @@ const Buttons = styled.div`
     width: 100%;
     justify-content: center;
     align-items: center;
+    padding-bottom: 10%;
   }
 `;
 
@@ -37,25 +41,21 @@ const Button = styled.button`
   &:hover {
     background: var(--light);
   }
+
+  @media screen and (max-width: 1440px) {
+    width: 250px;
+    height: 60px;
+    font-size: 1.6rem;
+  }
   @media screen and (max-width: 1024px) {
     width: 220px;
-    height: 55px;
-    font-size: 1.6rem;
-    box-shadow: 0 12px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.5s;
-    &:hover {
-      background: var(--light);
-    }
+    height: 50px;
+    font-size: 1.4rem;
   }
   @media screen and (max-width: 500px) {
     width: 180px;
     height: 45px;
     font-size: 1.2rem;
-    box-shadow: 0 12px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.5s;
-    &:hover {
-      background: var(--light);
-    }
   }
   @media screen and (max-width: 375px) {
     width: 140px;
@@ -64,10 +64,23 @@ const Button = styled.button`
 `;
 
 const ButtonGroup = () => {
+  const navigate = useNavigate();
   return (
     <Buttons>
-      <Button>플레이 보러가기</Button>
-      <Button>스토어 가기</Button>
+      <Button
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        플레이 보러가기
+      </Button>
+      <Button
+        onClick={() => {
+          navigate("/store");
+        }}
+      >
+        스토어 가기
+      </Button>
     </Buttons>
   );
 };
