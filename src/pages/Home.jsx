@@ -14,6 +14,7 @@ import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
 import HomeProducts from "../components/Home/HomeProducts";
 import authStore from "../stores/AuthStore";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -81,6 +82,9 @@ const ProductCardWrap = styled.div`
 
 const Banner = styled.div`
   margin-top: 40px;
+  a {
+    display: inline-block;
+  }
   img {
     width: 100%;
     max-width: 100%;
@@ -190,8 +194,10 @@ const Home = () => {
         <MainSlide />
       )}
       <Banner className="inner">
-        <img src={bannerStrike} alt="banner" />
-        <img src={bannerStrike_m} alt="banner" />
+        <Link to={"/event"}>
+          <img src={bannerStrike} alt="banner" />
+          <img src={bannerStrike_m} alt="banner" />
+        </Link>
       </Banner>
       <HighlightSlide />
       <PlaySlide />
