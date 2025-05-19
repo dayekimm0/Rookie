@@ -296,8 +296,10 @@ const UserTeam = styled.div`
   border-radius: 6px;
   img {
     width: 100%;
+    scale: ${({ $isTeam6 }) => ($isTeam6 ? "80%" : "100%")};
     height: 100%;
     object-fit: cover;
+    overflow: visible;
   }
 `;
 
@@ -805,6 +807,7 @@ const Header = ({ mode }) => {
               <User $isopen={isopen}>
                 <UserInfo>
                   <UserTeam
+                    $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
                     style={{
                       backgroundColor: getTeamColor(
                         teamToEmblemId[userProfile.favoriteTeam] || "#fff"

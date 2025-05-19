@@ -550,7 +550,12 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>필수 및 선택 사항에 모두 동의합니다.</CheckText>
+            <CheckText
+              checked={formData.agreements.all}
+              onClick={() => handleCheck("all")}
+            >
+              필수 및 선택 사항에 모두 동의합니다.
+            </CheckText>
           </Checkoption>
         </CheckWrapper>
         <Line />
@@ -562,7 +567,10 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.required}
+              onClick={() => handleCheck("required")}
+            >
               [필수] 이용약관에 동의합니다. <span>*</span>
             </CheckText>
           </Checkoption>
@@ -580,7 +588,10 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.privacy}
+              onClick={() => handleCheck("privacy")}
+            >
               [필수] 개인정보 수집 및 이용에 동의 합니다. <span>*</span>
             </CheckText>
           </Checkoption>
@@ -598,7 +609,10 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.promotion}
+              onClick={() => handleCheck("promotion")}
+            >
               Rookie가 제공하는 이벤트 등 프로모션 안내 메일을 수신에
               동의합니다.
             </CheckText>

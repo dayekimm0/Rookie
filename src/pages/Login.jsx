@@ -346,6 +346,8 @@ const Login = () => {
         setErrors({
           general: "네트워크 오류가 발생했습니다. 다시 시도해주세요.",
         });
+      } else {
+        setErrors({ general: "이메일 또는 비밀번호가 올바르지 않습니다." }); // 기타 오류도 표시
       }
     } finally {
       setIsLoading(false);
