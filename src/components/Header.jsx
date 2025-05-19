@@ -579,7 +579,6 @@ const Header = ({ mode }) => {
 
   const location = useLocation();
   const headerRef = useRef(null);
-
   const teamToEmblemId = {
     "기아 타이거즈": "1",
     "삼성 라이온즈": "2",
@@ -644,11 +643,29 @@ const Header = ({ mode }) => {
     setIsOpen((prev) => !prev);
   };
 
-  // const [isStoreOpen, setIsStoreOpen] = useState(false);
+  const [isStoreOpen, setIsStoreOpen] = useState(false);
 
   const TeamEmblem = ({ emblemId }) => {
+    const navigate = useNavigate();
     const emblem = getEmblem(emblemId);
-    return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
+
+    const handleClick = () => {
+      const teamCode = getTeamJsonCode(emblemId);
+      if (teamCode) {
+        navigate(`/store/${teamCode}`);
+      }
+    };
+
+    return emblem ? (
+      <img
+        src={emblem}
+        alt="Team Emblem"
+        onClick={handleClick}
+        style={{ cursor: "pointer" }}
+      />
+    ) : (
+      <p>엠블럼 없음</p>
+    );
   };
 
   const { resetForm } = logonStore();
@@ -872,210 +889,30 @@ const Header = ({ mode }) => {
           </MobileMenuBtn>
         </Profile>
       </Nav>
-      {searchOpen && (
-        <SearchPcWrap mode={mode}>
-          <form
-            id="searchPc"
-            className="searchPc"
-            name="searchPc"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="text"
-              placeholder="찾으시는 상품을 입력해주세요."
-              // onKeyUp={onCheckEnter}
+      {isStoreOpen && (
+        <StoreContainer
+          $hide={isActive}
+          onMouseEnter={() => setIsStoreOpen(true)}
+          onMouseLeave={() => setIsStoreOpen(false)}
+        >
+          <Stores>
+            <RookieEmblem
+              src="./src/images/logos/emblem_rookie.png"
+              alt="rookieemblem"
             />
-            {/* {showNoResult && (
-                      <div className="noSearchbox">
-                        검색하신 상품이 존재하지 않습니다.
-                      </div>
-                    )} */}
-            <button>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                onClick={handleClickSearchPc}
-              />
-            </button>
-          </form>
-        </SearchPcWrap>
+            <TeamEmblem emblemId="0" />
+            <TeamEmblem emblemId="1" />
+            <TeamEmblem emblemId="2" />
+            <TeamEmblem emblemId="3" />
+            <TeamEmblem emblemId="4" />
+            <TeamEmblem emblemId="5" />
+            <TeamEmblem emblemId="6" />
+            <TeamEmblem emblemId="7" />
+            <TeamEmblem emblemId="8" />
+            <TeamEmblem emblemId="9" />
+          </Stores>
+        </StoreContainer>
       )}
-
-      <MobileMenuWrap
-        className={mobileMenuOpen && "active"}
-        $headerHeight={headerHeight}
-        $folded={isFolded}
-        data-lenis-prevent
-      >
-        <div className="bg_black"></div>
-        <div className="menu_inner">
-          <div className="inner_wrap">
-            <div className="search_bar">
-              <form
-                id="search_form_mb"
-                name="search_bar_mb"
-                className="search_form_mb"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <input
-                  className="search_txt"
-                  type="text"
-                  placeholder="search"
-                  // onKeyUp={onCheckEnter}
-                />
-                <button className="search_btn">
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </button>
-              </form>
-            </div>
-            <ul className="mb_menus">
-              <li>
-                <Link to={"/"} onClick={() => setMobileMenuOpen(false)}>
-                  HOME
-                </Link>
-              </li>
-              <li>
-                <Link to={"#"} disabled>
-                  PLAY
-                </Link>
-              </li>
-              <li
-                onClick={handleClickMobileStore}
-                className={mobileStoreOpen ? "active" : null}
-              >
-                <Link to={"#"} disabled>
-                  STORE
-                  <img src={arrowSmall} alt="arrow" />
-                </Link>
-                <ul className="store_depth2">
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      ROOKie
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      KBO
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      기아 타이거즈
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      삼성 라이온즈
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      LG 트윈스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      두산 베어스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      KT 위즈
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      SSG 랜더스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      롯데 자이언츠
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      한화 이글스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      NC 다이노스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/store"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      키움 히어로즈
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Link to={"/event"} onClick={() => setMobileMenuOpen(false)}>
-                  EVENT
-                </Link>
-              </li>
-              {isLoading ? (
-                <></>
-              ) : user && userProfile ? (
-                <>
-                  <li>
-                    <Link
-                      to={"/mypage"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      ACCOUNT
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={"/cart"} onClick={() => setMobileMenuOpen(false)}>
-                      CART
-                    </Link>
-                  </li>
-                  <li>
-                    <Link onClick={handleLogout}>LOGOUT</Link>
-                  </li>
-                </>
-              ) : null}
-            </ul>
-          </div>
-        </div>
-      </MobileMenuWrap>
     </Container>
   );
 };
