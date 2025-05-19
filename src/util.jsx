@@ -116,27 +116,54 @@ export function getTodayMatches() {
 
 export const getTeamShortName = (fullName) => {
   switch (fullName) {
-    case "기아 타이거즈":
+    case "기아타이거즈":
       return "KIA";
-    case "삼성 라이온즈":
+    case "삼성라이온즈":
       return "삼성";
-    case "LG 트윈스":
+    case "엘지트윈스":
       return "LG";
-    case "두산 베어스":
+    case "두산베어스":
       return "두산";
-    case "KT 위즈":
+    case "케이티위즈":
       return "KT";
-    case "SSG 랜더스":
+    case "쓱랜더스":
       return "SSG";
-    case "롯데 자이언츠":
+    case "롯데자이언츠":
       return "롯데";
-    case "한화 이글스":
+    case "한화이글스":
       return "한화";
-    case "NC 다이노스":
+    case "엔씨다이노스":
       return "NC";
-    case "키움 히어로즈":
+    case "키움히어로즈":
       return "키움";
     default:
       return null;
   }
 };
+
+// export const getTeamShortName = (fullName) => {
+//   switch (fullName) {
+//     case "기아 타이거즈":
+//       return "KIA";
+//     case "삼성 라이온즈":
+//       return "삼성";
+//     case "LG 트윈스":
+//       return "LG";
+//     case "두산 베어스":
+//       return "두산";
+//     case "KT 위즈":
+//       return "KT";
+//     case "SSG 랜더스":
+//       return "SSG";
+//     case "롯데 자이언츠":
+//       return "롯데";
+//     case "한화 이글스":
+//       return "한화";
+//     case "NC 다이노스":
+//       return "NC";
+//     case "키움 히어로즈":
+//       return "키움";
+//     default:
+//       return null;
+//   }
+// };

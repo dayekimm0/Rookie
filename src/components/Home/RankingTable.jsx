@@ -30,7 +30,7 @@ const Section = styled.section`
     border-left: 1px solid #333;
     border-bottom: 1px solid #333;
     color: #ddd;
-    font-size: 1.6rem;
+    font-size: 1.7rem;
   }
 
   .rdt_TableRow {
@@ -44,14 +44,14 @@ const Section = styled.section`
     background-color: var(--bg);
     border-left: 1px solid #333;
     color: #eee;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     padding: 0;
   }
   .rdt_TableCol:first-child,
   .rdt_TableCell:first-child {
     flex: unset;
-    width: 140px;
-    min-width: 140px;
+    width: 160px;
+    min-width: 160px;
     max-width: 140px;
 
     @media screen and (max-width: 1440px) {

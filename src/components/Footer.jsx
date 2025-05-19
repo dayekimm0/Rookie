@@ -309,6 +309,7 @@ const Footer = ({ mode }) => {
         mode={mode}
         $isVisible={isVisible}
         $bottom={bottomOffset}
+        data-lenis-prevent
       >
         <svg width="24" height="26" viewBox="0 0 24 26" fill="none">
           <path

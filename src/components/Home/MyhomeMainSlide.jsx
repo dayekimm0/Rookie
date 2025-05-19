@@ -190,6 +190,8 @@ const MyhomeMainSlide = ({ isMyhome }) => {
         <div className="slideArrWrap">
           <div className="slider-container">
             <Swiper
+              observer={true}
+              observeParents={true}
               slidesPerView={1}
               spaceBetween={20}
               direction="vertical"
