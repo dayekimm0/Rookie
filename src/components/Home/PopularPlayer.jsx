@@ -21,9 +21,7 @@ const Container = styled.div`
       font-size: 3rem;
       font-weight: 700;
     }
-    .list_wrap {
-      width: 100%;
-    }
+
     .popular-list {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -81,6 +79,15 @@ const Container = styled.div`
     & > .inner {
       flex-direction: column;
       gap: 30px;
+      .popular-list {
+        gap: 14px;
+        li {
+          & > div {
+            max-width: 250px;
+            margin: 0 auto;
+          }
+        }
+      }
     }
   }
   @media screen and (max-width: 1024px) {
@@ -146,6 +153,7 @@ const Container = styled.div`
         display: inline-flex;
         gap: 16px;
         min-width: max-content;
+        padding-right: 3%;
         li {
           flex: 0 0 auto;
           width: auto;
@@ -177,6 +185,7 @@ const Container = styled.div`
         padding: 0 15px;
       }
       .popular-list {
+        padding-right: 15px;
         li {
           & > div {
             .layout {

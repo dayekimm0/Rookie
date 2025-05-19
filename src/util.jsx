@@ -167,3 +167,20 @@ export const getTeamShortName = (fullName) => {
       return null;
   }
 };
+
+//스크롤바 width
+export const getScrollbarWidth = () => {
+  const div = document.createElement("div");
+  div.style.cssText = `
+    position: absolute;
+    top: -9999px;
+    width: 100px;
+    height: 100px;
+    overflow: scroll;
+    visibility: hidden;
+  `;
+  document.body.appendChild(div);
+  const width = div.offsetWidth - div.clientWidth;
+  document.body.removeChild(div);
+  return width;
+};

@@ -11,7 +11,6 @@ import useHeaderStore from "./stores/headerStore";
 const ContentWrapper = styled.div`
   position: relative;
   padding-top: 177px;
-
   transition: padding 0.2s;
   background: ${({ $mode }) => ($mode === "light" ? "#fff" : "#222")};
 

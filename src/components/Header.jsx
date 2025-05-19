@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getEmblem, getTeamColor } from "../util";
+import { getEmblem, getTeamColor, getScrollbarWidth } from "../util";
 import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
@@ -323,6 +323,7 @@ const Gnb = styled.div`
 `;
 
 const SearchPcBtn = styled.div`
+  width: 21px;
   font-size: 21px;
   cursor: pointer;
   .closemark {
@@ -576,6 +577,7 @@ const Header = ({ mode }) => {
   const headerHeight = useHeaderStore((state) => state.headerHeight);
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
 
+  const location = useLocation();
   const headerRef = useRef(null);
 
   const teamToEmblemId = {
@@ -619,7 +621,6 @@ const Header = ({ mode }) => {
     { label: "STORE", path: "/store" },
     { label: "EVENT", path: "/event" },
   ];
-  const location = useLocation();
 
   const activeIndex = menus.findIndex(({ path, disabled }) => {
     if (disabled) return false;
@@ -681,6 +682,26 @@ const Header = ({ mode }) => {
   const handleClickMobileStore = () => {
     setMobileStoreOpen((prev) => !prev);
   };
+
+  //mobile 스토어 스크롤 막기
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const scrollbarWidth = getScrollbarWidth();
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+  }, [mobileMenuOpen]);
+
+  // 페이지 이동 시 search, user dropdown 닫기
+  useEffect(() => {
+    setSearchOpen(false);
+    setIsOpen(false);
+    setMobileMenuOpen(false);
+    setMobileStoreOpen(false);
+  }, [location.pathname]);
 
   return (
     <Container ref={headerRef}>
@@ -769,20 +790,6 @@ const Header = ({ mode }) => {
         </Items>
 
         <Profile>
-          <SearchPcBtn>
-            {searchOpen ? (
-              <FontAwesomeIcon
-                icon={faXmark}
-                onClick={handleClickSearchPc}
-                className="closemark"
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                onClick={handleClickSearchPc}
-              />
-            )}
-          </SearchPcBtn>
           {isLoading ? (
             <>
               <Emblem2>
@@ -841,6 +848,20 @@ const Header = ({ mode }) => {
               </UserName>
             </>
           )}
+          <SearchPcBtn>
+            {searchOpen ? (
+              <FontAwesomeIcon
+                icon={faXmark}
+                onClick={handleClickSearchPc}
+                className="closemark"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                onClick={handleClickSearchPc}
+              />
+            )}
+          </SearchPcBtn>
           <MobileMenuBtn
             onClick={handleClickMobileMenu}
             className={mobileMenuOpen && "active"}
