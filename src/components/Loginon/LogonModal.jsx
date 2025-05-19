@@ -142,7 +142,7 @@ const ModalButton = styled.button`
     font-size: 1.6rem;
   }
   @media screen and (max-width: 600px) {
-    height: 45px;
+    height: 40px;
     font-size: 1.4rem;
   }
 `;

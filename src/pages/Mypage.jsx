@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import authStore from "../stores/AuthStore";
 import { getEmblem, getTeamColor } from "../util";
@@ -5,6 +6,8 @@ import { getEmblem, getTeamColor } from "../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import partnerLogo from "../images/logos/Partner_logo.svg";
+import MypageModal from "../components/Loginon/MypageModal";
+import { getScrollbarWidth } from "../util";
 
 const Container = styled.div`
   width: 100%;
@@ -129,7 +132,7 @@ const MyShoppingInner = styled.div`
     gap: 40px;
   }
   @media screen and (max-width: 500px) {
-    gap: 30px;
+    gap: 35px;
   }
 `;
 
@@ -204,7 +207,7 @@ const InfoDetail = styled.h4`
     }
   }
   @media screen and (max-width: 600px) {
-    font-size: 1.2rem;
+    font-size: 1.2rem; 
     b {
       font-size: 1.4rem;
     }
@@ -311,10 +314,34 @@ const teamToEmblemId = {
 
 const Mypage = () => {
   const { userProfile, isLoading } = authStore();
+  const [teamModal, setTeamModal] = useState(false)
+
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
+
+const openTeamModal = () => {
+    setTeamModal(true);
+  };
+
+  const closeTeamModal = () => {
+    setTeamModal(false);
+  };  
+
+   //mobile 스토어 스크롤 막기
+    useEffect(() => {
+      if (teamModal) {
+        const scrollbarWidth = getScrollbarWidth();
+        document.body.style.overflow = "hidden";
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      } else {
+        document.body.style.overflow = "";
+        document.body.style.paddingRight = "";
+      }
+    }, [teamModal]);
+  
+
   return (
     <Container>
       {isLoading ? (
@@ -344,7 +371,7 @@ const Mypage = () => {
                 <span>계정 생성일 {userProfile.createdAt}</span>
               </UpBoxTitle>
             </UpBoxLeft>
-            <UpBoxSub>구단변경 ›</UpBoxSub>
+            <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
           </UpBox>
           <MyShopping>
             <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
@@ -404,12 +431,18 @@ const Mypage = () => {
             <InfoElement>
               <InfoDetail>
                 <b>주소</b>
-                <br />
-                {userProfile.address}
-                <br />
+                {userProfile.address?  <>
+                  <br />
+                  {userProfile.address}
+                  <br />
+                  <InfoDetailDetail>
+                    {userProfile.detailedAddress}
+                  </InfoDetailDetail>
+                </> :    
                 <InfoDetailDetail>
-                  {userProfile.detailedAddress}
-                </InfoDetailDetail>
+                  주소를 등록해 주세요.
+                  </InfoDetailDetail>
+                  }
               </InfoDetail>
               <InfoButton>변경</InfoButton>
             </InfoElement>
@@ -448,6 +481,10 @@ const Mypage = () => {
           )}
         </Inner>
       )}
+        <MypageModal
+        isOpen={teamModal}
+        closeTeamModal={closeTeamModal}
+      />
     </Container>
   );
 };
