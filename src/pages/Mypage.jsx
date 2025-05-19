@@ -4,14 +4,13 @@ import { getEmblem, getTeamColor } from "../util";
 // FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-
+import partnerLogo from "../images/logos/Partner_logo.svg";
 const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
   background: var(--light);
 `;
-
 const Inner = styled.div`
   width: 600px;
   display: flex;
@@ -19,7 +18,6 @@ const Inner = styled.div`
   gap: 30px;
   margin-bottom: 100px;
 `;
-
 const UpBox = styled.div`
   width: 100%;
   height: 120px;
@@ -31,24 +29,27 @@ const UpBox = styled.div`
   padding: 30px;
   margin: 50px 0 20px;
 `;
-
 const UpBoxLeft = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
 `;
-
 const UserTeam = styled.div`
   width: 60px;
   height: 60px;
   border-radius: 6px;
   img {
     width: 100%;
+    scale: ${({ $isTeam6 }) => ($isTeam6 ? "80%" : "100%")};
     height: 100%;
     object-fit: cover;
+    overflow: visible;
   }
 `;
-
+const PartnerLogo = styled.img`
+  position: absolute;
+  margin-left: 5px;
+`;
 const UpBoxTitle = styled.h4`
   font-size: 2rem;
   font-weight: 600;
@@ -61,8 +62,11 @@ const UpBoxSub = styled.span`
   font-size: 1.2rem;
   color: var(--gray6);
   cursor: pointer;
+  transition: color 0.3s;
+  &:hover {
+    color: var(--dark);
+  }
 `;
-
 const MyShopping = styled.div`
   width: 100%;
   display: flex;
@@ -71,12 +75,10 @@ const MyShopping = styled.div`
   gap: 30px;
   margin-bottom: 30px;
 `;
-
 const MyShoppingTitle = styled.h4`
   font-size: 2rem;
   font-weight: bold;
 `;
-
 const MyShoppingInner = styled.div`
   display: flex;
   justify-content: center;
@@ -84,7 +86,6 @@ const MyShoppingInner = styled.div`
   text-align: center;
   gap: 60px;
 `;
-
 const MyShoppingDetail = styled.h6`
   font-size: 1.2rem;
   line-height: 2.5;
@@ -94,30 +95,25 @@ const MyShoppingDetail = styled.h6`
     line-height: 1;
   }
 `;
-
 const MyShoppingLine = styled.span`
   width: 1px;
   height: 54px;
   background: var(--dark);
 `;
-
 const MyInfo = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 const MyInfoTitle = styled.h4`
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 20px;
 `;
-
 const MyInfoLine = styled.span`
   width: 100%;
   height: 1px;
   background: var(--dark);
 `;
-
 const InfoElement = styled.div`
   width: 100%;
   display: flex;
@@ -125,7 +121,6 @@ const InfoElement = styled.div`
   align-items: end;
   margin-bottom: 60px;
 `;
-
 const InfoDetail = styled.h4`
   font-size: 1.6rem;
   line-height: 2;
@@ -134,12 +129,10 @@ const InfoDetail = styled.h4`
     font-weight: 700;
   }
 `;
-
 const InfoDetailDetail = styled.h5`
   font-size: 1.4rem;
   color: var(--gray8);
-`
-
+`;
 const InfoButton = styled.button`
   width: 80px;
   height: 40px;
@@ -153,7 +146,6 @@ const InfoButton = styled.button`
     background: var(--gray3);
   }
 `;
-
 const Delete = styled.div`
   width: 100%;
   display: flex;
@@ -169,7 +161,6 @@ const Delete = styled.div`
     opacity: 1;
   }
 `;
-
 const DeleteLine = styled.span`
   width: 66px;
   height: 1px;
@@ -178,14 +169,12 @@ const DeleteLine = styled.span`
   opacity: 0;
   transition: opacity 0.3s;
 `;
-
 const LoadingSpinner = styled.div`
   height: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
 const InquiryLink = styled.a`
   padding: 10px 20px;
   background: var(--light);
@@ -207,27 +196,25 @@ const InquiryLink = styled.a`
   }
 `;
 
-  const teamToEmblemId = {
-  "두산베어스": "4",
-  "엘지트윈스": "3",
-  "키움히어로즈": "10",
-  "한화이글스": "8",
-  "삼성라이온즈": "2",
-  "케이티위즈": "5",
-  "엔씨다이노스": "9",
-  "쓱랜더스": "6",
-  "롯데자이언츠": "7",
-  "기아타이거즈": "1",
+const teamToEmblemId = {
+  "기아 타이거즈": "1",
+  "삼성 라이온즈": "2",
+  "LG 트윈스": "3",
+  "두산 베어스": "4",
+  "KT 위즈": "5",
+  "SSG 랜더스": "6",
+  "롯데 자이언츠": "7",
+  "한화 이글스": "8",
+  "NC 다이노스": "9",
+  "키움 히어로즈": "10",
 };
 
 const Mypage = () => {
   const { userProfile, isLoading } = authStore();
-
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
-
   return (
     <Container>
       {isLoading ? (
@@ -236,12 +223,23 @@ const Mypage = () => {
         <Inner>
           <UpBox>
             <UpBoxLeft>
-              <UserTeam style={{
-              backgroundColor: getTeamColor(teamToEmblemId[userProfile.favoriteTeam] || "#fff"),}}>
-            <TeamEmblem emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"} />
-          </UserTeam>
+              <UserTeam
+                $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                style={{
+                  backgroundColor: getTeamColor(
+                    teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                  ),
+                }}
+              >
+                <TeamEmblem
+                  emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                />
+              </UserTeam>
               <UpBoxTitle>
                 {userProfile.username}
+                {userProfile.email === "gosim@naver.com" ? (
+                  <PartnerLogo src={partnerLogo} alt="" />
+                ) : null}
                 <br />
                 <span>계정 생성일 {userProfile.createdAt}</span>
               </UpBoxTitle>
@@ -307,29 +305,50 @@ const Mypage = () => {
               <InfoDetail>
                 <b>주소</b>
                 <br />
-                우편번호 {userProfile.address}
+                {userProfile.address}
                 <br />
-                <InfoDetailDetail>우편번호 {userProfile.detailedAddress}</InfoDetailDetail>
+                <InfoDetailDetail>
+                  {userProfile.detailedAddress}
+                </InfoDetailDetail>
               </InfoDetail>
               <InfoButton>변경</InfoButton>
             </InfoElement>
             <Delete>
-              <h6 onClick={()=>{alert("준비중인 서비스 입니다.")}}>계정 삭제하기</h6>
+              <h6
+                onClick={() => {
+                  alert("준비중인 서비스 입니다.");
+                }}
+              >
+                계정 삭제하기
+              </h6>
               <DeleteLine />
             </Delete>
           </MyInfo>
-          <InquiryLink
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfS2-2IsVBBub-rmSk97nz1Fsw0eYLMsd5iOHtNdUNwH1HgKQ/viewform?usp=header"
-            target="_blank"
-            rel="noopener noreferrer" // 📌 보안
-          >
-            <FontAwesomeIcon icon={faEdit} />
-              ROOKie 파트너 입점신청 관련 공지
-        </InquiryLink>
+          {userProfile.email === "gosim@naver.com" ? (
+            <>
+              <InquiryLink
+                href="https://docs.google.com/forms/d/e/1FAIpQLScLQEzsdPMIHZiFxtQlq50tSpVLsZtvmxE3anLsND5uvQAQiw/viewform?usp=header"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faEdit} />
+                상품등록
+              </InquiryLink>
+            </>
+          ) : (
+            <>
+              <InquiryLink
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfS2-2IsVBBub-rmSk97nz1Fsw0eYLMsd5iOHtNdUNwH1HgKQ/viewform?usp=header"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ROOKie 파트너 입점신청 관련 공지
+              </InquiryLink>
+            </>
+          )}
         </Inner>
       )}
     </Container>
   );
 };
-
 export default Mypage;

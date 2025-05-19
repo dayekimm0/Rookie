@@ -9,10 +9,10 @@ const LogonMiddle = styled.div`
   position: relative;
   @media screen and (max-width: 1024px) {
     height: 225px;
-  }  
-  @media screen and (max-width: 500px) {
+  }
+  @media screen and (max-width: 600px) {
     height: 170px;
-  } 
+  }
 `;
 
 const Logonimg = styled.img`
@@ -24,8 +24,8 @@ const Logonimg = styled.img`
   @media screen and (max-width: 1024px) {
     width: 576px;
   }
-  @media screen and (max-width: 500px) {
-width: 322px;
+  @media screen and (max-width: 600px) {
+    width: 322px;
   }
 `;
 
@@ -50,13 +50,13 @@ const LogonEndmessage = styled.h4`
     span {
       font-size: 1.4rem;
     }
-  }  
-  @media screen and (max-width: 500px) {
+  }
+  @media screen and (max-width: 600px) {
     font-size: 1.6rem;
-      span {
+    span {
       font-size: 1rem;
     }
-  } 
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -72,15 +72,15 @@ const HomeButton = styled.button`
   background: var(--main);
   color: var(--dark);
   border-radius: 4px;
-  font-size: 2.2rem; 
+  font-size: 2.2rem;
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-  height: 50px;
-  font-size: 1.8rem;
+    height: 50px;
+    font-size: 1.8rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1.2rem;
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
   }
 `;
 
@@ -93,18 +93,18 @@ const LoginButton = styled.button`
   border-radius: 4px;
   font-size: 2.2rem;
   cursor: pointer;
-    @media screen and (max-width: 1024px) {
-  height: 50px;
-  font-size: 1.8rem;
+  @media screen and (max-width: 1024px) {
+    height: 50px;
+    font-size: 1.8rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1.2rem;
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
   }
 `;
 
 const LogonThird = () => {
-    const { resetForm } = logonStore();
+  const { resetForm } = logonStore();
   const logonnavigation = useNavigate();
   const handlegohome = () => {
     logonnavigation("/");

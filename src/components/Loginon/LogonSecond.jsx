@@ -13,7 +13,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
-import DaumPostcode from "react-daum-postcode"
+import DaumPostcode from "react-daum-postcode";
 
 // styled 부분
 const Form = styled.form`
@@ -30,11 +30,11 @@ const SubTWrapper = styled.div`
   justify-content: start;
   gap: 15px;
   @media screen and (max-width: 1024px) {
-  gap: 12px;
-  }  
-  @media screen and (max-width: 500px) {
-  gap: 10px;
-  } 
+    gap: 12px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 10px;
+  }
 `;
 
 const Subsubtitle = styled.h4`
@@ -44,12 +44,12 @@ const Subsubtitle = styled.h4`
     font-weight: 400;
     color: var(--gray8);
   }
-    @media screen and (max-width: 1024px) {
-  font-size: 1.6rem;
-  }  
-  @media screen and (max-width: 500px) {
-  font-size: 1.2rem;
-  } 
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const Input = styled.input`
@@ -64,18 +64,18 @@ const Input = styled.input`
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-  height: 50px;
-  font-size: 1.4rem;
-    &::placeholder {
+    height: 50px;
     font-size: 1.4rem;
-  }
-  }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1rem;
     &::placeholder {
-    font-size: 1rem;
+      font-size: 1.4rem;
+    }
   }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -97,18 +97,18 @@ const PostInput = styled.input`
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-  height: 50px;
-  font-size: 1.4rem;
-    &::placeholder {
+    height: 50px;
     font-size: 1.4rem;
-  }
-  }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1rem;
     &::placeholder {
-    font-size: 1rem;
+      font-size: 1.4rem;
+    }
   }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -125,12 +125,12 @@ const PostButton = styled.button`
   align-items: center;
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-  height: 50px;
-  font-size: 1.4rem;
+    height: 50px;
+    font-size: 1.4rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1rem;
   }
 `;
 
@@ -147,10 +147,10 @@ const AllCheckWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   @media screen and (max-width: 1024px) {
-  gap: 16px;
+    gap: 16px;
   }
-  @media screen and (max-width: 500px) {
-  gap: 12px;
+  @media screen and (max-width: 600px) {
+    gap: 12px;
   }
 `;
 
@@ -161,10 +161,10 @@ const CheckWrapper = styled.div`
   cursor: pointer;
   padding-right: 10px;
   @media screen and (max-width: 1024px) {
-  padding-right: 8px;
+    padding-right: 8px;
   }
-  @media screen and (max-width: 500px) {
-  padding-right: 6px;
+  @media screen and (max-width: 600px) {
+    padding-right: 6px;
   }
 `;
 
@@ -194,10 +194,10 @@ const CheckText = styled.h5`
     color: var(--red);
   }
   @media screen and (max-width: 1024px) {
-  font-size: 1.2rem;
+    font-size: 1.2rem;
   }
-  @media screen and (max-width: 500px) {
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
   }
 `;
 
@@ -211,12 +211,12 @@ const LoginBtn = styled.button`
   color: var(--grayC);
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.8rem;
+    height: 56px;
+    font-size: 1.8rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1.2rem;
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
   }
 `;
 
@@ -224,10 +224,10 @@ const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 1.4rem;
   @media screen and (max-width: 1024px) {
-  font-size: 1.2rem;
+    font-size: 1.2rem;
   }
-  @media screen and (max-width: 500px) {
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
   }
 `;
 
@@ -252,9 +252,9 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  @media screen and (max-width: 500px) {
-  width: 90%;
-}
+  @media screen and (max-width: 600px) {
+    width: 90%;
+  }
 `;
 
 const ModalCloseButton = styled.button`
@@ -276,7 +276,7 @@ const LogonSecond = () => {
     privacy: false,
   });
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  
+
   const handleCheck = (key) => {
     setFormData({
       agreements: {
@@ -422,7 +422,8 @@ const LogonSecond = () => {
         extraAddress += data.bname;
       }
       if (data.buildingName !== "") {
-        extraAddress += extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
@@ -436,7 +437,7 @@ const LogonSecond = () => {
     setIsAddressModalOpen(false); // 모달 닫기
   };
 
-const openModal = (type) => {
+  const openModal = (type) => {
     setModalState((prev) => ({ ...prev, [type]: true }));
   };
 
@@ -452,7 +453,7 @@ const openModal = (type) => {
     setIsAddressModalOpen(false);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     const isValid =
       formData.email &&
       /\S+@\S+\.\S+/.test(formData.email) &&
@@ -520,7 +521,9 @@ const openModal = (type) => {
             placeholder="우편번호"
             readOnly
           />
-          <PostButton type="button"onClick={openAddressModal}>우편번호 검색</PostButton>
+          <PostButton type="button" onClick={openAddressModal}>
+            우편번호 검색
+          </PostButton>
         </PostWrapper>
         <Input
           type="text"
@@ -563,7 +566,11 @@ const openModal = (type) => {
               [필수] 이용약관에 동의합니다. <span>*</span>
             </CheckText>
           </Checkoption>
-          <img src={RBarrow} alt="RBarrow" onClick={() => openModal("required")}/>
+          <img
+            src={RBarrow}
+            alt="RBarrow"
+            onClick={() => openModal("required")}
+          />
         </CheckWrapper>
         <CheckWrapper>
           <Checkoption>
@@ -577,7 +584,11 @@ const openModal = (type) => {
               [필수] 개인정보 수집 및 이용에 동의 합니다. <span>*</span>
             </CheckText>
           </Checkoption>
-          <img src={RBarrow} alt="RBarrow" onClick={() => openModal("privacy")} />
+          <img
+            src={RBarrow}
+            alt="RBarrow"
+            onClick={() => openModal("privacy")}
+          />
         </CheckWrapper>
         <CheckWrapper>
           <Checkoption>
@@ -601,7 +612,8 @@ const openModal = (type) => {
         type="submit"
         disabled={isLoading}
         style={{
-          background: isFormValid && !isLoading ? "var(--dark)" : "var(--grayE)",
+          background:
+            isFormValid && !isLoading ? "var(--dark)" : "var(--grayE)",
           color: isFormValid && !isLoading ? "var(--light)" : "var(--grayC)",
         }}
       >
@@ -621,11 +633,11 @@ const openModal = (type) => {
 
       {isAddressModalOpen && (
         <ModalOverlay onClick={closeAddressModal}>
-    <ModalContent onClick={(e) => e.stopPropagation()}>
-      <ModalCloseButton onClick={closeAddressModal}>×</ModalCloseButton>
-      <DaumPostcode onComplete={handleAddressComplete} />
-    </ModalContent>
-          </ModalOverlay>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalCloseButton onClick={closeAddressModal}>×</ModalCloseButton>
+            <DaumPostcode onComplete={handleAddressComplete} />
+          </ModalContent>
+        </ModalOverlay>
       )}
     </Form>
   );

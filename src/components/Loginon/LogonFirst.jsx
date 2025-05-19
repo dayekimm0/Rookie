@@ -14,18 +14,18 @@ const Input = styled.input`
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
-    &::placeholder {
+    height: 56px;
     font-size: 1.4rem;
-  }
-  }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
     &::placeholder {
-    font-size: 1rem;
+      font-size: 1.4rem;
+    }
   }
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -34,9 +34,9 @@ const AllInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  @media screen and (max-width: 500px) {
-  gap: 8px;
-  } 
+  @media screen and (max-width: 600px) {
+    gap: 8px;
+  }
 `;
 
 const SubTWrapper = styled.div`
@@ -45,20 +45,20 @@ const SubTWrapper = styled.div`
   flex-direction: column;
   justify-content: start;
   gap: 5px;
-  @media screen and (max-width: 500px) {
-  gap: 4px;
-  } 
+  @media screen and (max-width: 600px) {
+    gap: 4px;
+  }
 `;
 
 const Subsubtitle = styled.h4`
   font-size: 1.4rem;
   font-weight: 500;
-  @media screen and (max-width: 500px) {
-  font-size: 1.2rem;
-  } 
-  @media screen and (max-width: 500px) {
-  font-size: 0.9rem;
-  } 
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const StyledSelect = styled.select`
@@ -79,12 +79,12 @@ const StyledSelect = styled.select`
     background: var(--grayF5);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
+    height: 56px;
+    font-size: 1.4rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
   }
 `;
 
@@ -112,12 +112,12 @@ const StyledSelect2 = styled.select`
     background: var(--grayF5);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
+    height: 56px;
+    font-size: 1.4rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
   }
 `;
 
@@ -133,18 +133,18 @@ const Input2 = styled.input`
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
-    &::placeholder {
+    height: 56px;
     font-size: 1.4rem;
-  }
-  }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
     &::placeholder {
-    font-size: 1rem;
+      font-size: 1.4rem;
+    }
   }
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -159,12 +159,12 @@ const LoginBtn = styled.button`
   cursor: pointer;
   margin-top: 30px;
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.8rem;
+    height: 56px;
+    font-size: 1.8rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1.2rem;
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
   }
 `;
 
@@ -172,10 +172,10 @@ const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 1.4rem;
   @media screen and (max-width: 1024px) {
-  font-size: 1.2rem;
+    font-size: 1.2rem;
   }
-  @media screen and (max-width: 500px) {
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
   }
 `;
 
@@ -190,7 +190,7 @@ const dates = Array.from({ length: 31 }, (_, i) => i + 1);
 //
 
 const LogonFirst = () => {
-  const {formData, setFormData, nextStep } = logonStore();
+  const { formData, setFormData, nextStep } = logonStore();
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -288,16 +288,16 @@ const LogonFirst = () => {
               <option value="" disabled>
                 응원하는 구단을 선택해 주세요
               </option>
-              <option value="두산베어스">두산베어스</option>
-              <option value="엘지트윈스">엘지트윈스</option>
-              <option value="키움히어로즈">키움히어로즈</option>
-              <option value="한화이글스">한화이글스</option>
-              <option value="삼성라이온즈">삼성라이온즈</option>
-              <option value="케이티위즈">케이티위즈</option>
-              <option value="엔씨다이노스">엔씨다이노스</option>
-              <option value="쓱랜더스">쓱랜더스</option>
-              <option value="롯데자이언츠">롯데자이언츠</option>
-              <option value="기아타이거즈">기아타이거즈</option>
+              <option value="기아 타이거즈">기아 타이거즈</option>
+              <option value="삼성 라이온즈">삼성 라이온즈</option>
+              <option value="LG 트윈스">LG 트윈스</option>
+              <option value="두산 베어스">두산 베어스</option>
+              <option value="KT 위즈">KT 위즈</option>
+              <option value="SSG 랜더스">SSG 랜더스</option>
+              <option value="롯데 자이언츠">롯데 자이언츠</option>
+              <option value="한화 이글스">한화 이글스</option>
+              <option value="NC 다이노스">NC 다이노스</option>
+              <option value="키움 히어로즈">키움 히어로즈</option>
             </StyledSelect>
           </SubTWrapper>
           {errors.favoriteTeam && (
