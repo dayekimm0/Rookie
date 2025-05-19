@@ -4,6 +4,7 @@ import backgroundImg from "../images/coupon/back1.png";
 import ContentsTitle from "../components/Event/ContentTitle";
 import Game from "../components/Event/Game";
 import { getMascort } from "../util_mascort";
+import authStore from "../stores/AuthStore";
 
 const Container = styled.div`
   width: 100%;
@@ -109,21 +110,36 @@ const MascortImg = styled.div`
   }
 `;
 
+const teamToMascortId = {
+  두산베어스: "0",
+  한화이글스: "1",
+  기아타이거즈: "2",
+  키움히어로즈: "3",
+  케이티위즈: "4",
+  엘지트윈스: "5",
+  롯데자이언츠: "6",
+  엔씨다이노스: "7",
+  삼성라이온즈: "8",
+  쓱랜더스: "9",
+};
+
 const Event = () => {
-  const TeamMascort = ({ mascortId }) => {
-    const mascort = getMascort(mascortId);
-    return mascort ? (
-      <img src={mascort} alt="Team Mascort" />
-    ) : (
-      <p>마스코트 없음</p>
-    );
-  };
+  const { userProfile } = authStore();
+
+  const teamName = userProfile?.favoriteTeam;
+  const mascortId = teamToMascortId[teamName] || null;
+  const mascortImg = getMascort(mascortId);
+
   return (
     <Container>
       <ContentsTitle />
       <Game />
       <MascortImg>
-        <TeamMascort mascortId="1" />
+        {mascortImg ? (
+          <img src={mascortImg} alt={`${teamName} 마스코트`} />
+        ) : (
+          <p>마스코트 없음</p>
+        )}
       </MascortImg>
     </Container>
   );

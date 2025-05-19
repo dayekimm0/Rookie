@@ -69,6 +69,21 @@ const CouponModalContent = styled.div`
   box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.2);
   color: var(--light);
   position: relative;
+  @media screen and (max-width: 1440px) {
+    height: 95%;
+  }
+  @media screen and (max-width: 1024px) {
+    height: 90%;
+  }
+  @media screen and (max-width: 768px) {
+    height: 90%;
+  }
+  @media screen and (max-width: 600px) {
+    height: 75%;
+  }
+  @media screen and (max-width: 500px) {
+    height: 75%;
+  }
 `;
 
 const CouponTitle = styled.h2`
@@ -77,12 +92,37 @@ const CouponTitle = styled.h2`
   font-weight: bold;
   margin-bottom: 10px;
   user-select: none;
+  @media screen and (max-width: 1440px) {
+    font-size: 4rem;
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 3.4rem;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 2.6rem;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 2.4rem;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 2rem;
+  }
+  @media screen and (max-width: 375px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const CouponDesc = styled.p`
   font-size: 1.2rem;
   margin-bottom: 24px;
   user-select: none;
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.9rem;
+  }
+  @media screen and (max-width: 375px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const CouponImage = styled.img`
@@ -112,6 +152,21 @@ const MyPageButton = styled.button`
     opacity: 0.9;
     background: var(--light);
   }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.9rem;
+  }
+  @media screen and (max-width: 375px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const CloseButton = styled.button`
@@ -123,6 +178,21 @@ const CloseButton = styled.button`
   font-size: 1.4rem;
   color: var(--light);
   cursor: pointer;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 1rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.9rem;
+  }
+  @media screen and (max-width: 375px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const GameBoxBackground = styled.div`
@@ -214,10 +284,7 @@ const coupons = [
   },
 ];
 
-const fails = [
-  { type: "fail", label: "꽝" },
-  { type: "fail", label: "다음 기회에.." },
-];
+const fails = [{ type: "fail", label: "꽝" }];
 
 // 랜덤 쿠폰 함수
 const getRandomCoupon = () => {
@@ -254,13 +321,26 @@ const Game = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let scrollY;
+
+    // 모달이 열릴 때
     if (isModalOpen) {
-      document.body.style.overflow = "hidden"; // 스크롤 방지
+      // 현재 스크롤 위치를 저장
+      scrollY = window.scrollY;
+      // 모달이 열릴 때 스크롤을 고정
+      window.scrollTo(0, scrollY); // 스크롤 위치 고정
     } else {
-      document.body.style.overflow = "auto"; // 스크롤 복원
+      // 모달이 닫힐 때 스크롤 위치를 복원
+      if (scrollY !== undefined) {
+        window.scrollTo(0, scrollY); // 이전 스크롤 위치로 복원
+      }
     }
+
+    // 컴포넌트가 unmount될 때, 스크롤 복원
     return () => {
-      document.body.style.overflow = "auto"; // 컴포넌트 언마운트 될 때 복원
+      if (scrollY !== undefined) {
+        window.scrollTo(0, scrollY); // 이전 스크롤 위치로 복원
+      }
     };
   }, [isModalOpen]);
 
@@ -316,6 +396,8 @@ const Game = () => {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
+        ariaHideApp={true}
+        bodyOpenClassName="ReactModal__Body--open"
         style={{
           content: {
             top: "50%",
@@ -324,9 +406,17 @@ const Game = () => {
             background: "transparent",
             border: "none",
             padding: "0",
+            height: "340px",
           },
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            overflow: "hidden",
           },
         }}
       >
