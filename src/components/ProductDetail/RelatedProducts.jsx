@@ -11,6 +11,16 @@ const RelatedProductsSection = styled.div`
   margin-top: 60px;
   padding-top: 40px;
   border-top: 1px solid var(--grayE);
+
+  @media (max-width: 1024px) {
+    margin-top: 40px;
+    padding-top: 30px;
+  }
+
+  @media (max-width: 375px) {
+    margin-top: 30px;
+    padding-top: 20px;
+  }
 `;
 
 // 추천 상품 타이틀
@@ -81,6 +91,18 @@ const RelatedProductSlider = styled.div`
       }
     }
   }
+
+  @media (max-width: 375px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 25px;
+      height: 25px;
+
+      &:after {
+        font-size: 14px;
+      }
+    }
+  }
 `;
 
 // 개별 추천 상품 컨테이너
@@ -92,9 +114,17 @@ const RelatedProductItem = styled.div`
   cursor: pointer;
   transition: transform 0.3s ease;
 
+  &:hover {
+    transform: translateY(-5px);
+  }
+
   @media (max-width: 1024px) {
     width: 100%;
     height: 350px;
+  }
+
+  @media (max-width: 375px) {
+    height: 300px;
   }
 `;
 
@@ -105,11 +135,18 @@ const RelatedProductImageContainer = styled.div`
   background-color: var(--light);
   margin-bottom: 27px; // 이미지와 텍스트 사이 gap
   overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #eee;
 
   @media (max-width: 1024px) {
     width: 100%;
     height: 280px;
     margin-bottom: 15px;
+  }
+
+  @media (max-width: 375px) {
+    height: 200px;
+    margin-bottom: 12px;
   }
 `;
 
@@ -118,6 +155,33 @@ const RelatedProductImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+// 이미지 플레이스홀더 (이미지가 없거나 로드 실패시)
+const ImagePlaceholder = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 14px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+
+  &::after {
+    content: "상품 이미지";
+  }
+
+  @media (max-width: 375px) {
+    font-size: 12px;
+  }
 `;
 
 // 추천 상품 정보 컨테이너
@@ -130,6 +194,7 @@ const RelatedProductInfo = styled.div`
 
   @media (max-width: 1024px) {
     width: 100%;
+    height: auto;
   }
 `;
 
@@ -141,8 +206,9 @@ const RelatedProductName = styled.h4`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  line-height: 1.4;
 
   @media (max-width: 1024px) {
     font-size: 15px;
@@ -151,6 +217,7 @@ const RelatedProductName = styled.h4`
 
   @media (max-width: 480px) {
     font-size: 14px;
+    -webkit-line-clamp: 2;
   }
 `;
 
@@ -175,9 +242,31 @@ const BottomDivider = styled.div`
   height: 1px;
   background-color: var(--grayC);
   margin-top: 58px;
+
+  @media (max-width: 1024px) {
+    margin-top: 40px;
+  }
+
+  @media (max-width: 375px) {
+    margin-top: 30px;
+  }
 `;
 
-const RelatedProducts = ({ products }) => {
+// 상품이 없을 때 표시할 메시지
+const NoProductsMessage = styled.div`
+  width: 100%;
+  text-align: center;
+  padding: 60px 0;
+  color: #666;
+  font-size: 16px;
+
+  @media (max-width: 375px) {
+    padding: 40px 0;
+    font-size: 14px;
+  }
+`;
+
+const RelatedProducts = ({ products = [] }) => {
   const swiperRef = useRef(null);
 
   // Swiper 인스턴스 정리를 위한 useEffect
@@ -198,6 +287,19 @@ const RelatedProducts = ({ products }) => {
       }
     };
   }, []);
+
+  // 상품이 없는 경우
+  if (!products || products.length === 0) {
+    return (
+      <>
+        <RelatedProductsSection>
+          <RelatedProductsTitle>같은 카테고리의 추천 상품</RelatedProductsTitle>
+          <NoProductsMessage>추천 상품이 없습니다.</NoProductsMessage>
+        </RelatedProductsSection>
+        <BottomDivider />
+      </>
+    );
+  }
 
   return (
     <>
@@ -244,14 +346,50 @@ const RelatedProducts = ({ products }) => {
           >
             {products.map((item) => (
               <SwiperSlide key={item.id}>
-                <RelatedProductItem>
+                <RelatedProductItem
+                  onClick={() => {
+                    // 상품 클릭 시 해당 상품 페이지로 이동
+                    window.location.href = `/store/${item.id}`;
+                  }}
+                >
                   <RelatedProductImageContainer>
-                    <RelatedProductImage src={item.image} alt={item.name} />
+                    {item.image ? (
+                      <RelatedProductImage
+                        src={item.image}
+                        alt={item.name}
+                        onError={(e) => {
+                          // 이미지 로드 실패 시 플레이스홀더로 대체
+                          e.target.style.display = "none";
+                          const placeholder = document.createElement("div");
+                          placeholder.className = "image-placeholder";
+                          placeholder.style.cssText = `
+                            width: 100%;
+                            height: 100%;
+                            background-color: #f0f0f0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: #888;
+                            font-size: 14px;
+                            border: 2px dashed #ccc;
+                            border-radius: 8px;
+                          `;
+                          placeholder.textContent =
+                            "이미지를 불러올 수 없습니다";
+                          e.target.parentNode.appendChild(placeholder);
+                        }}
+                      />
+                    ) : (
+                      <ImagePlaceholder />
+                    )}
                   </RelatedProductImageContainer>
                   <RelatedProductInfo>
                     <RelatedProductName>{item.name}</RelatedProductName>
                     <RecommendedProductPrice>
-                      {item.price.toLocaleString()} 원
+                      {typeof item.price === "number"
+                        ? item.price.toLocaleString()
+                        : item.price}{" "}
+                      원
                     </RecommendedProductPrice>
                   </RelatedProductInfo>
                 </RelatedProductItem>

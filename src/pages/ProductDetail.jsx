@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
@@ -32,65 +34,71 @@ import promotionBanner from "../images/banners/banner-strike_m.png";
 import "swiper/css";
 import "swiper/css/navigation";
 
+// 구단별 JSON URL 매핑
+const TEAM_JSON_URLS = {
+  두산베어스: "https://rookiejson.netlify.app/teamJson/ds_bas.json",
+  // 추후 다른 구단들 추가 예정
+};
+
 // 임시 데이터 (실제 구현 시 API 응답으로 대체)
-const mockRelatedProducts = [
-  {
-    id: "2",
-    name: "LG트윈스 클래식 핑크 유니폼",
-    price: 99000,
-    image: null,
-    team: "LG Twins",
-  },
-  {
-    id: "3",
-    name: "LG트윈스 클래식 그린 유니폼",
-    price: 99000,
-    image: null,
-    team: "LG Twins",
-  },
-  {
-    id: "4",
-    name: "LG트윈스 빈티지 이지 티셔츠",
-    price: 33000,
-    image: null,
-    team: "LG Twins",
-  },
-  {
-    id: "5",
-    name: "LG트윈스 애플캐릭터 티셔츠",
-    price: 33000,
-    image: null,
-    team: "LG Twins",
-  },
-  {
-    id: "6",
-    name: "LG트윈스 클래식 원정 유니폼",
-    price: 99000,
-    image: null,
-    team: "LG Twins",
-  },
-  {
-    id: "7",
-    name: "LG트윈스 스페셜 에디션 유니폼",
-    price: 129000,
-    image: null,
-    team: "LG Twins",
-  },
-  {
-    id: "8",
-    name: "LG트윈스 팬 응원 티셔츠",
-    price: 29000,
-    image: null,
-    team: "LG Twins",
-  },
-  {
-    id: "9",
-    name: "LG트윈스 2025 시즌 유니폼",
-    price: 109000,
-    image: null,
-    team: "LG Twins",
-  },
-];
+// const mockRelatedProducts = [
+//   {
+//     id: "2",
+//     name: "LG트윈스 클래식 핑크 유니폼",
+//     price: 99000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+//   {
+//     id: "3",
+//     name: "LG트윈스 클래식 그린 유니폼",
+//     price: 99000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+//   {
+//     id: "4",
+//     name: "LG트윈스 빈티지 이지 티셔츠",
+//     price: 33000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+//   {
+//     id: "5",
+//     name: "LG트윈스 애플캐릭터 티셔츠",
+//     price: 33000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+//   {
+//     id: "6",
+//     name: "LG트윈스 클래식 원정 유니폼",
+//     price: 99000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+//   {
+//     id: "7",
+//     name: "LG트윈스 스페셜 에디션 유니폼",
+//     price: 129000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+//   {
+//     id: "8",
+//     name: "LG트윈스 팬 응원 티셔츠",
+//     price: 29000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+//   {
+//     id: "9",
+//     name: "LG트윈스 2025 시즌 유니폼",
+//     price: 109000,
+//     image: null,
+//     team: "LG Twins",
+//   },
+// ];
 
 // 전체 페이지 컨테이너
 const Container = styled.div`
@@ -233,6 +241,22 @@ const ImagePlaceholder = styled.div`
     &::after {
       font-size: 14px;
     }
+  }
+`;
+
+// 에러 메시지 스타일
+const ErrorMessage = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 18px;
+
+  @media (max-width: 375px) {
+    font-size: 16px;
   }
 `;
 
@@ -1349,15 +1373,16 @@ const RelatedProductsSection = styled.div`
 
 // 상태 변수들
 const ProductDetail = () => {
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("details");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const initialProductsRef = useRef(mockRelatedProducts);
-  const [relatedProducts, setRelatedProducts] = useState(mockRelatedProducts);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   // contentRef 및 contentHeight 상태 추가
   const contentRef = useRef(null);
@@ -1395,6 +1420,77 @@ const ProductDetail = () => {
       isSecret: true,
     },
   ]);
+
+  // 제품 데이터 가져오기
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // 우선 두산베어스 데이터만 가져오기 (추후 다른 구단 지원 예정)
+        const response = await axios.get(TEAM_JSON_URLS["두산베어스"]);
+        const allProducts = response.data;
+
+        // ID로 특정 상품 찾기
+        const selectedProduct = allProducts.find(
+          (product) => product.id === parseInt(id)
+        );
+
+        if (!selectedProduct) {
+          setError("해당 상품을 찾을 수 없습니다.");
+          setLoading(false);
+          return;
+        }
+
+        // 제품 데이터 설정
+        setProduct({
+          id: selectedProduct.id,
+          name: selectedProduct.name,
+          price: parsePrice(selectedProduct.price),
+          images: selectedProduct.detail?.detail_images || [],
+          team: selectedProduct.team,
+          options: selectedProduct.detail?.options || [],
+          category: selectedProduct.category,
+          thumbnail: selectedProduct.thumbnail,
+        });
+
+        // 같은 카테고리의 추천 상품 설정 (현재 상품 제외)
+        const filteredProducts = allProducts.filter(
+          (product) =>
+            product.category === selectedProduct.category &&
+            product.id !== selectedProduct.id
+        );
+
+        const relatedProductsData = filteredProducts
+          .slice(0, 8)
+          .map((product) => ({
+            id: product.id,
+            name: product.name,
+            price: parsePrice(product.price),
+            image: product.thumbnail,
+            team: product.team,
+          }));
+
+        setRelatedProducts(relatedProductsData);
+        setLoading(false);
+      } catch (error) {
+        console.error("제품 데이터 가져오기 오류:", error);
+        setError("데이터를 불러오는 중 오류가 발생했습니다.");
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProductData();
+    }
+  }, [id]);
+
+  // 가격 문자열을 숫자로 변환하는 헬퍼 함수
+  const parsePrice = (priceString) => {
+    if (!priceString) return 0;
+    return parseInt(priceString.replace(/[,원]/g, ""));
+  };
 
   // 토글 시 높이 계산을 위한 useEffect 추가
   useEffect(() => {
@@ -1530,49 +1626,50 @@ const ProductDetail = () => {
 
   const productInfoRef = useRef(null);
   const purchaseSectionRef = useRef(null);
-
-  // 추천 상품 가져오기 함수
-  const fetchRelatedProducts = (teamName) => {
-    console.log("Setting related products data with team:", teamName);
-    // 실제 API 연동 시 여기서 API 호출하고 setRelatedProducts로 설정
-    // 지금은 목업 데이터를 상태로 설정하는 단계만 실행
-    setRelatedProducts(mockRelatedProducts);
-  };
-
-  // 제품 데이터 가져오기
-  useEffect(() => {
-    // 실제 데이터 가져오기 로직으로 대체될 예정
-    const fetchProductData = async () => {
-      try {
-        // 임시 데이터 - 이미지 배열을 빈 배열로 설정
-        const mockProduct = {
-          id: "1",
-          name: "두산 베어스 마킹셔츠 어센틱 홈 유니폼",
-          price: 145000,
-          rating: 5.0,
-          images: [], // 빈 배열로 설정
-          team: "Doosan Bears",
-          options: [
-            { id: "1", name: "옵션", values: ["S", "M", "L", "XL", "2XL"] },
-          ],
-        };
-
-        setProduct(mockProduct);
-        setLoading(false);
-
-        // 추천 상품 가져오기
-        fetchRelatedProducts(mockProduct.team);
-      } catch (error) {
-        console.error("제품 데이터 가져오기 오류:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchProductData();
-  }, []);
-
+  // 로딩 중일 때
   if (loading) {
-    return <Container>로딩 중...</Container>;
+    return (
+      <Container>
+        <Header />
+        <ContentWrapper>
+          <div style={{ textAlign: "center", padding: "100px 0" }}>
+            로딩 중...
+          </div>
+        </ContentWrapper>
+        <Footer />
+      </Container>
+    );
+  }
+
+  // 에러가 발생했을 때
+  if (error) {
+    return (
+      <Container>
+        <Header />
+        <ContentWrapper>
+          <ErrorMessage>
+            <div>{error}</div>
+            <div style={{ marginTop: "20px", fontSize: "14px" }}>
+              다시 시도해주세요.
+            </div>
+          </ErrorMessage>
+        </ContentWrapper>
+        <Footer />
+      </Container>
+    );
+  }
+
+  // 제품 데이터가 없을 때
+  if (!product) {
+    return (
+      <Container>
+        <Header />
+        <ContentWrapper>
+          <ErrorMessage>제품 정보를 찾을 수 없습니다.</ErrorMessage>
+        </ContentWrapper>
+        <Footer />
+      </Container>
+    );
   }
 
   return (
@@ -1859,21 +1956,19 @@ const ProductDetail = () => {
               <ProductPrice>
                 {product?.price ? product.price.toLocaleString() : "0"} 원
               </ProductPrice>
-              {product?.rating && (
-                <RatingContainer>
-                  <StarIcon>★</StarIcon>
-                  <RatingText>{product.rating}</RatingText>
-                </RatingContainer>
-              )}
+              <RatingContainer>
+                <StarIcon>★</StarIcon>
+                <RatingText>5.0</RatingText>
+              </RatingContainer>
             </PriceContainer>
 
             {/* 옵션 선택기 */}
             <OptionContainer>
               <OptionSelect>
-                <option value=""> - [필수] 옵션 선택 -</option>
-                {product?.options?.[0]?.values?.map((value) => (
-                  <option key={value} value={value}>
-                    {value}
+                <option value="">- [필수] 옵션 선택 -</option>
+                {product?.options?.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
                   </option>
                 ))}
               </OptionSelect>

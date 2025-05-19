@@ -22,12 +22,58 @@ const ImageContainer = styled.div`
   align-items: center;
   overflow: visible;
   position: relative;
+
+  @media (max-width: 1200px) {
+    width: 520px;
+    height: 520px;
+  }
+
+  @media (max-width: 1024px) {
+    width: 400px;
+    height: 400px;
+  }
+
+  @media (max-width: 375px) {
+    width: 95%;
+    min-height: 350px;
+  }
 `;
 
 const SlideImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
+`;
+
+// 이미지 플레이스홀더 (이미지가 없을 때)
+const ImagePlaceholder = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 2px dashed #ccc;
+
+  &::after {
+    content: "상품 이미지";
+    color: #888;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 1024px) {
+    &::after {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 375px) {
+    &::after {
+      font-size: 14px;
+    }
+  }
 `;
 
 // 이미지 확대 컨테이너
@@ -42,6 +88,16 @@ const ZoomContainer = styled.div`
   display: ${(props) => (props.show ? "block" : "none")};
   background-color: white;
   z-index: 10;
+
+  @media (max-width: 1200px) {
+    right: -600px;
+    width: 500px;
+    height: 520px;
+  }
+
+  @media (max-width: 1024px) {
+    display: none; // 모바일에서는 확대 기능 비활성화
+  }
 `;
 
 const ZoomedImage = styled.div`
@@ -68,6 +124,10 @@ const HoverSquare = styled.div`
   top: ${(props) => props.y}px;
   z-index: 99;
   display: ${(props) => (props.show ? "block" : "none")};
+
+  @media (max-width: 1024px) {
+    display: none; // 모바일에서는 호버 기능 비활성화
+  }
 `;
 
 // Swiper 커스텀 스타일
@@ -100,6 +160,22 @@ const StyledSwiper = styled(Swiper)`
   /* 확대 기능을 위해 이미지 위에 마우스 오버 시, 커서 변경 */
   .swiper-slide img {
     cursor: crosshair;
+
+    @media (max-width: 1024px) {
+      cursor: default; // 모바일에서는 기본 커서
+    }
+  }
+
+  @media (max-width: 375px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 30px;
+      height: 30px;
+
+      &:after {
+        font-size: 16px;
+      }
+    }
   }
 `;
 
@@ -112,6 +188,11 @@ const SliderControls = styled.div`
   justify-content: center;
   gap: 10px;
   z-index: 2;
+
+  @media (max-width: 375px) {
+    bottom: 15px;
+    gap: 8px;
+  }
 `;
 
 const SliderDot = styled.button`
@@ -122,15 +203,31 @@ const SliderDot = styled.button`
   border: none;
   cursor: pointer;
   transition: all 0.2s;
+
+  @media (max-width: 375px) {
+    width: 10px;
+    height: 10px;
+  }
 `;
 
-const ImageSlider = ({ images, width = 600, height = 600 }) => {
+const ImageSlider = ({ images = [], width = 600, height = 600 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showZoom, setShowZoom] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
 
   const swiperRef = useRef(null);
+
+  // 이미지가 없는 경우 플레이스홀더 표시
+  if (!images || images.length === 0) {
+    return (
+      <SliderContainer>
+        <ImageContainer>
+          <ImagePlaceholder />
+        </ImageContainer>
+      </SliderContainer>
+    );
+  }
 
   // 줌 레벨
   const zoomLevel = 1.8;
@@ -155,6 +252,9 @@ const ImageSlider = ({ images, width = 600, height = 600 }) => {
 
   // 마우스 이벤트 핸들러
   const handleMouseMove = (e) => {
+    // 모바일에서는 확대 기능 비활성화
+    if (window.innerWidth <= 1024) return;
+
     // 네비게이션 버튼 위에 있으면 확대 기능 비활성화
     if (isNavigationButton(e.target)) {
       setShowZoom(false);
@@ -195,6 +295,9 @@ const ImageSlider = ({ images, width = 600, height = 600 }) => {
 
   // 마우스 엔터 이벤트 핸들러
   const handleMouseEnter = (e) => {
+    // 모바일에서는 확대 기능 비활성화
+    if (window.innerWidth <= 1024) return;
+
     // 네비게이션 버튼 위에 있으면 확대 기능 비활성화
     if (!isNavigationButton(e.target)) {
       setShowZoom(true);
@@ -203,6 +306,9 @@ const ImageSlider = ({ images, width = 600, height = 600 }) => {
 
   // 마우스 리브 이벤트 핸들러
   const handleMouseLeave = (e) => {
+    // 모바일에서는 확대 기능 비활성화
+    if (window.innerWidth <= 1024) return;
+
     // 네비게이션 버튼으로 이동하는 경우가 아니라면 확대 기능 비활성화
     if (!isNavigationButton(e.relatedTarget)) {
       setShowZoom(false);
@@ -222,10 +328,20 @@ const ImageSlider = ({ images, width = 600, height = 600 }) => {
           onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
           onSwiper={(swiper) => (swiperRef.current = swiper)}
           slidesPerView={1}
+          loop={images.length > 1} // 이미지가 여러 개일 때만 루프
         >
           {images.map((image, index) => (
             <SwiperSlide key={index}>
-              <SlideImage src={image} alt={`제품 이미지 ${index + 1}`} />
+              <SlideImage
+                src={image}
+                alt={`제품 이미지 ${index + 1}`}
+                onError={(e) => {
+                  // 이미지 로드 실패 시 플레이스홀더로 대체
+                  e.target.style.display = "none";
+                  e.target.parentNode.innerHTML =
+                    '<div style="width:100%;height:100%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;border:2px dashed #ccc;border-radius:8px;"><span style="color:#888;font-size:16px;">이미지를 불러올 수 없습니다</span></div>';
+                }}
+              />
             </SwiperSlide>
           ))}
         </StyledSwiper>
@@ -248,18 +364,23 @@ const ImageSlider = ({ images, width = 600, height = 600 }) => {
         </ZoomContainer>
       </ImageContainer>
 
-      <SliderControls>
-        {images.map((_, index) => (
-          <SliderDot
-            key={index}
-            active={index === currentIndex}
-            onClick={() => {
-              swiperRef.current.slideTo(index);
-              setCurrentIndex(index);
-            }}
-          />
-        ))}
-      </SliderControls>
+      {/* 이미지가 여러 개일 때만 컨트롤 표시 */}
+      {images.length > 1 && (
+        <SliderControls>
+          {images.map((_, index) => (
+            <SliderDot
+              key={index}
+              active={index === currentIndex}
+              onClick={() => {
+                if (swiperRef.current) {
+                  swiperRef.current.slideTo(index);
+                  setCurrentIndex(index);
+                }
+              }}
+            />
+          ))}
+        </SliderControls>
+      )}
     </SliderContainer>
   );
 };
