@@ -11,6 +11,7 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
+import { getScrollbarWidth } from "../../util";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import DaumPostcode from "react-daum-postcode";
@@ -467,6 +468,18 @@ const LogonSecond = () => {
 
     setIsFormValid(isValid);
   }, [formData]);
+
+  //스크롤 막기
+  useEffect(() => {
+    if (modalState.required || modalState.privacy || isAddressModalOpen) {
+      const scrollbarWidth = getScrollbarWidth();
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+  }, [modalState, isAddressModalOpen]);
 
   return (
     <Form onSubmit={handleSubmit}>
