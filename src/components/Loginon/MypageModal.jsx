@@ -6,7 +6,9 @@ import { auth,db } from "../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import authStore from "../../stores/AuthStore";
 
-const ModalOverlay = styled.div`
+const ModalOverlay = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isOpen'
+})`
   position: fixed;
   top: 0;
   left: 0;
@@ -104,7 +106,7 @@ display: flex;
 align-items: center;
 `
 
-const ModalText = styled.p`
+const ModalText = styled.h2`
   font-size: 1.6rem;
   line-height: 1.5;
   font-weight: 400;

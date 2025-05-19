@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import logo from "../../images/logos/Rookie_logo.svg";
 
-const ModalOverlay = styled.div`
+const ModalOverlay = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isOpen'
+})`
   position: fixed;
   top: 0;
   left: 0;
@@ -35,20 +37,6 @@ const ModalContent = styled.div`
     margin: 0 15px;
   }
 `;
-
-// const CloseButton = styled.button`
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-//   background: none;
-//   border: none;
-//   font-size: 3rem;
-//   cursor: pointer;
-//   color: var(--dark);
-//   @media screen and (max-width: 500px) {
-//     font-size: 1.4rem;
-//   }
-// `;
 
 const LogoWrapper = styled.div`
   width: 100%;

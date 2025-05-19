@@ -356,24 +356,25 @@ const LogonSecond = () => {
         displayName: formData.username,
       });
 
-      console.log("Firestore에 저장 시도:", {
-        uid: user.uid,
-        username: formData.username,
-        favoriteTeam: formData.favoriteTeam,
-        birthdate: `${
-          formData.birthdate.year
-        }-${formData.birthdate.month.padStart(
-          2,
-          "0"
-        )}-${formData.birthdate.date.padStart(2, "0")}`,
-        phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
-        nickname: formData.nickname,
-        email: formData.email,
-        postalCode: formData.postalCode, // 우편번호 저장
-        address: formData.address, // 주소 저장
-        detailedAddress: formData.detailedAddress, // 상세주소 저장
-        createdAt: new Date().toISOString().split("T")[0],
-      });
+      //  user콘솔
+      // console.log("Firestore에 저장 시도:", {
+      //   uid: user.uid,
+      //   username: formData.username,
+      //   favoriteTeam: formData.favoriteTeam,
+      //   birthdate: `${
+      //     formData.birthdate.year
+      //   }-${formData.birthdate.month.padStart(
+      //     2,
+      //     "0"
+      //   )}-${formData.birthdate.date.padStart(2, "0")}`,
+      //   phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
+      //   nickname: formData.nickname,
+      //   email: formData.email,
+      //   postalCode: formData.postalCode, // 우편번호 저장
+      //   address: formData.address, // 주소 저장
+      //   detailedAddress: formData.detailedAddress, // 상세주소 저장
+      //   createdAt: new Date().toISOString().split("T")[0],
+      // });
 
       // Firestore에 사용자 정보 저장
       await setDoc(doc(db, "users", user.uid), {

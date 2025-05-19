@@ -214,7 +214,7 @@ const InfoDetail = styled.h4`
   }
 `;
 
-const InfoDetailDetail = styled.h5`
+const InfoDetailDetail = styled.p`
   font-size: 1.4rem;
   color: var(--gray8);
   @media screen and (max-width: 1024px) {
