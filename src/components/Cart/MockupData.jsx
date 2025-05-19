@@ -1,4 +1,4 @@
-export const mockItems = Array.from({ length: 10 }, (_, index) => ({
+export const mockItems = Array.from({ length: 3 }, (_, index) => ({
   id: `item${index + 1}`,
   team: "LG트윈스",
   name: `최고심 콜라보 반팔티셔츠 ${index + 1}`,
