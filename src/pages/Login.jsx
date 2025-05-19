@@ -298,26 +298,14 @@ const Login = () => {
         form.email,
         form.password
       );
-      console.log("✅ 로그인 성공:", userCredential);
 
       const user = userCredential.user;
 
       const userDoc = await getDoc(doc(db, "users", user.uid));
-      console.log("📄 Firestore 문서 요청:", user.uid);
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        console.log("📦 Firestore 유저 데이터:", userData);
 
-        const birthdateParts = userData.birthdate?.match(
-          /^(\d{4})-(\d{2})-(\d{2})$/
-        );
-        const phoneParts = userData.phoneNumber?.match(
-          /^(\d{3})-(\d{3,4})-(\d{4})$/
-        );
-        if (!birthdateParts || !phoneParts) {
-          console.warn("⚠️ Invalid birthdate or phoneNumber format");
-        } else {
           setFormData({
             email: user.email,
             username: userData.username || "",
@@ -329,7 +317,6 @@ const Login = () => {
             address: userData.address || "",
             detailedAddress: userData.detailedAddress || "",
           });
-        }
       } else {
         console.warn("⚠️ Firestore 유저 데이터 없음");
       }

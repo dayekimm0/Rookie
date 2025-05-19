@@ -11,11 +11,10 @@ const authStore = create(
       userProfile: null,
       isLoading: true,
       setUser: (user, profile) => {
-        console.log("🟢 setUser 호출, user:", user, "profile:", profile);
+        // setUser 호출
         set({ user, userProfile: profile, isLoading: false });
       },
       clearUser: () => {
-        console.log("🟢 clearUser 호출");
         set({ user: null, userProfile: null, isLoading: false });
       },
     }),
@@ -28,7 +27,7 @@ const authStore = create(
 );
 
 onAuthStateChanged(auth, async (user) => {
-  console.log("🔵 onAuthStateChanged 호출, user:", user);
+  // onAuthStateChanged 호출
   if (user) {
     const userData = {
       uid: user.uid,
@@ -39,14 +38,12 @@ onAuthStateChanged(auth, async (user) => {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
       const profile = docSnap.exists() ? docSnap.data() : null;
-      console.log("🟢 getDoc 호출, profile:", profile);
       authStore.getState().setUser(userData, profile);
     } catch (error) {
-      console.error("🔴 getDoc 오류:", error.message, error.code);
+      console.error(error.message, error.code);
       authStore.getState().setUser(userData, null);
     }
   } else {
-    console.log("🔵 비로그인 상태, clearUser 호출");
     authStore.getState().clearUser();
   }
 });
