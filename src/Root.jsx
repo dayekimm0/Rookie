@@ -10,10 +10,17 @@ import useHeaderStore from "./stores/headerStore";
 
 const ContentWrapper = styled.div`
   position: relative;
-  padding-top: ${({ $headerHeight }) => `${$headerHeight}px`};
-  /* padding-top: 180px; */
+  padding-top: 177px;
+
   transition: padding 0.2s;
   background: ${({ $mode }) => ($mode === "light" ? "#fff" : "#222")};
+
+  @media screen and (max-width: 1024px) {
+    padding-top: 138.67px;
+  }
+  @media screen and (max-width: 500px) {
+    padding-top: 120.78px;
+  }
 `;
 
 const getMode = (pathname) => {
@@ -28,6 +35,7 @@ const getMode = (pathname) => {
 };
 
 function Root() {
+  const isFolded = useHeaderStore((state) => state.isHeaderFolded);
   const foldIfScrolled = useHeaderStore((state) => state.foldIfScrolled);
   const unfold = useHeaderStore((state) => state.unfold);
   const resetTransition = useHeaderStore((state) => state.resetTransition);
@@ -75,7 +83,11 @@ function Root() {
       {isVisible && (
         <>
           <Header mode={mode} />
-          <ContentWrapper $mode={mode} $headerHeight={headerHeight}>
+          <ContentWrapper
+            $mode={mode}
+            $headerHeight={headerHeight}
+            $folded={isFolded}
+          >
             <Outlet />
           </ContentWrapper>
           <Footer mode={mode} />

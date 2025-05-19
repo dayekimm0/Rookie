@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getEmblem } from "../util";
+import { getEmblem, getTeamColor } from "../util";
 import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
@@ -12,6 +12,8 @@ import TopSchedule from "./TopSchedule";
 import useHeaderStore from "../stores/headerStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
+import logonStore from "../stores/LogonStore";
+import arrowSmall from "../images/icons/RBarrow_logo.svg";
 
 const Container = styled.header`
   position: fixed;
@@ -34,7 +36,7 @@ const Nav = styled.div`
   }
   @media screen and (max-width: 500px) {
     height: 46px;
-    padding: 0 15%;
+    padding: 0 15px;
   }
 `;
 
@@ -105,9 +107,11 @@ const Profile = styled.div`
   transform: translateY(-50%);
   @media screen and (max-width: 1024px) {
     right: 3%;
+    gap: 12px;
   }
   @media screen and (max-width: 500px) {
     right: 15px;
+    gap: 8px;
   }
 `;
 
@@ -121,6 +125,15 @@ const Emblem = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    overflow: visible;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 36px;
+    height: 36px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 25px;
+    height: 25px;
   }
 `;
 
@@ -134,6 +147,14 @@ const Emblem2 = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 33px;
+    height: 33px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 23px;
+    height: 23px;
   }
 `;
 
@@ -205,6 +226,12 @@ const RookieEmblem = styled.img`
 const UserName = styled.p`
   font-weight: bold;
   font-family: var(--Pretendard);
+  @media screen and (max-width: 1024px) {
+    font-size: 1.4rem;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const User = styled.div`
@@ -223,6 +250,14 @@ const User = styled.div`
 const InfoBtn = styled.i`
   margin-left: 16px;
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+    margin-left: 6px;
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 1024px) {
+    margin-left: 2px;
+    font-size: 1rem;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -245,6 +280,9 @@ const UserDesc = styled.div`
 const UserId = styled.p`
   font-size: 2rem;
   font-weight: 600;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const SelectTeam = styled.span`
@@ -255,7 +293,6 @@ const SelectTeam = styled.span`
 const UserTeam = styled.div`
   width: 60px;
   height: 60px;
-  background: #0066b3;
   border-radius: 6px;
   img {
     width: 100%;
@@ -276,6 +313,11 @@ const Gnb = styled.div`
       text-decoration: underline;
     }
   }
+  @media screen and (max-width: 1024px) {
+    a {
+      font-size: 1.4rem;
+    }
+  }
 `;
 
 const SearchPcBtn = styled.div`
@@ -283,6 +325,9 @@ const SearchPcBtn = styled.div`
   cursor: pointer;
   .closemark {
     font-size: 25px;
+  }
+  @media screen and (max-width: 1024px) {
+    display: none;
   }
 `;
 
@@ -335,11 +380,213 @@ const SearchPcWrap = styled.div`
       cursor: pointer;
     }
   }
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+const MobileMenuBtn = styled.div`
+  display: none;
+  @media screen and (max-width: 1024px) {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: space-between;
+    width: 18px;
+    cursor: pointer;
+    span {
+      width: 20px;
+      height: 2px;
+      background: var(--gray1);
+      border-radius: 10px;
+      transition: all 0.4s;
+    }
+    &.active {
+      span {
+        &:nth-child(1) {
+          transform: rotate(45deg);
+          transform-origin: left center;
+        }
+        &:nth-child(2) {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        &:nth-child(3) {
+          transform: rotate(-45deg);
+          transform-origin: left center;
+        }
+      }
+    }
+  }
+`;
+
+const MobileMenuWrap = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: none;
+  @media screen and (max-width: 1024px) {
+    display: block;
+    &.active {
+      display: block;
+      .bg_black {
+        display: block;
+      }
+      .menu_inner {
+        transform: translateX(0%);
+      }
+    }
+  }
+  .bg_black {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+  }
+  .menu_inner {
+    position: fixed;
+    width: 430px;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+    transition: transform 0.4s;
+    background: #fff;
+    padding: 50px 50px 0;
+    @media screen and (max-width: 500px) {
+      width: 100%;
+    }
+
+    .inner_wrap {
+      padding-top: ${({ $headerHeight, $folded }) =>
+        $folded ? `55px` : `${$headerHeight - 1}px`};
+
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      gap: 40px;
+      transition: padding-top 0.4s ease;
+
+      @media screen and (max-width: 500px) {
+        padding-top: ${({ $headerHeight, $folded }) =>
+          $folded ? `45px` : `${$headerHeight - 1}px`};
+      }
+    }
+
+    .search_bar {
+      position: relative;
+      border-bottom: 1px solid #111;
+      padding-bottom: 8px;
+      #search_form_mb {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        button,
+        input {
+          border: none;
+          background: none;
+        }
+        font-size: 0;
+        position: relative;
+        .search_txt {
+          border-radius: 100px;
+          background: #fff;
+          width: 100%;
+          overflow: hidden;
+          transition: all 0.4s;
+          font-size: 1.2rem;
+          color: #111;
+          &::placeholder {
+            font-size: 1.2rem;
+            font-family: "pretendard";
+            transition: all 0.4s;
+            color: var(--grayC);
+          }
+          &:focus {
+            outline: none;
+            &::placeholder {
+              color: transparent;
+            }
+          }
+        }
+        .search_btn {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .mb_menus {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      overflow-y: scroll;
+      & > li {
+        font-size: 1.6rem;
+        font-weight: 700;
+        a {
+          display: flex;
+          align-items: center;
+          img {
+            margin-left: 10px;
+            width: 6px;
+            display: inline-block;
+            transform: rotate(90deg);
+          }
+        }
+        &.active {
+          a {
+            img {
+              transform: rotate(-90deg);
+            }
+          }
+          .store_depth2 {
+            display: flex;
+          }
+        }
+        .store_depth2 {
+          display: none;
+          /* display: flex; */
+          margin-top: 14px;
+          flex-direction: column;
+          gap: 12px;
+          & > li {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--gray8);
+          }
+        }
+      }
+    }
+  }
 `;
 
 const Header = ({ mode }) => {
   const setHeaderHeight = useHeaderStore((state) => state.setHeaderHeight);
+  const headerHeight = useHeaderStore((state) => state.headerHeight);
+  const isFolded = useHeaderStore((state) => state.isHeaderFolded);
+
   const headerRef = useRef(null);
+  const teamToEmblemId = {
+    두산베어스: "4",
+    엘지트윈스: "3",
+    키움히어로즈: "10",
+    한화이글스: "8",
+    삼성라이온즈: "2",
+    케이티위즈: "5",
+    엔씨다이노스: "9",
+    쓱랜더스: "6",
+    롯데자이언츠: "7",
+    기아타이거즈: "1",
+  };
+
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
@@ -357,14 +604,14 @@ const Header = ({ mode }) => {
 
   const { user, userProfile, isLoading } = authStore();
 
-  console.log(
-    "🔵 Header 렌더링, isLoading:",
-    isLoading,
-    "user:",
-    user,
-    "userProfile:",
-    userProfile
-  );
+  // console.log(
+  //   "🔵 Header 렌더링, isLoading:",
+  //   isLoading,
+  //   "user:",
+  //   user,
+  //   "userProfile:",
+  //   userProfile
+  // );
 
   const goToMain = () => navigate("/");
 
@@ -408,13 +655,16 @@ const Header = ({ mode }) => {
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
+  const { resetForm } = logonStore();
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
       authStore.getState().clearUser();
-      console.log("🟢 로그아웃 성공");
-    } catch (error) {
-      console.error("🔴 로그아웃 실패:", error);
+      alert("로그아웃 되었습니다.");
+      resetForm();
+    } catch (e) {
+      alert("로그아웃 실패", e);
     }
   };
 
@@ -422,6 +672,18 @@ const Header = ({ mode }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const handleClickSearchPc = () => {
     setSearchOpen((prev) => !prev);
+  };
+
+  //mobile 메뉴 토글
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const handleClickMobileMenu = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
+
+  //mobile 스토어메뉴 토글
+  const [mobileStoreOpen, setMobileStoreOpen] = useState(false);
+  const handleClickMobileStore = () => {
+    setMobileStoreOpen((prev) => !prev);
   };
 
   return (
@@ -509,7 +771,7 @@ const Header = ({ mode }) => {
             transition={{ duration: 0.3, ease: "easeOut" }}
           />
         </Items>
-        {/* 모바일 메뉴 아이콘 자리리 */}
+
         <Profile>
           <SearchPcBtn>
             {searchOpen ? (
@@ -531,13 +793,15 @@ const Header = ({ mode }) => {
                 <img src={kbologo2} alt="kbologo2" />
               </Emblem2>
               <UserName>
-                <Link>Loading..</Link>
+                <Link>로딩중..</Link>
               </UserName>
             </>
           ) : user && userProfile ? (
             <>
               <Emblem>
-                <TeamEmblem emblemId="2" />
+                <TeamEmblem
+                  emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                />
               </Emblem>
               <UserName>
                 <Link to="/mypage">{userProfile.nickname}</Link>
@@ -547,15 +811,20 @@ const Header = ({ mode }) => {
               </UserName>
               <User $isopen={isopen}>
                 <UserInfo>
-                  <UserTeam>
-                    <TeamEmblem emblemId="2" />
+                  <UserTeam
+                    style={{
+                      backgroundColor: getTeamColor(
+                        teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                      ),
+                    }}
+                  >
+                    <TeamEmblem
+                      emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                    />
                   </UserTeam>
                   <UserDesc>
                     <UserId>{userProfile.nickname}</UserId>
-                    <SelectTeam>
-                      {userProfile.favoriteTeam}{" "}
-                      <i className="fas fa-chevron-right"></i>
-                    </SelectTeam>
+                    <SelectTeam>{userProfile.favoriteTeam}</SelectTeam>
                   </UserDesc>
                 </UserInfo>
                 <hr />
@@ -576,6 +845,14 @@ const Header = ({ mode }) => {
               </UserName>
             </>
           )}
+          <MobileMenuBtn
+            onClick={handleClickMobileMenu}
+            className={mobileMenuOpen && "active"}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </MobileMenuBtn>
         </Profile>
       </Nav>
       {searchOpen && (
@@ -605,31 +882,171 @@ const Header = ({ mode }) => {
           </form>
         </SearchPcWrap>
       )}
-      {/* 모바일 오른쪽메뉴 모달 영역 */}
-      {/* {isStoreOpen && (
-        <StoreContainer
-          onMouseEnter={() => setIsStoreOpen(true)}
-          onMouseLeave={() => setIsStoreOpen(false)}
-        >
-          <Stores>
-            <RookieEmblem
-              src="./src/images/logos/emblem_rookie.png"
-              alt="rookieemblem"
-            />
-            <TeamEmblem emblemId="0" />
-            <TeamEmblem emblemId="1" />
-            <TeamEmblem emblemId="2" />
-            <TeamEmblem emblemId="3" />
-            <TeamEmblem emblemId="4" />
-            <TeamEmblem emblemId="5" />
-            <TeamEmblem emblemId="6" />
-            <TeamEmblem emblemId="7" />
-            <TeamEmblem emblemId="8" />
-            <TeamEmblem emblemId="9" />
-            <TeamEmblem emblemId="10" />
-          </Stores>
-        </StoreContainer>
-      )} */}
+
+      <MobileMenuWrap
+        className={mobileMenuOpen && "active"}
+        $headerHeight={headerHeight}
+        $folded={isFolded}
+        data-lenis-prevent
+      >
+        <div className="bg_black"></div>
+        <div className="menu_inner">
+          <div className="inner_wrap">
+            <div className="search_bar">
+              <form
+                id="search_form_mb"
+                name="search_bar_mb"
+                className="search_form_mb"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <input
+                  className="search_txt"
+                  type="text"
+                  placeholder="search"
+                  // onKeyUp={onCheckEnter}
+                />
+                <button className="search_btn">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </button>
+              </form>
+            </div>
+            <ul className="mb_menus">
+              <li>
+                <Link to={"/"} onClick={() => setMobileMenuOpen(false)}>
+                  HOME
+                </Link>
+              </li>
+              <li>
+                <Link to={"#"} disabled>
+                  PLAY
+                </Link>
+              </li>
+              <li
+                onClick={handleClickMobileStore}
+                className={mobileStoreOpen ? "active" : null}
+              >
+                <Link to={"#"} disabled>
+                  STORE
+                  <img src={arrowSmall} alt="arrow" />
+                </Link>
+                <ul className="store_depth2">
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      ROOKie
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      KBO
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      기아 타이거즈
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      삼성 라이온즈
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      LG 트윈스
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      두산 베어스
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      KT 위즈
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      SSG 랜더스
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      롯데 자이언츠
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      한화 이글스
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      NC 다이노스
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/store"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      키움 히어로즈
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <Link to={"/event"} onClick={() => setMobileMenuOpen(false)}>
+                  EVENT
+                </Link>
+              </li>
+              <li>
+                <Link to={"/mypage"} onClick={() => setMobileMenuOpen(false)}>
+                  ACCOUNT
+                </Link>
+              </li>
+              <li>
+                <Link to={"/cart"} onClick={() => setMobileMenuOpen(false)}>
+                  CART
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </MobileMenuWrap>
     </Container>
   );
 };

@@ -13,6 +13,20 @@ const Input = styled.input`
     font-size: 1.8rem;
     color: var(--grayC);
   }
+  @media screen and (max-width: 1024px) {
+  height: 56px;
+  font-size: 1.4rem;
+    &::placeholder {
+    font-size: 1.4rem;
+  }
+  }
+  @media screen and (max-width: 500px) {
+  height: 44px;
+  font-size: 1rem;
+    &::placeholder {
+    font-size: 1rem;
+  }
+  }
 `;
 
 const AllInputWrapper = styled.div`
@@ -20,6 +34,9 @@ const AllInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  @media screen and (max-width: 500px) {
+  gap: 8px;
+  } 
 `;
 
 const SubTWrapper = styled.div`
@@ -28,11 +45,20 @@ const SubTWrapper = styled.div`
   flex-direction: column;
   justify-content: start;
   gap: 5px;
+  @media screen and (max-width: 500px) {
+  gap: 4px;
+  } 
 `;
 
 const Subsubtitle = styled.h4`
   font-size: 1.4rem;
   font-weight: 500;
+  @media screen and (max-width: 500px) {
+  font-size: 1.2rem;
+  } 
+  @media screen and (max-width: 500px) {
+  font-size: 0.9rem;
+  } 
 `;
 
 const StyledSelect = styled.select`
@@ -51,6 +77,14 @@ const StyledSelect = styled.select`
   option {
     color: black;
     background: var(--grayF5);
+  }
+  @media screen and (max-width: 1024px) {
+  height: 56px;
+  font-size: 1.4rem;
+  }
+  @media screen and (max-width: 500px) {
+  height: 44px;
+  font-size: 1rem;
   }
 `;
 
@@ -77,6 +111,14 @@ const StyledSelect2 = styled.select`
     color: black;
     background: var(--grayF5);
   }
+  @media screen and (max-width: 1024px) {
+  height: 56px;
+  font-size: 1.4rem;
+  }
+  @media screen and (max-width: 500px) {
+  height: 44px;
+  font-size: 1rem;
+  }
 `;
 
 const Input2 = styled.input`
@@ -90,6 +132,20 @@ const Input2 = styled.input`
     font-size: 1.8rem;
     color: var(--grayC);
   }
+  @media screen and (max-width: 1024px) {
+  height: 56px;
+  font-size: 1.4rem;
+    &::placeholder {
+    font-size: 1.4rem;
+  }
+  }
+  @media screen and (max-width: 500px) {
+  height: 44px;
+  font-size: 1rem;
+    &::placeholder {
+    font-size: 1rem;
+  }
+  }
 `;
 
 const LoginBtn = styled.button`
@@ -102,11 +158,25 @@ const LoginBtn = styled.button`
   color: var(--grayC);
   cursor: pointer;
   margin-top: 30px;
+  @media screen and (max-width: 1024px) {
+  height: 56px;
+  font-size: 1.8rem;
+  }
+  @media screen and (max-width: 500px) {
+  height: 40px;
+  font-size: 1.2rem;
+  }
 `;
 
 const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 1.4rem;
+  @media screen and (max-width: 1024px) {
+  font-size: 1.2rem;
+  }
+  @media screen and (max-width: 500px) {
+  font-size: 1rem;
+  }
 `;
 
 const currentyear = new Date().getFullYear();
@@ -120,7 +190,7 @@ const dates = Array.from({ length: 31 }, (_, i) => i + 1);
 //
 
 const LogonFirst = () => {
-  const { formData, setFormData, nextStep } = logonStore();
+  const {formData, setFormData, nextStep } = logonStore();
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
 

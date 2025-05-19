@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import ScheduleBox from "./ScheduleBox";
 import scheduleData from "../data/kbo_2025_may_mock.json";
-import { useLayoutEffect, useState } from "react";
 import useHeaderStore from "../stores/headerStore";
 
 const Container = styled.div`
+  position: relative;
+  z-index: 900;
   background: var(--dark);
   color: var(--light);
   width: 100%;
@@ -12,6 +13,13 @@ const Container = styled.div`
   overflow: hidden;
   ${({ $disableTransition }) =>
     !$disableTransition && "transition: max-height 0.4s ease;"}
+
+  @media screen and (max-width: 1024px) {
+    max-height: ${({ $folded }) => ($folded ? "0px" : "85px")};
+  }
+  @media screen and (max-width: 500px) {
+    max-height: ${({ $folded }) => ($folded ? "0px" : "75px")};
+  }
 `;
 
 const List = styled.div`

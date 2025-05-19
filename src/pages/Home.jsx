@@ -168,7 +168,7 @@ const SvgSpinner = styled.svg`
 
 const Home = () => {
   const { isLoading, userProfile } = authStore();
-
+  // console.log(userProfile);
   return (
     <Container>
       {isLoading ? (
@@ -185,9 +185,7 @@ const Home = () => {
           </SvgSpinner>
         </SlideLoaderWrapper>
       ) : userProfile?.favoriteTeam ? (
-        // <MyhomeMainSlide isMyhome={userProfile.favoriteTeam} />
-        //로그온 셀렉트 수정되면 위에걸로 변경
-        <MyhomeMainSlide isMyhome={"두산 베어스"} />
+        <MyhomeMainSlide isMyhome={userProfile.favoriteTeam} />
       ) : (
         <MainSlide />
       )}

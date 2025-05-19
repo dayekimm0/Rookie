@@ -94,6 +94,8 @@ const MainSlide = () => {
     <Container>
       <div className="slider-container">
         <Swiper
+          observer={true}
+          observeParents={true}
           slidesPerView={4}
           spaceBetween={20}
           slidesOffsetBefore={offset}
@@ -109,7 +111,7 @@ const MainSlide = () => {
           onFromEdge={() => setIsEnd(false)}
           breakpoints={{
             0: {
-              spaceBetween: 1.1,
+              slidesPerView: 1.1,
               spaceBetween: 6,
             },
             400: {
@@ -146,6 +148,7 @@ const MainSlide = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+
         <NaviLeftBtn onClick={handlePrev} disabled={isBeginning}>
           <img src={Arrow} alt="button" />
         </NaviLeftBtn>
