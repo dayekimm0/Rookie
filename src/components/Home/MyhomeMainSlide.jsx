@@ -12,6 +12,13 @@ const Container = styled.div`
   width: 100%;
   padding-top: 40px;
 
+  @media screen and (max-width: 1024px) {
+    padding-top: 30px;
+  }
+  @media screen and (max-width: 500px) {
+    padding-top: 15px;
+  }
+
   .slideWrap {
     display: flex;
     justify-content: space-between;

@@ -124,26 +124,22 @@ const Container = styled.div`
         padding: 0 3%;
         cursor: grab;
         -webkit-overflow-scrolling: touch;
-        &:active {
-          cursor: grabbing;
-        }
         &.dragging {
-          cursor: grabbing !important;
+          cursor: grabbing;
           user-select: none;
         }
+
         &::-webkit-scrollbar {
-          height: 10px;
-          background-color: transparent;
+          height: 6px;
         }
-
-        &::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
         &::-webkit-scrollbar-thumb {
-          background-color: #ccc;
-          border-radius: 6px;
+          background-color: #bbb;
+          border-radius: 10px;
         }
+        &::-webkit-scrollbar-thumb:hover {
+          background: #888;
+        }
+        scrollbar-color: #bbb transparent;
         scrollbar-width: auto;
       }
       .popular-list {

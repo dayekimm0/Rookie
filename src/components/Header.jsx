@@ -245,6 +245,9 @@ const User = styled.div`
   top: 68px;
   position: absolute;
   display: ${(props) => (props.$isopen ? "block" : "none")};
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const InfoBtn = styled.i`
@@ -255,8 +258,7 @@ const InfoBtn = styled.i`
     font-size: 1.2rem;
   }
   @media screen and (max-width: 1024px) {
-    margin-left: 2px;
-    font-size: 1rem;
+    display: none;
   }
 `;
 
@@ -527,7 +529,8 @@ const MobileMenuWrap = styled.div`
       display: flex;
       flex-direction: column;
       gap: 30px;
-      overflow-y: scroll;
+      overflow-y: auto;
+      padding-bottom: 50px;
       & > li {
         font-size: 1.6rem;
         font-weight: 700;
@@ -1026,16 +1029,28 @@ const Header = ({ mode }) => {
                   EVENT
                 </Link>
               </li>
-              <li>
-                <Link to={"/mypage"} onClick={() => setMobileMenuOpen(false)}>
-                  ACCOUNT
-                </Link>
-              </li>
-              <li>
-                <Link to={"/cart"} onClick={() => setMobileMenuOpen(false)}>
-                  CART
-                </Link>
-              </li>
+              {isLoading ? (
+                <></>
+              ) : user && userProfile ? (
+                <>
+                  <li>
+                    <Link
+                      to={"/mypage"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      ACCOUNT
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={"/cart"} onClick={() => setMobileMenuOpen(false)}>
+                      CART
+                    </Link>
+                  </li>
+                  <li>
+                    <Link onClick={handleLogout}>LOGOUT</Link>
+                  </li>
+                </>
+              ) : null}
             </ul>
           </div>
         </div>

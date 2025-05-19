@@ -12,6 +12,13 @@ const Container = styled.div`
   padding-top: 40px;
   overflow: hidden;
 
+  @media screen and (max-width: 1024px) {
+    padding-top: 30px;
+  }
+  @media screen and (max-width: 500px) {
+    padding-top: 15px;
+  }
+
   .slider-container {
     position: relative;
   }
