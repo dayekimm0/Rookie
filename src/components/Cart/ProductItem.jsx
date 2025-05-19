@@ -24,7 +24,7 @@ const Item = styled.div`
   grid-template-columns: ${DeskTopGrid};
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   position: relative;
 
   &:after {
@@ -56,7 +56,6 @@ const Item = styled.div`
     grid-auto-rows: min-content;
     justify-content: space-between;
     align-items: center;
-    row-gap: 5px;
 
     &:after {
       width: 100%;
@@ -67,19 +66,20 @@ const Item = styled.div`
     }
 
     :nth-child(1) {
-      grid-row: 1/6;
+      grid-row: 1/5;
     }
     :nth-child(2) {
-      justify-self: start;
-      gap: 10px;
+      gap: 15px;
     }
     :nth-child(3) {
       display: flex;
+      flex-direction: column;
+      gap: 15px;
       li {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        height: min-content;
+        align-items: start;
         p {
           &:nth-child(1) {
             text-align: start;
@@ -88,9 +88,6 @@ const Item = styled.div`
             text-align: end;
           }
         }
-      }
-      button {
-        display: none;
       }
     }
     :nth-child(4) {
@@ -101,14 +98,14 @@ const Item = styled.div`
       display: flex;
       justify-content: space-between;
     }
-    :nth-child(6) {
-      justify-self: start;
-    }
   }
 
   @media screen and (max-width: 375px) {
     grid-template-columns: 140px 200px;
     :nth-child(2) {
+      gap: 5px;
+    }
+    :nth-child(3) {
       gap: 5px;
     }
   }
@@ -191,11 +188,11 @@ const ItemOption = styled.ul`
   li {
     width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 5px;
     p {
+      width: 100%;
       text-align: center;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -215,32 +212,6 @@ const ItemOption = styled.ul`
   }
 
   @media screen and (max-width: 375px) {
-    font-size: 1.4rem;
-  }
-`;
-
-const OptionChangeButton = styled.button`
-  width: 100%;
-  height: 40px;
-  background: var(--grayF5);
-  border: none;
-  border-radius: 4px;
-  font-family: "Pretendard";
-  font-size: 1.6rem;
-  cursor: pointer;
-
-  @media screen and (max-width: 1024px) {
-    height: 30px;
-    font-size: 1.4rem;
-  }
-
-  @media screen and (max-width: 768px) {
-    height: 40px;
-    font-size: 1.6rem;
-  }
-
-  @media screen and (max-width: 375px) {
-    height: 30px;
     font-size: 1.4rem;
   }
 `;
@@ -279,11 +250,11 @@ const MultiPrice = styled.li`
   }
 `;
 
-const ProductItem = ({ item, isChecked, onToggle }) => {
+const ProductItem = ({ item, isChecked, onToggle, page }) => {
   const { name, team, price, quantity, image } = item;
 
   return (
-    <Item>
+    <Item page={page}>
       <Thumbnail>
         {onToggle && <CustomCheckbox checked={isChecked} onChange={onToggle} />}
         <ItemImage src={image} alt={name} />
@@ -301,7 +272,6 @@ const ProductItem = ({ item, isChecked, onToggle }) => {
           <p className="mobile">수량</p>
           <p className="quantity">{quantity}개</p>
         </li>
-        <OptionChangeButton>옵션</OptionChangeButton>
       </ItemOption>
       <SinglePrice>
         <p className="mobile">상품가격</p>
@@ -311,7 +281,6 @@ const ProductItem = ({ item, isChecked, onToggle }) => {
         <p className="mobile">결제가격</p>
         <p>{(price * quantity).toLocaleString()}원</p>
       </MultiPrice>
-      <OptionChangeButton className="mobile">옵션 변경</OptionChangeButton>
     </Item>
   );
 };
