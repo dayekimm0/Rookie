@@ -140,22 +140,34 @@ const PostInput = styled.div`
 
   @media screen and (max-width: 1024px) {
     gap: 15px;
-    input {
+    input[type="text"] {
       font-size: 1.4rem;
+    }
+    input[type="button"] {
+      width: 40%;
+      font-size: 1.2rem;
     }
   }
 
   @media screen and (max-width: 768px) {
     gap: 20px;
-    input {
+    input[type="text"] {
       font-size: 1.6rem;
+    }
+    input[type="button"] {
+      font-size: 1.4rem;
     }
   }
 
   @media screen and (max-width: 375px) {
     gap: 15px;
-    input {
+    input[type="text"] {
+      width: 70%;
       font-size: 1.4rem;
+    }
+    input[type="button"] {
+      width: 30%;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -247,7 +259,7 @@ const PaymentAddress = () => {
         <DeliveryPlace>
           <PostInput>
             <Input type="text" placeholder="우편번호" />
-            <Input type="button" value="검색" />
+            <Input type="button" value="우편번호 검색" />
           </PostInput>
           <Input placeholder="주소" />
           <Input placeholder="상세주소" />
