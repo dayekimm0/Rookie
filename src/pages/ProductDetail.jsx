@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
@@ -931,7 +933,11 @@ const ProductDetail = () => {
 
           <SliderContainer>
             <ImageContainer>
-              <ImageSlider images={product.images} width={500} height={600} />
+              <ImageSlider
+                images={[product.thumbnail]}
+                width={500}
+                height={600}
+              />
             </ImageContainer>
           </SliderContainer>
 
@@ -978,8 +984,8 @@ const ProductDetail = () => {
 
                   {/* 상세 이미지 */}
                   <DetailImage
-                    src={doosanDetail}
-                    alt="두산 베어스 유니폼 상세 정보"
+                    src={product.detail?.detail_images?.[0]}
+                    alt={`${product.name} 상세 정보`}
                   />
 
                   {/* 그라데이션 효과 (접혔을 때만 보임) */}
