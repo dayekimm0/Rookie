@@ -195,18 +195,20 @@ const InquiryLink = styled.a`
     margin-right: 10px;
   }
 `;
+
 const teamToEmblemId = {
-  두산베어스: "4",
-  엘지트윈스: "3",
-  키움히어로즈: "10",
-  한화이글스: "8",
-  삼성라이온즈: "2",
-  케이티위즈: "5",
-  엔씨다이노스: "9",
-  쓱랜더스: "6",
-  롯데자이언츠: "7",
-  기아타이거즈: "1",
+  "기아 타이거즈": "1",
+  "삼성 라이온즈": "2",
+  "LG 트윈스": "3",
+  "두산 베어스": "4",
+  "KT 위즈": "5",
+  "SSG 랜더스": "6",
+  "롯데 자이언츠": "7",
+  "한화 이글스": "8",
+  "NC 다이노스": "9",
+  "키움 히어로즈": "10",
 };
+
 const Mypage = () => {
   const { userProfile, isLoading } = authStore();
   const TeamEmblem = ({ emblemId }) => {
