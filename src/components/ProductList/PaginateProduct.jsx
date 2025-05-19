@@ -34,7 +34,11 @@ const Products = styled.div`
   }
   @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 14px;
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @media screen and (max-width: 500px) {

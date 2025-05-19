@@ -115,10 +115,10 @@ const Sidebar = styled.div`
 
   @media screen and (max-width: 500px) {
     width: 100%;
+    padding: 0 3%;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    overflow-x: auto;
     span:first-child {
       display: none;
     }
@@ -144,11 +144,14 @@ const SidebarItem = styled.div`
   &:hover {
     color: var(--bg);
   }
-
   @media screen and (max-width: 500px) {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+    padding: 12px 0;
   }
 `;
 
@@ -156,7 +159,7 @@ const Dropdown = styled.div`
   position: absolute;
   top: 100%; /* 사이드바 바로 아래 */
   left: 0;
-  background: white;
+  background: #fff;
   border: 1px solid var(--gray5);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -175,6 +178,9 @@ const Dropdown = styled.div`
 
 const Sort = styled.div`
   margin-top: 10px;
+  @media screen and (max-width: 500px) {
+    margin-left: 3%;
+  }
 `;
 
 const Categories = [
@@ -187,7 +193,7 @@ const Categories = [
 ];
 
 const ProductCategory = ({
-  brands,
+  products = [],
   selectCollabo,
   setSelectCollabo,
   selectedBrand,
@@ -200,6 +206,12 @@ const ProductCategory = ({
   const [showCategories, setShowCategories] = useState(true);
   const [showCollaborationBrands, setShowCollaborationBrands] = useState(true);
   const brandRefs = useRef({});
+
+  const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
+
+  const collaborationBrands = [
+    ...new Set(products?.map((p) => p.collaboration).filter(Boolean)),
+  ];
 
   // ▼ 카테고리 클릭 핸들러 수정: 콜라보 선택 시 드롭다운 토글, 아닐 때 닫기
   const handleCategoryClick = (cat) => {
@@ -312,11 +324,10 @@ const ProductCategory = ({
                 {brand}
               </SidebarItem>
             ))}
-
-          <Sort>
-            <SortSelect value={sort} onChange={setSort} />
-          </Sort>
         </Sidebar>
+        <Sort>
+          <SortSelect value={sort} onChange={setSort} />
+        </Sort>
       </TabletContainer>
     </CategoryWrapper>
   );

@@ -10,19 +10,35 @@ export const filterAndSortProducts = (
   let filtered = products;
 
   if (selectCollabo === "COLLABORATION") {
-    filtered = products.filter((item) => item.brand === selectedBrand);
+    // collaboration 값이 존재하는 상품만 필터
+    filtered = products.filter(
+      (item) => item.collaboration && item.collaboration.trim() !== ""
+    );
+    if (selectedBrand) {
+      filtered = filtered.filter(
+        (item) => item.collaboration === selectedBrand
+      );
+    }
   } else if (selectCollabo !== "ALL") {
+    // category 값 기준 필터
     filtered = products.filter((item) => item.category === selectCollabo);
   }
 
-  if (sort === "newest") {
-    filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-  } else if (sort === "lowPrice") {
-    filtered.sort((a, b) => getPrice(a.price) - getPrice(b.price));
-  } else if (sort === "highPrice") {
-    filtered.sort((a, b) => getPrice(b.price) - getPrice(a.price));
-  } else if (sort === "popular") {
-    filtered.sort((a, b) => b.like - a.like);
+  switch (sort) {
+    case "newest":
+      filtered.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+      break;
+    case "lowPrice":
+      filtered.sort((a, b) => getPrice(a.price) - getPrice(b.price));
+      break;
+    case "highPrice":
+      filtered.sort((a, b) => getPrice(b.price) - getPrice(a.price));
+      break;
+    case "popular":
+      filtered.sort((a, b) => (b.like || 0) - (a.like || 0));
+      break;
+    default:
+      break;
   }
 
   return filtered;

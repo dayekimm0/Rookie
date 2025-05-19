@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { getTeamJsonCode } from "../util";
 
 const CardContainer = styled.div`
   width: 290px;
@@ -11,40 +13,45 @@ const CardContainer = styled.div`
   padding: 10px;
 
   @media screen and (max-width: 1440px) {
-    width: 250px;
+    width: 270px;
   }
   @media screen and (max-width: 1024px) {
-    width: 240px;
+    width: 250px;
   }
 
   @media screen and (max-width: 500px) {
-    width: 100%;
+    width: 230px;
   }
 `;
 
 const ProductImg = styled.div`
   width: 290px;
   height: 310px;
-  margin-bottom: 27px;
+  margin-bottom: 24px;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 4px;
+    filter: brightness(0.95);
     cursor: pointer;
+    transition: scale 0.3s;
+    &:hover {
+      scale: 1.08;
+    }
   }
   @media screen and (max-width: 1440px) {
-    width: 270px;
+    width: 100%;
     height: 290px;
   }
   @media screen and (max-width: 1024px) {
-    width: 250px;
+    width: 100%;
     height: 270px;
   }
 
   @media screen and (max-width: 500px) {
-    height: 230px;
+    width: 100%;
     height: 250px;
   }
 `;
@@ -72,7 +79,7 @@ const ProductInfo = styled.div`
   .brand {
   }
   .name {
-    margin-bottom: 10px;
+    height: 48px;
     cursor: pointer;
     font-size: 1.8rem;
     line-height: 1.3;
@@ -82,6 +89,8 @@ const ProductInfo = styled.div`
     cursor: pointer;
   }
   @media screen and (max-width: 1024px) {
+    width: 100%;
+
     .brand {
       font-size: 1.4rem;
     }
@@ -94,6 +103,7 @@ const ProductInfo = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 100%;
     .brand {
       font-size: 1.2rem;
     }
@@ -106,6 +116,8 @@ const ProductInfo = styled.div`
   }
 
   @media screen and (max-width: 375px) {
+    width: 100%;
+
     .brand {
       font-size: 1.1rem;
     }
@@ -119,11 +131,19 @@ const ProductInfo = styled.div`
 `;
 
 const ProductCard = ({ data }) => {
+  const navigate = useNavigate();
+
   if (!data) return null;
-  const { thumbnail, name, price, team } = data;
+  const { thumbnail, name, price, team, id } = data;
+
+  const handleClick = () => {
+    const teamCode = getTeamJsonCode(team); // ← 함수 호출로 수정!
+    navigate(`/store/${team}/${id}`);
+  };
+
   return (
     <CardContainer>
-      <ProductImg>
+      <ProductImg onClick={handleClick}>
         <img src={thumbnail} alt={name} />
       </ProductImg>
       <ProductInfo>

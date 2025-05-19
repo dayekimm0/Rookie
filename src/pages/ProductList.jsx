@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
@@ -91,7 +91,7 @@ const ProductList = () => {
 
   // 최초 로딩 시 선택 브랜드 설정
   useEffect(() => {
-    if (!selectedBrand && brands.length > 0) {
+    if (!selectedBrand?.trim() && brands.length > 0) {
       setSelectedBrand(brands[0]);
     }
   }, [brands, selectedBrand, setSelectedBrand]);
