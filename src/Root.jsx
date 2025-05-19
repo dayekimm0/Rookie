@@ -3,16 +3,23 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import lenis from "./lenisInstance";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
+import ScrollToTop from "./ScrollToTop";
+import useHeaderStore from "./stores/headerStore";
 
 const ContentWrapper = styled.div`
   position: relative;
-  padding-top: ${({ $isHeaderActive }) =>
-    $isHeaderActive ? "150px" : "180px"};
-  /* padding-top: 180px; */
+  padding-top: 177px;
   transition: padding 0.2s;
   background: ${({ $mode }) => ($mode === "light" ? "#fff" : "#222")};
+
+  @media screen and (max-width: 1024px) {
+    padding-top: 138.67px;
+  }
+  @media screen and (max-width: 500px) {
+    padding-top: 120.78px;
+  }
 `;
 
 const getMode = (pathname) => {
@@ -27,33 +34,41 @@ const getMode = (pathname) => {
 };
 
 function Root() {
-  const [isHeaderActive, setIsHeaderActive] = useState(false);
-  // const [prevScroll, setPrevScroll] = useState(0);
+  const isFolded = useHeaderStore((state) => state.isHeaderFolded);
+  const foldIfScrolled = useHeaderStore((state) => state.foldIfScrolled);
+  const unfold = useHeaderStore((state) => state.unfold);
+  const resetTransition = useHeaderStore((state) => state.resetTransition);
+  const enableTransition = useHeaderStore((state) => state.enableTransition);
   const location = useLocation();
+  const headerHeight = useHeaderStore((state) => state.headerHeight);
+
   const hideHeaderPath = ["/login", "/logon"];
   const isVisible = !hideHeaderPath.includes(location.pathname);
 
   const mode = getMode(location.pathname);
 
+  //페이지 이동 시 헤더 헤더 펼치기
   useEffect(() => {
-    let ticking = false;
+    unfold();
+    resetTransition();
+    setTimeout(() => {
+      enableTransition();
+    }, 50);
+  }, [location.pathname]);
 
+  useEffect(() => {
     const handleScroll = ({ scroll }) => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setIsHeaderActive(scroll > 50);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      foldIfScrolled(scroll);
     };
 
     lenis.on("scroll", handleScroll);
+
     const raf = (time) => {
       lenis.raf(time);
       requestAnimationFrame(raf);
     };
     requestAnimationFrame(raf);
+
     return () => {
       lenis.off("scroll", handleScroll);
       lenis.stop();
@@ -63,10 +78,15 @@ function Root() {
   return (
     <>
       <GlobalStyles />
+      <ScrollToTop />
       {isVisible && (
         <>
-          <Header isActive={isHeaderActive} />
-          <ContentWrapper $isHeaderActive={isHeaderActive} $mode={mode}>
+          <Header mode={mode} />
+          <ContentWrapper
+            $mode={mode}
+            $headerHeight={headerHeight}
+            $folded={isFolded}
+          >
             <Outlet />
           </ContentWrapper>
           <Footer mode={mode} />

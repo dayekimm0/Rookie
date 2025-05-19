@@ -164,6 +164,8 @@ const VideoInner = styled.div`
     right: 5%;
   }
   @media screen and (max-width: 1024px) {
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
     img {
       width: 28%;
     }

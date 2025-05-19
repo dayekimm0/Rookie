@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import PaymentAddress from "../components/Payment/PaymentDelivery";
-import { mockItems } from "../components/Cart/MockupData";
 
 const Container = styled.div.attrs({
   "data-lenis-prevent": true,
@@ -122,7 +122,7 @@ const Items = styled.div`
   width: calc(100% + 15px);
   display: flex;
   flex-direction: column;
-  height: 400px;
+  height: 520px;
   gap: 20px;
   overflow-y: auto;
 
@@ -144,7 +144,7 @@ const Items = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    height: 320px;
+    height: 400px;
     gap: 15px;
   }
 
@@ -161,6 +161,46 @@ const Items = styled.div`
 `;
 
 const Payment = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const orderItems = location.state?.orderItems || [];
+  const couponFromCart = location.state?.coupon || null;
+
+  const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [selectedCouponId, setSelectedCouponId] = useState(
+    couponFromCart?.id || ""
+  );
+
+  useEffect(() => {
+    const savedCoupons = localStorage.getItem("coupons");
+    if (savedCoupons) {
+      setAvailableCoupons(JSON.parse(savedCoupons));
+    }
+  }, []);
+
+  const selectedCoupon =
+    availableCoupons.find((c) => c.id === selectedCouponId) || null;
+
+  const productPrice = orderItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const couponDiscountRate = selectedCoupon ? selectedCoupon.discountRate : 0;
+  const discount = productPrice * couponDiscountRate;
+  const totalPrice = productPrice - discount;
+
+  const handleCouponChange = (e) => {
+    setSelectedCouponId(e.target.value);
+  };
+
+  const handlePaymentSubmit = () => {
+    alert("결제가 완료되었습니다.");
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("appliedCoupon");
+    navigate("/store");
+  };
   return (
     <Container>
       <Section>
@@ -178,13 +218,27 @@ const Payment = () => {
             <span></span>
           </InfoTitle>
           <Items>
-            {mockItems.map((item) => (
-              <ProductItem key={item.id} item={item} />
-            ))}
+            {orderItems.length > 0 ? (
+              orderItems.map((item) => (
+                <ProductItem key={item.id} item={item} page="payment" />
+              ))
+            ) : (
+              <p>주문할 상품이 없습니다.</p>
+            )}
           </Items>
         </List>
       </Section>
-      <WingBanner page="payment" />
+      <WingBanner
+        page="payment"
+        productPrice={productPrice}
+        discount={discount}
+        totalPrice={totalPrice}
+        coupon={selectedCoupon}
+        coupons={availableCoupons}
+        selectedCoupon={selectedCoupon}
+        onCouponChange={handleCouponChange}
+        onPaymentSubmit={handlePaymentSubmit}
+      />
     </Container>
   );
 };

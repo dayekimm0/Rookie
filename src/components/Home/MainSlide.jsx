@@ -12,6 +12,13 @@ const Container = styled.div`
   padding-top: 40px;
   overflow: hidden;
 
+  @media screen and (max-width: 1024px) {
+    padding-top: 30px;
+  }
+  @media screen and (max-width: 500px) {
+    padding-top: 15px;
+  }
+
   .slider-container {
     position: relative;
   }
@@ -94,6 +101,8 @@ const MainSlide = () => {
     <Container>
       <div className="slider-container">
         <Swiper
+          observer={true}
+          observeParents={true}
           slidesPerView={4}
           spaceBetween={20}
           slidesOffsetBefore={offset}
@@ -109,7 +118,7 @@ const MainSlide = () => {
           onFromEdge={() => setIsEnd(false)}
           breakpoints={{
             0: {
-              spaceBetween: 1.1,
+              slidesPerView: 1.1,
               spaceBetween: 6,
             },
             400: {
@@ -146,6 +155,7 @@ const MainSlide = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+
         <NaviLeftBtn onClick={handlePrev} disabled={isBeginning}>
           <img src={Arrow} alt="button" />
         </NaviLeftBtn>

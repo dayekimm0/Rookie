@@ -157,6 +157,8 @@ const PlaySlide = () => {
       </Title>
       <Container>
         <Swiper
+          observer={true}
+          observeParents={true}
           slidesPerView={5}
           spaceBetween={20}
           onSlideChange={(e) => {
@@ -170,7 +172,7 @@ const PlaySlide = () => {
           onFromEdge={() => setIsEnd(false)}
           breakpoints={{
             0: {
-              spaceBetween: 1,
+              slidesPerView: 1.4,
               spaceBetween: 6,
             },
             500: {

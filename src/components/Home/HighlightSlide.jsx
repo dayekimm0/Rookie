@@ -132,6 +132,8 @@ const HighlightSlide = () => {
       </Title>
       <Container>
         <Swiper
+          observer={true}
+          observeParents={true}
           slidesPerView={8}
           spaceBetween={20}
           onSlideChange={(e) => {
@@ -145,7 +147,7 @@ const HighlightSlide = () => {
           onFromEdge={() => setIsEnd(false)}
           breakpoints={{
             0: {
-              spaceBetween: 2,
+              slidesPerView: 2.8,
               spaceBetween: 6,
             },
             400: {

@@ -12,6 +12,13 @@ const Container = styled.div`
   width: 100%;
   padding-top: 40px;
 
+  @media screen and (max-width: 1024px) {
+    padding-top: 30px;
+  }
+  @media screen and (max-width: 500px) {
+    padding-top: 15px;
+  }
+
   .slideWrap {
     display: flex;
     justify-content: space-between;
@@ -190,6 +197,8 @@ const MyhomeMainSlide = ({ isMyhome }) => {
         <div className="slideArrWrap">
           <div className="slider-container">
             <Swiper
+              observer={true}
+              observeParents={true}
               slidesPerView={1}
               spaceBetween={20}
               direction="vertical"
