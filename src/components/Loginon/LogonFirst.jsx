@@ -14,18 +14,18 @@ const Input = styled.input`
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
-    &::placeholder {
+    height: 56px;
     font-size: 1.4rem;
-  }
-  }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
     &::placeholder {
-    font-size: 1rem;
+      font-size: 1.4rem;
+    }
   }
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -34,9 +34,9 @@ const AllInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  @media screen and (max-width: 500px) {
-  gap: 8px;
-  } 
+  @media screen and (max-width: 600px) {
+    gap: 8px;
+  }
 `;
 
 const SubTWrapper = styled.div`
@@ -45,20 +45,20 @@ const SubTWrapper = styled.div`
   flex-direction: column;
   justify-content: start;
   gap: 5px;
-  @media screen and (max-width: 500px) {
-  gap: 4px;
-  } 
+  @media screen and (max-width: 600px) {
+    gap: 4px;
+  }
 `;
 
 const Subsubtitle = styled.h4`
   font-size: 1.4rem;
   font-weight: 500;
-  @media screen and (max-width: 500px) {
-  font-size: 1.2rem;
-  } 
-  @media screen and (max-width: 500px) {
-  font-size: 0.9rem;
-  } 
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const StyledSelect = styled.select`
@@ -79,12 +79,12 @@ const StyledSelect = styled.select`
     background: var(--grayF5);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
+    height: 56px;
+    font-size: 1.4rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
   }
 `;
 
@@ -112,12 +112,12 @@ const StyledSelect2 = styled.select`
     background: var(--grayF5);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
+    height: 56px;
+    font-size: 1.4rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
   }
 `;
 
@@ -133,18 +133,18 @@ const Input2 = styled.input`
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.4rem;
-    &::placeholder {
+    height: 56px;
     font-size: 1.4rem;
-  }
-  }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
     &::placeholder {
-    font-size: 1rem;
+      font-size: 1.4rem;
+    }
   }
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -159,12 +159,12 @@ const LoginBtn = styled.button`
   cursor: pointer;
   margin-top: 30px;
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.8rem;
+    height: 56px;
+    font-size: 1.8rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1.2rem;
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
   }
 `;
 
@@ -172,10 +172,10 @@ const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 1.4rem;
   @media screen and (max-width: 1024px) {
-  font-size: 1.2rem;
+    font-size: 1.2rem;
   }
-  @media screen and (max-width: 500px) {
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
   }
 `;
 
@@ -190,7 +190,7 @@ const dates = Array.from({ length: 31 }, (_, i) => i + 1);
 //
 
 const LogonFirst = () => {
-  const {formData, setFormData, nextStep } = logonStore();
+  const { formData, setFormData, nextStep } = logonStore();
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
 

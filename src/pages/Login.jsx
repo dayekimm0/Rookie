@@ -17,7 +17,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
     padding: 0 15px;
   }
 `;
@@ -30,11 +30,11 @@ const Inner = styled.div`
   align-items: center;
   gap: 40px;
   @media screen and (max-width: 1024px) {
-  width: 480px;
+    width: 480px;
   }
-  @media screen and (max-width: 500px) {
-  width: 100%;
-  gap: 50px;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    gap: 50px;
   }
 `;
 
@@ -46,38 +46,38 @@ const LogoWrapper = styled.div`
   align-items: center;
   gap: 40px;
   @media screen and (max-width: 1024px) {
-  gap: 30px;
+    gap: 30px;
   }
-  @media screen and (max-width: 500px) {
-  gap: 22.5px;
+  @media screen and (max-width: 600px) {
+    gap: 22.5px;
   }
 `;
 
 const Logo = styled.img`
   @media screen and (max-width: 1024px) {
-  height: 60px;
+    height: 60px;
   }
-  @media screen and (max-width: 500px) {
-  height: 45px;
+  @media screen and (max-width: 600px) {
+    height: 45px;
   }
-  `;
+`;
 
 const LogoLogin = styled.div`
   font-size: 3rem;
   font-weight: bold;
   @media screen and (max-width: 1024px) {
-  font-size: 2.4rem;
+    font-size: 2.4rem;
   }
-  @media screen and (max-width: 500px) {
-  font-size: 2.4rem;
+  @media screen and (max-width: 600px) {
+    font-size: 2.4rem;
   }
-  `;
+`;
 
 const Form = styled.form`
   width: 100%;
   gap: 40px;
-  @media screen and (max-width: 500px) {
-  gap: 50px;
+  @media screen and (max-width: 600px) {
+    gap: 50px;
   }
 `;
 
@@ -87,11 +87,11 @@ const InputWrapper = styled.div`
   flex-direction: column;
   gap: 15px;
   @media screen and (max-width: 1024px) {
-  gap: 12px;
-  } 
-  @media screen and (max-width: 500px) {
-  gap: 10px;
-  } 
+    gap: 12px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 10px;
+  }
 `;
 
 const Input = styled.input`
@@ -106,18 +106,18 @@ const Input = styled.input`
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.6rem;
-    &::placeholder {
+    height: 56px;
     font-size: 1.6rem;
-  }
-  }
-  @media screen and (max-width: 500px) {
-  height: 44px;
-  font-size: 1rem;
     &::placeholder {
-    font-size: 1rem;
+      font-size: 1.6rem;
+    }
   }
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -129,10 +129,10 @@ const UnderInputWrapper = styled.div`
   gap: 6px;
   margin-bottom: 40px;
   @media screen and (max-width: 1024px) {
-  gap: 4px;
+    gap: 4px;
   }
-  @media screen and (max-width: 500px) {
-  gap: 3px;
+  @media screen and (max-width: 600px) {
+    gap: 3px;
   }
 `;
 
@@ -142,10 +142,10 @@ const UnderInputBtn = styled.button`
   background: none;
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-  font-size: 1.2rem;
+    font-size: 1.2rem;
   }
-  @media screen and (max-width: 500px) {
-  font-size: 0.9rem;
+  @media screen and (max-width: 600px) {
+    font-size: 0.9rem;
   }
 `;
 
@@ -167,8 +167,8 @@ const SnsWrapper = styled.div`
   @media screen and (max-width: 1024px) {
     height: 17px;
   }
-  @media screen and (max-width: 500px) {
-    height: 12px;  
+  @media screen and (max-width: 600px) {
+    height: 12px;
     margin-bottom: 22.5px;
   }
 `;
@@ -191,11 +191,11 @@ const SnsLogin = styled.h5`
   left: 50%;
   transform: translateX(-50%);
   @media screen and (max-width: 1024px) {
-  font-size: 1.4rem;
+    font-size: 1.4rem;
     padding: 4px 16px;
   }
-  @media screen and (max-width: 500px) {
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
     padding: 4px 12px;
   }
 `;
@@ -211,8 +211,8 @@ const SnsLogoWrapper = styled.div`
       height: 50px;
     }
   }
-  @media screen and (max-width: 500px) {
-      gap: 12px;
+  @media screen and (max-width: 600px) {
+    gap: 12px;
     img {
       height: 38px;
     }
@@ -229,12 +229,12 @@ const LoginBtn = styled.button`
   color: var(--grayC);
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-  height: 56px;
-  font-size: 1.8rem;
+    height: 56px;
+    font-size: 1.8rem;
   }
-  @media screen and (max-width: 500px) {
-  height: 40px;
-  font-size: 1.2rem;
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
   }
 `;
 
@@ -242,10 +242,10 @@ const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 1.4rem;
   @media screen and (max-width: 1024px) {
-  font-size: 1.2rem;
+    font-size: 1.2rem;
   }
-    @media screen and (max-width: 500px) {
-  font-size: 1rem;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
   }
 `;
 
@@ -346,8 +346,6 @@ const Login = () => {
         setErrors({
           general: "네트워크 오류가 발생했습니다. 다시 시도해주세요.",
         });
-      } else {
-        setErrors({ general: "오류가 발생했습니다. 다시 시도해주세요." });
       }
     } finally {
       setIsLoading(false);

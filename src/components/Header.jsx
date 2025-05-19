@@ -115,6 +115,7 @@ const Emblem = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    overflow: visible;
   }
 `;
 
@@ -242,17 +243,17 @@ const Gnb = styled.div`
   }
 `;
 
-  const teamToEmblemId = {
-  "두산베어스": "4",
-  "엘지트윈스": "3",
-  "키움히어로즈": "10",
-  "한화이글스": "8",
-  "삼성라이온즈": "2",
-  "케이티위즈": "5",
-  "엔씨다이노스": "9",
-  "쓱랜더스": "6",
-  "롯데자이언츠": "7",
-  "기아타이거즈": "1",
+const teamToEmblemId = {
+  두산베어스: "4",
+  엘지트윈스: "3",
+  키움히어로즈: "10",
+  한화이글스: "8",
+  삼성라이온즈: "2",
+  케이티위즈: "5",
+  엔씨다이노스: "9",
+  쓱랜더스: "6",
+  롯데자이언츠: "7",
+  기아타이거즈: "1",
 };
 
 const Header = ({ isActive }) => {
@@ -282,14 +283,14 @@ const Header = ({ isActive }) => {
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
-const { resetForm } = logonStore();
+  const { resetForm } = logonStore();
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       authStore.getState().clearUser();
       alert("로그아웃 되었습니다.");
-      resetForm()
+      resetForm();
     } catch (e) {
       alert("로그아웃 실패", e);
     }
@@ -339,7 +340,9 @@ const { resetForm } = logonStore();
           ) : user && userProfile ? (
             <>
               <Emblem>
-                <TeamEmblem emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"} />
+                <TeamEmblem
+                  emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                />
               </Emblem>
               <UserName>
                 <Link to="/mypage">{userProfile.nickname}</Link>
@@ -349,16 +352,20 @@ const { resetForm } = logonStore();
               </UserName>
               <User $isopen={isopen}>
                 <UserInfo>
-                  <UserTeam style={{
-                      backgroundColor: getTeamColor(teamToEmblemId[userProfile.favoriteTeam] || "#fff"),
-                    }}>
-                    <TeamEmblem emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"} />
+                  <UserTeam
+                    style={{
+                      backgroundColor: getTeamColor(
+                        teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                      ),
+                    }}
+                  >
+                    <TeamEmblem
+                      emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                    />
                   </UserTeam>
                   <UserDesc>
                     <UserId>{userProfile.nickname}</UserId>
-                    <SelectTeam>
-                      {userProfile.favoriteTeam}
-                    </SelectTeam>
+                    <SelectTeam>{userProfile.favoriteTeam}</SelectTeam>
                   </UserDesc>
                 </UserInfo>
                 <hr />
