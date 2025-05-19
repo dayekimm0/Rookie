@@ -115,7 +115,6 @@ const Thumbnail = styled.div`
 
 const PlaySlide = () => {
   const [swiper, setSwiper] = useState();
-  const [offset, setOffset] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
 
@@ -127,21 +126,25 @@ const PlaySlide = () => {
   };
 
   useEffect(() => {
-    const updateOffset = () => {
-      const width = window.innerWidth;
+    if (!swiper) return;
 
-      if (width <= 500) {
-        setOffset(15);
-      } else if (width <= 1024) {
-        setOffset(width * 0.03);
-      } else {
-        setOffset(width * 0.05);
-      }
+    const applyOffset = () => {
+      const width = window.innerWidth;
+      let offsetValue = 0;
+
+      if (width <= 500) offsetValue = 15;
+      else if (width <= 1024) offsetValue = width * 0.03;
+      else offsetValue = width * 0.05;
+
+      swiper.params.slidesOffsetBefore = offsetValue;
+      swiper.params.slidesOffsetAfter = offsetValue;
+      swiper.update();
     };
-    updateOffset();
-    window.addEventListener("resize", updateOffset);
-    return () => window.removeEventListener("resize", updateOffset);
-  }, []);
+
+    applyOffset();
+    window.addEventListener("resize", applyOffset);
+    return () => window.removeEventListener("resize", applyOffset);
+  }, [swiper]);
 
   return (
     <>
@@ -154,10 +157,10 @@ const PlaySlide = () => {
       </Title>
       <Container>
         <Swiper
+          observer={true}
+          observeParents={true}
           slidesPerView={5}
           spaceBetween={20}
-          slidesOffsetBefore={offset}
-          slidesOffsetAfter={offset}
           onSlideChange={(e) => {
             setIsBeginning(e.isBeginning);
             setIsEnd(e.isEnd);
@@ -169,7 +172,7 @@ const PlaySlide = () => {
           onFromEdge={() => setIsEnd(false)}
           breakpoints={{
             0: {
-              spaceBetween: 1,
+              slidesPerView: 1.4,
               spaceBetween: 6,
             },
             500: {

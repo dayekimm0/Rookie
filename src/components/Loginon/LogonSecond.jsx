@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import RBarrow from "../../images/icons/RBarrow_logo.svg";
 import logon_check from "../../images/icons/logon_check.svg";
+import LogonModal from "./LogonModal";
 
 import logonStore from "../../stores/LogonStore";
 import {
@@ -10,8 +11,10 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
+import { getScrollbarWidth } from "../../util";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
+import DaumPostcode from "react-daum-postcode";
 
 // styled 부분
 const Form = styled.form`
@@ -27,6 +30,12 @@ const SubTWrapper = styled.div`
   flex-direction: column;
   justify-content: start;
   gap: 15px;
+  @media screen and (max-width: 1024px) {
+    gap: 12px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 10px;
+  }
 `;
 
 const Subsubtitle = styled.h4`
@@ -35,6 +44,12 @@ const Subsubtitle = styled.h4`
   span {
     font-weight: 400;
     color: var(--gray8);
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1.2rem;
   }
 `;
 
@@ -49,6 +64,20 @@ const Input = styled.input`
     font-size: 1.8rem;
     color: var(--grayC);
   }
+  @media screen and (max-width: 1024px) {
+    height: 50px;
+    font-size: 1.4rem;
+    &::placeholder {
+      font-size: 1.4rem;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
+  }
 `;
 
 const PostWrapper = styled.div`
@@ -58,7 +87,7 @@ const PostWrapper = styled.div`
 `;
 
 const PostInput = styled.input`
-  width: 380px;
+  width: 60%;
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
@@ -68,18 +97,42 @@ const PostInput = styled.input`
     font-size: 1.8rem;
     color: var(--grayC);
   }
+  @media screen and (max-width: 1024px) {
+    height: 50px;
+    font-size: 1.4rem;
+    &::placeholder {
+      font-size: 1.4rem;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
+  }
 `;
 
 const PostButton = styled.button`
-  width: 210px;
+  width: 38%;
   height: 70px;
   border: 1px solid var(--dark);
   background: var(--dark);
   color: var(--light);
   border-radius: 4px;
   font-size: 1.8rem;
-  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+    height: 50px;
+    font-size: 1.4rem;
+  }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1rem;
+  }
 `;
 
 const Line = styled.span`
@@ -94,6 +147,12 @@ const AllCheckWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  @media screen and (max-width: 1024px) {
+    gap: 16px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 12px;
+  }
 `;
 
 const CheckWrapper = styled.div`
@@ -102,6 +161,12 @@ const CheckWrapper = styled.div`
   justify-content: space-between;
   cursor: pointer;
   padding-right: 10px;
+  @media screen and (max-width: 1024px) {
+    padding-right: 8px;
+  }
+  @media screen and (max-width: 600px) {
+    padding-right: 6px;
+  }
 `;
 
 const Checkoption = styled.div`
@@ -129,6 +194,12 @@ const CheckText = styled.h5`
   span {
     color: var(--red);
   }
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
+  }
 `;
 
 const LoginBtn = styled.button`
@@ -140,22 +211,74 @@ const LoginBtn = styled.button`
   font-size: 2.4rem;
   color: var(--grayC);
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+    height: 56px;
+    font-size: 1.8rem;
+  }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
+  }
 `;
 
 const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 1.4rem;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
+  }
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: var(--light);
+  width: 500px;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  @media screen and (max-width: 600px) {
+    width: 90%;
+  }
+`;
+
+const ModalCloseButton = styled.button`
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
 `;
 // styled 부분
 
 const LogonSecond = () => {
-  const { formData, setFormData, nextStep, resetForm } = logonStore();
+  const { formData, setFormData, nextStep } = logonStore();
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [modalState, setModalState] = useState({
+    required: false,
+    privacy: false,
+  });
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   const handleCheck = (key) => {
-    console.log("handleCheck key:", key, "agreements:", formData.agreements);
     setFormData({
       agreements: {
         ...formData.agreements,
@@ -233,20 +356,25 @@ const LogonSecond = () => {
         displayName: formData.username,
       });
 
-      console.log("irestore에 저장 시도:", {
-        uid: user.uid,
-        username: formData.username,
-        favoriteTeam: formData.favoriteTeam,
-        birthdate: `${
-          formData.birthdate.year
-        }-${formData.birthdate.month.padStart(
-          2,
-          "0"
-        )}-${formData.birthdate.date.padStart(2, "0")}`,
-        phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
-        email: formData.email,
-        createdAt: new Date(),
-      });
+      //  user콘솔
+      // console.log("Firestore에 저장 시도:", {
+      //   uid: user.uid,
+      //   username: formData.username,
+      //   favoriteTeam: formData.favoriteTeam,
+      //   birthdate: `${
+      //     formData.birthdate.year
+      //   }-${formData.birthdate.month.padStart(
+      //     2,
+      //     "0"
+      //   )}-${formData.birthdate.date.padStart(2, "0")}`,
+      //   phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
+      //   nickname: formData.nickname,
+      //   email: formData.email,
+      //   postalCode: formData.postalCode, // 우편번호 저장
+      //   address: formData.address, // 주소 저장
+      //   detailedAddress: formData.detailedAddress, // 상세주소 저장
+      //   createdAt: new Date().toISOString().split("T")[0],
+      // });
 
       // Firestore에 사용자 정보 저장
       await setDoc(doc(db, "users", user.uid), {
@@ -260,12 +388,15 @@ const LogonSecond = () => {
           "0"
         )}-${formData.birthdate.date.padStart(2, "0")}`,
         phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
+        nickname: formData.nickname,
         email: formData.email,
-        createdAt: new Date(),
+        postalCode: formData.postalCode, // 우편번호 저장
+        address: formData.address, // 주소 저장
+        detailedAddress: formData.detailedAddress, // 상세주소 저장
+        createdAt: new Date().toISOString().split("T")[0],
       });
 
       await signOut(auth);
-
       nextStep(); // → 가입 완료 페이지로 이동
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -283,6 +414,47 @@ const LogonSecond = () => {
     setFormData({ [name]: value });
   };
 
+  const handleAddressComplete = (data) => {
+    let fullAddress = data.address; // 도로명 주소
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      // 도로명 주소인 경우
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+
+    setFormData({
+      postalCode: data.zonecode, // 우편번호
+      address: fullAddress, // 도로명 주소 + 추가 정보
+      detailedAddress: "", // 상세주소는 사용자가 입력
+    });
+
+    setIsAddressModalOpen(false); // 모달 닫기
+  };
+
+  const openModal = (type) => {
+    setModalState((prev) => ({ ...prev, [type]: true }));
+  };
+
+  const closeModal = (type) => {
+    setModalState((prev) => ({ ...prev, [type]: false }));
+  };
+
+  const openAddressModal = () => {
+    setIsAddressModalOpen(true);
+  };
+
+  const closeAddressModal = () => {
+    setIsAddressModalOpen(false);
+  };
+
   useEffect(() => {
     const isValid =
       formData.email &&
@@ -297,6 +469,18 @@ const LogonSecond = () => {
 
     setIsFormValid(isValid);
   }, [formData]);
+
+  //스크롤 막기
+  useEffect(() => {
+    if (modalState.required || modalState.privacy || isAddressModalOpen) {
+      const scrollbarWidth = getScrollbarWidth();
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+  }, [modalState, isAddressModalOpen]);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -349,8 +533,11 @@ const LogonSecond = () => {
             value={formData.postalCode}
             onChange={handleChange}
             placeholder="우편번호"
+            readOnly
           />
-          <PostButton>우편번호 검색</PostButton>
+          <PostButton type="button" onClick={openAddressModal}>
+            우편번호 검색
+          </PostButton>
         </PostWrapper>
         <Input
           type="text"
@@ -358,6 +545,7 @@ const LogonSecond = () => {
           value={formData.address}
           onChange={handleChange}
           placeholder="주소"
+          readOnly
         />
         <Input
           type="text"
@@ -376,7 +564,12 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>필수 및 선택 사항에 모두 동의합니다.</CheckText>
+            <CheckText
+              checked={formData.agreements.all}
+              onClick={() => handleCheck("all")}
+            >
+              필수 및 선택 사항에 모두 동의합니다.
+            </CheckText>
           </Checkoption>
         </CheckWrapper>
         <Line />
@@ -388,11 +581,18 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.required}
+              onClick={() => handleCheck("required")}
+            >
               [필수] 이용약관에 동의합니다. <span>*</span>
             </CheckText>
           </Checkoption>
-          <img src={RBarrow} alt="RBarrow" />
+          <img
+            src={RBarrow}
+            alt="RBarrow"
+            onClick={() => openModal("required")}
+          />
         </CheckWrapper>
         <CheckWrapper>
           <Checkoption>
@@ -402,11 +602,18 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.privacy}
+              onClick={() => handleCheck("privacy")}
+            >
               [필수] 개인정보 수집 및 이용에 동의 합니다. <span>*</span>
             </CheckText>
           </Checkoption>
-          <img src={RBarrow} alt="RBarrow" />
+          <img
+            src={RBarrow}
+            alt="RBarrow"
+            onClick={() => openModal("privacy")}
+          />
         </CheckWrapper>
         <CheckWrapper>
           <Checkoption>
@@ -416,7 +623,10 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.promotion}
+              onClick={() => handleCheck("promotion")}
+            >
               Rookie가 제공하는 이벤트 등 프로모션 안내 메일을 수신에
               동의합니다.
             </CheckText>
@@ -424,18 +634,39 @@ const LogonSecond = () => {
         </CheckWrapper>
         {errors.agreements && <ErrorMessage>{errors.agreements}</ErrorMessage>}
       </AllCheckWrapper>
-      {errors.general && <ErrorMessage>{errors.general}</ErrorMessage>}
+      {errors.firebase && <ErrorMessage>{errors.firebase}</ErrorMessage>}
 
       <LoginBtn
         type="submit"
         disabled={isLoading}
         style={{
-          background: isFormValid ? "var(--dark)" : "var(--grayE)",
-          color: isFormValid ? "var(--light)" : "var(--grayC)",
+          background:
+            isFormValid && !isLoading ? "var(--dark)" : "var(--grayE)",
+          color: isFormValid && !isLoading ? "var(--light)" : "var(--grayC)",
         }}
       >
         {isLoading ? "로딩중..." : "회원가입"}
       </LoginBtn>
+
+      <LogonModal
+        isOpen={modalState.required}
+        closeModal={() => closeModal("required")}
+        contentType="required"
+      />
+      <LogonModal
+        isOpen={modalState.privacy}
+        closeModal={() => closeModal("privacy")}
+        contentType="privacy"
+      />
+
+      {isAddressModalOpen && (
+        <ModalOverlay onClick={closeAddressModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalCloseButton onClick={closeAddressModal}>×</ModalCloseButton>
+            <DaumPostcode onComplete={handleAddressComplete} />
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </Form>
   );
 };

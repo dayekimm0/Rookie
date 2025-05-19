@@ -17,6 +17,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: 600px) {
+    padding: 0 15px;
+  }
 `;
 
 const Inner = styled.div`
@@ -26,6 +29,13 @@ const Inner = styled.div`
   justify-content: center;
   align-items: center;
   gap: 40px;
+  @media screen and (max-width: 1024px) {
+    width: 480px;
+  }
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    gap: 50px;
+  }
 `;
 
 const LogoWrapper = styled.div`
@@ -35,25 +45,53 @@ const LogoWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 40px;
+  @media screen and (max-width: 1024px) {
+    gap: 30px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 22.5px;
+  }
 `;
 
-const Logo = styled.img``;
+const Logo = styled.img`
+  @media screen and (max-width: 1024px) {
+    height: 60px;
+  }
+  @media screen and (max-width: 600px) {
+    height: 45px;
+  }
+`;
 
 const LogoLogin = styled.div`
   font-size: 3rem;
   font-weight: bold;
+  @media screen and (max-width: 1024px) {
+    font-size: 2.4rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 2.4rem;
+  }
 `;
 
 const Form = styled.form`
   width: 100%;
   gap: 40px;
+  @media screen and (max-width: 600px) {
+    gap: 50px;
+  }
 `;
 
 const InputWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  @media screen and (max-width: 1024px) {
+    gap: 12px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 10px;
+  }
 `;
 
 const Input = styled.input`
@@ -67,6 +105,20 @@ const Input = styled.input`
     font-size: 1.8rem;
     color: var(--grayC);
   }
+  @media screen and (max-width: 1024px) {
+    height: 56px;
+    font-size: 1.6rem;
+    &::placeholder {
+      font-size: 1.6rem;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    height: 44px;
+    font-size: 1rem;
+    &::placeholder {
+      font-size: 1rem;
+    }
+  }
 `;
 
 const UnderInputWrapper = styled.div`
@@ -76,6 +128,12 @@ const UnderInputWrapper = styled.div`
   align-items: center;
   gap: 6px;
   margin-bottom: 40px;
+  @media screen and (max-width: 1024px) {
+    gap: 4px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 3px;
+  }
 `;
 
 const UnderInputBtn = styled.button`
@@ -83,12 +141,18 @@ const UnderInputBtn = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const UnderInputLine = styled.span`
   display: inline-block;
   width: 1px;
-  height: 12px;
+  height: 10px;
   background: var(--dark);
 `;
 
@@ -100,6 +164,13 @@ const SnsWrapper = styled.div`
   align-items: center;
   position: relative;
   margin-bottom: 30px;
+  @media screen and (max-width: 1024px) {
+    height: 17px;
+  }
+  @media screen and (max-width: 600px) {
+    height: 12px;
+    margin-bottom: 22.5px;
+  }
 `;
 
 const Line = styled.span`
@@ -115,10 +186,18 @@ const SnsLogin = styled.h5`
   font-weight: bold;
   position: absolute;
   background: var(--light);
-  padding: 6px;
+  padding: 6px 16px;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+  @media screen and (max-width: 1024px) {
+    font-size: 1.4rem;
+    padding: 4px 16px;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
+    padding: 4px 12px;
+  }
 `;
 
 const SnsLogoWrapper = styled.div`
@@ -127,6 +206,17 @@ const SnsLogoWrapper = styled.div`
   align-items: center;
   gap: 16px;
   margin-bottom: 30px;
+  @media screen and (max-width: 1024px) {
+    img {
+      height: 50px;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    gap: 12px;
+    img {
+      height: 38px;
+    }
+  }
 `;
 
 const LoginBtn = styled.button`
@@ -138,11 +228,25 @@ const LoginBtn = styled.button`
   font-size: 2.4rem;
   color: var(--grayC);
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+    height: 56px;
+    font-size: 1.8rem;
+  }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.2rem;
+  }
 `;
 
 const ErrorMessage = styled.p`
   color: var(--red);
   font-size: 1.4rem;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
+  }
 `;
 
 //
@@ -194,26 +298,14 @@ const Login = () => {
         form.email,
         form.password
       );
-      console.log("✅ 로그인 성공:", userCredential);
 
       const user = userCredential.user;
 
       const userDoc = await getDoc(doc(db, "users", user.uid));
-      console.log("📄 Firestore 문서 요청:", user.uid);
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        console.log("📦 Firestore 유저 데이터:", userData);
 
-        const birthdateParts = userData.birthdate?.match(
-          /^(\d{4})-(\d{2})-(\d{2})$/
-        );
-        const phoneParts = userData.phoneNumber?.match(
-          /^(\d{3})-(\d{3,4})-(\d{4})$/
-        );
-        if (!birthdateParts || !phoneParts) {
-          console.warn("⚠️ Invalid birthdate or phoneNumber format");
-        } else {
           setFormData({
             email: user.email,
             username: userData.username || "",
@@ -225,7 +317,6 @@ const Login = () => {
             address: userData.address || "",
             detailedAddress: userData.detailedAddress || "",
           });
-        }
       } else {
         console.warn("⚠️ Firestore 유저 데이터 없음");
       }
@@ -243,7 +334,7 @@ const Login = () => {
           general: "네트워크 오류가 발생했습니다. 다시 시도해주세요.",
         });
       } else {
-        setErrors({ general: "오류가 발생했습니다. 다시 시도해주세요." });
+        setErrors({ general: "이메일 또는 비밀번호가 올바르지 않습니다." }); // 기타 오류도 표시
       }
     } finally {
       setIsLoading(false);

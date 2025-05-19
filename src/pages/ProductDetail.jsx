@@ -37,7 +37,16 @@ import "swiper/css/navigation";
 // 구단별 JSON URL 매핑
 const TEAM_JSON_URLS = {
   두산베어스: "https://rookiejson.netlify.app/teamJson/ds_bas.json",
-  // 추후 다른 구단들 추가 예정
+  엔씨다이노스: "https://rookiejson.netlify.app/teamJson/nc_dns.json",
+  삼성라이온즈: "https://rookiejson.netlify.app/teamJson/ss_lns.json",
+  LG트윈스: "https://rookiejson.netlify.app/teamJson/lg_twins.json",
+  KIA타이거즈: "https://rookiejson.netlify.app/teamJson/kia_tgs.json",
+  롯데자이언츠: "https://rookiejson.netlify.app/teamJson/lt_gnt.json",
+  KT위즈: "https://rookiejson.netlify.app/teamJson/kt_wiz.json",
+  한화이글스: "https://rookiejson.netlify.app/teamJson/hw_egs.json",
+  키움히어로즈: "https://rookiejson.netlify.app/teamJson/kw_hrs.json",
+  SSG랜더스: "https://rookiejson.netlify.app/teamJson/ssg_lds.json",
+  KBO: "https://rookiejson.netlify.app/teamJson/kbo.json",
 };
 
 // 임시 데이터 (실제 구현 시 API 응답으로 대체)
@@ -1428,14 +1437,31 @@ const ProductDetail = () => {
         setLoading(true);
         setError(null);
 
-        // 우선 두산베어스 데이터만 가져오기 (추후 다른 구단 지원 예정)
-        const response = await axios.get(TEAM_JSON_URLS["두산베어스"]);
-        const allProducts = response.data;
+        // 모든 구단의 데이터를 가져와서 해당 ID의 상품 찾기
+        let selectedProduct = null;
+        let allProducts = [];
 
-        // ID로 특정 상품 찾기
-        const selectedProduct = allProducts.find(
-          (product) => product.id === parseInt(id)
-        );
+        // 모든 구단 JSON을 순차적으로 검색
+        for (const [teamName, url] of Object.entries(TEAM_JSON_URLS)) {
+          try {
+            const response = await axios.get(url);
+            const teamProducts = response.data;
+
+            allProducts = [...allProducts, ...teamProducts];
+
+            // 해당 ID의 상품이 있는지 확인
+            const found = teamProducts.find(
+              (product) => product.id === parseInt(id)
+            );
+            if (found) {
+              selectedProduct = found;
+              break; // 찾았으면 더 이상 검색하지 않음
+            }
+          } catch (error) {
+            console.warn(`${teamName} 데이터 로드 실패:`, error);
+            continue; // 실패해도 다음 구단 계속 시도
+          }
+        }
 
         if (!selectedProduct) {
           setError("해당 상품을 찾을 수 없습니다.");
@@ -1455,11 +1481,15 @@ const ProductDetail = () => {
           thumbnail: selectedProduct.thumbnail,
         });
 
-        // 같은 카테고리의 추천 상품 설정 (현재 상품 제외)
-        const filteredProducts = allProducts.filter(
+        // 같은 카테고리의 추천 상품 설정 (현재 상품과 같은 팀의 다른 상품)
+        const sameTeamProducts = allProducts.filter(
           (product) =>
-            product.category === selectedProduct.category &&
+            product.team === selectedProduct.team &&
             product.id !== selectedProduct.id
+        );
+
+        const filteredProducts = sameTeamProducts.filter(
+          (product) => product.category === selectedProduct.category
         );
 
         const relatedProductsData = filteredProducts
@@ -1626,6 +1656,7 @@ const ProductDetail = () => {
 
   const productInfoRef = useRef(null);
   const purchaseSectionRef = useRef(null);
+
   // 로딩 중일 때
   if (loading) {
     return (
@@ -1733,7 +1764,7 @@ const ProductDetail = () => {
 
                     {/* 상세 이미지 */}
                     <DetailImageWrapper>
-                      <ImagePlaceholder />
+                      <DetailImagePlaceholder />
                     </DetailImageWrapper>
 
                     {/* 그라데이션 효과 (접혔을 때만 보임) */}

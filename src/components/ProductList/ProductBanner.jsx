@@ -6,6 +6,17 @@ import React from "react";
 const BannerBox = styled.div`
   position: relative;
   height: 440px;
+
+  @media screen and (max-width: 1440px) {
+    height: 300px;
+  }
+  @media screen and (max-width: 1024px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 200px;
+  }
 `;
 
 const Banner = styled.div`
@@ -21,6 +32,18 @@ const Banner = styled.div`
     top: 0;
     left: 0;
   }
+  @media screen and (max-width: 1440px) {
+    height: 300px;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 100%;
+  }
 `;
 
 const BannerPlayer = styled(ReactPlayer)`
@@ -32,6 +55,22 @@ const BannerPlayer = styled(ReactPlayer)`
   height: 440px !important;
   video {
     object-fit: cover;
+  }
+  @media screen and (max-width: 1440px) {
+    width: 800px;
+    height: 300px !important;
+    video {
+      object-fit: cover;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    width: 1024px !important;
+    height: 300px !important;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: 500px !important;
+    height: 200px !important;
   }
 `;
 

@@ -20,39 +20,6 @@ const DeliveryInfo = styled.form`
   }
 `;
 
-const InfoTitle = styled.div`
-  width: 100%;
-  h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
-  }
-  span {
-    display: inline-block;
-    width: 102%;
-    height: 1px;
-    background: var(--gray1);
-    transform: translateX(-1%);
-  }
-
-  @media screen and (max-width: 1024px) {
-    h2 {
-      font-size: 1.6rem;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    h2 {
-      font-size: 1.8rem;
-    }
-  }
-
-  @media screen and (max-width: 375px) {
-    h2 {
-      font-size: 1.6rem;
-    }
-  }
-`;
-
 const DeliveryTitle = styled.h2`
   width: 80px;
   font-size: 1.6rem;
@@ -173,22 +140,34 @@ const PostInput = styled.div`
 
   @media screen and (max-width: 1024px) {
     gap: 15px;
-    input {
+    input[type="text"] {
       font-size: 1.4rem;
+    }
+    input[type="button"] {
+      width: 40%;
+      font-size: 1.2rem;
     }
   }
 
   @media screen and (max-width: 768px) {
     gap: 20px;
-    input {
+    input[type="text"] {
       font-size: 1.6rem;
+    }
+    input[type="button"] {
+      font-size: 1.4rem;
     }
   }
 
   @media screen and (max-width: 375px) {
     gap: 15px;
-    input {
+    input[type="text"] {
+      width: 70%;
       font-size: 1.4rem;
+    }
+    input[type="button"] {
+      width: 30%;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -267,10 +246,6 @@ const PaymentAddress = () => {
 
   return (
     <DeliveryInfo>
-      <InfoTitle>
-        <h2>배송지 정보</h2>
-        <span></span>
-      </InfoTitle>
       <DeliveryDetail>
         <DeliveryTitle>배송지명</DeliveryTitle>
         <Input placeholder="배송지 이름을 입력해주세요." />
@@ -284,7 +259,7 @@ const PaymentAddress = () => {
         <DeliveryPlace>
           <PostInput>
             <Input type="text" placeholder="우편번호" />
-            <Input type="button" value="검색" />
+            <Input type="button" value="우편번호 검색" />
           </PostInput>
           <Input placeholder="주소" />
           <Input placeholder="상세주소" />

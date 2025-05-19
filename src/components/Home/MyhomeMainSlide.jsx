@@ -2,14 +2,22 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { getEmblem } from "../../util";
 import MainCard from "./MainCard";
+import MyhomeCard from "./MyhomeCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { MyhomeNaviLeftBtn, MyhomeNaviRightBtn } from "./NaviBtnStyles";
+import { getTodayMatches, getTeamShortName } from "../../util";
 
 const Container = styled.div`
   width: 100%;
   padding-top: 40px;
+
+  @media screen and (max-width: 1024px) {
+    padding-top: 30px;
+  }
+  @media screen and (max-width: 500px) {
+    padding-top: 15px;
+  }
 
   .slideWrap {
     display: flex;
@@ -95,137 +103,12 @@ const Container = styled.div`
   }
 `;
 
-const Myhome = styled.div`
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  width: calc(100% - 520px - 20px);
-  aspect-ratio: 16 / 9;
-  .head {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 120px;
-    font-weight: 300;
-    background: rgba(0, 0, 0, 0.7);
-    position: relative;
-    display: flex;
-    justify-content: center;
-    ul {
-      width: 60%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      li {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-size: 1.6rem;
-        img {
-          width: 80px;
-          margin-bottom: 6px;
-        }
-      }
-    }
-    .timetable {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      line-height: 1.3;
-      font-size: 1.6rem;
-      .ground {
-        font-size: 1.4rem;
-        color: var(--grayD);
-      }
-    }
-  }
-  .video {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: #ccc;
-  }
-
-  @media screen and (max-width: 1440px) {
-    width: calc(100% - 350px - 20px);
-    .head {
-      height: 100px;
-      ul {
-        width: 60%;
-        li {
-          font-size: 1.4rem;
-          img {
-            width: 60px;
-            margin-bottom: 2px;
-          }
-        }
-      }
-      .timetable {
-        font-size: 1.4rem;
-        .ground {
-          font-size: 1.3rem;
-        }
-      }
-    }
-  }
-
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-    aspect-ratio: auto;
-    height: auto;
-    padding: 0 3%;
-    border-radius: 0px;
-    .head {
-      height: 100px;
-      position: relative;
-      border-radius: 8px 8px 0 0;
-    }
-    .video {
-      position: relative;
-      aspect-ratio: 16 / 9;
-      height: auto;
-      border-radius: 0 0 8px 8px;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    .head {
-      padding: 8px;
-      height: 80px;
-      ul {
-        width: 75%;
-        li {
-          font-size: 1.1rem;
-          img {
-            width: 50px;
-            margin-bottom: 2px;
-          }
-        }
-      }
-      .timetable {
-        font-size: 1.2rem;
-        .ground {
-          font-size: 1rem;
-        }
-      }
-    }
-  }
-
-  @media screen and (max-width: 500px) {
-    padding: 0;
-  }
-`;
-
-const MyhomeMainSlide = () => {
+const MyhomeMainSlide = ({ isMyhome }) => {
   const [swiper, setSwiper] = useState();
-  const [offset, setOffset] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 500);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 500);
+  const [timeString, setTimeString] = useState("");
 
   const handlePrev = () => {
     swiper?.slidePrev();
@@ -235,21 +118,31 @@ const MyhomeMainSlide = () => {
   };
 
   useEffect(() => {
-    const updateOffset = () => {
+    if (!swiper) return;
+
+    const applyOffsetIfHorizontal = () => {
       const width = window.innerWidth;
 
-      if (width <= 500) {
-        setOffset(15);
-      } else if (width <= 1024) {
-        setOffset(width * 0.03);
+      const isHorizontal = width < 1024;
+
+      if (isHorizontal) {
+        const offsetValue =
+          width <= 500 ? 15 : width <= 1024 ? width * 0.03 : width * 0.05;
+
+        swiper.params.slidesOffsetBefore = offsetValue;
+        swiper.params.slidesOffsetAfter = offsetValue;
       } else {
-        setOffset(width * 0.05);
+        swiper.params.slidesOffsetBefore = 0;
+        swiper.params.slidesOffsetAfter = 0;
       }
+
+      swiper.update();
     };
-    updateOffset();
-    window.addEventListener("resize", updateOffset);
-    return () => window.removeEventListener("resize", updateOffset);
-  }, []);
+
+    applyOffsetIfHorizontal();
+    window.addEventListener("resize", applyOffsetIfHorizontal);
+    return () => window.removeEventListener("resize", applyOffsetIfHorizontal);
+  }, [swiper]);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 500);
@@ -257,35 +150,55 @@ const MyhomeMainSlide = () => {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const formatted = now.toLocaleString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+      setTimeString(`${formatted} 기준`);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const gameDay = getTodayMatches();
+
+  const myhome = getTeamShortName(isMyhome);
+
+  const matches = gameDay.matches;
+
+  const myMatch = matches.find(
+    (match) => match.homeTeam.name === myhome || match.awayTeam.name === myhome
+  );
+  const otherMatches = matches.filter(
+    (match) => match.homeTeam.name !== myhome && match.awayTeam.name !== myhome
+  );
+
   return (
     <Container>
       <div className="slideWrap inner">
         {!isMobile && (
-          <Myhome>
-            <div className="head">
-              <ul>
-                <li className="teams">
-                  <img src={getEmblem(4)} alt="doosan" />
-                  <p>두산</p>
-                </li>
-                <li className="teams">
-                  <img src={getEmblem(4)} alt="doosan" />
-                  <p>두산</p>
-                </li>
-              </ul>
-              <div className="timetable">
-                <p className="date">4월 22일 (화)</p>
-                <p className="time">18:30 예정</p>
-                <p className="ground">고척</p>
-              </div>
-            </div>
-            <div className="video"></div>
-          </Myhome>
+          <MyhomeCard
+            hometeam={myMatch.homeTeam.code}
+            awayteam={myMatch.awayTeam.code}
+            stadium={myMatch.stadium}
+            date={gameDay.date}
+            day={gameDay.day}
+          />
         )}
         <div className="slideArrWrap">
           <div className="slider-container">
             <Swiper
-              key={offset}
+              observer={true}
+              observeParents={true}
               slidesPerView={1}
               spaceBetween={20}
               direction="vertical"
@@ -304,22 +217,16 @@ const MyhomeMainSlide = () => {
                   direction: "horizontal",
                   slidesPerView: 1.1,
                   spaceBetween: 6,
-                  slidesOffsetBefore: offset,
-                  slidesOffsetAfter: offset,
                 },
                 500: {
                   direction: "horizontal",
                   slidesPerView: 1.7,
                   spaceBetween: 14,
-                  slidesOffsetBefore: offset,
-                  slidesOffsetAfter: offset,
                 },
                 768: {
                   direction: "horizontal",
                   slidesPerView: 2.5,
                   spaceBetween: 14,
-                  slidesOffsetBefore: offset,
-                  slidesOffsetAfter: offset,
                 },
                 1024: {
                   direction: "vertical",
@@ -330,40 +237,26 @@ const MyhomeMainSlide = () => {
             >
               {isMobile && (
                 <SwiperSlide>
-                  <Myhome>
-                    <div className="head">
-                      <ul>
-                        <li className="teams">
-                          <img src={getEmblem(4)} alt="doosan" />
-                          <p>두산</p>
-                        </li>
-                        <li className="teams">
-                          <img src={getEmblem(4)} alt="doosan" />
-                          <p>두산</p>
-                        </li>
-                      </ul>
-                      <div className="timetable">
-                        <p className="date">4월 22일 (화)</p>
-                        <p className="time">18:30 예정</p>
-                        <p className="ground">고척</p>
-                      </div>
-                    </div>
-                    <div className="video"></div>
-                  </Myhome>
+                  <MyhomeCard
+                    hometeam={myMatch.homeTeam.code}
+                    awayteam={myMatch.awayTeam.code}
+                    stadium={myMatch.stadium}
+                    date={gameDay.date}
+                    day={gameDay.day}
+                  />
                 </SwiperSlide>
               )}
-              <SwiperSlide>
-                <MainCard bg={""} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <MainCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <MainCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <MainCard />
-              </SwiperSlide>
+              {otherMatches.map((match, index) => (
+                <SwiperSlide key={index}>
+                  <MainCard
+                    hometeam={match.homeTeam.code}
+                    awayteam={match.awayTeam.code}
+                    stadium={match.stadium}
+                    date={gameDay.date}
+                    day={gameDay.day}
+                  />
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
           <MyhomeNaviLeftBtn onClick={handlePrev} disabled={isBeginning}>
@@ -374,7 +267,7 @@ const MyhomeMainSlide = () => {
           </MyhomeNaviRightBtn>
         </div>
       </div>
-      <h6 className="timeLine inner">2025.04.19. 17:10 기준</h6>
+      <h6 className="timeLine inner">{timeString}</h6>
     </Container>
   );
 };

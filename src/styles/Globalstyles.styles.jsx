@@ -37,10 +37,16 @@ const GlobalStyles = createGlobalStyle`
   }
 
   @font-face {
-    font-family: 'GmarketSans';
-    src: url(${Gmarketsans}) format('truetype');
-    font-weight: normal;
-    font-style: normal;
+      font-family: 'GmarketSans';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+  }
+  @font-face {
+      font-family: 'GmarketSans';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+      font-weight: bold;
+      font-style: normal;
   }
 
   html {
@@ -48,7 +54,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    font-family: "Figtree", "Pretendard", "Gmarketsans", sans-serif;
+    font-family: "Figtree", "Pretendard", sans-serif;
     font-size: 1.6rem;
   }
 
@@ -73,6 +79,7 @@ const GlobalStyles = createGlobalStyle`
 .iqcOxY:not(:last-of-type) {
   border-bottom: none;
 }
+
 `;
 
 export default GlobalStyles;

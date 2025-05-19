@@ -1,10 +1,13 @@
+import React, { useState, useMemo } from "react";
 import styled from "styled-components";
-import { getEmblem } from "../../util";
+import { getEmblem, getTeamName, getTeamColor } from "../../util";
 
 const Card = styled.div`
   width: 100%;
   overflow: hidden;
   border-radius: 8px;
+  cursor: pointer;
+
   .head {
     padding: 10px;
     height: 120px;
@@ -22,9 +25,16 @@ const Card = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
-        img {
+        figure {
           width: 80px;
-          margin-bottom: 6px;
+          height: 70px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            width: 100%;
+            transform: translateY(-5px);
+          }
         }
       }
     }
@@ -43,10 +53,10 @@ const Card = styled.div`
     }
   }
   .video {
-    background: #fff;
     width: 100%;
     aspect-ratio: 16 / 9;
     position: relative;
+    overflow: hidden;
   }
 
   @media screen and (max-width: 1440px) {
@@ -57,9 +67,9 @@ const Card = styled.div`
         width: 75%;
         li {
           font-size: 1.4rem;
-          img {
+          figure {
             width: 60px;
-            margin-bottom: 2px;
+            height: 50px;
           }
         }
       }
@@ -80,9 +90,9 @@ const Card = styled.div`
         width: 75%;
         li {
           font-size: 1.1rem;
-          img {
+          figure {
             width: 50px;
-            margin-bottom: 2px;
+            height: 40px;
           }
         }
       }
@@ -96,29 +106,138 @@ const Card = styled.div`
   }
 `;
 
-const MainCard = () => {
+const VideoInner = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  font-size: 0;
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 95%;
+    right: 0;
+    top: 0;
+    background: ${({ $bg }) => $bg};
+  }
+  img {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 125px;
+  }
+  .homeEmblem {
+    left: 5%;
+  }
+  .awayEmblem {
+    right: 5%;
+  }
+  @media screen and (max-width: 1024px) {
+    img {
+      width: 110px;
+    }
+    .homeEmblem {
+      left: 4%;
+    }
+    .awayEmblem {
+      right: 4%;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    img {
+      width: 100px;
+    }
+  }
+`;
+
+const HomeBg = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 101%;
+  left: 0;
+  top: 0;
+  font-size: 0;
+  svg {
+    height: 100%;
+    width: 60%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    path {
+      height: 100%;
+      fill: ${({ $bg }) => $bg};
+    }
+  }
+`;
+
+const MainCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
+  const [isVideo, setIsVideo] = useState(false);
+  const homeEmblem = useMemo(() => getEmblem(hometeam), [hometeam]);
+  const awayEmblem = useMemo(() => getEmblem(awayteam), [awayteam]);
+  const homeColor = useMemo(() => getTeamColor(hometeam), [hometeam]);
+  const awayColor = useMemo(() => getTeamColor(awayteam), [awayteam]);
+  const homeName = useMemo(() => getTeamName(hometeam), [hometeam]);
+  const awayName = useMemo(() => getTeamName(awayteam), [awayteam]);
+
+  const formattedDate = useMemo(() => {
+    const d = new Date(date);
+    return d.toLocaleDateString("ko-KR", {
+      month: "long",
+      day: "numeric",
+    });
+  }, [date]);
+
   return (
     <Card>
       <div className="head">
         <ul>
           <li className="teams">
-            <img src={getEmblem(4)} alt="doosan" />
-            <p>두산</p>
+            <figure>
+              <img src={homeEmblem} alt="emblem" />
+            </figure>
+            <p>{homeName}</p>
           </li>
           <li className="teams">
-            <img src={getEmblem(4)} alt="doosan" />
-            <p>두산</p>
+            <figure>
+              <img src={awayEmblem} alt="emblem" />
+            </figure>
+            <p>{awayName}</p>
           </li>
         </ul>
         <div className="timetable">
-          <p className="date">4월 22일 (화)</p>
-          <p className="time">18:30 예정</p>
-          <p className="ground">고척</p>
+          <p className="date">
+            {formattedDate} ({day})
+          </p>
+          <p className="time">18:30</p>
+          <p className="ground">{stadium}</p>
         </div>
       </div>
-      <div className="video"></div>
+      <div className="video">
+        {" "}
+        {isVideo ? (
+          ""
+        ) : (
+          <VideoInner $bg={awayColor}>
+            <HomeBg $bg={homeColor}>
+              <svg
+                preserveAspectRatio="none"
+                width="277"
+                height="289"
+                viewBox="0 0 277 289"
+                fill="none"
+              >
+                <path d="M0.5 0H276.5L195.35 289H0.5V0Z" />
+              </svg>
+              <img className="homeEmblem" src={homeEmblem} alt="emblem" />
+            </HomeBg>
+            <img className="awayEmblem" src={awayEmblem} alt="emblem" />
+          </VideoInner>
+        )}
+      </div>
     </Card>
   );
-};
+});
 
 export default MainCard;

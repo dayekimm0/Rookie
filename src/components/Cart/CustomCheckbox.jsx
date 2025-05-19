@@ -54,8 +54,15 @@ const Checkbox = styled.input`
   }
 `;
 
-const CustomCheckbox = () => {
-  return <Checkbox type="checkbox"></Checkbox>;
+const CustomCheckbox = ({ checked, onChange, className }) => {
+  return (
+    <Checkbox
+      type="checkbox"
+      className={className}
+      checked={checked}
+      onChange={onChange}
+    />
+  );
 };
 
 export default CustomCheckbox;

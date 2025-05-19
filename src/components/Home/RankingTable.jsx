@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import DataTable from "react-data-table-component";
 import { kboTableCol, kboTableData } from "./kboTableDB";
+import useDragScroll from "../../hook/useDragScroll";
+import { useRef } from "react";
 
 const Section = styled.section`
   margin-top: 120px;
@@ -30,7 +32,7 @@ const Section = styled.section`
     border-left: 1px solid #333;
     border-bottom: 1px solid #333;
     color: #ddd;
-    font-size: 1.6rem;
+    font-size: 1.7rem;
   }
 
   .rdt_TableRow {
@@ -44,14 +46,14 @@ const Section = styled.section`
     background-color: var(--bg);
     border-left: 1px solid #333;
     color: #eee;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     padding: 0;
   }
   .rdt_TableCol:first-child,
   .rdt_TableCell:first-child {
     flex: unset;
-    width: 140px;
-    min-width: 140px;
+    width: 160px;
+    min-width: 160px;
     max-width: 140px;
 
     @media screen and (max-width: 1440px) {
@@ -145,17 +147,47 @@ const Section = styled.section`
   }
 `;
 
+const ScrollWrap = styled.div`
+  overflow-x: auto;
+  cursor: grab;
+  padding-bottom: 4px;
+
+  &.dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #bbb;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #888;
+  }
+
+  scrollbar-width: auto;
+  scrollbar-color: #bbb transparent;
+`;
+
 const RankingTable = () => {
+  const tableRef = useRef(null);
+  useDragScroll(tableRef);
   return (
     <Section>
       <div className="inner">
         <h3>리그 순위표</h3>
 
-        <DataTable
-          className="table"
-          columns={kboTableCol}
-          data={kboTableData}
-        />
+        <ScrollWrap ref={tableRef}>
+          <DataTable
+            className="table"
+            columns={kboTableCol}
+            data={kboTableData}
+            responsive={false}
+          />
+        </ScrollWrap>
       </div>
     </Section>
   );
