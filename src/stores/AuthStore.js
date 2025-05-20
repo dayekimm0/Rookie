@@ -44,8 +44,7 @@ const authStore = create(
 );
 
 onAuthStateChanged(auth, async (user) => {
-  console.log("🔵 onAuthStateChanged 호출, user:", user);
-
+  // onAuthStateChanged 호출
   if (user) {
     const userData = {
       uid: user.uid,
@@ -83,7 +82,6 @@ onAuthStateChanged(auth, async (user) => {
       authStore.getState().setUser(userData, null, false);
     }
   } else {
-    console.log("🔵 비로그인 상태, clearUser 호출");
     authStore.getState().clearUser();
   }
 });

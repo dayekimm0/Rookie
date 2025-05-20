@@ -24,10 +24,10 @@ const db = getFirestore(app);
 // 영속성 설정: localStorage
 setPersistence(auth, browserLocalPersistence)
   .then(() => {
-    console.log("🟢 Firebase 인증 영속성: localStorage 설정 완료");
+    console.log("Firebase 인증 영속성: localStorage 설정 완료");
   })
   .catch((error) => {
-    console.error("🔴 영속성 설정 실패:", error);
+    console.error("영속성 설정 실패:", error);
   });
 
 export { auth, db };

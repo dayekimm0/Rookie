@@ -147,7 +147,7 @@ const HighlightSlide = () => {
           onFromEdge={() => setIsEnd(false)}
           breakpoints={{
             0: {
-              slidesPerView: 2.5,
+              slidesPerView: 2.8,
               spaceBetween: 6,
             },
             400: {

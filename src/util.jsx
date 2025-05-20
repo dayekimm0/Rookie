@@ -167,3 +167,49 @@ export const getTeamShortName = (fullName) => {
       return null;
   }
 };
+
+export const getTeamJsonCode = (id) => {
+  switch (String(id)) {
+    case "0":
+      return "kbo";
+    case "1":
+      return "kia_tgs";
+    case "2":
+      return "ss_lns";
+    case "3":
+      return "lg_twins";
+    case "4":
+      return "ds_bas";
+    case "5":
+      return "kt_wiz";
+    case "6":
+      return "ssg_lds";
+    case "7":
+      return "lt_gnt";
+    case "8":
+      return "hw_egs";
+    case "9":
+      return "nc_dns";
+    case "10":
+      return "kw_hrs";
+    default:
+      return null;
+  }
+};
+
+//스크롤바 width
+export const getScrollbarWidth = () => {
+  const div = document.createElement("div");
+  div.style.cssText = `
+    position: absolute;
+    top: -9999px;
+    width: 100px;
+    height: 100px;
+    overflow: scroll;
+    visibility: hidden;
+  `;
+  document.body.appendChild(div);
+  const width = div.offsetWidth - div.clientWidth;
+  document.body.removeChild(div);
+  return width;
+};
