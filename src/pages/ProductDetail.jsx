@@ -139,7 +139,6 @@ const ContentWrapper = styled.div`
   @media (max-width: 1024px) {
     max-width: 900px;
     padding: 20px 15px;
-    flex-direction: column;
     gap: 0;
   }
 
@@ -155,11 +154,11 @@ const ProductInfoSection = styled.div`
   margin-bottom: 50px;
 
   @media (max-width: 1200px) {
-    width: 100%;
+    width: 58%;
     margin-bottom: 40px;
   }
 
-  @media (max-width: 1025px) {
+  @media (max-width: 768px) {
     width: 100%;
     margin-bottom: 30px;
   }
@@ -185,8 +184,8 @@ const SliderContainer = styled.div`
     height: 600px;
   }
 
-  @media (max-width: 1025px) {
-    width: 400px;
+  @media (max-width: 1024px) {
+    width: 100%;
     height: 400px;
   }
 
@@ -523,6 +522,28 @@ const ToggleButton = styled.button`
     margin-bottom: 20px;
   }
 `;
+const Sentinel = styled.div`
+  height: 1px;
+`;
+const StickyBox = styled.div`
+  width: 100%;
+  ${({ isFixed }) =>
+    isFixed
+      ? `
+    position: fixed;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: #fff;
+    padding: 44px 16px 15px;
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+  `
+      : `
+    position: static;
+  `}
+`;
 
 // 우측 영역 구매창 (450*476px)
 const PurchaseSection = styled.div`
@@ -534,20 +555,26 @@ const PurchaseSection = styled.div`
   background: var(--light);
   display: flex;
   flex-direction: column;
-  margin-bottom: 723px;
+  margin-bottom: 92px;
+  display: ${({ isContent }) => isContent && "none"};
 
   @media (max-width: 1200px) {
-    width: 360px;
+    width: 300px;
     top: 200px;
     margin-top: 40px;
+    margin-bottom: 106px;
+  }
+  @media (max-width: 1024px) {
+    margin-bottom: 72px;
   }
 
-  @media (max-width: 1024px) {
-    width: 260px;
+  @media (max-width: 768px) {
+    width: 100%;
     position: relative;
     top: 0;
     margin-top: 0;
     margin-bottom: 30px;
+    display: ${({ isContent }) => isContent && "block"};
   }
 
   @media (max-width: 375px) {
@@ -644,7 +671,7 @@ const ProductTitle = styled.h2`
   line-height: 1.3;
 
   @media (max-width: 1024px) {
-    font-size: 22px;
+    font-size: 20px;
     margin-bottom: 15px;
   }
 
@@ -678,11 +705,7 @@ const ProductPrice = styled.p`
   margin: 0;
 
   @media (max-width: 1024px) {
-    font-size: 22px;
-  }
-
-  @media (max-width: 375px) {
-    font-size: 20px;
+    font-size: 18px;
   }
 `;
 
@@ -743,6 +766,11 @@ const OptionSelect = styled.select`
     display: none;
   }
 
+  @media (max-width: 1024px) {
+    height: 40px;
+    font-size: 14px;
+  }
+
   @media (max-width: 375px) {
     height: 50px;
     font-size: 14px;
@@ -777,7 +805,7 @@ const ShippingInfo = styled.div`
   margin-bottom: 70px;
 
   @media (max-width: 1024px) {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
 
   @media (max-width: 375px) {
@@ -880,6 +908,9 @@ const ButtonContainer = styled.div`
   gap: 10px;
   margin-top: auto;
 
+  @media (max-width: 1024px) {
+    height: 40px;
+  }
   @media (max-width: 375px) {
     height: 50px;
     gap: 8px;
@@ -900,6 +931,10 @@ const CartButton = styled.button`
 
   &:hover {
     background: var(--gray3);
+  }
+
+  @media (max-width: 1024px) {
+    height: 40px;
   }
 
   @media (max-width: 375px) {
@@ -923,7 +958,9 @@ const BuyButton = styled.button`
   &:hover {
     background: var(--main);
   }
-
+  @media (max-width: 1024px) {
+    height: 40px;
+  }
   @media (max-width: 375px) {
     font-size: 14px;
     height: 50px;
@@ -983,6 +1020,11 @@ const PhotoReviewGrid = styled.div`
   gap: 13px;
   margin-bottom: 18px;
 
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+  }
   @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
@@ -1392,6 +1434,8 @@ const ProductDetail = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [isFixed, setIsFixed] = useState(false);
+  const stickyRef = useRef(null);
 
   // contentRef 및 contentHeight 상태 추가
   const contentRef = useRef(null);
@@ -1657,6 +1701,27 @@ const ProductDetail = () => {
   const productInfoRef = useRef(null);
   const purchaseSectionRef = useRef(null);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!stickyRef.current) return;
+
+      const scrollY = window.scrollY;
+      const elementTop = stickyRef.current.offsetTop;
+      const elementHeight = stickyRef.current.offsetHeight;
+
+      const triggerPoint = elementTop + elementHeight;
+
+      if (scrollY > triggerPoint) {
+        if (!isFixed) setIsFixed(true);
+      } else {
+        if (isFixed) setIsFixed(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isFixed]);
+
   // 로딩 중일 때
   if (loading) {
     return (
@@ -1718,6 +1783,72 @@ const ProductDetail = () => {
               )}
             </ImageContainer>
           </SliderContainer>
+          <PurchaseSection ref={purchaseSectionRef} isContent>
+            <PurchaseSectionContent>
+              {/* 제품 구매 정보와 버튼 */}
+              <ProductMeta>
+                <EmblemPlaceholder />
+                <LicenseText>공식 라이선스 제품</LicenseText>
+              </ProductMeta>
+              <ProductTitle>{product?.name || "제품명"}</ProductTitle>
+              <PriceContainer>
+                <ProductPrice>
+                  {product?.price ? product.price.toLocaleString() : "0"} 원
+                </ProductPrice>
+                <RatingContainer>
+                  <StarIcon>★</StarIcon>
+                  <RatingText>5.0</RatingText>
+                </RatingContainer>
+              </PriceContainer>
+              {/* 옵션 선택기 */}
+              <OptionContainer>
+                <OptionSelect>
+                  <option value="">- [필수] 옵션 선택 -</option>
+                  {product?.options?.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </OptionSelect>
+                <SelectArrowContainer>
+                  <FontAwesomeIcon icon={faChevronDown} color="#666" />
+                </SelectArrowContainer>
+              </OptionContainer>
+              {/* 배송 정보 */}
+              <ShippingInfo>배송비 무료 / 주문 시 결제(선결제)</ShippingInfo>
+              <StickyBox isFixed={isFixed}>
+                {/* 수량 선택 */}
+                <QuantitySection>
+                  <QuantityControl>
+                    <QuantityButton onClick={decreaseQuantity}>
+                      <FontAwesomeIcon icon={faMinus} size="xs" />
+                    </QuantityButton>
+                    <QuantityInput
+                      type="text"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                      onBlur={handleQuantityBlur}
+                    />
+                    <QuantityButton onClick={increaseQuantity}>
+                      <FontAwesomeIcon icon={faPlus} size="xs" />
+                    </QuantityButton>
+                  </QuantityControl>
+                  <SelectedProductPrice>
+                    {product?.price
+                      ? (product.price * quantity).toLocaleString()
+                      : "0"}{" "}
+                    원
+                  </SelectedProductPrice>
+                </QuantitySection>
+
+                {/* 액션 버튼 */}
+                <ButtonContainer>
+                  <CartButton>장바구니</CartButton>
+                  <BuyButton>바로 구매</BuyButton>
+                </ButtonContainer>
+              </StickyBox>
+            </PurchaseSectionContent>
+          </PurchaseSection>
 
           {/* 슬라이더와 상세 정보 사이의 간격 */}
           <SliderMargin />
@@ -1743,6 +1874,7 @@ const ProductDetail = () => {
               문의
             </TabButton>
           </TabMenu>
+          <Sentinel ref={stickyRef} />
 
           {/* 탭 콘텐츠 */}
           <TabContent>
@@ -2042,7 +2174,8 @@ const ProductDetail = () => {
             </ButtonContainer>
           </PurchaseSectionContent>
         </PurchaseSection>
-
+      </ContentWrapper>
+      <ContentWrapper>
         {/* 추천 상품 섹션 */}
         <RelatedProductsSection>
           <RelatedProducts products={relatedProducts} />
