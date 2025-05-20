@@ -78,9 +78,12 @@ const Items = styled.div`
   width: calc(100% + 5px);
   display: flex;
   flex-direction: column;
-  height: 520px;
+  max-height: 520px;
   gap: 20px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: auto;
+  scroll-behavior: auto;
 
   scrollbar-gutter: stable;
   &::-webkit-scrollbar {
@@ -100,13 +103,13 @@ const Items = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    height: 400px;
+    max-height: 400px;
     gap: 15px;
   }
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     gap: 20px;
     overflow-y: visible;
   }

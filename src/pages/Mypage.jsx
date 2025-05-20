@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import authStore from "../stores/AuthStore";
 import { getEmblem, getTeamColor } from "../util";
@@ -5,19 +6,32 @@ import { getEmblem, getTeamColor } from "../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import partnerLogo from "../images/logos/Partner_logo.svg";
+import MypageModal from "../components/Loginon/MypageModal";
+import { getScrollbarWidth } from "../util";
+
 const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
   background: var(--light);
+  @media screen and (max-width: 600px) {
+    padding: 0 15px;
+  }
 `;
+
 const Inner = styled.div`
   width: 600px;
   display: flex;
   flex-direction: column;
   gap: 30px;
-  margin-bottom: 100px;
+  @media screen and (max-width: 1024px) {
+    width: 480px;
+  }
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
 `;
+
 const UpBox = styled.div`
   width: 100%;
   height: 120px;
@@ -28,12 +42,19 @@ const UpBox = styled.div`
   align-items: center;
   padding: 30px;
   margin: 50px 0 20px;
+  @media screen and (max-width: 1024px) {
+    height: 96px;
+    padding: 24px;
+    margin: 30px 0 20px;
+  }
 `;
+
 const UpBoxLeft = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
 `;
+
 const UserTeam = styled.div`
   width: 60px;
   height: 60px;
@@ -45,11 +66,17 @@ const UserTeam = styled.div`
     object-fit: cover;
     overflow: visible;
   }
+  @media screen and (max-width: 1024px) {
+    width: 48px;
+    height: 48px;
+  }
 `;
+
 const PartnerLogo = styled.img`
   position: absolute;
   margin-left: 5px;
 `;
+
 const UpBoxTitle = styled.h4`
   font-size: 2rem;
   font-weight: 600;
@@ -57,7 +84,14 @@ const UpBoxTitle = styled.h4`
     font-size: 1.2rem;
     font-weight: 400;
   }
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+    span {
+      font-size: 1rem;
+    }
+  }
 `;
+
 const UpBoxSub = styled.span`
   font-size: 1.2rem;
   color: var(--gray6);
@@ -66,7 +100,11 @@ const UpBoxSub = styled.span`
   &:hover {
     color: var(--dark);
   }
+  @media screen and (max-width: 1024px) {
+    font-size: 1rem;
+  }
 `;
+
 const MyShopping = styled.div`
   width: 100%;
   display: flex;
@@ -75,17 +113,29 @@ const MyShopping = styled.div`
   gap: 30px;
   margin-bottom: 30px;
 `;
+
 const MyShoppingTitle = styled.h4`
   font-size: 2rem;
   font-weight: bold;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+  }
 `;
+
 const MyShoppingInner = styled.div`
   display: flex;
   justify-content: center;
   align-content: center;
   text-align: center;
   gap: 60px;
+  @media screen and (max-width: 1024px) {
+    gap: 40px;
+  }
+  @media screen and (max-width: 500px) {
+    gap: 35px;
+  }
 `;
+
 const MyShoppingDetail = styled.h6`
   font-size: 1.2rem;
   line-height: 2.5;
@@ -94,33 +144,55 @@ const MyShoppingDetail = styled.h6`
     font-weight: 600;
     line-height: 1;
   }
+  @media screen and (max-width: 1024px) {
+    font-size: 1rem;
+    b {
+      font-size: 1.6rem;
+    }
+  }
 `;
+
 const MyShoppingLine = styled.span`
   width: 1px;
   height: 54px;
   background: var(--dark);
+  @media screen and (max-width: 1024px) {
+    height: 48px;
+  }
 `;
+
 const MyInfo = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 const MyInfoTitle = styled.h4`
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 20px;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+  }
 `;
+
 const MyInfoLine = styled.span`
   width: 100%;
   height: 1px;
   background: var(--dark);
 `;
+
 const InfoElement = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: end;
   margin-bottom: 60px;
+  @media screen and (max-width: 1024px) {
+    margin-bottom: 40px;
+  }
 `;
+
 const InfoDetail = styled.h4`
   font-size: 1.6rem;
   line-height: 2;
@@ -128,11 +200,28 @@ const InfoDetail = styled.h4`
     font-size: 1.8rem;
     font-weight: 700;
   }
+  @media screen and (max-width: 1024px) {
+    font-size: 1.4rem;
+    b {
+      font-size: 1.6rem;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1.2rem; 
+    b {
+      font-size: 1.4rem;
+    }
+  }
 `;
-const InfoDetailDetail = styled.h5`
+
+const InfoDetailDetail = styled.p`
   font-size: 1.4rem;
   color: var(--gray8);
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
 `;
+
 const InfoButton = styled.button`
   width: 80px;
   height: 40px;
@@ -145,7 +234,13 @@ const InfoButton = styled.button`
   &:hover {
     background: var(--gray3);
   }
+  @media screen and (max-width: 1024px) {
+    width: 60px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
 `;
+
 const Delete = styled.div`
   width: 100%;
   display: flex;
@@ -161,6 +256,7 @@ const Delete = styled.div`
     opacity: 1;
   }
 `;
+
 const DeleteLine = styled.span`
   width: 66px;
   height: 1px;
@@ -169,12 +265,15 @@ const DeleteLine = styled.span`
   opacity: 0;
   transition: opacity 0.3s;
 `;
+
 const LoadingSpinner = styled.div`
   height: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--grayC);
 `;
+
 const InquiryLink = styled.a`
   padding: 10px 20px;
   background: var(--light);
@@ -194,6 +293,10 @@ const InquiryLink = styled.a`
   svg {
     margin-right: 10px;
   }
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+    height: 40px;
+  }
 `;
 
 const teamToEmblemId = {
@@ -211,10 +314,34 @@ const teamToEmblemId = {
 
 const Mypage = () => {
   const { userProfile, isLoading } = authStore();
+  const [teamModal, setTeamModal] = useState(false)
+
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
+
+const openTeamModal = () => {
+    setTeamModal(true);
+  };
+
+  const closeTeamModal = () => {
+    setTeamModal(false);
+  };  
+
+   //mobile 스토어 스크롤 막기
+    useEffect(() => {
+      if (teamModal) {
+        const scrollbarWidth = getScrollbarWidth();
+        document.body.style.overflow = "hidden";
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      } else {
+        document.body.style.overflow = "";
+        document.body.style.paddingRight = "";
+      }
+    }, [teamModal]);
+  
+
   return (
     <Container>
       {isLoading ? (
@@ -244,7 +371,7 @@ const Mypage = () => {
                 <span>계정 생성일 {userProfile.createdAt}</span>
               </UpBoxTitle>
             </UpBoxLeft>
-            <UpBoxSub>구단변경 ›</UpBoxSub>
+            <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
           </UpBox>
           <MyShopping>
             <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
@@ -304,12 +431,18 @@ const Mypage = () => {
             <InfoElement>
               <InfoDetail>
                 <b>주소</b>
-                <br />
-                {userProfile.address}
-                <br />
+                {userProfile.address?  <>
+                  <br />
+                  {userProfile.address}
+                  <br />
+                  <InfoDetailDetail>
+                    {userProfile.detailedAddress}
+                  </InfoDetailDetail>
+                </> :    
                 <InfoDetailDetail>
-                  {userProfile.detailedAddress}
-                </InfoDetailDetail>
+                  주소를 등록해 주세요.
+                  </InfoDetailDetail>
+                  }
               </InfoDetail>
               <InfoButton>변경</InfoButton>
             </InfoElement>
@@ -348,6 +481,10 @@ const Mypage = () => {
           )}
         </Inner>
       )}
+        <MypageModal
+        isOpen={teamModal}
+        closeTeamModal={closeTeamModal}
+      />
     </Container>
   );
 };

@@ -24,7 +24,11 @@ const router = createBrowserRouter([
         element: <ProductList />,
       },
       {
-        path: "store/:productId",
+        path: "store/:teamCode",
+        element: <ProductList />,
+      },
+      {
+        path: "store/:teamCode/:id",
         element: <ProductDetail />,
       },
       {
@@ -54,7 +58,5 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
-
 
 export default router;
