@@ -167,11 +167,9 @@ const DeleteButton = styled.div`
 const Cart = () => {
   const navigate = useNavigate();
 
-  const cartItems = useCartStore((state) => state.cartItems);
-  const setCartItems = useCartStore((state) => state.setCartItems);
+  const { cartItems, setCartItems, toggleCheckItem } = useCartStore();
 
-  // 기존 체크된 아이템 상태
-  const [checkedItems, setCheckedItems] = useState([]);
+  const checkedItems = cartItems.filter((item) => item.checked);
 
   // 쿠폰 목록
   const [coupons, setCoupons] = useState([]);
@@ -198,17 +196,12 @@ const Cart = () => {
   }, []);
 
   // 상품 체크
-  const selectedItems = cartItems.filter((item) =>
-    checkedItems.includes(item.id)
-  );
+  const selectedItems = checkedItems;
 
   // 체크된 상품 삭제
   const handleDeleteSelected = () => {
-    const updatedItems = cartItems.filter(
-      (item) => !checkedItems.includes(item.id)
-    );
+    const updatedItems = cartItems.filter((item) => !item.checked);
     setCartItems(updatedItems);
-    setCheckedItems([]);
   };
 
   // 상품금액
@@ -249,15 +242,11 @@ const Cart = () => {
 
   // 체크박스
   const handleToggleAll = (isChecked) => {
-    setCheckedItems(isChecked ? cartItems.map((item) => item.id) : []);
-  };
-
-  const handleToggle = (itemId) => {
-    setCheckedItems((prev) =>
-      prev.includes(itemId)
-        ? prev.filter((id) => id !== itemId)
-        : [...prev, itemId]
-    );
+    const updateAllChecked = cartItems.map((item) => ({
+      ...item,
+      checked: isChecked,
+    }));
+    setCartItems(updateAllChecked);
   };
 
   useEffect(() => {
@@ -286,8 +275,8 @@ const Cart = () => {
                 <ProductItem
                   key={item.id}
                   item={item}
-                  isChecked={checkedItems.includes(item.id)}
-                  onToggle={() => handleToggle(item.id)}
+                  isChecked={item.checked}
+                  onToggle={() => toggleCheckItem(item.id)}
                 />
               ))
             ) : (
