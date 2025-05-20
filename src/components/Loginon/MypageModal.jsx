@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getEmblem } from "../../util";
 import logon_check from "../../images/icons/logon_check.svg";
-import { auth,db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import authStore from "../../stores/AuthStore";
 
 const ModalOverlay = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== 'isOpen'
+  shouldForwardProp: (prop) => prop !== "isOpen",
 })`
   position: fixed;
   top: 0;
@@ -70,17 +70,17 @@ const ModalTitle = styled.h2`
   width: 100%;
   font-size: 2rem;
   font-weight: 800;
-  span{
+  span {
     font-size: 1.6rem;
     font-weight: 400;
     line-height: 1.3;
   }
   @media screen and (max-width: 600px) {
     font-size: 1.6rem;
-    span{
-    font-size: 1.2rem;
-    font-weight: 400;
-  }
+    span {
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
   }
 `;
 
@@ -94,17 +94,37 @@ const ModalTWrapper = styled.div`
   padding-right: 10px;
   overflow-y: scroll;
   overflow-x: hidden;
+  overscroll-behavior: contain;
+  touch-action: auto;
+  scroll-behavior: auto;
+
+  scrollbar-gutter: stable;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--grayC);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--light);
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
   @media screen and (max-width: 600px) {
     margin-bottom: 20px;
   }
 `;
 
 const TeamWrapper = styled.div`
-width: 100%;
-height: 50px;
-display: flex;
-align-items: center;
-`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+`;
 
 const ModalText = styled.h2`
   font-size: 1.6rem;
@@ -159,7 +179,6 @@ const ModalButton = styled.button`
   }
 `;
 
-
 const MypageModal = ({ isOpen, closeTeamModal }) => {
   const { userProfile, setUser } = authStore();
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -178,44 +197,44 @@ const MypageModal = ({ isOpen, closeTeamModal }) => {
     { id: "10", name: "키움 히어로즈" },
   ];
 
-useEffect(()=>{
-  const fetchFavoriteTeam = async () => {
+  useEffect(() => {
+    const fetchFavoriteTeam = async () => {
+      const user = auth.currentUser;
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setSelectedTeam(userData.favoriteTeam || "");
+        }
+      } catch (err) {
+        console.log("favoriteTeam 가져오기 오류", err);
+      }
+    };
+
+    if (isOpen) {
+      fetchFavoriteTeam();
+    }
+  }, [isOpen]);
+
+  const handleTeamSelect = (teamName) => {
+    setSelectedTeam(teamName);
+  };
+
+  // 팀 업뎃
+  const handleSaveTeam = async () => {
     const user = auth.currentUser;
+
+    setLoading(true);
 
     try {
       const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if(userDoc.exists()) {
-        const userData = userDoc.data();
-        setSelectedTeam(userData.favoriteTeam || "");
-      }
-    } catch (err) {
-      console.log("favoriteTeam 가져오기 오류", err);
-    }
-  };
+      await updateDoc(userDocRef, {
+        favoriteTeam: selectedTeam,
+      });
 
-  if(isOpen) {
-    fetchFavoriteTeam();
-  }
-}, [isOpen])
-
-const handleTeamSelect =(teamName) => {
-  setSelectedTeam(teamName);
-}
-
-// 팀 업뎃
-const handleSaveTeam = async() => {
-  const user = auth.currentUser;
-
-  setLoading(true)
-
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    await updateDoc(userDocRef, {
-      favoriteTeam : selectedTeam,
-    })
-
-    // authStore의 userProfile 업데이트
+      // authStore의 userProfile 업데이트
       const updatedProfile = {
         ...userProfile,
         favoriteTeam: selectedTeam,
@@ -229,52 +248,58 @@ const handleSaveTeam = async() => {
         updatedProfile
       );
 
-    closeTeamModal();
-  } catch (err) {
-    console.log("favoriteTeam 업데이트 오류", err);
-  } finally {
-    setLoading(false);
-  }
-};
+      closeTeamModal();
+    } catch (err) {
+      console.log("favoriteTeam 업데이트 오류", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const TeamEmblem = ({ emblemId }) => {
-      const emblem = getEmblem(emblemId);
-      return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
-    };
+  const TeamEmblem = ({ emblemId }) => {
+    const emblem = getEmblem(emblemId);
+    return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
+  };
 
   return (
     <ModalOverlay isOpen={isOpen} onClick={closeTeamModal}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={closeTeamModal}>⨯</CloseButton>
         <LogoWrapper>
-          <ModalTitle>마이팀 설정 <br/><br/>
-          <span>마이팀을 설정하면 내가 응원하는 팀의 컨텐츠를 더 손쉽게 볼 수 있어요.</span>
+          <ModalTitle>
+            마이팀 설정 <br />
+            <br />
+            <span>
+              마이팀을 설정하면 내가 응원하는 팀의 컨텐츠를 더 손쉽게 볼 수
+              있어요.
+            </span>
           </ModalTitle>
         </LogoWrapper>
-        <ModalTWrapper>
-          {
-            teams.map((team) => 
-              <ModalText
+        <ModalTWrapper data-lenis-prevent>
+          {teams.map((team) => (
+            <ModalText
               key={team.id}
               onClick={() => handleTeamSelect(team.name)}
-              >
-                <TeamWrapper>
-                  <TeamEmblem emblemId={team.id}/>{team.name}
-                </TeamWrapper>
-                <CheckCircle checked={selectedTeam === team.name}>
-                  <img src={logon_check} alt="logon_check"/>
-                </CheckCircle>
-              </ModalText>
-            )
-          }
+            >
+              <TeamWrapper>
+                <TeamEmblem emblemId={team.id} />
+                {team.name}
+              </TeamWrapper>
+              <CheckCircle checked={selectedTeam === team.name}>
+                <img src={logon_check} alt="logon_check" />
+              </CheckCircle>
+            </ModalText>
+          ))}
         </ModalTWrapper>
-        <ModalButton type="button"
+        <ModalButton
+          type="button"
           onClick={handleSaveTeam}
           disabled={loading}
           style={{
             background: loading ? "var(--grayE)" : "var(--dark)",
             cursor: loading ? "not-allowed" : "pointer",
-          }}>
+          }}
+        >
           {loading ? "저장 중..." : "팀 변경하기"}
         </ModalButton>
       </ModalContent>
