@@ -71,6 +71,10 @@ const CouponModalContent = styled.div`
   box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.2);
   color: var(--light);
   position: relative;
+
+  @media screen and (max-width: 500px) {
+    height: 75%;
+  }
 `;
 
 const CouponTitle = styled.h2`
@@ -79,12 +83,20 @@ const CouponTitle = styled.h2`
   font-weight: bold;
   margin-bottom: 10px;
   user-select: none;
+
+  @media screen and (max-width: 500px) {
+    font-size: 2.4rem;
+  }
 `;
 
 const CouponDesc = styled.p`
   font-size: 1.2rem;
   margin-bottom: 24px;
   user-select: none;
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const CouponImage = styled.img`
@@ -113,6 +125,10 @@ const MyPageButton = styled.button`
   &:hover {
     opacity: 0.9;
     background: var(--light);
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
   }
 `;
 
