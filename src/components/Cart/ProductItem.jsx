@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import CustomCheckbox from "./CustomCheckbox";
 import useCartStore from "../../stores/cartStore";
+import { getTeamNameKor } from "../../util.jsx";
 
 const DeskTopGrid = `
   140px
@@ -261,7 +262,7 @@ const ProductItem = ({ item, isChecked, onToggle }) => {
         <ItemImage src={thumbnail} />
       </Thumbnail>
       <ItemName>
-        <TeamName>{team}</TeamName>
+        <TeamName>{getTeamNameKor(team)}</TeamName>
         <ProductName>{name}</ProductName>
       </ItemName>
       <ItemOption>

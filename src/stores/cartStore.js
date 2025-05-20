@@ -34,7 +34,9 @@ const useCartStore = create(
             item.id === id ? { ...item, checked: !item.checked } : item
           ),
         })),
+      setCartItems: (items) => set({ cartItems: items }),
     }),
+
     {
       name: "cart-storage",
     }
