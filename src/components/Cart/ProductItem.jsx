@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import CustomCheckbox from "./CustomCheckbox";
+import useCartStore from "../../stores/cartStore";
+import { getTeamNameKor } from "../../util.jsx";
 
 const DeskTopGrid = `
   140px
@@ -250,23 +252,23 @@ const MultiPrice = styled.li`
   }
 `;
 
-const ProductItem = ({ item, isChecked, onToggle, page }) => {
-  const { name, team, price, quantity, image } = item;
+const ProductItem = ({ item, isChecked, onToggle }) => {
+  const { id, thumbnail, team, name, option, quantity, price } = item;
 
   return (
-    <Item page={page}>
+    <Item key={id}>
       <Thumbnail>
-        {onToggle && <CustomCheckbox checked={isChecked} onChange={onToggle} />}
-        <ItemImage src={image} alt={name} />
+        <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        <ItemImage src={thumbnail} />
       </Thumbnail>
       <ItemName>
-        <TeamName>{team}</TeamName>
+        <TeamName>{getTeamNameKor(team)}</TeamName>
         <ProductName>{name}</ProductName>
       </ItemName>
       <ItemOption>
         <li>
           <p className="mobile">옵션</p>
-          <p className="option">54.양현종(양현종)</p>
+          <p className="option">{option}</p>
         </li>
         <li>
           <p className="mobile">수량</p>
