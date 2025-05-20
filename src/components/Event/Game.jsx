@@ -37,7 +37,7 @@ const GameBox = styled.div`
 
   @media screen and (max-width: 1024px) {
   }
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 376px) {
     padding: 22px 0px 60px 0px;
   }
 `;
@@ -147,6 +147,11 @@ const GameBoxBackground = styled.div`
     background: var(--main);
     user-select: none;
   }
+
+  @media screen and (max-width: 376px) {
+    width: 90px;
+    height: 90px;
+  }
 `;
 
 const GameBoxContent = styled.img`
@@ -163,6 +168,8 @@ const TextBoxImg = styled.img`
     width: 75%;
   }
 `;
+
+/* ==================== 게임 로직 START ==================== */
 
 const coupons = [
   {
@@ -199,19 +206,35 @@ const coupons = [
   },
 ];
 
+// 꽝 이미지
 const fails = [{ type: "fail", img: boom }];
 
+/* 가중치 기반 랜덤 쿠폰 추첨함수 */
+// 랜덤하게 하나의 쿠폰을 반환하지만, 각 쿠폰의 weight(가중치)에 따라 확률이 다르게 설정된 함수
 const getRandomCoupon = () => {
-  const total = coupons.reduce((sum, item) => sum + item.weight, 0);
+  // 모든 쿠폰의 가중치를 합산해서 전체 가중치 값을 계산
+  // 전체 가중치 합산
+  const total = coupons.reduce((sum, item) => sum + item.weight, 0); // coupons weight value : 15 + 30 + 60 + 85 = 190
+
+  // 0 이상 total 미만의 실수 중 무작위 수를 생성
+  // rand 수는 당첨되는지를 결정하는 역할
   const rand = Math.random() * total;
+
+  // 누적 가중치 초기값
   let cumulative = 0;
+
+  // 쿠폰 배열의 갯수만큼 증가하다가 누적 가중치가 rand보다 커지는 순간 쿠폰을 선택
   for (let i = 0; i < coupons.length; i++) {
     cumulative += coupons[i].weight;
-    if (rand < cumulative) return coupons[i];
+
+    // rand가 현재까지의 누적 weight보다 작다면, 해당 쿠폰이 당첨됨
+    if (rand < cumulative) return coupons[i]; // 당첨된 쿠폰 반환
   }
+  // 마지막 쿠폰을 기본값으로 반환
   return coupons[coupons.length - 1];
 };
 
+/* 게임판 3 x 3 */
 const generateBoardData = () => {
   const board = Array(9).fill(null);
   const winIndex = Math.floor(Math.random() * 9);
@@ -259,7 +282,7 @@ const Game = () => {
     };
 
     if (user?.uid) {
-      console.log("✅ 유저 로그인됨:", user.uid);
+      console.log("유저 로그인됨:", user.uid);
       fetchGameStatus();
     } else {
       console.log("유저 없음: 로그인 필요");
@@ -276,12 +299,14 @@ const Game = () => {
     }
   }, [result]);
 
+  // 비회원 이벤트 참여 막기
   const handleClick = async (index) => {
     if (!user) {
       alert("로그인 후 이용가능합니다!");
       return;
     }
 
+    // 사용자 파이어스토어 저장값 불러와서 조건부랜더링 후 막기
     if (revealed[index] || gameStarted || gamePlayed || gamePlayedFlag) {
       alert("이벤트 게임은 한 번만 참여 가능합니다.\n이미 참여하셨습니다!");
       return;
@@ -289,7 +314,7 @@ const Game = () => {
 
     setGameStarted(true);
 
-    // 서버에서 다시 확인
+    // 서버에서 다시 확인 (게임을 진행 한 계정인지 아닌지)
     try {
       const latest = await getDoc(doc(db, "gameUser", user.uid));
       if (latest.exists() && latest.data().gamePlayed) {
@@ -305,12 +330,12 @@ const Game = () => {
 
       const item = result[index];
 
-      // ✅ regardless of result type, save gamePlayed: true
+      // 게임 결과값 Firestore 값 저장 (gamePlayed: true)
       const gameUserRef = doc(db, "gameUser", user.uid);
       await setDoc(gameUserRef, { gamePlayed: true }, { merge: true });
       setGamePlayed(true);
       setGamePlayedFlag(true);
-      console.log("✅ Firebase 저장 성공");
+      console.log("Firebase 저장 성공");
 
       if (item.type === "coupon") {
         setModalContent(item);
