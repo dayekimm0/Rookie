@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import CustomCheckbox from "./CustomCheckbox";
+import useCartStore from "../../stores/cartStore";
 
 const DeskTopGrid = `
   140px
@@ -250,38 +251,46 @@ const MultiPrice = styled.li`
   }
 `;
 
-const ProductItem = ({ item, isChecked, onToggle, page }) => {
-  const { name, team, price, quantity, image } = item;
+const ProductItem = () => {
+  const cartItems = useCartStore((state) => state.cartItems);
 
   return (
-    <Item page={page}>
-      <Thumbnail>
-        {onToggle && <CustomCheckbox checked={isChecked} onChange={onToggle} />}
-        <ItemImage src={image} alt={name} />
-      </Thumbnail>
-      <ItemName>
-        <TeamName>{team}</TeamName>
-        <ProductName>{name}</ProductName>
-      </ItemName>
-      <ItemOption>
-        <li>
-          <p className="mobile">옵션</p>
-          <p className="option">54.양현종(양현종)</p>
-        </li>
-        <li>
-          <p className="mobile">수량</p>
-          <p className="quantity">{quantity}개</p>
-        </li>
-      </ItemOption>
-      <SinglePrice>
-        <p className="mobile">상품가격</p>
-        <p>{price.toLocaleString()}원</p>
-      </SinglePrice>
-      <MultiPrice>
-        <p className="mobile">결제가격</p>
-        <p>{(price * quantity).toLocaleString()}원</p>
-      </MultiPrice>
-    </Item>
+    <>
+      {cartItems.map((item) => {
+        const { id, thumbnail, team, name, option, quantity, price } = item;
+
+        return (
+          <Item key={id}>
+            <Thumbnail>
+              <CustomCheckbox />
+              <ItemImage src={thumbnail} />
+            </Thumbnail>
+            <ItemName>
+              <TeamName>{team}</TeamName>
+              <ProductName>{name}</ProductName>
+            </ItemName>
+            <ItemOption>
+              <li>
+                <p className="mobile">옵션</p>
+                <p className="option">{option}</p>
+              </li>
+              <li>
+                <p className="mobile">수량</p>
+                <p className="quantity">{quantity}개</p>
+              </li>
+            </ItemOption>
+            <SinglePrice>
+              <p className="mobile">상품가격</p>
+              <p>{price.toLocaleString()}원</p>
+            </SinglePrice>
+            <MultiPrice>
+              <p className="mobile">결제가격</p>
+              <p>{(price * quantity).toLocaleString()}원</p>
+            </MultiPrice>
+          </Item>
+        );
+      })}
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const NewAddressInfo = styled.form`
@@ -158,6 +158,7 @@ const NewAddress = ({
   postalCode,
   address,
   detailAddress,
+  phoneNumber,
   setSelectedAddress,
   onAddressSelect,
 }) => {
@@ -166,6 +167,14 @@ const NewAddress = ({
   const [phone3, setPhone3] = useState("");
 
   console.log(address);
+
+  useEffect(() => {
+    const phoneNumber = `${phone1}-${phone2}-${phone3}`;
+    setSelectedAddress((prev) => ({
+      ...prev,
+      phoneNumber: phoneNumber,
+    }));
+  }, [phone1, phone2, phone3, setSelectedAddress]);
 
   return (
     <NewAddressInfo>

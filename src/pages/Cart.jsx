@@ -5,6 +5,7 @@ import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import CartMenuBar from "../components/Cart/CartMenuBar";
 import { mockItems } from "../components/Cart/MockupData";
+import useCartStore from "../stores/cartStore";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -166,7 +167,7 @@ const DeleteButton = styled.div`
 const Cart = () => {
   const navigate = useNavigate();
 
-  const [cartItems, setCartItems] = useState(mockItems);
+  const cartItems = useCartStore((state) => state.cartItems);
 
   // 기존 체크된 아이템 상태
   const [checkedItems, setCheckedItems] = useState([]);

@@ -47,6 +47,9 @@ const TEAM_JSON_URLS = {
   KBO: "https://rookiejson.netlify.app/teamJson/kbo.json",
 };
 
+// 카트 이동 주스턴트
+import useCartStore from "../stores/cartStore";
+
 // 임시 데이터 (실제 구현 시 API 응답으로 대체)
 // const mockRelatedProducts = [
 //   {
@@ -1435,6 +1438,28 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isFixed, setIsFixed] = useState(false);
 
+  // 카트페이지 이동
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: parsePrice(product.price),
+      images: product.detail?.detail_images || [],
+      team: product.team,
+      options: product.detail?.options || [],
+      category: product.category,
+      thumbnail: product.thumbnail,
+    });
+    addToCart(product);
+
+    console.log("장바구니:", product); // 주의: 여기선 바로 안 보일 수 있음
+    setTimeout(() => {
+      console.log("업데이트된 장바구니:", useCartStore.getState().product);
+    }, 100);
+  };
+
   // contentRef 및 contentHeight 상태 추가
   const contentRef = useRef(null);
   const stickyRef = useRef(null);
@@ -1757,7 +1782,6 @@ const ProductDetail = () => {
   if (error) {
     return (
       <Container>
-        <Header />
         <ContentWrapper>
           <ErrorMessage>
             <div>{error}</div>
@@ -1766,7 +1790,6 @@ const ProductDetail = () => {
             </div>
           </ErrorMessage>
         </ContentWrapper>
-        <Footer />
       </Container>
     );
   }
@@ -2196,7 +2219,7 @@ const ProductDetail = () => {
 
             {/* 액션 버튼 */}
             <ButtonContainer>
-              <CartButton>장바구니</CartButton>
+              <CartButton onClick={handleAddToCart}>장바구니</CartButton>
               <BuyButton>바로 구매</BuyButton>
             </ButtonContainer>
           </PurchaseSectionContent>

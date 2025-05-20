@@ -117,7 +117,7 @@ const AddressModal = ({ isOpen, closeModal }) => {
     postalCode: "",
     address: "",
     detailAddress: "",
-    phone: "",
+    phoneNumber: "",
   });
 
   const openPostModal = () => setPostModalOpen(true);
@@ -149,16 +149,28 @@ const AddressModal = ({ isOpen, closeModal }) => {
 
           <NewAddress
             openPostModal={openPostModal}
+            username={selectedAddress.username}
             postalCode={selectedAddress.postalCode}
             address={selectedAddress.address}
             detailAddress={selectedAddress.detailAddress}
-            recipient={selectedAddress.username}
-            phone={selectedAddress.phone}
+            phoneNumber={selectedAddress.phoneNumber}
             setSelectedAddress={setSelectedAddress}
             onAddressSelect={onAddressSelect}
           />
-
-          <Button type="button" value="수정하기" />
+          <Button
+            type="button"
+            value="수정하기"
+            onClick={() => {
+              authStore.getState().updateUserAddress({
+                username: selectedAddress.username,
+                postalCode: selectedAddress.postalCode,
+                address: selectedAddress.address,
+                detailedAddress: selectedAddress.detailAddress,
+                phoneNumber: selectedAddress.phoneNumber,
+              });
+              closeModal(); // 모달 닫기
+            }}
+          />
         </ModalContent>
       </ModalOverlay>
 
