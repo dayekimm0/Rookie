@@ -349,7 +349,7 @@ const RelatedProducts = ({ products = [] }) => {
                 <RelatedProductItem
                   onClick={() => {
                     // 상품 클릭 시 해당 상품 페이지로 이동
-                    window.location.href = `/store/${item.id}`;
+                    window.location.href = `/store/${item.team}/${item.id}`;
                   }}
                 >
                   <RelatedProductImageContainer>

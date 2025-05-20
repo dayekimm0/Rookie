@@ -36,8 +36,8 @@ import "swiper/css/navigation";
 
 // 구단별 JSON URL 매핑
 const TEAM_JSON_URLS = {
-  두산베어스: "https://rookiejson.netlify.app/teamJson/ds_bas.json",
   엔씨다이노스: "https://rookiejson.netlify.app/teamJson/nc_dns.json",
+  두산베어스: "https://rookiejson.netlify.app/teamJson/ds_bas.json",
   삼성라이온즈: "https://rookiejson.netlify.app/teamJson/ss_lns.json",
   LG트윈스: "https://rookiejson.netlify.app/teamJson/lg_twins.json",
   KIA타이거즈: "https://rookiejson.netlify.app/teamJson/kia_tgs.json",
@@ -175,7 +175,7 @@ const SliderContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--grayC);
+  /* background: var(--grayC); */
   position: relative;
   overflow: visible;
 
@@ -550,8 +550,8 @@ const PurchaseSection = styled.div`
   width: 450px;
   height: 476px;
   position: sticky;
-  top: 230px;
-  margin-top: 50px;
+  top: 200px;
+  margin-top: 30px;
   background: var(--light);
   display: flex;
   flex-direction: column;
@@ -561,10 +561,11 @@ const PurchaseSection = styled.div`
   @media (max-width: 1200px) {
     width: 300px;
     top: 200px;
-    margin-top: 40px;
+    margin-top: 20px;
     margin-bottom: 106px;
   }
   @media (max-width: 1024px) {
+    top: 20px;
     margin-bottom: 72px;
   }
 
@@ -1424,7 +1425,7 @@ const RelatedProductsSection = styled.div`
 
 // 상태 변수들
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { teamCode, id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -1435,10 +1436,10 @@ const ProductDetail = () => {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isFixed, setIsFixed] = useState(false);
-  const stickyRef = useRef(null);
 
   // contentRef 및 contentHeight 상태 추가
   const contentRef = useRef(null);
+  const stickyRef = useRef(null);
   const [contentHeight, setContentHeight] = useState("10000px"); // 충분히 큰 초기값
 
   // 리뷰 모의 데이터
@@ -1474,90 +1475,109 @@ const ProductDetail = () => {
     },
   ]);
 
+  // 팀 이름 → 코드 매핑 함수
+  // const getTeamCode = teamName => {
+  //   if (!teamName) return null;
+
+  //   // URL 디코딩을 적용 (특수문자 처리)
+  //   const decodedTeamName = decodeURIComponent(teamName);
+
+  //   const teamCodeMap = {
+  //     두산베어스: "ds_bas",
+  //     엔씨다이노스: "nc_dns",
+  //     삼성라이온즈: "ss_lns",
+  //     LG트윈스: "lg_twins",
+  //     KIA타이거즈: "kia_tgs",
+  //     롯데자이언츠: "lt_gnt",
+  //     KT위즈: "kt_wiz",
+  //     한화이글스: "hw_egs",
+  //     키움히어로즈: "kw_hrs",
+  //     SSG랜더스: "ssg_lds",
+  //     KBO: "kbo",
+  //   };
+
+  //   return teamCodeMap[teamName] || null;
+  // };
+
+  const fetchProductData = async () => {
+    setLoading(true);
+    try {
+      setError(null);
+
+      // 모든 구단의 데이터를 가져와서 해당 ID의 상품 찾기
+      // let selectedProduct = null;
+      // let allProducts = [];
+
+      // 모든 구단 JSON을 순차적으로 검색
+      // for (const [teamName, url] of Object.entries(TEAM_JSON_URLS)) {
+
+      const url = TEAM_JSON_URLS[teamCode];
+      const response = await axios.get(url);
+      const allProducts = response.data;
+
+      // const allProducts = teamProducts;
+
+      // 해당 ID의 상품이 있는지 확인
+      const selectedProduct = allProducts.find(
+        (product) => product.id === parseInt(id)
+      );
+      // if (!selectedProduct) {
+      //   setError("해당 상품을 찾을 수 없습니다.");
+      //   setLoading(false);
+      //   return;
+      // }
+
+      // 제품 데이터 설정
+      setProduct({
+        id: selectedProduct.id,
+        name: selectedProduct.name,
+        price: parsePrice(selectedProduct.price),
+        images: selectedProduct.detail?.detail_images || [],
+        team: selectedProduct.team,
+        options: selectedProduct.detail?.options || [],
+        category: selectedProduct.category,
+        thumbnail: selectedProduct.thumbnail,
+      });
+
+      // console.warn(`${teamCode} 데이터 로드 실패:`, error);
+      // continue; // 실패해도 다음 구단 계속 시도
+
+      // }
+
+      // 같은 카테고리의 추천 상품 설정 (현재 상품과 같은 팀의 다른 상품)
+      const sameTeamProducts = allProducts.filter(
+        (product) =>
+          product.team === selectedProduct.team &&
+          product.id !== selectedProduct.id
+      );
+
+      const filteredProducts = sameTeamProducts.filter(
+        (product) => product.category === selectedProduct.category
+      );
+
+      const relatedProductsData = filteredProducts
+        .slice(0, 8)
+        .map((product) => ({
+          id: product.id,
+          name: product.name,
+          price: parsePrice(product.price),
+          image: product.thumbnail,
+          team: product.team,
+        }));
+
+      setRelatedProducts(relatedProductsData);
+      setLoading(false);
+    } catch (error) {
+      console.error("제품 데이터 가져오기 오류:", error);
+      setError("데이터를 불러오는 중 오류가 발생했습니다.");
+      setLoading(false);
+    }
+  };
+
   // 제품 데이터 가져오기
   useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // 모든 구단의 데이터를 가져와서 해당 ID의 상품 찾기
-        let selectedProduct = null;
-        let allProducts = [];
-
-        // 모든 구단 JSON을 순차적으로 검색
-        for (const [teamName, url] of Object.entries(TEAM_JSON_URLS)) {
-          try {
-            const response = await axios.get(url);
-            const teamProducts = response.data;
-
-            allProducts = [...allProducts, ...teamProducts];
-
-            // 해당 ID의 상품이 있는지 확인
-            const found = teamProducts.find(
-              (product) => product.id === parseInt(id)
-            );
-            if (found) {
-              selectedProduct = found;
-              break; // 찾았으면 더 이상 검색하지 않음
-            }
-          } catch (error) {
-            console.warn(`${teamName} 데이터 로드 실패:`, error);
-            continue; // 실패해도 다음 구단 계속 시도
-          }
-        }
-
-        if (!selectedProduct) {
-          setError("해당 상품을 찾을 수 없습니다.");
-          setLoading(false);
-          return;
-        }
-
-        // 제품 데이터 설정
-        setProduct({
-          id: selectedProduct.id,
-          name: selectedProduct.name,
-          price: parsePrice(selectedProduct.price),
-          images: selectedProduct.detail?.detail_images || [],
-          team: selectedProduct.team,
-          options: selectedProduct.detail?.options || [],
-          category: selectedProduct.category,
-          thumbnail: selectedProduct.thumbnail,
-        });
-
-        // 같은 카테고리의 추천 상품 설정 (현재 상품과 같은 팀의 다른 상품)
-        const sameTeamProducts = allProducts.filter(
-          (product) =>
-            product.team === selectedProduct.team &&
-            product.id !== selectedProduct.id
-        );
-
-        const filteredProducts = sameTeamProducts.filter(
-          (product) => product.category === selectedProduct.category
-        );
-
-        const relatedProductsData = filteredProducts
-          .slice(0, 8)
-          .map((product) => ({
-            id: product.id,
-            name: product.name,
-            price: parsePrice(product.price),
-            image: product.thumbnail,
-            team: product.team,
-          }));
-
-        setRelatedProducts(relatedProductsData);
-        setLoading(false);
-      } catch (error) {
-        console.error("제품 데이터 가져오기 오류:", error);
-        setError("데이터를 불러오는 중 오류가 발생했습니다.");
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchProductData();
-    }
+    if (id === undefined) return;
+    fetchProductData();
   }, [id]);
 
   // 가격 문자열을 숫자로 변환하는 헬퍼 함수
@@ -1767,7 +1787,7 @@ const ProductDetail = () => {
       </Container>
     );
   }
-
+  console.log("product", product);
   return (
     <Container>
       <Header />
@@ -1776,8 +1796,12 @@ const ProductDetail = () => {
           {/* 제품 이미지 슬라이더 */}
           <SliderContainer>
             <ImageContainer>
-              {product?.images && product.images.length > 0 ? (
-                <ImageSlider images={product.images} width={500} height={600} />
+              {product.thumbnail ? (
+                <ImageSlider
+                  images={[product.thumbnail]}
+                  width={500}
+                  height={600}
+                />
               ) : (
                 <ImagePlaceholder />
               )}
@@ -1801,19 +1825,21 @@ const ProductDetail = () => {
                 </RatingContainer>
               </PriceContainer>
               {/* 옵션 선택기 */}
-              <OptionContainer>
-                <OptionSelect>
-                  <option value="">- [필수] 옵션 선택 -</option>
-                  {product?.options?.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </OptionSelect>
-                <SelectArrowContainer>
-                  <FontAwesomeIcon icon={faChevronDown} color="#666" />
-                </SelectArrowContainer>
-              </OptionContainer>
+              {product?.options.length ? (
+                <OptionContainer>
+                  <OptionSelect>
+                    <option value="">- [필수] 옵션 선택 -</option>
+                    {product?.options?.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </OptionSelect>
+                  <SelectArrowContainer>
+                    <FontAwesomeIcon icon={faChevronDown} color="#666" />
+                  </SelectArrowContainer>
+                </OptionContainer>
+              ) : null}
               {/* 배송 정보 */}
               <ShippingInfo>배송비 무료 / 주문 시 결제(선결제)</ShippingInfo>
               <StickyBox isFixed={isFixed}>
@@ -1896,7 +1922,13 @@ const ProductDetail = () => {
 
                     {/* 상세 이미지 */}
                     <DetailImageWrapper>
-                      <DetailImagePlaceholder />
+                      {product.images.length ? (
+                        product.images?.map((item) => (
+                          <DetailImage src={item} key={item} />
+                        ))
+                      ) : (
+                        <DetailImagePlaceholder />
+                      )}
                     </DetailImageWrapper>
 
                     {/* 그라데이션 효과 (접혔을 때만 보임) */}
@@ -2126,19 +2158,21 @@ const ProductDetail = () => {
             </PriceContainer>
 
             {/* 옵션 선택기 */}
-            <OptionContainer>
-              <OptionSelect>
-                <option value="">- [필수] 옵션 선택 -</option>
-                {product?.options?.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </OptionSelect>
-              <SelectArrowContainer>
-                <FontAwesomeIcon icon={faChevronDown} color="#666" />
-              </SelectArrowContainer>
-            </OptionContainer>
+            {product.options.length ? (
+              <OptionContainer>
+                <OptionSelect>
+                  <option value="">- [필수] 옵션 선택 -</option>
+                  {product?.options?.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </OptionSelect>
+                <SelectArrowContainer>
+                  <FontAwesomeIcon icon={faChevronDown} color="#666" />
+                </SelectArrowContainer>
+              </OptionContainer>
+            ) : null}
 
             {/* 배송 정보 */}
             <ShippingInfo>배송비 무료 / 주문 시 결제(선결제)</ShippingInfo>
@@ -2197,8 +2231,6 @@ const ProductDetail = () => {
         product={product}
         onSubmit={handleInquirySubmit}
       />
-
-      <Footer />
     </Container>
   );
 };
