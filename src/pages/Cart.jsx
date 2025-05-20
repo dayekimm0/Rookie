@@ -168,6 +168,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const cartItems = useCartStore((state) => state.cartItems);
+  const setCartItems = useCartStore((state) => state.setCartItems);
 
   // 기존 체크된 아이템 상태
   const [checkedItems, setCheckedItems] = useState([]);
@@ -248,10 +249,10 @@ const Cart = () => {
 
   // 체크박스
   const handleToggleAll = (isChecked) => {
-    setCheckedItems(isChecked ? mockItems.map((item) => item.id) : []);
+    setCheckedItems(isChecked ? cartItems.map((item) => item.id) : []);
   };
 
-  const handleToggleItem = (itemId) => {
+  const handleToggle = (itemId) => {
     setCheckedItems((prev) =>
       prev.includes(itemId)
         ? prev.filter((id) => id !== itemId)
@@ -259,13 +260,24 @@ const Cart = () => {
     );
   };
 
+  useEffect(() => {
+    console.log("cartItems:", cartItems);
+    console.log("checkedItems:", checkedItems);
+    console.log(
+      "allChecked:",
+      cartItems.length > 0 && checkedItems.length === cartItems.length
+    );
+  }, [cartItems, checkedItems]);
+
   return (
     <Container>
       <Section>
         <Title>Shopping Cart</Title>
         <List>
           <CartMenuBar
-            allChecked={checkedItems.length === mockItems.length}
+            allChecked={
+              cartItems.length > 0 && checkedItems.length === cartItems.length
+            }
             onToggleAll={handleToggleAll}
           />
           <Items data-lenis-prevent>
@@ -275,7 +287,7 @@ const Cart = () => {
                   key={item.id}
                   item={item}
                   isChecked={checkedItems.includes(item.id)}
-                  onToggle={() => handleToggleItem(item.id)}
+                  onToggle={() => handleToggle(item.id)}
                 />
               ))
             ) : (

@@ -17,7 +17,9 @@ const useCartStore = create(
               ),
             };
           } else {
-            return { cartItems: [...state.cartItems, product] };
+            return {
+              cartItems: [...state.cartItems, { ...product, checked: false }],
+            };
           }
         }),
       removeFromCart: (id) =>
@@ -25,9 +27,16 @@ const useCartStore = create(
           cartItems: state.cartItems.filter((item) => item.id !== id),
         })),
       clearCart: () => set({ cartItems: [] }),
+
+      toggleCheckItem: (id) =>
+        set((state) => ({
+          cartItems: state.cartItems.map((item) =>
+            item.id === id ? { ...item, checked: !item.checked } : item
+          ),
+        })),
     }),
     {
-      name: "cart-storage", // localStorage key 이름
+      name: "cart-storage",
     }
   )
 );

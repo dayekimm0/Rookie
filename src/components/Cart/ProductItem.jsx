@@ -251,46 +251,38 @@ const MultiPrice = styled.li`
   }
 `;
 
-const ProductItem = () => {
-  const cartItems = useCartStore((state) => state.cartItems);
+const ProductItem = ({ item, isChecked, onToggle }) => {
+  const { id, thumbnail, team, name, option, quantity, price } = item;
 
   return (
-    <>
-      {cartItems.map((item) => {
-        const { id, thumbnail, team, name, option, quantity, price } = item;
-
-        return (
-          <Item key={id}>
-            <Thumbnail>
-              <CustomCheckbox />
-              <ItemImage src={thumbnail} />
-            </Thumbnail>
-            <ItemName>
-              <TeamName>{team}</TeamName>
-              <ProductName>{name}</ProductName>
-            </ItemName>
-            <ItemOption>
-              <li>
-                <p className="mobile">옵션</p>
-                <p className="option">{option}</p>
-              </li>
-              <li>
-                <p className="mobile">수량</p>
-                <p className="quantity">{quantity}개</p>
-              </li>
-            </ItemOption>
-            <SinglePrice>
-              <p className="mobile">상품가격</p>
-              <p>{price.toLocaleString()}원</p>
-            </SinglePrice>
-            <MultiPrice>
-              <p className="mobile">결제가격</p>
-              <p>{(price * quantity).toLocaleString()}원</p>
-            </MultiPrice>
-          </Item>
-        );
-      })}
-    </>
+    <Item key={id}>
+      <Thumbnail>
+        <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        <ItemImage src={thumbnail} />
+      </Thumbnail>
+      <ItemName>
+        <TeamName>{team}</TeamName>
+        <ProductName>{name}</ProductName>
+      </ItemName>
+      <ItemOption>
+        <li>
+          <p className="mobile">옵션</p>
+          <p className="option">{option}</p>
+        </li>
+        <li>
+          <p className="mobile">수량</p>
+          <p className="quantity">{quantity}개</p>
+        </li>
+      </ItemOption>
+      <SinglePrice>
+        <p className="mobile">상품가격</p>
+        <p>{price.toLocaleString()}원</p>
+      </SinglePrice>
+      <MultiPrice>
+        <p className="mobile">결제가격</p>
+        <p>{(price * quantity).toLocaleString()}원</p>
+      </MultiPrice>
+    </Item>
   );
 };
 

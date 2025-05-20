@@ -1448,11 +1448,11 @@ const ProductDetail = () => {
       price: parsePrice(product.price),
       images: product.detail?.detail_images || [],
       team: product.team,
-      options: product.detail?.options || [],
+      option: product.detail?.options || [],
       category: product.category,
       thumbnail: product.thumbnail,
+      quantity,
     });
-    addToCart(product);
 
     console.log("장바구니:", product); // 주의: 여기선 바로 안 보일 수 있음
     setTimeout(() => {
@@ -1604,10 +1604,10 @@ const ProductDetail = () => {
   }, [id]);
 
   // 가격 문자열을 숫자로 변환하는 헬퍼 함수
-  const parsePrice = (priceString) => {
-    if (!priceString) return 0;
-    return parseInt(priceString.replace(/[,원]/g, ""));
-  };
+  const parsePrice = (price) =>
+    typeof price === "number"
+      ? price
+      : parseInt(price.toString().replace(/[^\d]/g, ""), 10);
 
   // 토글 시 높이 계산을 위한 useEffect 추가
   useEffect(() => {
