@@ -9,12 +9,9 @@ import { mockItems } from "../components/Cart/MockupData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const Container = styled.div.attrs({
-  "data-lenis-prevent": true,
-})`
+const Container = styled.div`
   width: 100%;
   padding: 0 5%;
-  font-family: "Pretendard";
   display: flex;
   gap: 5%;
   background: var(--light);
@@ -81,9 +78,12 @@ const Items = styled.div`
   width: calc(100% + 5px);
   display: flex;
   flex-direction: column;
-  height: 520px;
+  max-height: 520px;
   gap: 20px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: auto;
+  scroll-behavior: auto;
 
   scrollbar-gutter: stable;
   &::-webkit-scrollbar {
@@ -103,13 +103,13 @@ const Items = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    height: 400px;
+    max-height: 400px;
     gap: 15px;
   }
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     gap: 20px;
     overflow-y: visible;
   }
@@ -127,6 +127,7 @@ const EmptyMessage = styled.p`
 `;
 
 const DeleteButton = styled.div`
+  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -266,7 +267,7 @@ const Cart = () => {
             allChecked={checkedItems.length === mockItems.length}
             onToggleAll={handleToggleAll}
           />
-          <Items>
+          <Items data-lenis-prevent>
             {cartItems.length > 0 ? (
               cartItems.map((item) => (
                 <ProductItem

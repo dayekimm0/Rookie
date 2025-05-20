@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
-import { getDoc, doc } from "firebase/firestore";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import RankingTable from "../components/Home/RankingTable";
 import MainSlide from "../components/Home/MainSlide";
@@ -14,7 +13,7 @@ import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
 import HomeProducts from "../components/Home/HomeProducts";
 import authStore from "../stores/AuthStore";
-import { Link } from "react-router-dom";
+import useAllProductsQuery from "../hook/useAllProductsQuery";
 
 const Container = styled.div`
   width: 100%;
@@ -171,11 +170,41 @@ const SvgSpinner = styled.svg`
 `;
 
 const Home = () => {
-  const { isLoading, userProfile } = authStore();
-  // console.log(userProfile);
+  const { isLoading: isUserLoading, userProfile } = authStore();
+  const { data: allProducts = [], isLoading: isProductLoading } =
+    useAllProductsQuery();
+
+  const { kiaTinypingCollabo, newest, popular } = useMemo(() => {
+    const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
+
+    // const collabo = shuffled.filter((item) => item.collaboration).slice(0, 4);
+
+    const kiaTinypingCollabo = allProducts
+      .filter(
+        (item) =>
+          item.team === "기아타이거즈" &&
+          item.collaboration &&
+          item.collaboration.includes("티니핑")
+      )
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 4);
+
+    const usedIds = new Set(kiaTinypingCollabo.map((p) => p.id));
+
+    const newest = shuffled.filter((item) => !usedIds.has(item.id)).slice(0, 4);
+
+    newest.forEach((p) => usedIds.add(p.id));
+
+    const popular = shuffled
+      .filter((item) => !usedIds.has(item.id))
+      .slice(0, 8);
+
+    return { kiaTinypingCollabo, newest, popular };
+  }, [allProducts]);
+
   return (
     <Container>
-      {isLoading ? (
+      {isUserLoading ? (
         <SlideLoaderWrapper>
           <SvgSpinner viewBox="0 0 50 50">
             <circle
@@ -208,15 +237,19 @@ const Home = () => {
       <div className="home_products">
         <ProductCardWrap>
           <h3>Season 콜라보</h3>
-          <HomeProducts />
+          {isProductLoading ? (
+            "Loading"
+          ) : (
+            <HomeProducts products={kiaTinypingCollabo} />
+          )}
         </ProductCardWrap>
         <ProductCardWrap>
           <h3>New 신상품</h3>
-          <HomeProducts />
+          {isProductLoading ? "Loading" : <HomeProducts products={newest} />}
         </ProductCardWrap>
         <ProductCardWrap>
           <h3>Best 인기상품</h3>
-          <HomeProducts />
+          {isProductLoading ? "Loading" : <HomeProducts products={popular} />}
         </ProductCardWrap>
       </div>
     </Container>

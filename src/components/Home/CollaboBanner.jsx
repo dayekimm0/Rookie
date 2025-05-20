@@ -112,6 +112,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     transition: box-shadow 0.2s;
+    cursor: pointer;
     img {
       display: inline-block;
       opacity: 0.5;
