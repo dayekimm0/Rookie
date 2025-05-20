@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import logo from "../../images/logos/Rookie_logo.svg";
 
-const ModalOverlay = styled.div`
+const ModalOverlay = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isOpen'
+})`
   position: fixed;
   top: 0;
   left: 0;
@@ -25,24 +27,16 @@ const ModalContent = styled.div`
   position: relative;
   overflow-y: auto;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  @media screen and (max-width: 1024px) {
+    width: 480px;
+    padding: 50px;
+  }
   @media screen and (max-width: 600px) {
-    padding: 0 15px;
+    width: 100%;
+    padding: 50px 30px 30px;
+    margin: 0 15px;
   }
 `;
-
-// const CloseButton = styled.button`
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-//   background: none;
-//   border: none;
-//   font-size: 3rem;
-//   cursor: pointer;
-//   color: var(--dark);
-//   @media screen and (max-width: 500px) {
-//     font-size: 1.4rem;
-//   }
-// `;
 
 const LogoWrapper = styled.div`
   width: 100%;
@@ -51,6 +45,9 @@ const LogoWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 40px;
+  @media screen and (max-width: 600px) {
+    margin-bottom: 25px;
+  }
 `;
 
 const Logo = styled.div`
@@ -64,12 +61,20 @@ const LogoImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  scale: 1;
+  @media screen and (max-width: 1024px) {
+    scale: 0.9;
+  }
+  @media screen and (max-width: 600px) {
+    scale: 0.8;
+  }
 `;
 
 const ModalTitle = styled.h2`
   font-size: 2rem;
   font-weight: 800;
   @media screen and (max-width: 600px) {
+    font-size: 1.6rem;
   }
 `;
 
@@ -79,13 +84,20 @@ const ModalTWrapper = styled.div`
   gap: 5px;
   margin-bottom: 40px;
   overflow-wrap: break-word;
+  @media screen and (max-width: 600px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const ModalTextT = styled.p`
   font-size: 1.8rem;
   line-height: 1.3;
   font-weight: bold;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+  }
   @media screen and (max-width: 600px) {
+    font-size: 1.4rem;
   }
 `;
 
@@ -93,7 +105,11 @@ const ModalText = styled.p`
   font-size: 1.4rem;
   line-height: 1.5;
   font-weight: 400;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
   @media screen and (max-width: 600px) {
+    font-size: 1rem;
   }
 `;
 
@@ -109,6 +125,14 @@ const ModalButton = styled.button`
   align-items: center;
   font-size: 2rem;
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+    height: 50px;
+    font-size: 1.6rem;
+  }
+  @media screen and (max-width: 600px) {
+    height: 40px;
+    font-size: 1.4rem;
+  }
 `;
 
 const LogonModal = ({ isOpen, closeModal, contentType }) => {

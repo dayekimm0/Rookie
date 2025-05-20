@@ -304,8 +304,10 @@ const UserTeam = styled.div`
   border-radius: 6px;
   img {
     width: 100%;
+    scale: ${({ $isTeam6 }) => ($isTeam6 ? "80%" : "100%")};
     height: 100%;
     object-fit: cover;
+    overflow: visible;
   }
 `;
 
@@ -653,23 +655,8 @@ const Header = ({ mode }) => {
   // const [isStoreOpen, setIsStoreOpen] = useState(false);
 
   const TeamEmblem = ({ emblemId }) => {
-    const navigate = useNavigate();
     const emblem = getEmblem(emblemId);
-
-    const handleClick = () => {
-      const teamCode = getTeamJsonCode(emblemId);
-      if (teamCode) {
-        navigate(`/store/${teamCode}`);
-      }
-    };
-    return (
-      <img
-        src={emblem}
-        alt={`team-emblem-${emblemId}`}
-        onClick={handleClick}
-        style={{ cursor: "pointer" }}
-      />
-    );
+    return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
   const { resetForm } = logonStore();
@@ -841,6 +828,7 @@ const Header = ({ mode }) => {
               <User $isopen={isopen}>
                 <UserInfo>
                   <UserTeam
+                    $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
                     style={{
                       backgroundColor: getTeamColor(
                         teamToEmblemId[userProfile.favoriteTeam] || "#fff"

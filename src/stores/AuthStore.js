@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore"; // getDoc 임포트
+import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 const authStore = create(
@@ -10,43 +10,78 @@ const authStore = create(
       user: null,
       userProfile: null,
       isLoading: true,
-      setUser: (user, profile) => {
-        console.log("🟢 setUser 호출, user:", user, "profile:", profile);
-        set({ user, userProfile: profile, isLoading: false });
+      gamePlayed: false,
+      setUser: (user, profile, gamePlayed) => {
+        console.log(
+          "🟢 setUser 호출, user:",
+          user,
+          "profile:",
+          profile,
+          "gamePlayed:",
+          gamePlayed
+        );
+        set({ user, userProfile: profile, isLoading: false, gamePlayed });
       },
+      setGamePlayed: (played) => set({ gamePlayed: played }),
       clearUser: () => {
         console.log("🟢 clearUser 호출");
-        set({ user: null, userProfile: null, isLoading: false });
+        set({
+          user: null,
+          userProfile: null,
+          isLoading: false,
+        });
       },
     }),
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ user: state.user }),
+      partialize: (state) => ({
+        user: state.user,
+        gamePlayed: state.gamePlayed,
+      }),
     }
   )
 );
 
 onAuthStateChanged(auth, async (user) => {
-  console.log("🔵 onAuthStateChanged 호출, user:", user);
+  // onAuthStateChanged 호출
   if (user) {
     const userData = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
     };
+
     try {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
       const profile = docSnap.exists() ? docSnap.data() : null;
       console.log("🟢 getDoc 호출, profile:", profile);
-      authStore.getState().setUser(userData, profile);
+
+      // gamePlayed 정보 가져오기
+      const gameUserRef = doc(db, "gameUser", user.uid);
+      const gameSnap = await getDoc(gameUserRef);
+      const gamePlayed = gameSnap.exists() ? gameSnap.data().gamePlayed : false;
+
+      const currentState = authStore.getState();
+
+      // 상태가 모두 변경되었을 때만 setUser 호출
+      if (
+        !currentState.user ||
+        currentState.user.uid !== userData.uid ||
+        currentState.userProfile !== profile ||
+        currentState.gamePlayed !== gamePlayed
+      ) {
+        console.log("🟢 상태가 변경되어 setUser 호출");
+        authStore.getState().setUser(userData, profile, gamePlayed);
+      } else {
+        console.log("🔴 상태 변경 없음");
+      }
     } catch (error) {
       console.error("🔴 getDoc 오류:", error.message, error.code);
-      authStore.getState().setUser(userData, null);
+      authStore.getState().setUser(userData, null, false);
     }
   } else {
-    console.log("🔵 비로그인 상태, clearUser 호출");
     authStore.getState().clearUser();
   }
 });

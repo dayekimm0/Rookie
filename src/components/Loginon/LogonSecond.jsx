@@ -11,6 +11,7 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
+import { getScrollbarWidth } from "../../util";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import DaumPostcode from "react-daum-postcode";
@@ -355,24 +356,25 @@ const LogonSecond = () => {
         displayName: formData.username,
       });
 
-      console.log("Firestore에 저장 시도:", {
-        uid: user.uid,
-        username: formData.username,
-        favoriteTeam: formData.favoriteTeam,
-        birthdate: `${
-          formData.birthdate.year
-        }-${formData.birthdate.month.padStart(
-          2,
-          "0"
-        )}-${formData.birthdate.date.padStart(2, "0")}`,
-        phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
-        nickname: formData.nickname,
-        email: formData.email,
-        postalCode: formData.postalCode, // 우편번호 저장
-        address: formData.address, // 주소 저장
-        detailedAddress: formData.detailedAddress, // 상세주소 저장
-        createdAt: new Date().toISOString().split("T")[0],
-      });
+      //  user콘솔
+      // console.log("Firestore에 저장 시도:", {
+      //   uid: user.uid,
+      //   username: formData.username,
+      //   favoriteTeam: formData.favoriteTeam,
+      //   birthdate: `${
+      //     formData.birthdate.year
+      //   }-${formData.birthdate.month.padStart(
+      //     2,
+      //     "0"
+      //   )}-${formData.birthdate.date.padStart(2, "0")}`,
+      //   phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
+      //   nickname: formData.nickname,
+      //   email: formData.email,
+      //   postalCode: formData.postalCode, // 우편번호 저장
+      //   address: formData.address, // 주소 저장
+      //   detailedAddress: formData.detailedAddress, // 상세주소 저장
+      //   createdAt: new Date().toISOString().split("T")[0],
+      // });
 
       // Firestore에 사용자 정보 저장
       await setDoc(doc(db, "users", user.uid), {
@@ -468,6 +470,18 @@ const LogonSecond = () => {
     setIsFormValid(isValid);
   }, [formData]);
 
+  //스크롤 막기
+  useEffect(() => {
+    if (modalState.required || modalState.privacy || isAddressModalOpen) {
+      const scrollbarWidth = getScrollbarWidth();
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+  }, [modalState, isAddressModalOpen]);
+
   return (
     <Form onSubmit={handleSubmit}>
       <SubTWrapper>
@@ -550,7 +564,12 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>필수 및 선택 사항에 모두 동의합니다.</CheckText>
+            <CheckText
+              checked={formData.agreements.all}
+              onClick={() => handleCheck("all")}
+            >
+              필수 및 선택 사항에 모두 동의합니다.
+            </CheckText>
           </Checkoption>
         </CheckWrapper>
         <Line />
@@ -562,7 +581,10 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.required}
+              onClick={() => handleCheck("required")}
+            >
               [필수] 이용약관에 동의합니다. <span>*</span>
             </CheckText>
           </Checkoption>
@@ -580,7 +602,10 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.privacy}
+              onClick={() => handleCheck("privacy")}
+            >
               [필수] 개인정보 수집 및 이용에 동의 합니다. <span>*</span>
             </CheckText>
           </Checkoption>
@@ -598,7 +623,10 @@ const LogonSecond = () => {
             >
               <img src={logon_check} alt="logon_check" />
             </CheckCircle>
-            <CheckText>
+            <CheckText
+              checked={formData.agreements.promotion}
+              onClick={() => handleCheck("promotion")}
+            >
               Rookie가 제공하는 이벤트 등 프로모션 안내 메일을 수신에
               동의합니다.
             </CheckText>
