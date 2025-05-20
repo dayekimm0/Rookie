@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import useProductStore from "../stores/ProductStore";
-import { filterAndSortProducts } from "../utils/filterSort";
+import { filterAndSortProducts } from "../productlist_utils/filterSort";
+import bannerLinks from "../data/bannerLinks";
 import ProductBanner from "../components/ProductList/ProductBanner";
 import ProductCategory from "../components/ProductList/ProductCategory";
 import PaginateProduct from "../components/ProductList/PaginateProduct";
@@ -56,6 +57,21 @@ const ProductList = () => {
     "kw_hrs",
     "ssg_lds",
   ];
+
+  const teamCodeToBannerKey = {
+    ssg_lds: "ssg",
+    ds_bas: "doosan",
+    hw_egs: "hanwha",
+    kiwoom: "kiwoom",
+    lg_twins: "lg",
+    lt_gnt: "lotte",
+    nc_dns: "nc",
+    ss_lns: "samsung",
+    kia_tgs: "kia",
+    kt_wiz: "kt",
+  };
+
+  const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
 
   // React Query로 직접 fetch
   const {
@@ -126,7 +142,7 @@ const ProductList = () => {
 
   return (
     <Container>
-      <ProductBanner />
+      <ProductBanner team={bannerKey || "kbo"} />
       <ProductCategory brands={brands} />
       <PaginateProduct items={filteredAndSortedProducts} itemsPerPage={16} />
     </Container>
