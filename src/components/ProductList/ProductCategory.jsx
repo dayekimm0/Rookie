@@ -65,11 +65,14 @@ const CollaboCategory = styled.div`
 `;
 
 const CollaboBrand = styled.div`
+  width: 100%;
+  height: 100%;
   padding: 10px 18px;
   cursor: pointer;
   z-index: 2;
 
   span {
+    width: 100%;
     color: var(--gray8);
     font-weight: 400;
     transition: all 0.3s ease;
@@ -214,7 +217,11 @@ const ProductCategory = ({ products = [] }) => {
   const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
 
   const collaborationBrands = [
-    ...new Set(products.map((p) => p.collaboration).filter(Boolean)),
+    ...new Set(
+      products
+        .map((p) => p.collaboration)
+        .filter((c) => typeof c === "string" && c.trim() !== "")
+    ),
   ];
 
   const subBrands =
@@ -235,6 +242,7 @@ const ProductCategory = ({ products = [] }) => {
   // ▼ 브랜드 클릭 시 드롭다운 닫고 브랜드 선택
   const handleBrandClick = (brand) => {
     setSelectedBrand(brand);
+    setSelectedCategory("COLLABORATION");
     setDropdownOpen(false);
   };
 
@@ -289,7 +297,7 @@ const ProductCategory = ({ products = [] }) => {
                   <CollaboBrand
                     key={brand}
                     ref={(el) => (brandRefs.current[brand] = el)}
-                    onClick={() => setSelectedBrand(brand)}
+                    onClick={() => handleBrandClick(brand)}
                   >
                     <span className={selectedBrand === brand ? "active" : ""}>
                       {brand}
