@@ -11,6 +11,7 @@ const CardContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px;
+  cursor: pointer;
 
   @media screen and (max-width: 1440px) {
     width: 270px;
@@ -147,8 +148,8 @@ const ProductCard = ({ data }) => {
   };
 
   return (
-    <CardContainer>
-      <ProductImg onClick={handleClick}>
+    <CardContainer onClick={handleClick}>
+      <ProductImg>
         <img src={thumbnail} alt={name} />
       </ProductImg>
       <ProductInfo>
