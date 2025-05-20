@@ -9,29 +9,30 @@ import mascort_nc from "./images/mascort/mascort_ncD.svg";
 import mascort_samsung from "./images/mascort/mascort_samsungL.svg";
 import mascort_ssg from "./images/mascort/mascort_ssgL.svg";
 
-export const getMascort = (mascortName) => {
-  const targetMascort = String(mascortName);
-  switch (targetMascort) {
+export const getMascort = (mascortId) => {
+  const target = String(mascortId);
+
+  switch (target) {
     case "0":
       return mascort_doosan;
     case "1":
-      return mascort_hanwha;
-    case "2":
       return mascort_kia;
+    case "2":
+      return mascort_samsung;
     case "3":
-      return mascort_kiwoom;
+      return mascort_lg;
     case "4":
       return mascort_kt;
     case "5":
-      return mascort_lg;
+      return mascort_ssg;
     case "6":
       return mascort_lotte;
     case "7":
-      return mascort_nc;
+      return mascort_hanwha;
     case "8":
-      return mascort_samsung;
+      return mascort_nc;
     case "9":
-      return mascort_ssg;
+      return mascort_kiwoom;
     default:
       return null;
   }
