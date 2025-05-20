@@ -207,7 +207,7 @@ const InfoDetail = styled.h4`
     }
   }
   @media screen and (max-width: 600px) {
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
     b {
       font-size: 1.4rem;
     }
@@ -299,6 +299,49 @@ const InquiryLink = styled.a`
   }
 `;
 
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
+
+  .path {
+    stroke: var(--main);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+`;
+
 const teamToEmblemId = {
   "기아 타이거즈": "1",
   "삼성 라이온즈": "2",
@@ -314,38 +357,64 @@ const teamToEmblemId = {
 
 const Mypage = () => {
   const { userProfile, isLoading } = authStore();
-  const [teamModal, setTeamModal] = useState(false)
+  const [teamModal, setTeamModal] = useState(false);
 
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
-const openTeamModal = () => {
+  const openTeamModal = () => {
     setTeamModal(true);
   };
 
   const closeTeamModal = () => {
     setTeamModal(false);
-  };  
+  };
 
-   //mobile 스토어 스크롤 막기
-    useEffect(() => {
-      if (teamModal) {
-        const scrollbarWidth = getScrollbarWidth();
-        document.body.style.overflow = "hidden";
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-      } else {
-        document.body.style.overflow = "";
-        document.body.style.paddingRight = "";
-      }
-    }, [teamModal]);
-  
+  //mobile 스토어 스크롤 막기
+  useEffect(() => {
+    const preventScroll = (e) => {
+      e.preventDefault();
+    };
+
+    if (teamModal) {
+      const scrollbarWidth = getScrollbarWidth();
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      document.addEventListener("wheel", preventScroll, { passive: false });
+      document.addEventListener("touchmove", preventScroll, { passive: false });
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+      document.removeEventListener("wheel", preventScroll);
+      document.removeEventListener("touchmove", preventScroll);
+    }
+
+    // cleanup
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+      document.removeEventListener("wheel", preventScroll);
+      document.removeEventListener("touchmove", preventScroll);
+    };
+  }, [teamModal]);
 
   return (
     <Container>
       {isLoading ? (
-        <LoadingSpinner>Loading...</LoadingSpinner>
+        <LoadingSpinner>
+          <SvgSpinner viewBox="0 0 50 50">
+            <circle
+              className="path"
+              cx="25"
+              cy="25"
+              r="20"
+              fill="none"
+              strokeWidth="5"
+            />
+          </SvgSpinner>
+        </LoadingSpinner>
       ) : (
         <Inner>
           <UpBox>
@@ -431,18 +500,18 @@ const openTeamModal = () => {
             <InfoElement>
               <InfoDetail>
                 <b>주소</b>
-                {userProfile.address?  <>
-                  <br />
-                  {userProfile.address}
-                  <br />
-                  <InfoDetailDetail>
-                    {userProfile.detailedAddress}
-                  </InfoDetailDetail>
-                </> :    
-                <InfoDetailDetail>
-                  주소를 등록해 주세요.
-                  </InfoDetailDetail>
-                  }
+                {userProfile.address ? (
+                  <>
+                    <br />
+                    {userProfile.address}
+                    <br />
+                    <InfoDetailDetail>
+                      {userProfile.detailedAddress}
+                    </InfoDetailDetail>
+                  </>
+                ) : (
+                  <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
+                )}
               </InfoDetail>
               <InfoButton>변경</InfoButton>
             </InfoElement>
@@ -481,10 +550,7 @@ const openTeamModal = () => {
           )}
         </Inner>
       )}
-        <MypageModal
-        isOpen={teamModal}
-        closeTeamModal={closeTeamModal}
-      />
+      <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
     </Container>
   );
 };
