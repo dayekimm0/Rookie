@@ -207,7 +207,7 @@ const InfoDetail = styled.h4`
     }
   }
   @media screen and (max-width: 600px) {
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
     b {
       font-size: 1.4rem;
     }
@@ -314,33 +314,32 @@ const teamToEmblemId = {
 
 const Mypage = () => {
   const { userProfile, isLoading } = authStore();
-  const [teamModal, setTeamModal] = useState(false)
+  const [teamModal, setTeamModal] = useState(false);
 
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
-const openTeamModal = () => {
+  const openTeamModal = () => {
     setTeamModal(true);
   };
 
   const closeTeamModal = () => {
     setTeamModal(false);
-  };  
+  };
 
-   //mobile 스토어 스크롤 막기
-    useEffect(() => {
-      if (teamModal) {
-        const scrollbarWidth = getScrollbarWidth();
-        document.body.style.overflow = "hidden";
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-      } else {
-        document.body.style.overflow = "";
-        document.body.style.paddingRight = "";
-      }
-    }, [teamModal]);
-  
+  //mobile 스토어 스크롤 막기
+  useEffect(() => {
+    if (teamModal) {
+      const scrollbarWidth = getScrollbarWidth();
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+  }, [teamModal]);
 
   return (
     <Container>
@@ -431,18 +430,18 @@ const openTeamModal = () => {
             <InfoElement>
               <InfoDetail>
                 <b>주소</b>
-                {userProfile.address?  <>
-                  <br />
-                  {userProfile.address}
-                  <br />
-                  <InfoDetailDetail>
-                    {userProfile.detailedAddress}
-                  </InfoDetailDetail>
-                </> :    
-                <InfoDetailDetail>
-                  주소를 등록해 주세요.
-                  </InfoDetailDetail>
-                  }
+                {userProfile.address ? (
+                  <>
+                    <br />
+                    {userProfile.address}
+                    <br />
+                    <InfoDetailDetail>
+                      {userProfile.detailedAddress}
+                    </InfoDetailDetail>
+                  </>
+                ) : (
+                  <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
+                )}
               </InfoDetail>
               <InfoButton>변경</InfoButton>
             </InfoElement>
@@ -481,10 +480,9 @@ const openTeamModal = () => {
           )}
         </Inner>
       )}
-        <MypageModal
-        isOpen={teamModal}
-        closeTeamModal={closeTeamModal}
-      />
+      {teamModal && (
+        <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
+      )}
     </Container>
   );
 };

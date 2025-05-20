@@ -5,6 +5,7 @@ import logon_check from "../../images/icons/logon_check.svg";
 import { auth, db } from "../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import authStore from "../../stores/AuthStore";
+import useBodyScrollLock from "../../hook/useBodyScrollLock";
 
 const ModalOverlay = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== "isOpen",
@@ -180,6 +181,7 @@ const ModalButton = styled.button`
 `;
 
 const MypageModal = ({ isOpen, closeTeamModal }) => {
+  useBodyScrollLock(isOpen);
   const { userProfile, setUser } = authStore();
   const [selectedTeam, setSelectedTeam] = useState("");
   const [loading, setLoading] = useState(false);
