@@ -53,16 +53,20 @@ const GlobalStyles = createGlobalStyle`
     font-size: 62.5%;
   }
 
+  html.modal-open {
+  overflow: hidden !important;
+  height: 100%;
+  }
+
   body {
     font-family: "Figtree", "Pretendard", sans-serif;
     font-size: 1.6rem;
   }
 
-
   #root {
     height: 100%;
   }
-  
+
   .inner {
     margin: 0 5%;
 
@@ -73,12 +77,13 @@ const GlobalStyles = createGlobalStyle`
       margin: 0 15px;
     }
   }
+
   .bJeycj{
     border: none !important;
   }
-.iqcOxY:not(:last-of-type) {
-  border-bottom: none;
-}
+  .iqcOxY:not(:last-of-type) {
+    border-bottom: none;
+  }
 
 `;
 

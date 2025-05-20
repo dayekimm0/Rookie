@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
+import RedirectToStore from "./components/RedirectToStore";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <RedirectToStore />,
+      },
+      {
+        // index: true,
+        path: "play",
         element: <Home />,
       },
       {
