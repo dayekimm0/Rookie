@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getTeamJsonCode } from "../util";
+import { getTeamJsonCode, getTeamNameKor } from "../util";
 
 const CardContainer = styled.div`
   width: 290px;
@@ -153,7 +153,7 @@ const ProductCard = ({ data }) => {
       </ProductImg>
       <ProductInfo>
         <div className="brandGo">
-          <div className="brand">{team}</div>
+          <div className="brand">{getTeamNameKor(team)}</div>
           <svg viewBox="0 0 8 15" fill="none">
             <path
               d="M1.48926 1.98944L6.99982 7.5L1.48926 13.0106"

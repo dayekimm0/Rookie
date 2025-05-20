@@ -16,9 +16,9 @@ const Coupon = styled.img`
     width: ${(props) => props.width || "209px"};
     height: ${(props) => props.height || "96px"};
   }
-  @media screen and (max-width: 375px) {
-    width: ${(props) => props.width || "104px"};
-    height: ${(props) => props.height || "48px"};
+  @media screen and (max-width: 376px) {
+    width: ${(props) => props.width || "170px"};
+    height: ${(props) => props.height || "80px"};
   }
 `;
 
