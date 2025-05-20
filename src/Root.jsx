@@ -10,15 +10,20 @@ import useHeaderStore from "./stores/headerStore";
 
 const ContentWrapper = styled.div`
   position: relative;
-  padding-top: 177px;
+  /* padding-top: 177px; */
+  padding-top: ${({ $folded }) => ($folded ? "calc(177px - 30px)" : "177px")};
   transition: padding 0.2s;
   background: ${({ $mode }) => ($mode === "light" ? "#fff" : "#222")};
 
   @media screen and (max-width: 1024px) {
-    padding-top: 138.67px;
+    /* padding-top: 138.67px; */
+    padding-top: ${({ $folded }) =>
+      $folded ? "calc(138.67px - 10px)" : "138.67px"};
   }
   @media screen and (max-width: 500px) {
-    padding-top: 120.78px;
+    /* padding-top: 120.78px; */
+    padding-top: ${({ $folded }) =>
+      $folded ? "calc(120.78px - 10px)" : "120.78px"};
   }
 `;
 
@@ -81,7 +86,7 @@ function Root() {
       <ScrollToTop />
       {isVisible && (
         <>
-          <Header mode={mode} />
+          <Header mode={mode} $folded={isFolded} />
           <ContentWrapper
             $mode={mode}
             $headerHeight={headerHeight}

@@ -624,8 +624,8 @@ const Header = ({ mode }) => {
   const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
   const itemRefs = useRef([]);
   const menus = [
-    { label: "HOME", path: "/" },
-    { label: "PLAY", path: "/play", disabled: true },
+    { label: "PLAY", path: "/play" },
+    // { label: "PLAY", path: "/play", disabled: true },
     { label: "STORE", path: "/store" },
     { label: "EVENT", path: "/event" },
   ];
@@ -651,8 +651,6 @@ const Header = ({ mode }) => {
   const toggleUserBox = () => {
     setIsOpen((prev) => !prev);
   };
-
-  // const [isStoreOpen, setIsStoreOpen] = useState(false);
 
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
@@ -711,6 +709,7 @@ const Header = ({ mode }) => {
     setMobileStoreOpen(false);
   }, [location.pathname]);
   const teams = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   return (
     <Container ref={headerRef}>
       <TopSchedule />
@@ -720,10 +719,10 @@ const Header = ({ mode }) => {
         </Logo>
         <Items>
           <Item ref={(el) => (itemRefs.current[0] = el)}>
-            <Link to="/">HOME</Link>
+            <Link to="/play">PLAY</Link>
           </Item>
 
-          <Item ref={(el) => (itemRefs.current[1] = el)}>
+          {/* <Item ref={(el) => (itemRefs.current[1] = el)}>
             <Link
               to="/play"
               onClick={(e) => {
@@ -733,9 +732,9 @@ const Header = ({ mode }) => {
             >
               PLAY
             </Link>
-          </Item>
+          </Item> */}
 
-          <Item ref={(el) => (itemRefs.current[2] = el)}>
+          <Item ref={(el) => (itemRefs.current[1] = el)}>
             <StoreWrapper>
               <Link to="/store">STORE</Link>
               <StoreContainer className="store-dropdown">
@@ -751,47 +750,12 @@ const Header = ({ mode }) => {
                       </Link>
                     );
                   })}
-                  {/* <Link to={"/store"}>
-                    <TeamEmblem emblemId="0" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="1" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="2" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="3" />
-                  </Link>
-                  <Link to={"/store"}>
-                    {" "}
-                    <TeamEmblem emblemId="4" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="5" />
-                  </Link>
-                  <Link to={"/store"}>
-                    {" "}
-                    <TeamEmblem emblemId="6" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="7" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="8" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="9" />
-                  </Link>
-                  <Link to={"/store"}>
-                    <TeamEmblem emblemId="10" />
-                  </Link> */}
                 </Stores>
               </StoreContainer>
             </StoreWrapper>
           </Item>
 
-          <Item ref={(el) => (itemRefs.current[3] = el)}>
+          <Item ref={(el) => (itemRefs.current[2] = el)}>
             <Link to="/event">EVENT</Link>
           </Item>
           <Line
@@ -943,15 +907,15 @@ const Header = ({ mode }) => {
             </div>
             <ul className="mb_menus">
               <li>
-                <Link to={"/"} onClick={() => setMobileMenuOpen(false)}>
-                  HOME
-                </Link>
-              </li>
-              <li>
-                <Link to={"#"} disabled>
+                <Link to={"/play"} onClick={() => setMobileMenuOpen(false)}>
                   PLAY
                 </Link>
               </li>
+              {/* <li>
+                <Link to={"#"} disabled>
+                  PLAY
+                </Link>
+              </li> */}
               <li
                 onClick={handleClickMobileStore}
                 className={mobileStoreOpen ? "active" : null}
@@ -963,7 +927,7 @@ const Header = ({ mode }) => {
                 <ul className="store_depth2">
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(0)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       ROOKie
@@ -971,7 +935,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(0)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       KBO
@@ -979,7 +943,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(1)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       기아 타이거즈
@@ -987,7 +951,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(2)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       삼성 라이온즈
@@ -995,7 +959,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(3)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       LG 트윈스
@@ -1003,7 +967,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(4)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       두산 베어스
@@ -1011,7 +975,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(5)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       KT 위즈
@@ -1019,7 +983,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      tto={`/store/${getTeamJsonCode(6)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       SSG 랜더스
@@ -1027,7 +991,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(7)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       롯데 자이언츠
@@ -1035,7 +999,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(8)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       한화 이글스
@@ -1043,7 +1007,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(9)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       NC 다이노스
@@ -1051,7 +1015,7 @@ const Header = ({ mode }) => {
                   </li>
                   <li>
                     <Link
-                      to={"/store"}
+                      to={`/store/${getTeamJsonCode(10)}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       키움 히어로즈

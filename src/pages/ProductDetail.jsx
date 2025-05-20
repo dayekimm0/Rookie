@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-import Header from "../components/Header.jsx";
-import Footer from "../components/Footer.jsx";
 import ImageSlider from "../components/ProductDetail/ImageSlider.jsx";
 import ReviewModal from "../components/ProductDetail/ReviewModal.jsx";
 import InquiryModal from "../components/ProductDetail/InquiryModal.jsx";
@@ -1746,13 +1744,11 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <Container>
-        <Header />
         <ContentWrapper>
           <div style={{ textAlign: "center", padding: "100px 0" }}>
             로딩 중...
           </div>
         </ContentWrapper>
-        <Footer />
       </Container>
     );
   }
@@ -1779,18 +1775,15 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <Container>
-        <Header />
         <ContentWrapper>
           <ErrorMessage>제품 정보를 찾을 수 없습니다.</ErrorMessage>
         </ContentWrapper>
-        <Footer />
       </Container>
     );
   }
   console.log("product", product);
   return (
     <Container>
-      <Header />
       <ContentWrapper>
         <ProductInfoSection ref={productInfoRef}>
           {/* 제품 이미지 슬라이더 */}
