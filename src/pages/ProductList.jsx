@@ -35,8 +35,14 @@ const Container = styled.div`
 
 const ProductList = () => {
   const { teamCode } = useParams();
-  const { selectCollabo, selectedBrand, sort, setSelectedBrand } =
-    useProductStore();
+  const {
+    selectCollabo,
+    selectedBrand,
+    sort,
+    setSelectedBrand,
+    selectedCategory,
+    setSelectedCategory,
+  } = useProductStore();
 
   const teamCodes = [
     "nc_dns",
@@ -105,11 +111,24 @@ const ProductList = () => {
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러 :{error.message}</div>;
 
+  const filteredAndSortedProducts = filterAndSortProducts(
+    allProducts.filter((p) => {
+      if (selectCollabo === "COLLABORATION") {
+        return selectedBrand ? p.brand === selectedBrand : true;
+      }
+      if (selectedCategory !== "ALL") {
+        return p.category === selectedCategory;
+      }
+      return true;
+    }),
+    { selectCollabo, selectedBrand, sort }
+  );
+
   return (
     <Container>
       <ProductBanner />
       <ProductCategory brands={brands} />
-      <PaginateProduct items={sortedProducts} itemsPerPage={16} />
+      <PaginateProduct items={filteredAndSortedProducts} itemsPerPage={16} />
     </Container>
   );
 };

@@ -17,6 +17,7 @@ const SortWrapper = styled.div`
   }
   @media screen and (max-width: 500px) {
     width: 100%;
+    margin: 0;
   }
 `;
 

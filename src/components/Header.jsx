@@ -1,11 +1,17 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getEmblem, getTeamColor, getScrollbarWidth } from "../util";
+import {
+  getEmblem,
+  getTeamJsonCode,
+  getTeamColor,
+  getScrollbarWidth,
+} from "../util";
 import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import styled from "styled-components";
+import rookieemblem from "../images/logos/emblem_rookie.png";
 import logo from "../images/logos/Rookie_logo.svg";
 import kbologo2 from "../images/emblem/emblem_kbo2.svg";
 import TopSchedule from "./TopSchedule";
@@ -704,7 +710,7 @@ const Header = ({ mode }) => {
     setMobileMenuOpen(false);
     setMobileStoreOpen(false);
   }, [location.pathname]);
-
+  const teams = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
     <Container ref={headerRef}>
       <TopSchedule />
@@ -735,12 +741,17 @@ const Header = ({ mode }) => {
               <StoreContainer className="store-dropdown">
                 <Stores>
                   <Link to={"/store"}>
-                    <RookieEmblem
-                      src="./src/images/logos/emblem_rookie.png"
-                      alt="rookieemblem"
-                    />
+                    <RookieEmblem src={rookieemblem} alt="rookieemblem" />
                   </Link>
-                  <Link to={"/store"}>
+                  {teams.map((id) => {
+                    const teamCode = getTeamJsonCode(id);
+                    return (
+                      <Link key={id} to={`/store/${teamCode}`}>
+                        <TeamEmblem emblemId={id} />
+                      </Link>
+                    );
+                  })}
+                  {/* <Link to={"/store"}>
                     <TeamEmblem emblemId="0" />
                   </Link>
                   <Link to={"/store"}>
@@ -774,7 +785,7 @@ const Header = ({ mode }) => {
                   </Link>
                   <Link to={"/store"}>
                     <TeamEmblem emblemId="10" />
-                  </Link>
+                  </Link> */}
                 </Stores>
               </StoreContainer>
             </StoreWrapper>
@@ -817,7 +828,7 @@ const Header = ({ mode }) => {
               <User $isopen={isopen}>
                 <UserInfo>
                   <UserTeam
-                  $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                    $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
                     style={{
                       backgroundColor: getTeamColor(
                         teamToEmblemId[userProfile.favoriteTeam] || "#fff"
