@@ -15,6 +15,7 @@ import { getScrollbarWidth } from "../../util";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import DaumPostcode from "react-daum-postcode";
+import useBodyScrollLock from "../../hook/useBodyScrollLock";
 
 // styled 부분
 const Form = styled.form`
@@ -471,16 +472,7 @@ const LogonSecond = () => {
   }, [formData]);
 
   //스크롤 막기
-  useEffect(() => {
-    if (modalState.required || modalState.privacy || isAddressModalOpen) {
-      const scrollbarWidth = getScrollbarWidth();
-      document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    }
-  }, [modalState, isAddressModalOpen]);
+  useBodyScrollLock(isAddressModalOpen);
 
   return (
     <Form onSubmit={handleSubmit}>
