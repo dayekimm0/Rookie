@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import ProductCard from "../ProductCard";
@@ -78,12 +78,35 @@ const StyledPaginate = styled(ReactPaginate)`
   }
 `;
 
-const PaginateProduct = ({ items, itemsPerPage }) => {
+const PaginateProduct = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(16);
 
+  // ✅ 반응형 itemsPerPage 계산
+  const calculateItemsPerPage = () => {
+    const width = window.innerWidth;
+
+    let columns = 4;
+    if (width <= 375) columns = 1;
+    else if (width <= 500) columns = 2;
+    else if (width <= 768) columns = 2;
+    else if (width <= 1024) columns = 3;
+    else if (width <= 1440) columns = 3;
+
+    // 화면 세로 방향 기준으로 2줄 고정 (원하면 가변 처리 가능)
+    const rows = 4;
+    setItemsPerPage(columns * rows);
+  };
+
+  useEffect(() => {
+    calculateItemsPerPage(); // 초기 계산
+    window.addEventListener("resize", calculateItemsPerPage);
+    return () => window.removeEventListener("resize", calculateItemsPerPage);
+  }, []);
+
+  // ✅ 페이지 계산
   const offset = currentPage * itemsPerPage;
   const currentItems = (items || []).slice(offset, offset + itemsPerPage);
-
   const pageCount = Math.ceil((items?.length || 0) / itemsPerPage);
 
   const handlePageClick = ({ selected }) => {
