@@ -622,11 +622,12 @@ const Header = ({ mode }) => {
 
   //메뉴 Line 스타일
   const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
+  const [lineVisible, setLineVisible] = useState(true);
   const itemRefs = useRef([]);
   const menus = [
+    { label: "STORE", path: "/store" },
     { label: "PLAY", path: "/play" },
     // { label: "PLAY", path: "/play", disabled: true },
-    { label: "STORE", path: "/store" },
     { label: "EVENT", path: "/event" },
   ];
 
@@ -637,14 +638,25 @@ const Header = ({ mode }) => {
   });
 
   useLayoutEffect(() => {
-    const activeEl = itemRefs.current[activeIndex];
-    if (activeEl) {
-      setLineStyle({
-        left: activeEl.offsetLeft,
-        width: activeEl.offsetWidth,
-      });
-    }
-  }, [location.pathname]);
+    const updateLineStyle = () => {
+      const activeEl = itemRefs.current[activeIndex];
+      if (activeEl) {
+        setLineStyle({
+          left: activeEl.offsetLeft,
+          width: activeEl.offsetWidth,
+        });
+        setLineVisible(true);
+      } else {
+        setLineVisible(false);
+        setLineStyle({ left: 0, width: 0 });
+      }
+    };
+
+    updateLineStyle();
+    window.addEventListener("resize", updateLineStyle);
+
+    return () => window.removeEventListener("resize", updateLineStyle);
+  }, [location.pathname, activeIndex]);
 
   // 토글 버튼을 누르면 유저 정보 오픈
   const [isopen, setIsOpen] = useState(false);
@@ -719,22 +731,6 @@ const Header = ({ mode }) => {
         </Logo>
         <Items>
           <Item ref={(el) => (itemRefs.current[0] = el)}>
-            <Link to="/play">PLAY</Link>
-          </Item>
-
-          {/* <Item ref={(el) => (itemRefs.current[1] = el)}>
-            <Link
-              to="/play"
-              onClick={(e) => {
-                e.preventDefault();
-                alert("준비 중입니다.");
-              }}
-            >
-              PLAY
-            </Link>
-          </Item> */}
-
-          <Item ref={(el) => (itemRefs.current[1] = el)}>
             <StoreWrapper>
               <Link to="/store">STORE</Link>
               <StoreContainer className="store-dropdown">
@@ -755,6 +751,10 @@ const Header = ({ mode }) => {
             </StoreWrapper>
           </Item>
 
+          <Item ref={(el) => (itemRefs.current[1] = el)}>
+            <Link to="/play">PLAY</Link>
+          </Item>
+
           <Item ref={(el) => (itemRefs.current[2] = el)}>
             <Link to="/event">EVENT</Link>
           </Item>
@@ -762,7 +762,12 @@ const Header = ({ mode }) => {
             as={motion.div}
             initial={false}
             animate={lineStyle}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={
+              lineVisible ? { duration: 0.3, ease: "easeOut" } : { duration: 0 }
+            }
+            style={{
+              display: lineVisible ? "block" : "none",
+            }}
           />
         </Items>
 
@@ -906,16 +911,6 @@ const Header = ({ mode }) => {
               </form>
             </div>
             <ul className="mb_menus">
-              <li>
-                <Link to={"/play"} onClick={() => setMobileMenuOpen(false)}>
-                  PLAY
-                </Link>
-              </li>
-              {/* <li>
-                <Link to={"#"} disabled>
-                  PLAY
-                </Link>
-              </li> */}
               <li
                 onClick={handleClickMobileStore}
                 className={mobileStoreOpen ? "active" : null}
@@ -1022,6 +1017,11 @@ const Header = ({ mode }) => {
                     </Link>
                   </li>
                 </ul>
+              </li>
+              <li>
+                <Link to={"/play"} onClick={() => setMobileMenuOpen(false)}>
+                  PLAY
+                </Link>
               </li>
               <li>
                 <Link to={"/event"} onClick={() => setMobileMenuOpen(false)}>
