@@ -4,6 +4,7 @@ import { motion, LayoutGroup } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import SortSelect from "./SortSelect";
+import useProductStore from "../../stores/ProductStore";
 
 const CategoryWrapper = styled.div`
   width: 100%;
@@ -119,6 +120,7 @@ const Sidebar = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 0;
     span:first-child {
       display: none;
     }
@@ -192,15 +194,17 @@ const Categories = [
   "COLLABORATION",
 ];
 
-const ProductCategory = ({
-  products = [],
-  selectCollabo,
-  setSelectCollabo,
-  selectedBrand,
-  setSelectedBrand,
-  sort,
-  setSort,
-}) => {
+const ProductCategory = ({ products = [] }) => {
+  const {
+    selectCollabo,
+    setSelectCollabo,
+    selectedBrand,
+    setSelectedBrand,
+    sort,
+    setSort,
+    setSelectedCategory,
+  } = useProductStore();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
   const [showCategories, setShowCategories] = useState(true);
@@ -210,16 +214,21 @@ const ProductCategory = ({
   const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
 
   const collaborationBrands = [
-    ...new Set(products?.map((p) => p.collaboration).filter(Boolean)),
+    ...new Set(products.map((p) => p.collaboration).filter(Boolean)),
   ];
 
-  // ▼ 카테고리 클릭 핸들러 수정: 콜라보 선택 시 드롭다운 토글, 아닐 때 닫기
+  const subBrands =
+    selectCollabo === "COLLABORATION" ? collaborationBrands : brands;
+
   const handleCategoryClick = (cat) => {
+    setSelectedCategory(cat);
     setSelectCollabo(cat);
+
     if (cat === "COLLABORATION") {
-      setDropdownOpen(!dropdownOpen); // 토글
+      setSelectedBrand(null); // 브랜드 초기화
+      setDropdownOpen((prev) => !prev);
     } else {
-      setDropdownOpen(false); // 다른 카테고리 선택 시 닫기
+      setDropdownOpen(false);
     }
   };
 
@@ -230,10 +239,14 @@ const ProductCategory = ({
   };
 
   useEffect(() => {
-    if (selectCollabo === "COLLABORATION") {
+    if (
+      selectCollabo === "COLLABORATION" &&
+      brands.length > 0 &&
+      selectedBrand !== brands[0]
+    ) {
       setSelectedBrand(brands[0]);
     }
-  }, [selectCollabo, brands, setSelectedBrand]);
+  }, [selectCollabo, brands, selectedBrand, setSelectedBrand]);
 
   useEffect(() => {
     const el = brandRefs.current[selectedBrand];
@@ -272,7 +285,7 @@ const ProductCategory = ({
                   animate={bgStyle}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 />
-                {brands.map((brand) => (
+                {subBrands.map((brand) => (
                   <CollaboBrand
                     key={brand}
                     ref={(el) => (brandRefs.current[brand] = el)}
@@ -315,7 +328,7 @@ const ProductCategory = ({
 
           {selectCollabo === "COLLABORATION" &&
             showCollaborationBrands &&
-            brands.map((brand) => (
+            subBrands.map((brand) => (
               <SidebarItem
                 key={brand}
                 active={selectedBrand === brand}
