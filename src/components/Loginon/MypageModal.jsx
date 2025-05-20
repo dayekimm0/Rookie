@@ -11,6 +11,7 @@ const ModalOverlay = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== "isOpen",
 })`
   position: fixed;
+  z-index: 1500;
   top: 0;
   left: 0;
   width: 100%;

@@ -47,6 +47,9 @@ const TEAM_JSON_URLS = {
   kbo: "https://rookiejson.netlify.app/teamJson/kbo.json",
 };
 
+// 카트 이동 주스턴트
+import useCartStore from "../stores/cartStore";
+
 // 임시 데이터 (실제 구현 시 API 응답으로 대체)
 // const mockRelatedProducts = [
 //   {
@@ -1435,6 +1438,28 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isFixed, setIsFixed] = useState(false);
 
+  // 카트페이지 이동
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: parsePrice(product.price),
+      images: product.detail?.detail_images || [],
+      team: product.team,
+      option: product.detail?.options || [],
+      category: product.category,
+      thumbnail: product.thumbnail,
+      quantity,
+    });
+
+    console.log("장바구니:", product); // 주의: 여기선 바로 안 보일 수 있음
+    setTimeout(() => {
+      console.log("업데이트된 장바구니:", useCartStore.getState().product);
+    }, 100);
+  };
+
   // contentRef 및 contentHeight 상태 추가
   const contentRef = useRef(null);
   const stickyRef = useRef(null);
@@ -1579,10 +1604,10 @@ const ProductDetail = () => {
   }, [id]);
 
   // 가격 문자열을 숫자로 변환하는 헬퍼 함수
-  const parsePrice = (priceString) => {
-    if (!priceString) return 0;
-    return parseInt(priceString.replace(/[,원]/g, ""));
-  };
+  const parsePrice = (price) =>
+    typeof price === "number"
+      ? price
+      : parseInt(price.toString().replace(/[^\d]/g, ""), 10);
 
   // 토글 시 높이 계산을 위한 useEffect 추가
   useEffect(() => {
@@ -2194,7 +2219,7 @@ const ProductDetail = () => {
 
             {/* 액션 버튼 */}
             <ButtonContainer>
-              <CartButton>장바구니</CartButton>
+              <CartButton onClick={handleAddToCart}>장바구니</CartButton>
               <BuyButton>바로 구매</BuyButton>
             </ButtonContainer>
           </PurchaseSectionContent>
