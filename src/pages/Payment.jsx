@@ -5,12 +5,9 @@ import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import PaymentAddress from "../components/Payment/PaymentDelivery";
 
-const Container = styled.div.attrs({
-  "data-lenis-prevent": true,
-})`
+const Container = styled.div`
   width: 100%;
   padding: 0 5%;
-  font-family: "Pretendard";
   display: flex;
   gap: 5%;
   background: var(--light);
@@ -217,7 +214,7 @@ const Payment = () => {
             <h2>주문정보</h2>
             <span></span>
           </InfoTitle>
-          <Items>
+          <Items data-lenis-prevent>
             {orderItems.length > 0 ? (
               orderItems.map((item) => (
                 <ProductItem key={item.id} item={item} page="payment" />

@@ -9,12 +9,9 @@ import { mockItems } from "../components/Cart/MockupData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const Container = styled.div.attrs({
-  "data-lenis-prevent": true,
-})`
+const Container = styled.div`
   width: 100%;
   padding: 0 5%;
-  font-family: "Pretendard";
   display: flex;
   gap: 5%;
   background: var(--light);
@@ -127,6 +124,7 @@ const EmptyMessage = styled.p`
 `;
 
 const DeleteButton = styled.div`
+  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -266,7 +264,7 @@ const Cart = () => {
             allChecked={checkedItems.length === mockItems.length}
             onToggleAll={handleToggleAll}
           />
-          <Items>
+          <Items data-lenis-prevent>
             {cartItems.length > 0 ? (
               cartItems.map((item) => (
                 <ProductItem
