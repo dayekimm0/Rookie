@@ -10,9 +10,12 @@ const useProductStore = create((set) => ({
   sort: "newest",
   setSort: (value) => set({ sort: value }),
 
-  // 추가: 선택한 상품 ID
   selectedProductId: null,
   setSelectedProductId: (id) => set({ selectedProductId: id }),
+
+  // ✅ 여기가 추가된 부분
+  selectedCategory: "ALL",
+  setSelectedCategory: (category) => set({ selectedCategory: category }),
 }));
 
 export default useProductStore;
