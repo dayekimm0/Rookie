@@ -194,7 +194,7 @@ const Cart = () => {
     }
   }, []);
 
-  // 체크된 상품 필터링
+  // 상품 체크
   const selectedItems = cartItems.filter((item) =>
     checkedItems.includes(item.id)
   );
@@ -205,7 +205,7 @@ const Cart = () => {
       (item) => !checkedItems.includes(item.id)
     );
     setCartItems(updatedItems);
-    setCheckedItems([]); // 선택 초기화
+    setCheckedItems([]);
   };
 
   // 상품금액
