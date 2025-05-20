@@ -82,8 +82,9 @@ const PaginateProduct = ({ items, itemsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const offset = currentPage * itemsPerPage;
-  const currentItems = items.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(items.length / itemsPerPage);
+  const currentItems = (items || []).slice(offset, offset + itemsPerPage);
+
+  const pageCount = Math.ceil((items?.length || 0) / itemsPerPage);
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
