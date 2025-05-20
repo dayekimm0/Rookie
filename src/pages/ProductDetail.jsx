@@ -34,17 +34,17 @@ import "swiper/css/navigation";
 
 // 구단별 JSON URL 매핑
 const TEAM_JSON_URLS = {
-  엔씨다이노스: "https://rookiejson.netlify.app/teamJson/nc_dns.json",
-  두산베어스: "https://rookiejson.netlify.app/teamJson/ds_bas.json",
-  삼성라이온즈: "https://rookiejson.netlify.app/teamJson/ss_lns.json",
-  LG트윈스: "https://rookiejson.netlify.app/teamJson/lg_twins.json",
-  KIA타이거즈: "https://rookiejson.netlify.app/teamJson/kia_tgs.json",
-  롯데자이언츠: "https://rookiejson.netlify.app/teamJson/lt_gnt.json",
-  KT위즈: "https://rookiejson.netlify.app/teamJson/kt_wiz.json",
-  한화이글스: "https://rookiejson.netlify.app/teamJson/hw_egs.json",
-  키움히어로즈: "https://rookiejson.netlify.app/teamJson/kw_hrs.json",
-  SSG랜더스: "https://rookiejson.netlify.app/teamJson/ssg_lds.json",
-  KBO: "https://rookiejson.netlify.app/teamJson/kbo.json",
+  nc_dns: "https://rookiejson.netlify.app/teamJson/nc_dns.json",
+  ds_bas: "https://rookiejson.netlify.app/teamJson/ds_bas.json",
+  ss_lns: "https://rookiejson.netlify.app/teamJson/ss_lns.json",
+  lg_twins: "https://rookiejson.netlify.app/teamJson/lg_twins.json",
+  kia_tgs: "https://rookiejson.netlify.app/teamJson/kia_tgs.json",
+  lt_gnt: "https://rookiejson.netlify.app/teamJson/lt_gnt.json",
+  kt_wiz: "https://rookiejson.netlify.app/teamJson/kt_wiz.json",
+  hw_egs: "https://rookiejson.netlify.app/teamJson/hw_egs.json",
+  kw_hrs: "https://rookiejson.netlify.app/teamJson/kw_hrs.json",
+  ssg_lds: "https://rookiejson.netlify.app/teamJson/ssg_lds.json",
+  kbo: "https://rookiejson.netlify.app/teamJson/kbo.json",
 };
 
 // 임시 데이터 (실제 구현 시 API 응답으로 대체)
@@ -1757,7 +1757,6 @@ const ProductDetail = () => {
   if (error) {
     return (
       <Container>
-        <Header />
         <ContentWrapper>
           <ErrorMessage>
             <div>{error}</div>
@@ -1766,7 +1765,6 @@ const ProductDetail = () => {
             </div>
           </ErrorMessage>
         </ContentWrapper>
-        <Footer />
       </Container>
     );
   }
