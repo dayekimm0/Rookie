@@ -172,6 +172,8 @@ export const getTeamJsonCode = (id) => {
 
 export const getTeamNameKor = (fullName) => {
   switch (fullName) {
+    case "kbo":
+      return "KBO";
     case "kia_tgs":
       return "기아 타이거즈";
     case "ss_lns":
