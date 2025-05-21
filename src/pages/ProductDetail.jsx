@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import ImageSlider from "../components/ProductDetail/ImageSlider.jsx";
+import CartModal from "../components/ProductDetail/CartModal.jsx";
 import ReviewModal from "../components/ProductDetail/ReviewModal.jsx";
 import InquiryModal from "../components/ProductDetail/InquiryModal.jsx";
 import RelatedProducts from "../components/ProductDetail/RelatedProducts.jsx";
@@ -1504,6 +1505,8 @@ const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState("details");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [showBuyModal, setShowBuyModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -1527,10 +1530,32 @@ const ProductDetail = () => {
       quantity,
     });
 
-    console.log("장바구니:", product); // 주의: 여기선 바로 안 보일 수 있음
+    // 장바구니 모달 표시
+    setShowCartModal(true);
+
+    console.log("장바구니:", product); // 여기선 바로 안 보일 수 있음
     setTimeout(() => {
       console.log("업데이트된 장바구니:", useCartStore.getState().product);
     }, 100);
+  };
+
+  // 바로 구매 처리 함수 추가
+  const handleBuyNow = () => {
+    // 원하는 경우 장바구니에 상품 추가 로직도 포함 가능
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: parsePrice(product.price),
+      images: product.detail?.detail_images || [],
+      team: product.team,
+      option: product.detail?.options || [],
+      category: product.category,
+      thumbnail: product.thumbnail,
+      quantity,
+    });
+
+    // 구매 모달 표시
+    setShowBuyModal(true);
   };
 
   // contentRef 및 contentHeight 상태 추가
@@ -2029,8 +2054,8 @@ const ProductDetail = () => {
 
                 {/* 액션 버튼 */}
                 <ButtonContainer>
-                  <CartButton>장바구니</CartButton>
-                  <BuyButton>바로 구매</BuyButton>
+                  <CartButton onClick={handleAddToCart}>장바구니</CartButton>
+                  <BuyButton onClick={handleBuyNow}>바로 구매</BuyButton>
                 </ButtonContainer>
               </StickyBox>
             </PurchaseSectionContent>
@@ -2396,7 +2421,7 @@ const ProductDetail = () => {
             {/* 액션 버튼 */}
             <ButtonContainer>
               <CartButton onClick={handleAddToCart}>장바구니</CartButton>
-              <BuyButton>바로 구매</BuyButton>
+              <BuyButton onClick={handleBuyNow}>바로 구매</BuyButton>
             </ButtonContainer>
           </PurchaseSectionContent>
         </PurchaseSection>
@@ -2422,6 +2447,22 @@ const ProductDetail = () => {
         onClose={closeInquiryModal}
         product={product}
         onSubmit={handleInquirySubmit}
+      />
+
+      {/* CartModal 추가 */}
+      <CartModal
+        isOpen={showCartModal}
+        onClose={() => setShowCartModal(false)}
+        message="상품이 장바구니에 담겼습니다!"
+        buttonText="장바구니로 이동"
+      />
+
+      {/* 바로 구매 모달 */}
+      <CartModal
+        isOpen={showBuyModal}
+        onClose={() => setShowBuyModal(false)}
+        message="상품이 장바구니에 담겼습니다!"
+        buttonText="장바구니로 이동"
       />
     </Container>
   );
