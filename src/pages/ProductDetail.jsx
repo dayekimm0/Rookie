@@ -929,7 +929,7 @@ const QuantityInput = styled.input`
   }
 `;
 
-// 선택된 제품 가격
+// 선택된 제품 가격f
 const SelectedProductPrice = styled.span`
   font-size: 22px;
   font-weight: bold;
@@ -1508,6 +1508,7 @@ const ProductDetail = () => {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isFixed, setIsFixed] = useState(false);
+  const [isOptionDropdownOpen, setIsOptionDropdownOpen] = useState(false);
 
   // 카트페이지 이동
   const addToCart = useCartStore((state) => state.addToCart);
