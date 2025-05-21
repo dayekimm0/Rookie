@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import ImageSlider from "../components/ProductDetail/ImageSlider.jsx";
 import CartModal from "../components/ProductDetail/CartModal.jsx";
+import BuyNowModal from "../components/ProductDetail/BuyNowModal.jsx";
 import ReviewModal from "../components/ProductDetail/ReviewModal.jsx";
 import InquiryModal from "../components/ProductDetail/InquiryModal.jsx";
 import RelatedProducts from "../components/ProductDetail/RelatedProducts.jsx";
@@ -1603,6 +1605,8 @@ const ProductDetail = () => {
   const [isOptionDropdownOpen, setIsOptionDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
+  const navigate = useNavigate();
+
   // 카트페이지 이동
   const addToCart = useCartStore((state) => state.addToCart);
 
@@ -1631,17 +1635,26 @@ const ProductDetail = () => {
   // 바로 구매 처리 함수 추가
   const handleBuyNow = () => {
     // 원하는 경우 장바구니에 상품 추가 로직도 포함 가능
-    addToCart({
+    const orderItem = {
       id: product.id,
       name: product.name,
       price: parsePrice(product.price),
       images: product.detail?.detail_images || [],
       team: product.team,
-      option: product.detail?.options || [],
+      option: selectedOption ? [selectedOption] : [],
       category: product.category,
       thumbnail: product.thumbnail,
       quantity,
-    });
+    };
+    // 1초 뒤에 결제 페이지로 이동
+    setTimeout(() => {
+      navigate("/payment", {
+        state: {
+          orderItems: [orderItem],
+          coupon: null,
+        },
+      });
+    }, 1000);
 
     // 구매 모달 표시
     setShowBuyModal(true);
@@ -2630,11 +2643,11 @@ const ProductDetail = () => {
       />
 
       {/* 바로 구매 모달 */}
-      <CartModal
+      <BuyNowModal
         isOpen={showBuyModal}
         onClose={() => setShowBuyModal(false)}
-        message="상품이 장바구니에 담겼습니다!"
-        buttonText="장바구니로 이동"
+        message="잠시 후 결제 페이지로 이동합니다!"
+        // buttonText="바로 이동"
       />
     </Container>
   );
