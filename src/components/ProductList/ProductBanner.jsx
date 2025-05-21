@@ -9,7 +9,7 @@ const BannerBox = styled.div`
   height: 500px;
 
   @media screen and (max-width: 1440px) {
-    height: 300px;
+    height: 400px;
   }
   @media screen and (max-width: 1024px) {
     height: 300px;
@@ -34,36 +34,73 @@ const BannerPlayer = styled(ReactPlayer)`
   }
 
   @media (max-width: 1440px) {
-    width: 800px !important;
-    height: 300px !important;
+    width: 100% !important;
+    height: 400px !important;
   }
 
   @media (max-width: 1024px) {
-    width: 1024px !important;
+    width: 100% !important;
+    height: 300px !important;
+  }
+
+  @media (max-width: 768px) {
+    width: 100% !important;
+    height: 300px !important;
+  }
+  @media (max-width: 500px) {
+    width: 100% !important;
+    height: 200px !important;
+  }
+`;
+
+const BannerImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  @media (max-width: 1440px) {
+    width: 100% !important;
+    height: 400px !important;
+  }
+  @media (max-width: 1024px) {
+    width: 100% !important;
+    height: 300px !important;
+  }
+  @media (max-width: 768px) {
+    width: 100% !important;
     height: 300px !important;
   }
 
   @media (max-width: 500px) {
-    width: 500px !important;
+    width: 100% !important;
     height: 200px !important;
   }
 `;
 
 const ProductBanner = ({ team = "kbo" }) => {
-  const videoUrl = bannerLinks[team] || bannerLinks["kbo"];
+  const banner = bannerLinks[team] || bannerLinks["kbo"];
 
   return (
     <BannerBox>
-      <BannerPlayer
-        url={videoUrl}
-        playing
-        loop
-        muted
-        controls={false}
-        width="100%"
-        height="100%"
-        playsinline
-      />
+      {banner.type === "video" ? (
+        <BannerPlayer
+          url={banner.src}
+          playing
+          loop
+          muted
+          controls={false}
+          width="100%"
+          height="100%"
+          playsinline
+        />
+      ) : (
+        <BannerImg src={banner.src} alt={`${team} 배너 이미지`} />
+      )}
     </BannerBox>
   );
 };
