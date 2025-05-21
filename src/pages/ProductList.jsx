@@ -10,7 +10,7 @@ import PaginateProduct from "../components/ProductList/PaginateProduct";
 import { shuffleArray } from "../productlist_utils/productShuffle";
 
 const Container = styled.div`
-  width: 1920px;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
