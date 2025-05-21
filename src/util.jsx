@@ -170,6 +170,35 @@ export const getTeamJsonCode = (id) => {
   }
 };
 
+export const getTeamNameKor = (fullName) => {
+  switch (fullName) {
+    case "kbo":
+      return "KBO";
+    case "kia_tgs":
+      return "기아 타이거즈";
+    case "ss_lns":
+      return "삼성 라이온즈";
+    case "lg_twins":
+      return "LG 트윈스";
+    case "ds_bas":
+      return "두산 베어스";
+    case "kt_wiz":
+      return "KT 위즈";
+    case "ssg_lds":
+      return "SSG 랜더스";
+    case "lt_gnt":
+      return "롯데 자이언츠";
+    case "hw_egs":
+      return "한화 이글스";
+    case "nc_dns":
+      return "NC 다이노스";
+    case "kw_hrs":
+      return "키움 히어로즈";
+    default:
+      return null;
+  }
+};
+
 //스크롤바 width
 export const getScrollbarWidth = () => {
   const div = document.createElement("div");

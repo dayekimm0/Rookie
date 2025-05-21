@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import logo from "../../images/logos/Rookie_logo.svg";
+import useBodyScrollLock from "../../hook/useBodyScrollLock";
 
 const ModalOverlay = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== 'isOpen'
+  shouldForwardProp: (prop) => prop !== "isOpen",
 })`
   position: fixed;
   top: 0;
@@ -136,6 +137,7 @@ const ModalButton = styled.button`
 `;
 
 const LogonModal = ({ isOpen, closeModal, contentType }) => {
+  useBodyScrollLock(isOpen);
   const getModalContent = () => {
     switch (contentType) {
       case "required":

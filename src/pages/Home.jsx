@@ -182,7 +182,7 @@ const Home = () => {
     const kiaTinypingCollabo = allProducts
       .filter(
         (item) =>
-          item.team === "기아타이거즈" &&
+          item.team === "kia_tgs" &&
           item.collaboration &&
           item.collaboration.includes("티니핑")
       )

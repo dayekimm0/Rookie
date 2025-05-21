@@ -21,7 +21,7 @@ export const filterAndSortProducts = (
     }
   } else if (selectCollabo !== "ALL") {
     // category 값 기준 필터
-    filtered = products.filter((item) => item.category === selectCollabo);
+    filtered = filtered.filter((item) => item.category === selectCollabo);
   }
 
   switch (sort) {

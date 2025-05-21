@@ -6,7 +6,7 @@ import bannerLinks from "../../data/bannerLinks";
 const BannerBox = styled.div`
   position: relative;
   width: 100%;
-  height: 440px;
+  height: 500px;
 
   @media screen and (max-width: 1440px) {
     height: 300px;
@@ -19,33 +19,6 @@ const BannerBox = styled.div`
     height: 200px;
   }
 `;
-
-const BannerBackground = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  z-index: 0;
-`;
-
-const Overlay = styled.div`
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-`;
-
-const PlayerWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  z-index: 3;
-`;
-
 const BannerPlayer = styled(ReactPlayer)`
   position: absolute;
   z-index: 3;
@@ -53,9 +26,6 @@ const BannerPlayer = styled(ReactPlayer)`
   left: 50%;
   transform: translateX(-50%);
   pointer-events: none;
-
-  width: 1020px !important;
-  height: 440px !important;
 
   video {
     width: 100%;
@@ -84,20 +54,16 @@ const ProductBanner = ({ team = "kbo" }) => {
 
   return (
     <BannerBox>
-      <BannerBackground src={headerbg} alt="bg" />
-      <Overlay />
-      <PlayerWrapper>
-        <BannerPlayer
-          url={videoUrl}
-          playing
-          loop
-          muted
-          controls={false}
-          width="100%"
-          height="100%"
-          playsinline
-        />
-      </PlayerWrapper>
+      <BannerPlayer
+        url={videoUrl}
+        playing
+        loop
+        muted
+        controls={false}
+        width="100%"
+        height="100%"
+        playsinline
+      />
     </BannerBox>
   );
 };
