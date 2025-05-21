@@ -32,9 +32,11 @@ const ImageContainer = styled.div`
     width: 400px;
     height: 400px;
   }
-
+  @media (max-width: 450px) {
+    width: 100%;
+  }
   @media (max-width: 375px) {
-    width: 95%;
+    width: 100%;
     min-height: 350px;
   }
 `;

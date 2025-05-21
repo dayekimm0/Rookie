@@ -257,7 +257,7 @@ const ReviewModal = ({
   return (
     <ModalBase isOpen={isOpen} onClose={onClose} title="리뷰" footer={footer}>
       <ProductInfoBox>
-        <ProductThumb src={product?.images?.[0]} alt={product?.name} />
+        <ProductThumb src={product?.thumbnail} alt={product?.name} />
         <ProductInfoText>
           <ProductName>{product?.name}</ProductName>
           <ProductOption>옵션: {selectedOption}</ProductOption>

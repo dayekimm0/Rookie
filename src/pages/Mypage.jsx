@@ -266,14 +266,6 @@ const DeleteLine = styled.span`
   transition: opacity 0.3s;
 `;
 
-const LoadingSpinner = styled.div`
-  height: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--grayC);
-`;
-
 const InquiryLink = styled.a`
   padding: 10px 20px;
   background: var(--light);
@@ -296,6 +288,68 @@ const InquiryLink = styled.a`
   @media screen and (max-width: 1024px) {
     font-size: 1.2rem;
     height: 40px;
+  }
+`;
+
+const SlideLoaderWrapper = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
+
+  .path {
+    stroke: var(--main);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
   }
 `;
 
@@ -344,7 +398,18 @@ const Mypage = () => {
   return (
     <Container>
       {isLoading ? (
-        <LoadingSpinner>Loading...</LoadingSpinner>
+        <SlideLoaderWrapper>
+          <SvgSpinner viewBox="0 0 50 50">
+            <circle
+              className="path"
+              cx="25"
+              cy="25"
+              r="20"
+              fill="none"
+              strokeWidth="5"
+            />
+          </SvgSpinner>
+        </SlideLoaderWrapper>
       ) : (
         <Inner>
           <UpBox>
