@@ -114,33 +114,6 @@ export function getTodayMatches() {
   };
 }
 
-// export const getTeamShortName = (fullName) => {
-//   switch (fullName) {
-//     case "기아타이거즈":
-//       return "KIA";
-//     case "삼성라이온즈":
-//       return "삼성";
-//     case "엘지트윈스":
-//       return "LG";
-//     case "두산베어스":
-//       return "두산";
-//     case "케이티위즈":
-//       return "KT";
-//     case "쓱랜더스":
-//       return "SSG";
-//     case "롯데자이언츠":
-//       return "롯데";
-//     case "한화이글스":
-//       return "한화";
-//     case "엔씨다이노스":
-//       return "NC";
-//     case "키움히어로즈":
-//       return "키움";
-//     default:
-//       return null;
-//   }
-// };
-
 export const getTeamShortName = (fullName) => {
   switch (fullName) {
     case "기아 타이거즈":
@@ -192,6 +165,35 @@ export const getTeamJsonCode = (id) => {
       return "nc_dns";
     case "10":
       return "kw_hrs";
+    default:
+      return null;
+  }
+};
+
+export const getTeamNameKor = (fullName) => {
+  switch (fullName) {
+    case "kbo":
+      return "KBO";
+    case "kia_tgs":
+      return "기아 타이거즈";
+    case "ss_lns":
+      return "삼성 라이온즈";
+    case "lg_twins":
+      return "LG 트윈스";
+    case "ds_bas":
+      return "두산 베어스";
+    case "kt_wiz":
+      return "KT 위즈";
+    case "ssg_lds":
+      return "SSG 랜더스";
+    case "lt_gnt":
+      return "롯데 자이언츠";
+    case "hw_egs":
+      return "한화 이글스";
+    case "nc_dns":
+      return "NC 다이노스";
+    case "kw_hrs":
+      return "키움 히어로즈";
     default:
       return null;
   }

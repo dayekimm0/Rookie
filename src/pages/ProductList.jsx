@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import useProductStore from "../stores/ProductStore";
-import { filterAndSortProducts } from "../utils/filterSort";
+import bannerLinks from "../data/bannerLinks";
+import { filterAndSortProducts } from "../productlist_utils/filterSort";
 import ProductBanner from "../components/ProductList/ProductBanner";
 import ProductCategory from "../components/ProductList/ProductCategory";
 import PaginateProduct from "../components/ProductList/PaginateProduct";
@@ -33,6 +34,68 @@ const Container = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
+
+  .path {
+    stroke: var(--main);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+`;
+
 const ProductList = () => {
   const { teamCode } = useParams();
   const {
@@ -56,6 +119,21 @@ const ProductList = () => {
     "kw_hrs",
     "ssg_lds",
   ];
+
+  const teamCodeToBannerKey = {
+    ssg_lds: "ssg",
+    ds_bas: "doosan",
+    hw_egs: "hanwha",
+    kiwoom: "kiwoom",
+    lg_twins: "lg",
+    lt_gnt: "lotte",
+    nc_dns: "nc",
+    ss_lns: "samsung",
+    kia_tgs: "kia",
+    kt_wiz: "kt",
+  };
+
+  const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
 
   // React Query로 직접 fetch
   const {
@@ -108,7 +186,21 @@ const ProductList = () => {
     sort,
   });
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
   if (error) return <div>에러 :{error.message}</div>;
 
   const filteredAndSortedProducts = filterAndSortProducts(
@@ -126,7 +218,7 @@ const ProductList = () => {
 
   return (
     <Container>
-      <ProductBanner />
+      <ProductBanner team={bannerKey || "kbo"} />
       <ProductCategory brands={brands} />
       <PaginateProduct items={filteredAndSortedProducts} itemsPerPage={16} />
     </Container>

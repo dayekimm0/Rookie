@@ -266,14 +266,6 @@ const DeleteLine = styled.span`
   transition: opacity 0.3s;
 `;
 
-const LoadingSpinner = styled.div`
-  height: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--grayC);
-`;
-
 const InquiryLink = styled.a`
   padding: 10px 20px;
   background: var(--light);
@@ -296,6 +288,25 @@ const InquiryLink = styled.a`
   @media screen and (max-width: 1024px) {
     font-size: 1.2rem;
     height: 40px;
+  }
+`;
+
+const SlideLoaderWrapper = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
   }
 `;
 
@@ -374,36 +385,20 @@ const Mypage = () => {
 
   //mobile 스토어 스크롤 막기
   useEffect(() => {
-    const preventScroll = (e) => {
-      e.preventDefault();
-    };
-
     if (teamModal) {
       const scrollbarWidth = getScrollbarWidth();
       document.body.style.overflow = "hidden";
       document.body.style.paddingRight = `${scrollbarWidth}px`;
-      document.addEventListener("wheel", preventScroll, { passive: false });
-      document.addEventListener("touchmove", preventScroll, { passive: false });
     } else {
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
-      document.removeEventListener("wheel", preventScroll);
-      document.removeEventListener("touchmove", preventScroll);
     }
-
-    // cleanup
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-      document.removeEventListener("wheel", preventScroll);
-      document.removeEventListener("touchmove", preventScroll);
-    };
   }, [teamModal]);
 
   return (
     <Container>
       {isLoading ? (
-        <LoadingSpinner>
+        <SlideLoaderWrapper>
           <SvgSpinner viewBox="0 0 50 50">
             <circle
               className="path"
@@ -414,7 +409,7 @@ const Mypage = () => {
               strokeWidth="5"
             />
           </SvgSpinner>
-        </LoadingSpinner>
+        </SlideLoaderWrapper>
       ) : (
         <Inner>
           <UpBox>
@@ -550,7 +545,9 @@ const Mypage = () => {
           )}
         </Inner>
       )}
-      <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
+      {teamModal && (
+        <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
+      )}
     </Container>
   );
 };

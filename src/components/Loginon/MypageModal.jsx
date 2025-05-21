@@ -5,11 +5,13 @@ import logon_check from "../../images/icons/logon_check.svg";
 import { auth, db } from "../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import authStore from "../../stores/AuthStore";
+import useBodyScrollLock from "../../hook/useBodyScrollLock";
 
 const ModalOverlay = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== "isOpen",
 })`
   position: fixed;
+  z-index: 1500;
   top: 0;
   left: 0;
   width: 100%;
@@ -28,7 +30,7 @@ const ModalContent = styled.div`
   background: var(--light);
   width: 600px;
   border-radius: 12px;
-  padding: 60px;
+  padding: 70px;
   position: relative;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   margin-top: 100px;
@@ -86,7 +88,7 @@ const ModalTitle = styled.h2`
 
 const ModalTWrapper = styled.div`
   width: 100%;
-  height: 300px;
+  max-height: 300px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -94,9 +96,25 @@ const ModalTWrapper = styled.div`
   padding-right: 10px;
   overflow-y: scroll;
   overflow-x: hidden;
-  @media screen and (max-width: 1024px) {
-    max-height: 240px;
-    margin-bottom: 20px;
+  overscroll-behavior: contain;
+  touch-action: auto;
+  scroll-behavior: auto;
+
+  scrollbar-gutter: stable;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--grayC);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--light);
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
   }
   @media screen and (max-width: 600px) {
     margin-bottom: 20px;
@@ -164,6 +182,7 @@ const ModalButton = styled.button`
 `;
 
 const MypageModal = ({ isOpen, closeTeamModal }) => {
+  useBodyScrollLock(isOpen);
   const { userProfile, setUser } = authStore();
   const [selectedTeam, setSelectedTeam] = useState("");
   const [loading, setLoading] = useState(false);
@@ -259,7 +278,7 @@ const MypageModal = ({ isOpen, closeTeamModal }) => {
             </span>
           </ModalTitle>
         </LogoWrapper>
-        <ModalTWrapper>
+        <ModalTWrapper data-lenis-prevent>
           {teams.map((team) => (
             <ModalText
               key={team.id}

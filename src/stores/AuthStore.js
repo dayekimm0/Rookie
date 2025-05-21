@@ -31,7 +31,16 @@ const authStore = create(
           isLoading: false,
         });
       },
+      // 주소 수정
+      updateUserAddress: (newAddress) =>
+        set((state) => ({
+          userProfile: {
+            ...state.userProfile,
+            ...newAddress,
+          },
+        })),
     }),
+
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),

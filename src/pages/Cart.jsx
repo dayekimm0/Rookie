@@ -5,16 +5,14 @@ import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import CartMenuBar from "../components/Cart/CartMenuBar";
 import { mockItems } from "../components/Cart/MockupData";
+import useCartStore from "../stores/cartStore";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const Container = styled.div.attrs({
-  "data-lenis-prevent": true,
-})`
+const Container = styled.div`
   width: 100%;
   padding: 0 5%;
-  font-family: "Pretendard";
   display: flex;
   gap: 5%;
   background: var(--light);
@@ -81,9 +79,12 @@ const Items = styled.div`
   width: calc(100% + 5px);
   display: flex;
   flex-direction: column;
-  height: 520px;
+  max-height: 520px;
   gap: 20px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: auto;
+  scroll-behavior: auto;
 
   scrollbar-gutter: stable;
   &::-webkit-scrollbar {
@@ -103,13 +104,13 @@ const Items = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    height: 400px;
+    max-height: 400px;
     gap: 15px;
   }
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     gap: 20px;
     overflow-y: visible;
   }
@@ -127,6 +128,7 @@ const EmptyMessage = styled.p`
 `;
 
 const DeleteButton = styled.div`
+  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -165,10 +167,9 @@ const DeleteButton = styled.div`
 const Cart = () => {
   const navigate = useNavigate();
 
-  const [cartItems, setCartItems] = useState(mockItems);
+  const { cartItems, setCartItems, toggleCheckItem } = useCartStore();
 
-  // 기존 체크된 아이템 상태
-  const [checkedItems, setCheckedItems] = useState([]);
+  const checkedItems = cartItems.filter((item) => item.checked);
 
   // 쿠폰 목록
   const [coupons, setCoupons] = useState([]);
@@ -194,18 +195,13 @@ const Cart = () => {
     }
   }, []);
 
-  // 체크된 상품 필터링
-  const selectedItems = cartItems.filter((item) =>
-    checkedItems.includes(item.id)
-  );
+  // 상품 체크
+  const selectedItems = checkedItems;
 
   // 체크된 상품 삭제
   const handleDeleteSelected = () => {
-    const updatedItems = cartItems.filter(
-      (item) => !checkedItems.includes(item.id)
-    );
+    const updatedItems = cartItems.filter((item) => !item.checked);
     setCartItems(updatedItems);
-    setCheckedItems([]); // 선택 초기화
   };
 
   // 상품금액
@@ -240,22 +236,27 @@ const Cart = () => {
   // 전체상품주문
   const handleOrderAll = () => {
     navigate("/payment", {
-      state: { orderItems: mockItems, coupon: selectedCoupon },
+      state: { orderItems: cartItems, coupon: selectedCoupon },
     });
   };
 
   // 체크박스
   const handleToggleAll = (isChecked) => {
-    setCheckedItems(isChecked ? mockItems.map((item) => item.id) : []);
+    const updateAllChecked = cartItems.map((item) => ({
+      ...item,
+      checked: isChecked,
+    }));
+    setCartItems(updateAllChecked);
   };
 
-  const handleToggleItem = (itemId) => {
-    setCheckedItems((prev) =>
-      prev.includes(itemId)
-        ? prev.filter((id) => id !== itemId)
-        : [...prev, itemId]
+  useEffect(() => {
+    console.log("cartItems:", cartItems);
+    console.log("checkedItems:", checkedItems);
+    console.log(
+      "allChecked:",
+      cartItems.length > 0 && checkedItems.length === cartItems.length
     );
-  };
+  }, [cartItems, checkedItems]);
 
   return (
     <Container>
@@ -263,17 +264,19 @@ const Cart = () => {
         <Title>Shopping Cart</Title>
         <List>
           <CartMenuBar
-            allChecked={checkedItems.length === mockItems.length}
+            allChecked={
+              cartItems.length > 0 && checkedItems.length === cartItems.length
+            }
             onToggleAll={handleToggleAll}
           />
-          <Items>
+          <Items data-lenis-prevent>
             {cartItems.length > 0 ? (
               cartItems.map((item) => (
                 <ProductItem
                   key={item.id}
                   item={item}
-                  isChecked={checkedItems.includes(item.id)}
-                  onToggle={() => handleToggleItem(item.id)}
+                  isChecked={item.checked}
+                  onToggle={() => toggleCheckItem(item.id)}
                 />
               ))
             ) : (

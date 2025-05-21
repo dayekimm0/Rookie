@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getTeamJsonCode } from "../util";
+import { getTeamJsonCode, getTeamNameKor } from "../util";
 
 const CardContainer = styled.div`
   width: 290px;
@@ -11,6 +11,7 @@ const CardContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px;
+  cursor: pointer;
 
   @media screen and (max-width: 1440px) {
     width: 270px;
@@ -20,12 +21,13 @@ const CardContainer = styled.div`
   }
 
   @media screen and (max-width: 500px) {
-    width: 230px;
+    width: 100%;
   }
 `;
 
 const ProductImg = styled.div`
   width: 290px;
+  max-width: 100%;
   height: 310px;
   margin-bottom: 24px;
 
@@ -52,7 +54,11 @@ const ProductImg = styled.div`
 
   @media screen and (max-width: 500px) {
     width: 100%;
-    height: 250px;
+    height: 290px;
+  }
+  @media screen and (max-width: 450px) {
+    width: 100%;
+    height: calc(230px + 25vw);
   }
 `;
 
@@ -142,13 +148,13 @@ const ProductCard = ({ data }) => {
   };
 
   return (
-    <CardContainer>
-      <ProductImg onClick={handleClick}>
+    <CardContainer onClick={handleClick}>
+      <ProductImg>
         <img src={thumbnail} alt={name} />
       </ProductImg>
       <ProductInfo>
         <div className="brandGo">
-          <div className="brand">{team}</div>
+          <div className="brand">{getTeamNameKor(team)}</div>
           <svg viewBox="0 0 8 15" fill="none">
             <path
               d="M1.48926 1.98944L6.99982 7.5L1.48926 13.0106"

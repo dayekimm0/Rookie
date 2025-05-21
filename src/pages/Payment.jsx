@@ -3,24 +3,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
-import PaymentAddress from "../components/Payment/PaymentDelivery";
+import MyAddress from "../components/Payment/MyAddress";
+import AddressModal from "../components/Payment/AddressModal";
 
-const Container = styled.div.attrs({
-  "data-lenis-prevent": true,
-})`
+const Container = styled.div`
   width: 100%;
   padding: 0 5%;
-  font-family: "Pretendard";
   display: flex;
   gap: 5%;
   background: var(--light);
 
   input[type="checkbox"] {
-    display: none;
-  }
-
-  button,
-  button.mobile {
     display: none;
   }
 
@@ -43,10 +36,6 @@ const Section = styled.section`
   flex-direction: column;
   gap: 50px;
   padding-top: 5%;
-
-  OptionChangeButton {
-    display: none;
-  }
 `;
 
 const Title = styled.h2`
@@ -87,9 +76,14 @@ const List = styled.div`
 
 const InfoTitle = styled.div`
   width: 100%;
-  h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
   }
   span {
     display: inline-block;
@@ -118,14 +112,24 @@ const InfoTitle = styled.div`
   }
 `;
 
+const AddressChangeButton = styled.button`
+  padding: 8px 12px;
+  background: var(--dark);
+  color: var(--light);
+  border: none;
+  border-radius: 4px;
+`;
+
 const Items = styled.div`
   width: calc(100% + 15px);
   display: flex;
   flex-direction: column;
-  height: 520px;
+  max-height: 520px;
   gap: 20px;
   overflow-y: auto;
-
+  overscroll-behavior: contain;
+  touch-action: auto;
+  scroll-behavior: auto;
   scrollbar-gutter: stable;
   &::-webkit-scrollbar {
     width: 5px;
@@ -144,13 +148,13 @@ const Items = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    height: 400px;
+    max-height: 400px;
     gap: 15px;
   }
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     gap: 20px;
     overflow-y: visible;
   }
@@ -166,6 +170,7 @@ const Payment = () => {
 
   const orderItems = location.state?.orderItems || [];
   const couponFromCart = location.state?.coupon || null;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [selectedCouponId, setSelectedCouponId] = useState(
@@ -178,6 +183,17 @@ const Payment = () => {
       setAvailableCoupons(JSON.parse(savedCoupons));
     }
   }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isModalOpen]);
 
   const selectedCoupon =
     availableCoupons.find((c) => c.id === selectedCouponId) || null;
@@ -201,23 +217,31 @@ const Payment = () => {
     localStorage.removeItem("appliedCoupon");
     navigate("/store");
   };
+
   return (
     <Container>
       <Section>
         <Title>Payment</Title>
         <List>
           <InfoTitle>
-            <h2>배송지 정보</h2>
+            <li>
+              <h2>배송정보</h2>
+              <AddressChangeButton onClick={() => setIsModalOpen(true)}>
+                배송정보 변경
+              </AddressChangeButton>
+            </li>
             <span></span>
           </InfoTitle>
-          <PaymentAddress />
+          <MyAddress />
         </List>
         <List>
           <InfoTitle>
-            <h2>주문정보</h2>
+            <li>
+              <h2>주문정보</h2>
+            </li>
             <span></span>
           </InfoTitle>
-          <Items>
+          <Items data-lenis-prevent>
             {orderItems.length > 0 ? (
               orderItems.map((item) => (
                 <ProductItem key={item.id} item={item} page="payment" />
@@ -239,6 +263,12 @@ const Payment = () => {
         onCouponChange={handleCouponChange}
         onPaymentSubmit={handlePaymentSubmit}
       />
+      {isModalOpen && (
+        <AddressModal
+          isOpen={isModalOpen}
+          closeModal={() => setIsModalOpen(false)}
+        />
+      )}
     </Container>
   );
 };

@@ -75,6 +75,7 @@ const SaleInfo = styled.div`
 `;
 
 const CouponList = styled.select`
+  width: 100%;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -85,6 +86,19 @@ const CouponList = styled.select`
   border: 1px solid var(--grayC);
   border-radius: 4px;
 
+  /* 커스텀 화살표 */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: url(../../src/images/icons/select_arrow_down.svg);
+  background-repeat: no-repeat;
+  background-position: right 2% center;
+  background-size: 3.2rem;
+  &:focus {
+    background-image: url(../../src/images/icons/select_arrow_up.svg);
+  }
+
   @media screen and (max-width: 1024px) {
     height: 50px;
     font-size: 1.4rem;
@@ -92,6 +106,7 @@ const CouponList = styled.select`
 
   @media screen and (max-width: 768px) {
     font-size: 1.6rem;
+    background-position: right 1% center;
   }
 
   @media screen and (max-width: 375px) {

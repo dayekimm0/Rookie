@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import ReactPlayer from "react-player";
 import headerbg from "/src/images/banners/banner-headerbg.png";
-import React from "react";
+import bannerLinks from "../../data/bannerLinks";
 
 const BannerBox = styled.div`
   position: relative;
-  height: 440px;
+  width: 100%;
+  height: 500px;
 
   @media screen and (max-width: 1440px) {
     height: 300px;
@@ -18,75 +19,51 @@ const BannerBox = styled.div`
     height: 200px;
   }
 `;
-
-const Banner = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  &::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    top: 0;
-    left: 0;
-  }
-  @media screen and (max-width: 1440px) {
-    height: 300px;
-  }
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-    height: 300px;
-    overflow: hidden;
-  }
-
-  @media screen and (max-width: 500px) {
-    height: 100%;
-  }
-`;
-
 const BannerPlayer = styled(ReactPlayer)`
   position: absolute;
+  z-index: 3;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 1020px !important;
-  height: 440px !important;
+  pointer-events: none;
+
   video {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
-  @media screen and (max-width: 1440px) {
-    width: 800px;
+
+  @media (max-width: 1440px) {
+    width: 800px !important;
     height: 300px !important;
-    video {
-      object-fit: cover;
-    }
   }
-  @media screen and (max-width: 1024px) {
+
+  @media (max-width: 1024px) {
     width: 1024px !important;
     height: 300px !important;
   }
 
-  @media screen and (max-width: 500px) {
+  @media (max-width: 500px) {
     width: 500px !important;
     height: 200px !important;
   }
 `;
 
-const ProductBanner = () => {
+const ProductBanner = ({ team = "kbo" }) => {
+  const videoUrl = bannerLinks[team] || bannerLinks["kbo"];
+
   return (
     <BannerBox>
-      <Banner>
-        <img src={headerbg} alt="bg" />
-        <BannerPlayer
-          url="/videos/banner_kbo.mov"
-          playing
-          loop
-          muted
-          controls={false}
-        />
-      </Banner>
+      <BannerPlayer
+        url={videoUrl}
+        playing
+        loop
+        muted
+        controls={false}
+        width="100%"
+        height="100%"
+        playsinline
+      />
     </BannerBox>
   );
 };
