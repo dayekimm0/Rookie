@@ -222,7 +222,7 @@ const ImageContainer = styled.div`
     width: 100%;
   }
   @media (max-width: 375px) {
-    width: 95%;
+    width: 100%;
     min-height: 350px;
   }
 `;
