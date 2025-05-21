@@ -220,7 +220,7 @@ const Upbtn = styled.div.attrs((props) => ({
   },
 }))`
   position: fixed;
-  z-index: 100;
+  z-index: 88;
   right: 5%;
   width: 48px;
   aspect-ratio: 1;

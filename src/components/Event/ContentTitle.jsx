@@ -33,6 +33,10 @@ const TitleText = styled.div`
     font-size: 4rem;
     margin-bottom: 8px;
   }
+  @media screen and (max-width: 500px) {
+    font-size: 3rem;
+    margin-bottom: 8px;
+  }
   @media screen and (max-width: 376px) {
     font-size: 2.8rem;
     margin-bottom: 8px;
@@ -43,6 +47,9 @@ const MediumText = styled.div`
   padding-bottom: 3%;
   @media screen and (max-width: 1024px) {
     font-size: 6rem;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 4.2rem;
   }
   @media screen and (max-width: 376px) {
     font-size: 3.8rem;
@@ -58,6 +65,10 @@ const LastText = styled.div`
   @media screen and (max-width: 1024px) {
     font-size: 1.6rem;
     margin-bottom: 5%;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 1.3rem;
+    margin-bottom: 3%;
   }
   @media screen and (max-width: 376px) {
     font-size: 1.1rem;
@@ -84,7 +95,7 @@ const TextFirst = styled.div`
     font-size: 2.2rem;
   }
 
-  @media screen and (max-width: 376px) {
+  @media screen and (max-width: 500px) {
     font-size: 1.6rem;
   }
 
@@ -94,7 +105,7 @@ const TextFirst = styled.div`
 `;
 const TextLast = styled.div`
   font-size: 1.6rem;
-  @media screen and (max-width: 376px) {
+  @media screen and (max-width: 500px) {
     display: none;
   }
 `;
@@ -121,7 +132,7 @@ const CouponBox = styled.div`
     justify-content: center;
     align-content: center;
   }
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 768px) {
     margin: 0 16px;
     display: grid;
     grid-template-columns: repeat(2, 220px);
@@ -132,11 +143,11 @@ const CouponBox = styled.div`
       margin-right: 0px;
     }
   }
-  @media screen and (max-width: 376px) {
+  @media screen and (max-width: 500px) {
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(2, 180px);
-    grid-template-rows: repeat(2, 100px);
+    grid-template-columns: repeat(2, 160px);
+    grid-template-rows: repeat(2, 70px);
     justify-content: center;
     align-content: center;
     img {

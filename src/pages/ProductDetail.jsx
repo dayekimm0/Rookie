@@ -21,6 +21,14 @@ import {
 // util에서 엠블럼과 팀 색상 가져오기 함수 import
 import { getEmblem, getTeamColor } from "../util";
 
+import review1 from "../images/review/review1.jpg";
+import review2 from "../images/review/review2.jpg";
+import review3 from "../images/review/review3.jpg";
+import review4 from "../images/review/review4.jpg";
+import review5 from "../images/review/review5.jpg";
+import review6 from "../images/review/review6.jpg";
+import review7 from "../images/review/review7.jpg";
+
 // mockup 이미지
 // import doosanUniform1 from "../images/mockup/doosan_bears_uniform1.jpg";
 // import doosanUniform2 from "../images/mockup/doosan_bears_uniform2.jpg";
@@ -219,9 +227,11 @@ const ImageContainer = styled.div`
     width: 400px;
     height: 400px;
   }
-
+  @media (max-width: 450px) {
+    width: 100%;
+  }
   @media (max-width: 375px) {
-    width: 95%;
+    width: 100%;
     min-height: 350px;
   }
 `;
@@ -364,7 +374,7 @@ const DetailSectionWrapper = styled.div`
 const DetailImageWrapper = styled.div`
   width: 100%;
   overflow: hidden;
-  min-height: 1000px;
+  min-height: 600px;
 
   @media (max-width: 1200px) {
     min-height: 800px;
@@ -376,6 +386,12 @@ const DetailImageWrapper = styled.div`
 
   @media (max-width: 375px) {
     min-height: 400px;
+  }
+`;
+
+const DetailReplaceThumb = styled.div`
+  img {
+    width: 100%;
   }
 `;
 
@@ -1088,6 +1104,11 @@ const PhotoReviewItem = styled.div`
   background-color: var(--grayE);
   border-radius: 4px;
   overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
   @media (max-width: 1024px) {
     width: 100%;
@@ -1278,6 +1299,12 @@ const ReviewImage = styled.div`
   height: 70px;
   background-color: var(--grayE);
   border-radius: 4px;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
   @media (max-width: 375px) {
     width: 60px;
@@ -1466,6 +1493,68 @@ const RelatedProductsSection = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
+
+  .path {
+    stroke: var(--main);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+`;
+
 // 구단 코드를 ID로 변환하는 함수 추가
 const getTeamIdFromCode = (teamCode) => {
   switch (teamCode) {
@@ -1575,14 +1664,14 @@ const ProductDetail = () => {
       date: "2025.04.07",
       rating: 5,
       content: "유니폼 좋아요!",
-      images: 4,
+      images: 2,
     },
     {
       id: 2,
-      author: "sub****",
-      date: "2025.04.07",
+      author: "ZZa****",
+      date: "2025.04.8",
       rating: 5,
-      content: "유니폼 좋아요!",
+      content: "완전 맘에 들어요 너무 귀여워용",
       images: 4,
     },
   ]);
@@ -1906,11 +1995,18 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <Container>
-        <ContentWrapper>
-          <div style={{ textAlign: "center", padding: "100px 0" }}>
-            로딩 중...
-          </div>
-        </ContentWrapper>
+        <SlideLoaderWrapper>
+          <SvgSpinner viewBox="0 0 50 50">
+            <circle
+              className="path"
+              cx="25"
+              cy="25"
+              r="20"
+              fill="none"
+              strokeWidth="5"
+            />
+          </SvgSpinner>
+        </SlideLoaderWrapper>
       </Container>
     );
   }
@@ -2114,7 +2210,10 @@ const ProductDetail = () => {
                           <DetailImage src={item} key={item} />
                         ))
                       ) : (
-                        <DetailImagePlaceholder />
+                        // <DetailImagePlaceholder />
+                        <DetailReplaceThumb>
+                          <img src={[product.thumbnail]} alt="product" />
+                        </DetailReplaceThumb>
                       )}
                     </DetailImageWrapper>
 
@@ -2148,9 +2247,24 @@ const ProductDetail = () => {
                 {/* 사진 리뷰 섹션 추가 */}
                 <SubSectionTitle>사진 리뷰 전체보기</SubSectionTitle>
                 <PhotoReviewGrid>
-                  {[...Array(6)].map((_, index) => (
-                    <PhotoReviewItem key={index} />
-                  ))}
+                  <PhotoReviewItem>
+                    <img src={review1} alt="review1" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review2} alt="review2" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review3} alt="review3" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review4} alt="review4" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review5} alt="review5" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review6} alt="review6" />
+                  </PhotoReviewItem>
                 </PhotoReviewGrid>
                 <HorizontalDivider />
 
@@ -2170,11 +2284,28 @@ const ProductDetail = () => {
                       </ReviewHeader>
                       <ReviewContent>
                         <ReviewText>{review.content}</ReviewText>
-                        <ReviewImages>
-                          {[...Array(review.images)].map((_, index) => (
-                            <ReviewImage key={index} />
-                          ))}
-                        </ReviewImages>
+                        {review.id === 1 ? (
+                          <ReviewImages>
+                            <ReviewImage>
+                              <img src={review6} alt="review6" />
+                            </ReviewImage>
+                            <ReviewImage>
+                              <img src={review7} alt="review7" />
+                            </ReviewImage>
+                            <ReviewImage>
+                              <img src={review2} alt="review2" />
+                            </ReviewImage>
+                          </ReviewImages>
+                        ) : (
+                          <ReviewImages>
+                            <ReviewImage>
+                              <img src={review1} alt="review6" />
+                            </ReviewImage>
+                            <ReviewImage>
+                              <img src={review5} alt="review7" />
+                            </ReviewImage>
+                          </ReviewImages>
+                        )}
                       </ReviewContent>
                     </ReviewItem>
                   ))}

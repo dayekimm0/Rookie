@@ -17,6 +17,7 @@ const Buttons = styled.div`
   }
   @media screen and (max-width: 500px) {
     padding-bottom: 26%;
+    gap: 20px;
   }
   @media screen and (max-width: 375px) {
     width: 100%;
@@ -52,14 +53,18 @@ const Button = styled.button`
     height: 50px;
     font-size: 1.4rem;
   }
+  @media screen and (max-width: 1768px) {
+    width: 200px;
+  }
   @media screen and (max-width: 500px) {
-    width: 180px;
+    width: 150px;
     height: 45px;
     font-size: 1.2rem;
+    margin: 0 auto;
   }
   @media screen and (max-width: 376px) {
-    width: 140px;
-    height: 44px;
+    width: 130px;
+    height: 38px;
   }
 `;
 
