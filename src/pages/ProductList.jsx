@@ -197,19 +197,26 @@ const ProductList = () => {
     setShuffledProducts,
     setInitialShuffleDone,
   ]);
-
   // // 최초 로딩 시 선택 브랜드 초기화
   // useEffect(() => {
   //   if (!selectedBrand?.trim() && brands.length > 0) {
   //     setSelectedBrand(brands[0]);
   //   }
   // }, [brands, selectedBrand, setSelectedBrand]);
-
   const baseProducts = sort === "random" ? shuffledProducts : allProducts;
-
   // 필터링 & 정렬
-  });
-
+  const filteredAndSortedProducts = filterAndSortProducts(
+    baseProducts.filter((p) => {
+      if (selectCollabo === "COLLABORATION") {
+        return selectedBrand ? p.brand === selectedBrand : true;
+      }
+      if (selectedCategory !== "ALL") {
+        return p.category === selectedCategory;
+      }
+      return true;
+    }),
+    { selectCollabo, selectedBrand, sort }
+  );
   if (isLoading)
     return (
       <SlideLoaderWrapper>
@@ -226,23 +233,6 @@ const ProductList = () => {
       </SlideLoaderWrapper>
     );
   if (error) return <div>에러 :{error.message}</div>;
-
-  const filteredAndSortedProducts = filterAndSortProducts(
-    baseProducts.filter((p) => {
-      if (selectCollabo === "COLLABORATION") {
-        return selectedBrand ? p.brand === selectedBrand : true;
-      }
-      if (selectedCategory !== "ALL") {
-        return p.category === selectedCategory;
-      }
-      return true;
-    }),
-    { selectCollabo, selectedBrand, sort }
-  );
-
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>에러 :{error.message}</div>;
-
   return (
     <Container>
       <ProductBanner team={bannerKey || "kbo"} />
@@ -251,5 +241,4 @@ const ProductList = () => {
     </Container>
   );
 };
-
 export default ProductList;
