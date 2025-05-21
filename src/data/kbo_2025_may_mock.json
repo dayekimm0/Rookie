@@ -1,0 +1,200 @@
+[
+  {
+    "date": "2025-05-20",
+    "day": "화",
+    "matches": [
+      {
+        "time": "18:30",
+        "stadium": "울산",
+        "homeTeam": {
+          "name": "한화",
+          "code": 8
+        },
+        "awayTeam": {
+          "name": "NC",
+          "code": 9
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "수원",
+        "homeTeam": {
+          "name": "KIA",
+          "code": 1
+        },
+        "awayTeam": {
+          "name": "KT",
+          "code": 5
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "사직",
+        "homeTeam": {
+          "name": "LG",
+          "code": 3
+        },
+        "awayTeam": {
+          "name": "롯데",
+          "code": 7
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "잠실",
+        "homeTeam": {
+          "name": "SSG",
+          "code": 6
+        },
+        "awayTeam": {
+          "name": "두산",
+          "code": 4
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "고척",
+        "homeTeam": {
+          "name": "삼성",
+          "code": 2
+        },
+        "awayTeam": {
+          "name": "키움",
+          "code": 10
+        }
+      }
+    ]
+  },
+  {
+    "date": "2025-05-21",
+    "day": "수",
+    "matches": [
+      {
+        "time": "18:30",
+        "stadium": "울산",
+        "homeTeam": {
+          "name": "한화",
+          "code": 8
+        },
+        "awayTeam": {
+          "name": "NC",
+          "code": 9
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "수원",
+        "homeTeam": {
+          "name": "KIA",
+          "code": 1
+        },
+        "awayTeam": {
+          "name": "KT",
+          "code": 5
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "사직",
+        "homeTeam": {
+          "name": "LG",
+          "code": 3
+        },
+        "awayTeam": {
+          "name": "롯데",
+          "code": 7
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "잠실",
+        "homeTeam": {
+          "name": "SSG",
+          "code": 6
+        },
+        "awayTeam": {
+          "name": "두산",
+          "code": 4
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "고척",
+        "homeTeam": {
+          "name": "삼성",
+          "code": 2
+        },
+        "awayTeam": {
+          "name": "키움",
+          "code": 10
+        }
+      }
+    ]
+  },
+  {
+    "date": "2025-05-22",
+    "day": "목",
+    "matches": [
+      {
+        "time": "18:30",
+        "stadium": "울산",
+        "homeTeam": {
+          "name": "한화",
+          "code": 8
+        },
+        "awayTeam": {
+          "name": "NC",
+          "code": 9
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "수원",
+        "homeTeam": {
+          "name": "KIA",
+          "code": 1
+        },
+        "awayTeam": {
+          "name": "KT",
+          "code": 5
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "사직",
+        "homeTeam": {
+          "name": "LG",
+          "code": 3
+        },
+        "awayTeam": {
+          "name": "롯데",
+          "code": 7
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "잠실",
+        "homeTeam": {
+          "name": "SSG",
+          "code": 6
+        },
+        "awayTeam": {
+          "name": "두산",
+          "code": 4
+        }
+      },
+      {
+        "time": "18:30",
+        "stadium": "고척",
+        "homeTeam": {
+          "name": "삼성",
+          "code": 2
+        },
+        "awayTeam": {
+          "name": "키움",
+          "code": 10
+        }
+      }
+    ]
+  }
+]
