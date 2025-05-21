@@ -35,6 +35,68 @@ const Container = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
+
+  .path {
+    stroke: var(--main);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+`;
+
 const ProductList = () => {
   const { teamCode } = useParams();
   const {
@@ -135,16 +197,13 @@ const ProductList = () => {
     setShuffledProducts,
     setInitialShuffleDone,
   ]);
-
   // // 최초 로딩 시 선택 브랜드 초기화
   // useEffect(() => {
   //   if (!selectedBrand?.trim() && brands.length > 0) {
   //     setSelectedBrand(brands[0]);
   //   }
   // }, [brands, selectedBrand, setSelectedBrand]);
-
   const baseProducts = sort === "random" ? shuffledProducts : allProducts;
-
   // 필터링 & 정렬
   const filteredAndSortedProducts = filterAndSortProducts(
     baseProducts.filter((p) => {
@@ -158,10 +217,22 @@ const ProductList = () => {
     }),
     { selectCollabo, selectedBrand, sort }
   );
-
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
   if (error) return <div>에러 :{error.message}</div>;
-
   return (
     <Container>
       <ProductBanner team={bannerKey || "kbo"} />
@@ -170,5 +241,4 @@ const ProductList = () => {
     </Container>
   );
 };
-
 export default ProductList;
