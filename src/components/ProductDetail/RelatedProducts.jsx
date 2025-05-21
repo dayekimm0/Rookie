@@ -9,8 +9,8 @@ import "swiper/css/navigation";
 const RelatedProductsSection = styled.div`
   width: 100%;
   margin-top: 60px;
-  padding-top: 40px;
-  border-top: 1px solid var(--grayE);
+  padding-top: 50px;
+  border-top: 1px solid var(--gray6);
 
   @media (max-width: 1024px) {
     margin-top: 40px;
@@ -27,11 +27,11 @@ const RelatedProductsSection = styled.div`
 const RelatedProductsTitle = styled.h3`
   font-size: 30px;
   font-weight: 700;
-  margin-bottom: 50px; // 제목과 상품 컨테이너 사이 간격
+  margin-bottom: 20px; // 제목과 상품 컨테이너 사이 간격
 
   @media (max-width: 1024px) {
     font-size: 24px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   @media (max-width: 480px) {
@@ -53,6 +53,7 @@ const RelatedProductSlider = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    top: 40%;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -114,10 +115,6 @@ const RelatedProductItem = styled.div`
   cursor: pointer;
   transition: transform 0.3s ease;
 
-  &:hover {
-    transform: translateY(-5px);
-  }
-
   @media (max-width: 1024px) {
     width: 100%;
     height: 350px;
@@ -133,9 +130,9 @@ const RelatedProductImageContainer = styled.div`
   width: 238px;
   height: 317px;
   background-color: var(--light);
-  margin-bottom: 27px; // 이미지와 텍스트 사이 gap
+  margin-bottom: 15px; // 이미지와 텍스트 사이 gap
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid #eee;
 
   @media (max-width: 1024px) {
@@ -158,7 +155,7 @@ const RelatedProductImage = styled.img`
   transition: transform 0.3s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
   }
 `;
 
@@ -173,7 +170,7 @@ const ImagePlaceholder = styled.div`
   color: #888;
   font-size: 14px;
   border: 2px dashed #ccc;
-  border-radius: 8px;
+  border-radius: 4px;
 
   &::after {
     content: "상품 이미지";
@@ -202,13 +199,13 @@ const RelatedProductInfo = styled.div`
 const RelatedProductName = styled.h4`
   font-size: 16px;
   font-weight: 400;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  line-height: 1.4;
+  line-height: 2;
 
   @media (max-width: 1024px) {
     font-size: 15px;
@@ -233,22 +230,6 @@ const RecommendedProductPrice = styled.span`
 
   @media (max-width: 480px) {
     font-size: 15px;
-  }
-`;
-
-// 추천 상품 영역 하단 구분선
-const BottomDivider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: var(--grayC);
-  margin-top: 58px;
-
-  @media (max-width: 1024px) {
-    margin-top: 40px;
-  }
-
-  @media (max-width: 375px) {
-    margin-top: 30px;
   }
 `;
 
@@ -296,7 +277,6 @@ const RelatedProducts = ({ products = [] }) => {
           <RelatedProductsTitle>같은 카테고리의 추천 상품</RelatedProductsTitle>
           <NoProductsMessage>추천 상품이 없습니다.</NoProductsMessage>
         </RelatedProductsSection>
-        <BottomDivider />
       </>
     );
   }
@@ -372,7 +352,7 @@ const RelatedProducts = ({ products = [] }) => {
                             color: #888;
                             font-size: 14px;
                             border: 2px dashed #ccc;
-                            border-radius: 8px;
+                            border-radius: 4px;
                           `;
                           placeholder.textContent =
                             "이미지를 불러올 수 없습니다";
@@ -398,7 +378,6 @@ const RelatedProducts = ({ products = [] }) => {
           </Swiper>
         </RelatedProductSlider>
       </RelatedProductsSection>
-      <BottomDivider />
     </>
   );
 };

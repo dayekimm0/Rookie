@@ -236,7 +236,7 @@ const Cart = () => {
   // 전체상품주문
   const handleOrderAll = () => {
     navigate("/payment", {
-      state: { orderItems: mockItems, coupon: selectedCoupon },
+      state: { orderItems: cartItems, coupon: selectedCoupon },
     });
   };
 
