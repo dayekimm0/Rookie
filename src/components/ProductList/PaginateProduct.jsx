@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
+import useProductStore from "../../stores/ProductStore";
 import styled from "styled-components";
 import ProductCard from "../ProductCard";
 
@@ -82,7 +83,6 @@ const PaginateProduct = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(16);
 
-  // ✅ 반응형 itemsPerPage 계산
   const calculateItemsPerPage = () => {
     const width = window.innerWidth;
 

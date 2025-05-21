@@ -1,19 +1,26 @@
 import { create } from "zustand";
 
 const useProductStore = create((set) => ({
+  sort: "random",
+  setSort: (sort) => set({ sort }),
+
+  initialShuffleDone: false,
+  setInitialShuffleDone: () => set({ initialShuffleDone: true }),
+
+  shuffledProducts: [],
+  setShuffledProducts: (products) => set({ shuffledProducts: products }),
+
+  // 콜라보 필터
   selectCollabo: "ALL",
   setSelectCollabo: (value) => set({ selectCollabo: value }),
 
   selectedBrand: "",
   setSelectedBrand: (brand) => set({ selectedBrand: brand }),
 
-  sort: "newest",
-  setSort: (value) => set({ sort: value }),
-
   selectedProductId: null,
   setSelectedProductId: (id) => set({ selectedProductId: id }),
 
-  // ✅ 여기가 추가된 부분
+  // 카테고리 선택
   selectedCategory: "ALL",
   setSelectedCategory: (category) => set({ selectedCategory: category }),
 }));
