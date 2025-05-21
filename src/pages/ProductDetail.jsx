@@ -1664,15 +1664,15 @@ const ProductDetail = () => {
       date: "2025.04.07",
       rating: 5,
       content: "유니폼 좋아요!",
-      images: 2,
+      reviewImages: [review6, review7, review2],
     },
     {
       id: 2,
       author: "ZZa****",
-      date: "2025.04.8",
+      date: "2025.04.08",
       rating: 5,
       content: "완전 맘에 들어요 너무 귀여워용",
-      images: 4,
+      reviewImages: [review1, review5],
     },
   ]);
 
@@ -2266,6 +2266,7 @@ const ProductDetail = () => {
                     <img src={review6} alt="review6" />
                   </PhotoReviewItem>
                 </PhotoReviewGrid>
+
                 <HorizontalDivider />
 
                 <ReviewList>
@@ -2284,28 +2285,32 @@ const ProductDetail = () => {
                       </ReviewHeader>
                       <ReviewContent>
                         <ReviewText>{review.content}</ReviewText>
-                        {review.id === 1 ? (
-                          <ReviewImages>
-                            <ReviewImage>
-                              <img src={review6} alt="review6" />
-                            </ReviewImage>
-                            <ReviewImage>
-                              <img src={review7} alt="review7" />
-                            </ReviewImage>
-                            <ReviewImage>
-                              <img src={review2} alt="review2" />
-                            </ReviewImage>
-                          </ReviewImages>
-                        ) : (
-                          <ReviewImages>
-                            <ReviewImage>
-                              <img src={review1} alt="review6" />
-                            </ReviewImage>
-                            <ReviewImage>
-                              <img src={review5} alt="review7" />
-                            </ReviewImage>
-                          </ReviewImages>
-                        )}
+                        <ReviewImages>
+                          {review.id === 1 ? (
+                            // 첫 번째 리뷰인 경우
+                            <>
+                              <ReviewImage>
+                                <img src={review6} alt="review6" />
+                              </ReviewImage>
+                              <ReviewImage>
+                                <img src={review7} alt="review7" />
+                              </ReviewImage>
+                              <ReviewImage>
+                                <img src={review2} alt="review2" />
+                              </ReviewImage>
+                            </>
+                          ) : (
+                            // 두 번째 리뷰인 경우
+                            <>
+                              <ReviewImage>
+                                <img src={review1} alt="review1" />
+                              </ReviewImage>
+                              <ReviewImage>
+                                <img src={review5} alt="review5" />
+                              </ReviewImage>
+                            </>
+                          )}
+                        </ReviewImages>
                       </ReviewContent>
                     </ReviewItem>
                   ))}
@@ -2374,9 +2379,24 @@ const ProductDetail = () => {
                 {/* 사진 리뷰 섹션 추가 */}
                 <SubSectionTitle>사진 리뷰 전체보기</SubSectionTitle>
                 <PhotoReviewGrid>
-                  {[...Array(6)].map((_, index) => (
-                    <PhotoReviewItem key={index} />
-                  ))}
+                  <PhotoReviewItem>
+                    <img src={review1} alt="review1" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review2} alt="review2" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review3} alt="review3" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review4} alt="review4" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review5} alt="review5" />
+                  </PhotoReviewItem>
+                  <PhotoReviewItem>
+                    <img src={review6} alt="review6" />
+                  </PhotoReviewItem>
                 </PhotoReviewGrid>
                 <HorizontalDivider />
 
@@ -2397,9 +2417,30 @@ const ProductDetail = () => {
                       <ReviewContent>
                         <ReviewText>{review.content}</ReviewText>
                         <ReviewImages>
-                          {[...Array(review.images)].map((_, index) => (
-                            <ReviewImage key={index} />
-                          ))}
+                          {review.id === 1 ? (
+                            // 첫 번째 리뷰인 경우
+                            <>
+                              <ReviewImage>
+                                <img src={review6} alt="review6" />
+                              </ReviewImage>
+                              <ReviewImage>
+                                <img src={review7} alt="review7" />
+                              </ReviewImage>
+                              <ReviewImage>
+                                <img src={review2} alt="review2" />
+                              </ReviewImage>
+                            </>
+                          ) : (
+                            // 두 번째 리뷰인 경우
+                            <>
+                              <ReviewImage>
+                                <img src={review1} alt="review1" />
+                              </ReviewImage>
+                              <ReviewImage>
+                                <img src={review5} alt="review5" />
+                              </ReviewImage>
+                            </>
+                          )}
                         </ReviewImages>
                       </ReviewContent>
                     </ReviewItem>
