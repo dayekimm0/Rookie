@@ -17,6 +17,9 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 
+// util에서 엠블럼과 팀 색상 가져오기 함수 import
+import { getEmblem, getTeamColor } from "../util";
+
 // mockup 이미지
 // import doosanUniform1 from "../images/mockup/doosan_bears_uniform1.jpg";
 // import doosanUniform2 from "../images/mockup/doosan_bears_uniform2.jpg";
@@ -401,16 +404,15 @@ const DetailImagePlaceholder = styled.div`
   width: 100%;
   /* 명확한 높이 지정 */
   height: 500px;
-  background-color: #f0f0f0;
+  background-color: var(--light);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--light);
 
   &::after {
-    content: "상세 이미지";
-    color: #888;
+    content: "";
+    color: var(--light);
     font-size: 18px;
     font-weight: 500;
   }
@@ -455,6 +457,13 @@ const ContentGradient = styled.div`
   @media (max-width: 375px) {
     height: 100px;
   }
+`;
+
+// 링크로 감싸진 배너 이미지를 위한 styled-component 생성
+const PromotionBannerLink = styled.a`
+  display: block;
+  width: 100%;
+  cursor: pointer;
 `;
 
 // 홍보 배너
@@ -535,7 +544,7 @@ const StickyBox = styled.div`
     bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 9999;
+    z-index: 90;
     background: #fff;
     padding: 44px 16px 15px;
     border-top-right-radius: 16px;
@@ -556,18 +565,18 @@ const PurchaseSection = styled.div`
   background: var(--light);
   display: flex;
   flex-direction: column;
-  margin-bottom: 92px;
+  margin-bottom: 85px;
   display: ${({ isContent }) => isContent && "none"};
 
   @media (max-width: 1200px) {
     width: 300px;
     top: 200px;
     margin-top: 20px;
-    margin-bottom: 106px;
+    margin-bottom: 100px;
   }
   @media (max-width: 1024px) {
     top: 20px;
-    margin-bottom: 72px;
+    margin-bottom: 5px;
   }
 
   @media (max-width: 768px) {
@@ -575,8 +584,8 @@ const PurchaseSection = styled.div`
     position: relative;
     top: 0;
     margin-top: 0;
-    margin-bottom: 30px;
-    display: ${({ isContent }) => isContent && "block"};
+    margin-bottom: 10px;
+    display: ${({ isContent }) => (isContent ? "block" : "none")};
   }
 
   @media (max-width: 375px) {
@@ -586,7 +595,7 @@ const PurchaseSection = styled.div`
   }
 `;
 
-// 모바일에서 구매 섹션 내부 패딩 조정
+// 구매 섹션 내부 패딩 조정
 const PurchaseSectionContent = styled.div`
   padding: 24px;
   height: 100%;
@@ -616,39 +625,33 @@ const ProductMeta = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  padding-left: -20;
 
   @media (max-width: 375px) {
     margin-bottom: 16px;
   }
 `;
 
-// 임시 엠블럼 플레이스홀더
-const EmblemPlaceholder = styled.div`
+// 엠블럼 플레이스홀더
+const EmblemContainer = styled.div`
   width: 53px;
   height: 53px;
   margin-right: 12px;
-  background-color: #e0e0e0;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed #ccc;
 
-  &::after {
-    content: "로고";
-    color: #888;
-    font-size: 10px;
-    font-weight: 500;
+  img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    scale: ${(props) => (props.isTeam6 ? "80%" : "100%")};
   }
 
   @media (max-width: 375px) {
     width: 45px;
     height: 45px;
     margin-right: 10px;
-
-    &::after {
-      font-size: 9px;
-    }
   }
 `;
 
@@ -657,7 +660,7 @@ const LicenseText = styled.span`
   font-size: 14px;
   color: var(--gray1);
   display: flex;
-  align-items: center;
+  margin-left: 0px;
 
   @media (max-width: 375px) {
     font-size: 12px;
@@ -751,22 +754,18 @@ const OptionContainer = styled.div`
   }
 `;
 
-const OptionSelect = styled.select`
+const OptionSelect = styled.div`
   width: 100%;
   height: 60px;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 0 15px;
   font-size: 15px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   background-color: white;
   cursor: pointer;
-
-  &::-ms-expand {
-    display: none;
-  }
+  display: flex;
+  align-items: center;
+  position: relative;
 
   @media (max-width: 1024px) {
     height: 40px;
@@ -797,6 +796,48 @@ const SelectArrowContainer = styled.div`
     right: 8px;
     width: 20px;
     height: 20px;
+  }
+`;
+
+// 드롭다운 메뉴 컨테이너
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+`;
+
+// 드롭다운 메뉴 아이템
+const DropdownItem = styled.div`
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 15px;
+
+  &:hover {
+    background-color: var(--grayF5);
+  }
+
+  // 선택된 아이템 스타일
+  ${(props) =>
+    props.isSelected &&
+    `
+    background-color: var(--grayF5);
+    font-weight: 500;
+  `}
+
+  @media (max-width: 375px) {
+    padding: 10px 12px;
+    font-size: 14px;
   }
 `;
 
@@ -888,7 +929,7 @@ const QuantityInput = styled.input`
   }
 `;
 
-// 선택된 제품 가격
+// 선택된 제품 가격f
 const SelectedProductPrice = styled.span`
   font-size: 22px;
   font-weight: bold;
@@ -1409,82 +1450,50 @@ const InquiryAuthor = styled.span`
   }
 `;
 
-// 모바일에서 관련 상품 섹션 스타일
+// 관련 상품 섹션 스타일
 const RelatedProductsSection = styled.div`
   width: 100%;
-  margin-top: 60px;
+  margin-top: 10px;
 
   @media (max-width: 1024px) {
-    margin-top: 40px;
+    margin-top: 10px;
   }
 
   @media (max-width: 375px) {
-    margin-top: 30px;
+    margin-top: 5px;
     padding: 0 4px;
   }
 `;
 
-const SlideLoaderWrapper = styled.div`
-  height: 700px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @media screen and (max-width: 1024px) {
-    height: 320px;
+// 구단 코드를 ID로 변환하는 함수 추가
+const getTeamIdFromCode = (teamCode) => {
+  switch (teamCode) {
+    case "kbo":
+      return "0";
+    case "kia_tgs":
+      return "1";
+    case "ss_lns":
+      return "2";
+    case "lg_twins":
+      return "3";
+    case "ds_bas":
+      return "4";
+    case "kt_wiz":
+      return "5";
+    case "ssg_lds":
+      return "6";
+    case "lt_gnt":
+      return "7";
+    case "hw_egs":
+      return "8";
+    case "nc_dns":
+      return "9";
+    case "kw_hrs":
+      return "10";
+    default:
+      return "0";
   }
-
-  @media screen and (max-width: 768px) {
-    height: 300px;
-  }
-
-  @media screen and (max-width: 500px) {
-    height: 250px;
-  }
-`;
-
-const SvgSpinner = styled.svg`
-  animation: rotate 2s linear infinite;
-  width: 50px;
-  height: 50px;
-
-  .path {
-    stroke: var(--main);
-    stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
-  }
-
-  @media screen and (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-  }
-
-  @media screen and (max-width: 480px) {
-    width: 30px;
-    height: 30px;
-  }
-
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes dash {
-    0% {
-      stroke-dasharray: 1, 150;
-      stroke-dashoffset: 0;
-    }
-    50% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -35;
-    }
-    100% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -124;
-    }
-  }
-`;
+};
 
 // 상태 변수들
 const ProductDetail = () => {
@@ -1499,6 +1508,7 @@ const ProductDetail = () => {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isFixed, setIsFixed] = useState(false);
+  const [isOptionDropdownOpen, setIsOptionDropdownOpen] = useState(false);
 
   // 카트페이지 이동
   const addToCart = useCartStore((state) => state.addToCart);
@@ -1525,7 +1535,11 @@ const ProductDetail = () => {
   // contentRef 및 contentHeight 상태 추가
   const contentRef = useRef(null);
   const stickyRef = useRef(null);
-  const [contentHeight, setContentHeight] = useState("10000px"); // 충분히 큰 초기값
+  const [contentHeight, setContentHeight] = useState("10000px"); //
+
+  // 여기에 옵션 컨테이너 ref 추가
+  const optionContainerRef1 = useRef(null);
+  const optionContainerRef2 = useRef(null);
 
   // 리뷰 모의 데이터
   const [reviews, setReviews] = useState([
@@ -1686,6 +1700,30 @@ const ProductDetail = () => {
     }
   }, [isCollapsed]); // isCollapsed가 변경될 때마다 실행
 
+  // 드롭다운 외부 클릭 감지를 위한 useEffect 추가
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // 두 컨테이너 모두 확인
+      const isOutside1 =
+        optionContainerRef1.current &&
+        !optionContainerRef1.current.contains(event.target);
+      const isOutside2 =
+        optionContainerRef2.current &&
+        !optionContainerRef2.current.contains(event.target);
+
+      // 두 컨테이너 모두 외부를 클릭했고 드롭다운이 열려있으면 닫기
+      if (isOutside1 && isOutside2 && isOptionDropdownOpen) {
+        setIsOptionDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOptionDropdownOpen]);
+
   // 리뷰 모달 열기
   const openReviewModal = () => {
     setShowReviewModal(true);
@@ -1747,6 +1785,17 @@ const ProductDetail = () => {
 
   // 탭 메뉴에 대한 ref
   const tabMenuRef = useRef(null);
+
+  // 드롭다운 토글 함수
+  const toggleOptionDropdown = () => {
+    setIsOptionDropdownOpen(!isOptionDropdownOpen);
+  };
+
+  // 옵션 선택 함수
+  const selectOption = (option) => {
+    setSelectedOption(option);
+    setIsOptionDropdownOpen(false);
+  };
 
   // 접기/펼치기 토글 함수
   const toggleCollapse = () => {
@@ -1831,18 +1880,11 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <Container>
-        <SlideLoaderWrapper>
-          <SvgSpinner viewBox="0 0 50 50">
-            <circle
-              className="path"
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              strokeWidth="5"
-            />
-          </SvgSpinner>
-        </SlideLoaderWrapper>
+        <ContentWrapper>
+          <div style={{ textAlign: "center", padding: "100px 0" }}>
+            로딩 중...
+          </div>
+        </ContentWrapper>
       </Container>
     );
   }
@@ -1896,10 +1938,32 @@ const ProductDetail = () => {
             <PurchaseSectionContent>
               {/* 제품 구매 정보와 버튼 */}
               <ProductMeta>
-                <EmblemPlaceholder />
+                <EmblemContainer
+                  bgColor={getTeamColor(getTeamIdFromCode(teamCode))}
+                  isTeam6={getTeamIdFromCode(teamCode) === "6"}
+                >
+                  {teamCode ? (
+                    <img
+                      src={getEmblem(getTeamIdFromCode(teamCode))}
+                      alt={`${teamCode} 엠블럼`}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        color: "#888",
+                        fontSize: "10px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      로고
+                    </div>
+                  )}
+                </EmblemContainer>
                 <LicenseText>공식 라이선스 제품</LicenseText>
               </ProductMeta>
+
               <ProductTitle>{product?.name || "제품명"}</ProductTitle>
+
               <PriceContainer>
                 <ProductPrice>
                   {product?.price ? product.price.toLocaleString() : "0"} 원
@@ -1911,18 +1975,28 @@ const ProductDetail = () => {
               </PriceContainer>
               {/* 옵션 선택기 */}
               {product?.options.length ? (
-                <OptionContainer>
-                  <OptionSelect>
-                    <option value="">- [필수] 옵션 선택 -</option>
-                    {product?.options?.map((option, index) => (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    ))}
+                <OptionContainer ref={optionContainerRef1}>
+                  <OptionSelect onClick={toggleOptionDropdown}>
+                    {selectedOption || "- [필수] 옵션 선택 -"}
                   </OptionSelect>
                   <SelectArrowContainer>
-                    <FontAwesomeIcon icon={faChevronDown} color="#666" />
+                    <FontAwesomeIcon
+                      icon={isOptionDropdownOpen ? faChevronUp : faChevronDown}
+                      color="#666"
+                    />
                   </SelectArrowContainer>
+
+                  <DropdownMenu isOpen={isOptionDropdownOpen}>
+                    {product?.options?.map((option, index) => (
+                      <DropdownItem
+                        key={index}
+                        isSelected={selectedOption === option}
+                        onClick={() => selectOption(option)}
+                      >
+                        {option}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
                 </OptionContainer>
               ) : null}
               {/* 배송 정보 */}
@@ -2000,10 +2074,12 @@ const ProductDetail = () => {
                     }}
                   >
                     {/* 홍보 배너 */}
-                    <PromotionBanner
-                      src={promotionBanner}
-                      alt="프로모션 배너"
-                    />
+                    <PromotionBannerLink href="/event">
+                      <PromotionBanner
+                        src={promotionBanner}
+                        alt="프로모션 배너"
+                      />
+                    </PromotionBannerLink>
 
                     {/* 상세 이미지 */}
                     <DetailImageWrapper>
@@ -2226,7 +2302,27 @@ const ProductDetail = () => {
           <PurchaseSectionContent>
             {/* 제품 구매 정보와 버튼 */}
             <ProductMeta>
-              <EmblemPlaceholder />
+              <EmblemContainer
+                bgColor={getTeamColor(getTeamIdFromCode(teamCode))}
+                isTeam6={getTeamIdFromCode(teamCode) === "6"}
+              >
+                {teamCode ? (
+                  <img
+                    src={getEmblem(getTeamIdFromCode(teamCode))}
+                    alt={`${teamCode} 엠블럼`}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      color: "#888",
+                      fontSize: "10px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    로고
+                  </div>
+                )}
+              </EmblemContainer>
               <LicenseText>공식 라이선스 제품</LicenseText>
             </ProductMeta>
 
@@ -2244,18 +2340,28 @@ const ProductDetail = () => {
 
             {/* 옵션 선택기 */}
             {product.options.length ? (
-              <OptionContainer>
-                <OptionSelect>
-                  <option value="">- [필수] 옵션 선택 -</option>
-                  {product?.options?.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
+              <OptionContainer ref={optionContainerRef2}>
+                <OptionSelect onClick={toggleOptionDropdown}>
+                  {selectedOption || "- [필수] 옵션 선택 -"}
                 </OptionSelect>
                 <SelectArrowContainer>
-                  <FontAwesomeIcon icon={faChevronDown} color="#666" />
+                  <FontAwesomeIcon
+                    icon={isOptionDropdownOpen ? faChevronUp : faChevronDown}
+                    color="#666"
+                  />
                 </SelectArrowContainer>
+
+                <DropdownMenu isOpen={isOptionDropdownOpen}>
+                  {product?.options?.map((option, index) => (
+                    <DropdownItem
+                      key={index}
+                      isSelected={selectedOption === option}
+                      onClick={() => selectOption(option)}
+                    >
+                      {option}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
               </OptionContainer>
             ) : null}
 
