@@ -175,7 +175,6 @@ const Dropdown = styled.div`
     top: 50px; /* 적절히 조절 (필요시 조정) */
     left: 0;
     right: 0;
-    width: auto;
     margin: 0 10px;
     border-radius: 8px;
   }
@@ -208,10 +207,10 @@ const ProductCategory = ({ products = [] }) => {
     setSelectedCategory,
   } = useProductStore();
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
+  // const [dropdownOpen, setDropdownOpen] = useState(false);
+  // const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
   const [showCategories, setShowCategories] = useState(true);
-  const [showCollaborationBrands, setShowCollaborationBrands] = useState(true);
+  // const [showCollaborationBrands, setShowCollaborationBrands] = useState(true);
   const brandRefs = useRef({});
 
   const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
@@ -224,27 +223,24 @@ const ProductCategory = ({ products = [] }) => {
     ),
   ];
 
-  const subBrands =
-    selectCollabo === "COLLABORATION" ? collaborationBrands : brands;
+  // const subBrands =
+  //   selectCollabo === "COLLABORATION" ? collaborationBrands : brands;
 
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
     setSelectCollabo(cat);
 
     if (cat === "COLLABORATION") {
-      setSelectedBrand(null); // 브랜드 초기화
-      setDropdownOpen((prev) => !prev);
-    } else {
-      setDropdownOpen(false);
+      setSelectedBrand(null);
     }
   };
 
   // ▼ 브랜드 클릭 시 드롭다운 닫고 브랜드 선택
-  const handleBrandClick = (brand) => {
-    setSelectedBrand(brand);
-    setSelectedCategory("COLLABORATION");
-    setDropdownOpen(false);
-  };
+  // const handleBrandClick = (brand) => {
+  //   setSelectedBrand(brand);
+  //   setSelectedCategory("COLLABORATION");
+  //   setDropdownOpen(false);
+  // };
 
   useEffect(() => {
     if (
@@ -273,14 +269,14 @@ const ProductCategory = ({ products = [] }) => {
           {Categories.map((category) => (
             <CategoryItem
               key={category}
-              active={selectCollabo === category}
+              active={selectCollabo === category ? "active" : ""}
               onClick={() => handleCategoryClick(category)}
             >
               {category}
             </CategoryItem>
           ))}
         </Category>
-
+        {/* 
         {selectCollabo === "COLLABORATION" && dropdownOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
@@ -307,7 +303,7 @@ const ProductCategory = ({ products = [] }) => {
               </CollaboCategory>
             </LayoutGroup>
           </motion.div>
-        )}
+        )} */}
       </CategoryContainer>
 
       {/* Mobile/Tablet */}
@@ -334,7 +330,7 @@ const ProductCategory = ({ products = [] }) => {
               </SidebarItem>
             ))}
 
-          {selectCollabo === "COLLABORATION" &&
+          {/* {selectCollabo === "COLLABORATION" &&
             showCollaborationBrands &&
             subBrands.map((brand) => (
               <SidebarItem
@@ -344,7 +340,7 @@ const ProductCategory = ({ products = [] }) => {
               >
                 {brand}
               </SidebarItem>
-            ))}
+            ))} */}
         </Sidebar>
         <Sort>
           <SortSelect value={sort} onChange={setSort} />

@@ -3,20 +3,21 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import useProductStore from "../stores/ProductStore";
-import bannerLinks from "../data/bannerLinks";
 import { filterAndSortProducts } from "../productlist_utils/filterSort";
 import ProductBanner from "../components/ProductList/ProductBanner";
 import ProductCategory from "../components/ProductList/ProductCategory";
 import PaginateProduct from "../components/ProductList/PaginateProduct";
+import { shuffleArray } from "../productlist_utils/productShuffle";
 
 const Container = styled.div`
-  width: 1920px;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: var(--light);
+  overflow: hidden;
   @media screen and (max-width: 1440px) {
     width: 100%;
   }
@@ -105,6 +106,10 @@ const ProductList = () => {
     setSelectedBrand,
     selectedCategory,
     setSelectedCategory,
+    initialShuffleDone,
+    setInitialShuffleDone,
+    shuffledProducts,
+    setShuffledProducts,
   } = useProductStore();
 
   const teamCodes = [
@@ -168,22 +173,41 @@ const ProductList = () => {
     staleTime: 1000 * 60 * 10,
   });
 
-  // 브랜드 리스트 추출
-  const brands = Array.from(
-    new Set(allProducts.map((item) => item.brand))
-  ).filter((brand) => brand && brand.trim() !== "");
-
-  // 최초 로딩 시 선택 브랜드 설정
+  // 최초 브랜드 셋팅
   useEffect(() => {
-    if (!selectedBrand?.trim() && brands.length > 0) {
-      setSelectedBrand(brands[0]);
+    if (!selectedBrand?.trim() && allProducts.length > 0) {
+      const brands = Array.from(
+        new Set(allProducts.map((p) => p.brand).filter(Boolean))
+      );
+      if (brands.length > 0) setSelectedBrand(brands[0]);
     }
-  }, [brands, selectedBrand, setSelectedBrand]);
+  }, [allProducts, selectedBrand, setSelectedBrand]);
 
-  const sortedProducts = filterAndSortProducts(allProducts, {
-    selectCollabo,
-    selectedBrand,
+  // 최초 랜덤 셔플 한 번 실행
+  useEffect(() => {
+    if (sort === "random" && !initialShuffleDone && allProducts.length > 0) {
+      const shuffled = shuffleArray(allProducts);
+      setShuffledProducts(shuffled);
+      setInitialShuffleDone();
+    }
+  }, [
     sort,
+    initialShuffleDone,
+    allProducts,
+    setShuffledProducts,
+    setInitialShuffleDone,
+  ]);
+
+  // // 최초 로딩 시 선택 브랜드 초기화
+  // useEffect(() => {
+  //   if (!selectedBrand?.trim() && brands.length > 0) {
+  //     setSelectedBrand(brands[0]);
+  //   }
+  // }, [brands, selectedBrand, setSelectedBrand]);
+
+  const baseProducts = sort === "random" ? shuffledProducts : allProducts;
+
+  // 필터링 & 정렬
   });
 
   if (isLoading)
@@ -204,7 +228,7 @@ const ProductList = () => {
   if (error) return <div>에러 :{error.message}</div>;
 
   const filteredAndSortedProducts = filterAndSortProducts(
-    allProducts.filter((p) => {
+    baseProducts.filter((p) => {
       if (selectCollabo === "COLLABORATION") {
         return selectedBrand ? p.brand === selectedBrand : true;
       }
@@ -216,11 +240,14 @@ const ProductList = () => {
     { selectCollabo, selectedBrand, sort }
   );
 
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러 :{error.message}</div>;
+
   return (
     <Container>
       <ProductBanner team={bannerKey || "kbo"} />
-      <ProductCategory brands={brands} />
-      <PaginateProduct items={filteredAndSortedProducts} itemsPerPage={16} />
+      <ProductCategory />
+      <PaginateProduct items={filteredAndSortedProducts} />
     </Container>
   );
 };

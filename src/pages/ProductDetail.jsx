@@ -373,7 +373,7 @@ const DetailSectionWrapper = styled.div`
 const DetailImageWrapper = styled.div`
   width: 100%;
   overflow: hidden;
-  min-height: 1000px;
+  min-height: 600px;
 
   @media (max-width: 1200px) {
     min-height: 800px;
@@ -385,6 +385,12 @@ const DetailImageWrapper = styled.div`
 
   @media (max-width: 375px) {
     min-height: 400px;
+  }
+`;
+
+const DetailReplaceThumb = styled.div`
+  img {
+    width: 100%;
   }
 `;
 
@@ -2177,7 +2183,10 @@ const ProductDetail = () => {
                           <DetailImage src={item} key={item} />
                         ))
                       ) : (
-                        <DetailImagePlaceholder />
+                        // <DetailImagePlaceholder />
+                        <DetailReplaceThumb>
+                          <img src={[product.thumbnail]} alt="product" />
+                        </DetailReplaceThumb>
                       )}
                     </DetailImageWrapper>
 
