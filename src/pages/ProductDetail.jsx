@@ -1654,7 +1654,7 @@ const ProductDetail = () => {
           coupon: null,
         },
       });
-    }, 3000);
+    }, 1000);
 
     // 구매 모달 표시
     setShowBuyModal(true);
