@@ -1509,6 +1509,7 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isFixed, setIsFixed] = useState(false);
   const [isOptionDropdownOpen, setIsOptionDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
 
   // 카트페이지 이동
   const addToCart = useCartStore((state) => state.addToCart);
