@@ -37,7 +37,7 @@ const GameBox = styled.div`
 
   @media screen and (max-width: 1024px) {
   }
-  @media screen and (max-width: 376px) {
+  @media screen and (max-width: 500px) {
     padding: 22px 0px 60px 0px;
   }
 `;
@@ -164,7 +164,7 @@ const GameBoxBackground = styled.div`
     user-select: none;
   }
 
-  @media screen and (max-width: 376px) {
+  @media screen and (max-width: 500px) {
     width: 90px;
     height: 90px;
   }

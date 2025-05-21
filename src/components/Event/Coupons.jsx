@@ -12,13 +12,17 @@ const Coupon = styled.img`
     width: ${(props) => props.width || "209px"};
     height: ${(props) => props.height || "100px"};
   }
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 768px) {
     width: ${(props) => props.width || "209px"};
     height: ${(props) => props.height || "96px"};
   }
-  @media screen and (max-width: 376px) {
+  @media screen and (max-width: 500px) {
     width: ${(props) => props.width || "170px"};
     height: ${(props) => props.height || "80px"};
+  }
+  @media screen and (max-width: 500px) {
+    width: ${(props) => props.width || "150px"};
+    height: ${(props) => props.height || "60px"};
   }
 `;
 
