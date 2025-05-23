@@ -261,7 +261,7 @@ const Login = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        navigate("/");
+        navigate("/store");
       }
     });
     return () => unsubscribe();
@@ -306,17 +306,17 @@ const Login = () => {
       if (userDoc.exists()) {
         const userData = userDoc.data();
 
-          setFormData({
-            email: user.email,
-            username: userData.username || "",
-            nickname: userData.nickname || "",
-            favoriteTeam: userData.favoriteTeam || "",
-            birthdate: { year: "", month: "", date: "" },
-            phoneNumber: { part1: "", part2: "", part3: "" },
-            postalCode: userData.postalCode || "",
-            address: userData.address || "",
-            detailedAddress: userData.detailedAddress || "",
-          });
+        setFormData({
+          email: user.email,
+          username: userData.username || "",
+          nickname: userData.nickname || "",
+          favoriteTeam: userData.favoriteTeam || "",
+          birthdate: { year: "", month: "", date: "" },
+          phoneNumber: { part1: "", part2: "", part3: "" },
+          postalCode: userData.postalCode || "",
+          address: userData.address || "",
+          detailedAddress: userData.detailedAddress || "",
+        });
       } else {
         console.warn("⚠️ Firestore 유저 데이터 없음");
       }
