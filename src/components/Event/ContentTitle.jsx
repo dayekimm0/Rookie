@@ -80,7 +80,7 @@ const LastText = styled.div`
 `;
 
 const ContentTwo = styled.div`
-  margin-bottom: 26px;
+  margin-bottom: 50px;
   font-family: "Pretendard";
   user-select: none;
   @media screen and (max-width: 1024px) {
