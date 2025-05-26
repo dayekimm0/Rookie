@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import gsap from "gsap";
 import coupon80 from "../../images/coupon/cp1.png";
 import coupon50 from "../../images/coupon/cp2.png";
 import coupon30 from "../../images/coupon/cp3.png";
@@ -26,14 +27,39 @@ const Coupon = styled.img`
   }
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
 const Coupons = ({ width, height }) => {
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    const targets = wrapperRef.current.querySelectorAll("img");
+
+    gsap.fromTo(
+      targets,
+      { y: -100, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "bounce.out",
+        stagger: 0.2,
+      }
+    );
+  }, []);
   return (
-    <>
+    <Wrapper ref={wrapperRef}>
       <Coupon src={coupon80} alt="coupon" width={width} height={height} />
       <Coupon src={coupon50} alt="coupon" width={width} height={height} />
       <Coupon src={coupon30} alt="coupon" width={width} height={height} />
       <Coupon src={coupon10} alt="coupon" width={width} height={height} />
-    </>
+    </Wrapper>
   );
 };
 
