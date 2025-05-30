@@ -5,7 +5,7 @@ import { getEmblem, getTeamColor } from "../util";
 // FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import partnerLogo from "../images/logos/Partner_logo.svg";
+import partnerLogo from "../images/logos/Partner_Logo.svg";
 import MypageModal from "../components/Loginon/MypageModal";
 import { getScrollbarWidth } from "../util";
 
