@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 const ContentOne = styled.div`
-  font-family: "Gmarketsans";
+  font-family: "GmarketSans";
   font-weight: bold;
   padding: 30px;
   user-select: none;
@@ -59,9 +59,11 @@ const MediumText = styled.div`
     color: var(--main);
   }
 `;
+
 const LastText = styled.div`
   font-size: 1.8rem;
-  font-family: "Pretendard";
+  font-family: "Pretendard", sans-serif;
+  font-weight: 400;
   @media screen and (max-width: 1024px) {
     font-size: 1.6rem;
     margin-bottom: 5%;
@@ -81,7 +83,6 @@ const LastText = styled.div`
 
 const ContentTwo = styled.div`
   margin-bottom: 50px;
-  font-family: "Pretendard";
   user-select: none;
   @media screen and (max-width: 1024px) {
     margin-bottom: 3%;
