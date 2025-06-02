@@ -1,5 +1,4 @@
 import { createGlobalStyle } from "styled-components";
-import Gmarketsans from "../font/GmarketSansTTFBold.ttf";
 import reset from "styled-reset";
 
 const GlobalStyles = createGlobalStyle`
@@ -36,18 +35,6 @@ const GlobalStyles = createGlobalStyle`
     --eventtext: #0068ae;
   }
 
-  @font-face {
-      font-family: 'GmarketSans';
-      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-  }
-  @font-face {
-      font-family: 'GmarketSans';
-      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
-      font-weight: bold;
-      font-style: normal;
-  }
 
   html {
     font-size: 62.5%;
