@@ -10,6 +10,7 @@ import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
 import Play from "./pages/Play";
+import PlayDetail from "./pages/PlayDetail";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "play",
         element: <Play />,
+      },
+      {
+        path: "play/:id",
+        element: <PlayDetail />,
       },
       {
         path: "store",
