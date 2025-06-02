@@ -7,7 +7,7 @@ export const NaviLeftBtn = styled.button`
   left: 0;
   width: 5%;
   height: 100%;
-  background: linear-gradient(90deg, #222 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
   border: none;
   display: flex;
   justify-content: center;
@@ -49,7 +49,11 @@ export const NaviRightBtn = styled.button`
   right: 0;
   width: 5%;
   height: 100%;
-  background: linear-gradient(-90deg, #222 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(
+    -90deg,
+    var(--bg) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
   border: none;
   display: flex;
   justify-content: center;
@@ -114,7 +118,11 @@ export const MyhomeNaviLeftBtn = styled.button`
   @media screen and (max-width: 1024px) {
     width: 3.5%;
     height: 100%;
-    background: linear-gradient(90deg, #222 0%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(
+      90deg,
+      var(--bg) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
     transform: none;
     img {
       transform: rotate(-180deg);
@@ -137,7 +145,7 @@ export const MyhomeNaviRightBtn = styled.button`
   right: 0;
   height: 8%;
   width: 100%;
-  background: linear-gradient(0deg, #222 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(0deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
   border: none;
   display: flex;
   justify-content: center;
@@ -160,7 +168,11 @@ export const MyhomeNaviRightBtn = styled.button`
   @media screen and (max-width: 1024px) {
     width: 3.5%;
     height: 100%;
-    background: linear-gradient(-90deg, #222 0%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(
+      -90deg,
+      var(--bg) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
     img {
       transform: rotate(0deg);
       margin-left: 0px;

@@ -20,9 +20,10 @@ const GlobalStyles = createGlobalStyle`
   :root {
     --light: #fff;
     --dark: #111;
-    --bg: #222;
+    --bg: #111;
     --main:#FFEC00;
     --gray1: #111;
+    --gray2: #222;
     --gray3: #333;
     --gray6: #666;
     --gray8: #888;
