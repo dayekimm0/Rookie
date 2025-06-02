@@ -381,7 +381,9 @@ const Login = () => {
                 계정만들기
               </UnderInputBtn>
               <UnderInputLine />
-              <UnderInputBtn>이메일 • 비밀번호 찾기</UnderInputBtn>
+              <UnderInputBtn type="button">
+                이메일 • 비밀번호 찾기
+              </UnderInputBtn>
             </UnderInputWrapper>
           </InputWrapper>
           <SnsWrapper>
