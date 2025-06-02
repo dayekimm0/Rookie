@@ -21,7 +21,6 @@ const router = createBrowserRouter([
         element: <RedirectToStore />,
       },
       {
-        // index: true,
         path: "play",
         element: <Home />,
       },
