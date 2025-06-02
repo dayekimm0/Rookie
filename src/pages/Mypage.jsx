@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import authStore from "../stores/AuthStore";
 import { Outlet } from "react-router-dom";
-import coupon from "../images/logos/icons/coupon.svg";
-import thumbs_up from "../images/logos/icons/thumbs-up.svg";
+import coupon from ".././images/icons/coupon.svg";
+import thumbs_up from ".././images/icons/thumbs-up.svg";
 
 const Container = styled.div`
   width: 100%;
@@ -45,9 +45,26 @@ const Profile = styled.div`
   height: 370px;
   border: 1px solid var(--grayD);
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h4 {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  h6 {
+    font-size: 1.6rem;
+    color: var(--gray6);
+  }
 `;
 
-const ProfileImg = styled.img``;
+const ProfileImg = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  border: 1px solid #f00;
+`;
 
 const ProfileUnder = styled.div``;
 
