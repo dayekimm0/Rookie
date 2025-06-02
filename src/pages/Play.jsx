@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import VideoContent from "../components/Play/VideoContent";
-import ClipContent from "../components/Play/ClipContent";
+import PlayList from "../components/Play/PlayList";
+import ClipList from "../components/Play/ClipList";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
   padding: 0 5%;
+  gap: 100px;
   display: flex;
   flex-direction: column;
 
@@ -18,8 +18,12 @@ const Container = styled.div`
 const Play = () => {
   return (
     <Container>
-      <VideoContent />
-      <ClipContent />
+      <PlayList type="weekly play" title="WEEKLY PLAY" />
+      <PlayList type="interview" title="INTERVIEW" />
+      <PlayList type="hot clip" title="HOT CLIP" />
+      <PlayList type="team play" title="TEAM PLAY" />
+      <PlayList type="rookie play" title="ROOKie PLAY" />
+      <ClipList type="rookie clip" title="ROOKie CLIP" />
     </Container>
   );
 };
