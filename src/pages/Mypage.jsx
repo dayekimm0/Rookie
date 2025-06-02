@@ -45,9 +45,26 @@ const Profile = styled.div`
   height: 370px;
   border: 1px solid var(--grayD);
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h4 {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  h6 {
+    font-size: 1.6rem;
+    color: var(--gray6);
+  }
 `;
 
-const ProfileImg = styled.img``;
+const ProfileImg = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  border: 1px solid #f00;
+`;
 
 const ProfileUnder = styled.div``;
 
