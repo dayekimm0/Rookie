@@ -63,7 +63,7 @@ const MediumText = styled.div`
 const LastText = styled.div`
   font-size: 1.8rem;
   font-family: "Pretendard", sans-serif;
-  font-weight: 400;
+  font-weight: 300;
   @media screen and (max-width: 1024px) {
     font-size: 1.6rem;
     margin-bottom: 5%;
@@ -171,7 +171,7 @@ const ContentsTitle = () => {
       </ContentOne>
       <ContentTwo>
         <TextFirst>
-          <b>할인 쿠폰</b>을 얻을수 있는 단 한번의 기회!
+          <b>할인 쿠폰</b>을 얻을 수 있는 단 한번의 기회!
         </TextFirst>
         <TextLast>그 한번의 기회에 당신의 운을 확인해보세요!</TextLast>
       </ContentTwo>
