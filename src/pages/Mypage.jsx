@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import authStore from "../stores/AuthStore";
 import { Outlet } from "react-router-dom";
-import coupon from "../images/logos/icons/coupon.svg";
-import thumbs_up from "../images/logos/icons/thumbs-up.svg";
+import coupon from ".././images/icons/coupon.svg";
+import thumbs_up from ".././images/icons/thumbs-up.svg";
 
 const Container = styled.div`
   width: 100%;
