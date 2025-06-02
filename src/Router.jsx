@@ -10,7 +10,6 @@ import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
 import Play from "./pages/Play";
-import RedirectToStore from "./components/RedirectToStore";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +18,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <RedirectToStore />,
+        element: <Home />,
       },
       {
-        // index: true,
         path: "play",
-        element: <Home />,
+        element: <Play />,
       },
       {
         path: "store",
@@ -61,10 +59,6 @@ const router = createBrowserRouter([
       {
         path: "payment",
         element: <Payment />,
-      },
-      {
-        path: "test",
-        element: <Play />,
       },
     ],
   },

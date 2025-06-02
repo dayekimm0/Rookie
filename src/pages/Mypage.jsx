@@ -428,7 +428,8 @@ const Mypage = () => {
               </UserTeam>
               <UpBoxTitle>
                 {userProfile.username}
-                {userProfile.email === "gosim@naver.com" ? (
+                {userProfile.email === "gosim@naver.com" ||
+                "mangom@daum.net" ? (
                   <PartnerLogo src={partnerLogo} alt="" />
                 ) : null}
                 <br />
@@ -521,7 +522,7 @@ const Mypage = () => {
               <DeleteLine />
             </Delete>
           </MyInfo>
-          {userProfile.email === "gosim@naver.com" ? (
+          {userProfile.email === "gosim@naver.com" || "mangom@daum.net" ? (
             <>
               <InquiryLink
                 href="https://docs.google.com/forms/d/e/1FAIpQLScLQEzsdPMIHZiFxtQlq50tSpVLsZtvmxE3anLsND5uvQAQiw/viewform?usp=header"
