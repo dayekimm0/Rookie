@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
+import Play from "./pages/Play";
 import RedirectToStore from "./components/RedirectToStore";
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "payment",
         element: <Payment />,
+      },
+      {
+        path: "test",
+        element: <Play />,
       },
     ],
   },

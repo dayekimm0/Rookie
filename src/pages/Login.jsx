@@ -306,17 +306,17 @@ const Login = () => {
       if (userDoc.exists()) {
         const userData = userDoc.data();
 
-          setFormData({
-            email: user.email,
-            username: userData.username || "",
-            nickname: userData.nickname || "",
-            favoriteTeam: userData.favoriteTeam || "",
-            birthdate: { year: "", month: "", date: "" },
-            phoneNumber: { part1: "", part2: "", part3: "" },
-            postalCode: userData.postalCode || "",
-            address: userData.address || "",
-            detailedAddress: userData.detailedAddress || "",
-          });
+        setFormData({
+          email: user.email,
+          username: userData.username || "",
+          nickname: userData.nickname || "",
+          favoriteTeam: userData.favoriteTeam || "",
+          birthdate: { year: "", month: "", date: "" },
+          phoneNumber: { part1: "", part2: "", part3: "" },
+          postalCode: userData.postalCode || "",
+          address: userData.address || "",
+          detailedAddress: userData.detailedAddress || "",
+        });
       } else {
         console.warn("⚠️ Firestore 유저 데이터 없음");
       }
@@ -381,7 +381,9 @@ const Login = () => {
                 계정만들기
               </UnderInputBtn>
               <UnderInputLine />
-              <UnderInputBtn>이메일 • 비밀번호 찾기</UnderInputBtn>
+              <UnderInputBtn type="button">
+                이메일 • 비밀번호 찾기
+              </UnderInputBtn>
             </UnderInputWrapper>
           </InputWrapper>
           <SnsWrapper>
