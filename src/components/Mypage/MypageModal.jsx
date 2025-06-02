@@ -20,7 +20,6 @@ const ModalOverlay = styled.div.withConfig({
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
   visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -34,6 +33,7 @@ const ModalContent = styled.div`
   position: relative;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   margin-top: 100px;
+  z-index: 2000;
   @media screen and (max-width: 1024px) {
     width: 480px;
     padding: 50px;
