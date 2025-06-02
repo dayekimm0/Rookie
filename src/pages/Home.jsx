@@ -6,7 +6,7 @@ import MainSlide from "../components/Home/MainSlide";
 import MyhomeMainSlide from "../components/Home/MyhomeMainSlide";
 import bannerStrike from "../images/banners/banner-strike.png";
 import bannerStrike_m from "../images/banners/bannerStrike_mh.png";
-import PlaySlide from "../components/Home/PlaySlide";
+import PlaySlide from "../components/Slides/PlaySlide";
 import HomeList from "../components/Home/HomeList";
 import HighlightSlide from "../components/Slides/HighlightSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";

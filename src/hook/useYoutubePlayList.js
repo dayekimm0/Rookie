@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-const fetchYoutubePlaylist = async ({ queryKey }) => {
+export const fetchYoutubePlaylist = async ({ queryKey }) => {
   const [_key, playlistId, maxResults] = queryKey;
 
   const res = await axios.get(

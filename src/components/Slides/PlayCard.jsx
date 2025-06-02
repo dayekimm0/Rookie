@@ -2,14 +2,21 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-  p {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  cursor: pointer;
+
+  h5 {
     font-size: 1.6rem;
-    margin-top: 9px;
+    font-weight: 300;
     line-height: 1.3;
-    white-space: nowrap;
+    color: var(--grayD);
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--grayD);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     @media screen and (max-width: 1024px) {
       font-size: 1.4rem;
     }
@@ -19,12 +26,12 @@ const Container = styled.div`
   }
 `;
 
-const CardWrapper = styled.div`
+const Card = styled.div`
   overflow: hidden;
   width: 100%;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 16 /9;
   border-radius: 8px;
-  cursor: pointer;
+  background: var(--grayC);
   img {
     width: 100%;
     height: 100%;
@@ -32,10 +39,11 @@ const CardWrapper = styled.div`
   }
 `;
 
-const ShortsCard = ({ thumbnail, title, onClick }) => {
+const PlayCard = ({ thumbnail, title, onClick }) => {
   return (
     <Container>
-      <CardWrapper onClick={onClick}>
+      <Card onClick={onClick}>
+        {" "}
         <img
           src={thumbnail}
           alt={title}
@@ -44,10 +52,10 @@ const ShortsCard = ({ thumbnail, title, onClick }) => {
             e.target.src = "/fallback.jpg"; // 필요 시 fallback 이미지 설정
           }}
         />
-      </CardWrapper>
-      <p>{title}</p>
+      </Card>
+      <h5>{title}</h5>
     </Container>
   );
 };
 
-export default React.memo(ShortsCard);
+export default React.memo(PlayCard);

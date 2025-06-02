@@ -1,12 +1,16 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
-import { useYoutubePlaylist } from "../../hook/useYoutubePlaylist";
-import Shortscard from "./Shortscard";
+import {
+  useYoutubePlaylist,
+  fetchYoutubePlaylist,
+} from "../../hook/useYoutubePlaylist";
+import PlayCard from "./PlayCard";
+import { useQueries } from "@tanstack/react-query";
 
 const Title = styled.div`
   margin-top: 120px;
@@ -91,7 +95,30 @@ const SlideContainer = styled.div`
   }
 `;
 
-const HighlightSlide = React.memo(({ playlistId, title, max }) => {
+const TabNav = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 24px;
+
+  button {
+    padding: 8px 18px;
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 100px;
+    background: var(--gray2);
+    color: var(--grayE);
+    cursor: pointer;
+
+    &.active {
+      background: #f5f5f5;
+      color: #111;
+      font-weight: 600;
+    }
+  }
+`;
+
+const PlaySlide = () => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -104,49 +131,113 @@ const HighlightSlide = React.memo(({ playlistId, title, max }) => {
     swiper?.slideNext();
   }, [swiper]);
 
-  //유튜브 리스트 설정
-  const {
-    data: shorts = [],
-    isLoading,
-    isError,
-  } = useYoutubePlaylist(playlistId, max);
+  // 탭 버튼
+  const tabs = [
+    {
+      name: "전체",
+      isAll: true,
+      playlists: [
+        { id: "PLuY-NTS_5IpxSLENcrLkC1_E7RuWldqXR", max: 15 },
+        { id: "PLuY-NTS_5Ipwm3kK7npcPz7F-KJsP68My", max: 15 },
+        { id: "PLuY-NTS_5Ipz_1rm38KzVa2JB9zQMn9Us", max: 15 },
+      ],
+    },
+    {
+      name: "하이라이트",
+      playlistId: "PLuY-NTS_5IpxSLENcrLkC1_E7RuWldqXR",
+      max: 15,
+    },
+    {
+      name: "KBO 모먼트",
+      playlistId: "PLuY-NTS_5Ipwm3kK7npcPz7F-KJsP68My",
+      max: 15,
+    },
+    {
+      name: "KBO Vibes",
+      playlistId: "PLuY-NTS_5Ipz_1rm38KzVa2JB9zQMn9Us",
+      max: 15,
+    },
+  ];
+  const [activeTab, setActiveTab] = useState(tabs[0]);
+
+  const isAllTab = activeTab.isAll;
+
+  //유튜브 재생목록 리액트쿼리
+  const allQueries = useQueries({
+    queries: isAllTab
+      ? activeTab.playlists.map(({ id, max }) => ({
+          queryKey: ["youtubePlaylist", id, max],
+          queryFn: () =>
+            fetchYoutubePlaylist({ queryKey: ["youtubePlaylist", id, max] }),
+        }))
+      : [],
+  });
+
+  const singleQuery = useYoutubePlaylist(activeTab.playlistId, activeTab.max);
+
+  const items = isAllTab
+    ? allQueries
+        .flatMap((q) => q.data || [])
+        .sort(
+          (a, b) =>
+            new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt)
+        )
+        .slice(0, 15)
+    : singleQuery.data || [];
+
+  const isLoading = isAllTab
+    ? allQueries.some((q) => q.isLoading)
+    : singleQuery.isLoading;
+
+  const isError = isAllTab
+    ? allQueries.some((q) => q.isError)
+    : singleQuery.isError;
 
   const slides = useMemo(() => {
-    return shorts.map((item) => {
-      const videoId = item.snippet.resourceId?.videoId || item.id.videoId;
+    return items.map((item) => {
+      const videoId = item.snippet.resourceId?.videoId || item.id?.videoId;
       const { title, thumbnails } = item.snippet;
 
       return (
         <SwiperSlide key={videoId}>
-          <Shortscard
-            thumbnail={thumbnails.maxres?.url || thumbnails.medium.url}
+          <PlayCard
+            thumbnail={thumbnails?.maxres?.url || thumbnails?.medium?.url}
             title={title}
             onClick={() => console.log("Clicked:", videoId)}
           />
         </SwiperSlide>
       );
     });
-  }, [shorts]);
+  }, [items]);
 
   if (isLoading) return <div>불러오는 중...</div>;
   if (isError) return <div>문제가 발생했어요.</div>;
 
-  // console.log("shorts", shorts);
-
   return (
     <>
       <Title className="inner">
-        <h3>{title}</h3>
+        <h3>추천영상</h3>
         <div className="more">
           <span>더보기</span>
           <img src={PlusIcon} alt="icon" />
         </div>
       </Title>
+      <TabNav className="inner">
+        {tabs.map((tab) => (
+          <button
+            key={tab.name}
+            className={activeTab.name === tab.name ? "active" : ""}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab.name}
+          </button>
+        ))}
+      </TabNav>
       <Container>
         <SlideContainer>
           <Swiper
-            slidesPerView={7}
-            slidesPerGroup={7}
+            slidesPerView={5}
+            slidesPerGroup={5}
             spaceBetween={20}
             onSlideChange={(e) => {
               if (e.isBeginning !== isBeginning) setIsBeginning(e.isBeginning);
@@ -163,29 +254,24 @@ const HighlightSlide = React.memo(({ playlistId, title, max }) => {
                 slidesPerGroup: 2,
                 spaceBetween: 6,
               },
-              400: {
-                slidesPerView: 2,
-                slidesPerGroup: 3,
-                spaceBetween: 6,
-              },
               500: {
+                slidesPerView: 2,
+                slidesPerGroup: 2,
+                spaceBetween: 14,
+              },
+              768: {
                 slidesPerView: 3,
                 slidesPerGroup: 3,
                 spaceBetween: 14,
               },
-              768: {
+              1024: {
                 slidesPerView: 4,
                 slidesPerGroup: 4,
-                spaceBetween: 14,
-              },
-              1024: {
-                slidesPerView: 5,
-                slidesPerGroup: 5,
                 spaceBetween: 20,
               },
               1440: {
-                slidesPerView: 7,
-                slidesPerGroup: 7,
+                slidesPerView: 5,
+                slidesPerGroup: 5,
                 spaceBetween: 20,
               },
             }}
@@ -202,6 +288,6 @@ const HighlightSlide = React.memo(({ playlistId, title, max }) => {
       </Container>
     </>
   );
-});
+};
 
-export default HighlightSlide;
+export default React.memo(PlaySlide);
