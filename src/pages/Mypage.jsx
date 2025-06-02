@@ -6,7 +6,7 @@ import { getEmblem, getTeamColor } from "../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import partnerLogo from "../images/logos/Partner_logo.svg";
-import MypageModal from "../components/Loginon/MypageModal";
+import MypageModal from "../components/Mypage/MypageModal";
 import { getScrollbarWidth } from "../util";
 
 const Container = styled.div`
@@ -17,6 +17,26 @@ const Container = styled.div`
   @media screen and (max-width: 600px) {
     padding: 0 15px;
   }
+`;
+
+const LeftInner = styled.div`
+  width: 280px;
+  height: 100%;
+  gap: 12px;
+`;
+
+const Profile = styled.div`
+  width: 100%;
+  height: 370px;
+  border: 1px solid var(--grayD);
+  border-radius: 8px;
+`;
+
+const Nav = styled.div`
+  width: 100%;
+  height: 240px;
+  border: 1px solid var(--grayD);
+  border-radius: 8px;
 `;
 
 const Inner = styled.div`
@@ -411,140 +431,147 @@ const Mypage = () => {
           </SvgSpinner>
         </SlideLoaderWrapper>
       ) : (
-        <Inner>
-          <UpBox>
-            <UpBoxLeft>
-              <UserTeam
-                $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
-                style={{
-                  backgroundColor: getTeamColor(
-                    teamToEmblemId[userProfile.favoriteTeam] || "#fff"
-                  ),
-                }}
-              >
-                <TeamEmblem
-                  emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
-                />
-              </UserTeam>
-              <UpBoxTitle>
-                {userProfile.username}
-                {userProfile.email === "gosim@naver.com" ||
-                "mangom@daum.net" ? (
-                  <PartnerLogo src={partnerLogo} alt="" />
-                ) : null}
-                <br />
-                <span>계정 생성일 {userProfile.createdAt}</span>
-              </UpBoxTitle>
-            </UpBoxLeft>
-            <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
-          </UpBox>
-          <MyShopping>
-            <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
-            <MyShoppingInner>
-              <MyShoppingDetail>
-                <b>2</b>
-                <br />
-                장바구니
-              </MyShoppingDetail>
-              <MyShoppingLine />
-              <MyShoppingDetail>
-                <b>1</b>
-                <br />
-                구매완료
-              </MyShoppingDetail>
-              <MyShoppingLine />
-              <MyShoppingDetail>
-                <b>0</b>
-                <br />
-                배송완료
-              </MyShoppingDetail>
-              <MyShoppingLine />
-              <MyShoppingDetail>
-                <b>1</b>
-                <br />
-                쿠폰
-              </MyShoppingDetail>
-            </MyShoppingInner>
-          </MyShopping>
-          <MyInfo>
-            <MyInfoTitle>계정 상세정보</MyInfoTitle>
-            <MyInfoLine style={{ marginBottom: "40px" }} />
-            <InfoElement>
-              <InfoDetail>
-                <b> 이메일</b>
-                <br />
-                {userProfile.email}
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <InfoElement>
-              <InfoDetail>
-                <b> 비밀번호</b>
-                <br />
-                *********
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <InfoElement>
-              <InfoDetail>
-                <b>닉네임</b>
-                <br />
-                {userProfile.nickname}
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <InfoElement>
-              <InfoDetail>
-                <b>주소</b>
-                {userProfile.address ? (
-                  <>
-                    <br />
-                    {userProfile.address}
-                    <br />
-                    <InfoDetailDetail>
-                      {userProfile.detailedAddress}
-                    </InfoDetailDetail>
-                  </>
-                ) : (
-                  <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
-                )}
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <Delete>
-              <h6
-                onClick={() => {
-                  alert("준비중인 서비스 입니다.");
-                }}
-              >
-                계정 삭제하기
-              </h6>
-              <DeleteLine />
-            </Delete>
-          </MyInfo>
-          {userProfile.email === "gosim@naver.com" || "mangom@daum.net" ? (
-            <>
-              <InquiryLink
-                href="https://docs.google.com/forms/d/e/1FAIpQLScLQEzsdPMIHZiFxtQlq50tSpVLsZtvmxE3anLsND5uvQAQiw/viewform?usp=header"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FontAwesomeIcon icon={faEdit} />
-                상품등록
-              </InquiryLink>
-            </>
-          ) : (
-            <>
-              <InquiryLink
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfS2-2IsVBBub-rmSk97nz1Fsw0eYLMsd5iOHtNdUNwH1HgKQ/viewform?usp=header"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ROOKie 파트너 입점신청 관련 공지
-              </InquiryLink>
-            </>
-          )}
-        </Inner>
+        <>
+          <LeftInner>
+            <Profile>profile</Profile>
+            <Nav>mypagenav</Nav>
+          </LeftInner>
+          <Inner>
+            <UpBox>
+              <UpBoxLeft>
+                <UserTeam
+                  $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                  style={{
+                    backgroundColor: getTeamColor(
+                      teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                    ),
+                  }}
+                >
+                  <TeamEmblem
+                    emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                  />
+                </UserTeam>
+                <UpBoxTitle>
+                  {userProfile.username}
+                  {userProfile.email === "gosim@naver.com" ||
+                  userProfile.email === "mangom@daum.net" ? (
+                    <PartnerLogo src={partnerLogo} alt="" />
+                  ) : null}
+                  <br />
+                  <span>계정 생성일 {userProfile.createdAt}</span>
+                </UpBoxTitle>
+              </UpBoxLeft>
+              <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
+            </UpBox>
+            <MyShopping>
+              <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
+              <MyShoppingInner>
+                <MyShoppingDetail>
+                  <b>2</b>
+                  <br />
+                  장바구니
+                </MyShoppingDetail>
+                <MyShoppingLine />
+                <MyShoppingDetail>
+                  <b>1</b>
+                  <br />
+                  구매완료
+                </MyShoppingDetail>
+                <MyShoppingLine />
+                <MyShoppingDetail>
+                  <b>0</b>
+                  <br />
+                  배송완료
+                </MyShoppingDetail>
+                <MyShoppingLine />
+                <MyShoppingDetail>
+                  <b>1</b>
+                  <br />
+                  쿠폰
+                </MyShoppingDetail>
+              </MyShoppingInner>
+            </MyShopping>
+            <MyInfo>
+              <MyInfoTitle>계정 상세정보</MyInfoTitle>
+              <MyInfoLine style={{ marginBottom: "40px" }} />
+              <InfoElement>
+                <InfoDetail>
+                  <b> 이메일</b>
+                  <br />
+                  {userProfile.email}
+                </InfoDetail>
+                <InfoButton>변경</InfoButton>
+              </InfoElement>
+              <InfoElement>
+                <InfoDetail>
+                  <b> 비밀번호</b>
+                  <br />
+                  *********
+                </InfoDetail>
+                <InfoButton>변경</InfoButton>
+              </InfoElement>
+              <InfoElement>
+                <InfoDetail>
+                  <b>닉네임</b>
+                  <br />
+                  {userProfile.nickname}
+                </InfoDetail>
+                <InfoButton>변경</InfoButton>
+              </InfoElement>
+              <InfoElement>
+                <InfoDetail>
+                  <b>주소</b>
+                  {userProfile.address ? (
+                    <>
+                      <br />
+                      {userProfile.address}
+                      <br />
+                      <InfoDetailDetail>
+                        {userProfile.detailedAddress}
+                      </InfoDetailDetail>
+                    </>
+                  ) : (
+                    <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
+                  )}
+                </InfoDetail>
+                <InfoButton>변경</InfoButton>
+              </InfoElement>
+              <Delete>
+                <h6
+                  onClick={() => {
+                    alert("준비중인 서비스 입니다.");
+                  }}
+                >
+                  계정 삭제하기
+                </h6>
+                <DeleteLine />
+              </Delete>
+            </MyInfo>
+            {userProfile.email === "gosim@naver.com" ||
+            userProfile.email === "mangom@daum.net" ? (
+              <>
+                <InquiryLink
+                  href="https://docs.google.com/forms/d/e/1FAIpQLScLQEzsdPMIHZiFxtQlq50tSpVLsZtvmxE3anLsND5uvQAQiw/viewform?usp=header"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                  상품등록
+                </InquiryLink>
+              </>
+            ) : (
+              <>
+                <InquiryLink
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfS2-2IsVBBub-rmSk97nz1Fsw0eYLMsd5iOHtNdUNwH1HgKQ/viewform?usp=header"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  ROOKie 파트너 입점신청 관련 공지
+                </InquiryLink>
+              </>
+            )}
+          </Inner>
+        </>
       )}
       {teamModal && (
         <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
