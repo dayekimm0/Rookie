@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
+import Play from "./pages/Play";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "play",
+        element: <Play />,
       },
       {
         path: "store",
