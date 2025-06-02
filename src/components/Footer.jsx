@@ -6,7 +6,7 @@ import LogoSvg from "./LogoSvg";
 
 const Container = styled.footer`
   padding-top: ${({ $pathname }) => ($pathname !== "/event" ? "95px" : "0")};
-  background: ${({ mode }) => (mode === "light" ? "#fff" : "#222")};
+  background: ${({ mode }) => (mode === "light" ? "#fff" : "var(--bg)")};
   position: relative;
   color: var(--gray8);
   @media screen and (max-width: 1024px) {

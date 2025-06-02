@@ -13,7 +13,8 @@ const ContentWrapper = styled.div`
   /* padding-top: 177px; */
   padding-top: ${({ $folded }) => ($folded ? "calc(177px - 30px)" : "177px")};
   transition: padding 0.2s;
-  background: ${({ $mode }) => ($mode === "light" ? "#fff" : "#222")};
+  background: ${({ $mode }) =>
+    $mode === "light" ? "var(--light)" : "var(--bg)"};
 
   @media screen and (max-width: 1024px) {
     /* padding-top: 138.67px; */
