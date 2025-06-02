@@ -5,7 +5,7 @@ import "swiper/css";
 import MainCard from "./MainCard";
 import MyhomeCard from "./MyhomeCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
-import { MyhomeNaviLeftBtn, MyhomeNaviRightBtn } from "./NaviBtnStyles";
+import { MyhomeNaviLeftBtn, MyhomeNaviRightBtn } from "../Slides/NaviBtnStyles";
 import { getTodayMatches, getTeamShortName } from "../../util";
 
 const Container = styled.div`

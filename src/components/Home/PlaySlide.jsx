@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
-import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
+import { NaviLeftBtn, NaviRightBtn } from "../Slides/NaviBtnStyles";
 
 const Title = styled.div`
   margin-top: 120px;
