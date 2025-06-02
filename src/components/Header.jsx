@@ -625,9 +625,9 @@ const Header = ({ mode }) => {
   const [lineVisible, setLineVisible] = useState(true);
   const itemRefs = useRef([]);
   const menus = [
-    { label: "STORE", path: "/store" },
+    { label: "HOME", path: "/" },
     { label: "PLAY", path: "/play" },
-    // { label: "PLAY", path: "/play", disabled: true },
+    { label: "STORE", path: "/store" },
     { label: "EVENT", path: "/event" },
   ];
 
@@ -731,6 +731,13 @@ const Header = ({ mode }) => {
         </Logo>
         <Items>
           <Item ref={(el) => (itemRefs.current[0] = el)}>
+            <Link to="/">HOME</Link>
+          </Item>
+          <Item ref={(el) => (itemRefs.current[1] = el)}>
+            <Link to="/play">PLAY</Link>
+          </Item>
+
+          <Item ref={(el) => (itemRefs.current[2] = el)}>
             <StoreWrapper>
               <Link to="/store/kbo">STORE</Link>
               <StoreContainer className="store-dropdown">
@@ -757,11 +764,7 @@ const Header = ({ mode }) => {
             </StoreWrapper>
           </Item>
 
-          <Item ref={(el) => (itemRefs.current[1] = el)}>
-            <Link to="/play">PLAY</Link>
-          </Item>
-
-          <Item ref={(el) => (itemRefs.current[2] = el)}>
+          <Item ref={(el) => (itemRefs.current[3] = el)}>
             <Link to="/event">EVENT</Link>
           </Item>
           <Line
@@ -917,6 +920,16 @@ const Header = ({ mode }) => {
               </form>
             </div>
             <ul className="mb_menus">
+              <li>
+                <Link to={"/"} onClick={() => setMobileMenuOpen(false)}>
+                  HOME
+                </Link>
+              </li>
+              <li>
+                <Link to={"/play"} onClick={() => setMobileMenuOpen(false)}>
+                  PLAY
+                </Link>
+              </li>
               <li
                 onClick={handleClickMobileStore}
                 className={mobileStoreOpen ? "active" : null}
@@ -1023,11 +1036,6 @@ const Header = ({ mode }) => {
                     </Link>
                   </li>
                 </ul>
-              </li>
-              <li>
-                <Link to={"/play"} onClick={() => setMobileMenuOpen(false)}>
-                  PLAY
-                </Link>
               </li>
               <li>
                 <Link to={"/event"} onClick={() => setMobileMenuOpen(false)}>
