@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ScheduleBox from "./ScheduleBox";
-import scheduleData from "../data/kbo_2025_may_mock.json";
+import scheduleData from "../data/gameList_final.json";
 import useHeaderStore from "../stores/headerStore";
 
 const Container = styled.div`
@@ -54,7 +54,9 @@ const TopSchedule = () => {
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
   const disableTransition = useHeaderStore((state) => state.disableTransition);
 
-  const baseDate = "2025-05-21";
+  const today = new Date().toISOString().split("T")[0];
+
+  const baseDate = today;
   const baseIndex = scheduleData.findIndex((item) => item.date === baseDate);
   const threeDaySlice = [
     scheduleData[baseIndex - 1],

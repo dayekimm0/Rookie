@@ -6,6 +6,10 @@ const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 export const fetchYoutubePlaylist = async ({ queryKey }) => {
   const [_key, playlistId, maxResults] = queryKey;
 
+  if (!playlistId) {
+    throw new Error("Invalid playlistId");
+  }
+
   const res = await axios.get(
     "https://www.googleapis.com/youtube/v3/playlistItems",
     {
@@ -18,16 +22,22 @@ export const fetchYoutubePlaylist = async ({ queryKey }) => {
     }
   );
 
-  return res.data.items;
+  return res.data.items || [];
 };
 
-export const useYoutubePlaylist = (playlistId, maxResults = 12) => {
+export const useYoutubePlaylist = (
+  playlistId,
+  maxResults = 12,
+  enabled = true
+) => {
+  if (!playlistId) return { data: null };
   return useQuery({
     queryKey: ["youtubePlaylist", playlistId, maxResults],
     queryFn: fetchYoutubePlaylist,
+    enabled,
     staleTime: 1000 * 60 * 5, // 5분간 데이터 캐시
     cacheTime: 1000 * 60 * 10, // 10분간 쿼리 캐시 유지
-    retry: 1, // 실패 시 1회 재시도
+    retry: 1,
     refetchOnWindowFocus: false, // 탭 이동 시 재요청 방지
   });
 };

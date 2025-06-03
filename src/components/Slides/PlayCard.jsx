@@ -43,15 +43,7 @@ const PlayCard = ({ thumbnail, title, onClick }) => {
   return (
     <Container>
       <Card onClick={onClick}>
-        {" "}
-        <img
-          src={thumbnail}
-          alt={title}
-          loading="lazy"
-          onError={(e) => {
-            e.target.src = "/fallback.jpg"; // 필요 시 fallback 이미지 설정
-          }}
-        />
+        <img src={thumbnail} alt={title} loading="lazy" />
       </Card>
       <h5>{title}</h5>
     </Container>
