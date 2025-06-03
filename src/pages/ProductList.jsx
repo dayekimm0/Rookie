@@ -105,7 +105,6 @@ const ProductList = () => {
     sort,
     setSelectedBrand,
     selectedCategory,
-    setSelectedCategory,
     initialShuffleDone,
     setInitialShuffleDone,
     shuffledProducts,
