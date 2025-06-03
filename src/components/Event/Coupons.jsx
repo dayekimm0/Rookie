@@ -28,11 +28,21 @@ const Coupon = styled.img`
 `;
 
 const Wrapper = styled.div`
-  display: flex;
-  gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(4, 0fr);
   justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  align-content: center;
+  padding-left: 10px;
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+  }
+  @media screen and (max-width: 768px) {
+  }
+  @media screen and (max-width: 500px) {
+  }
+  @media screen and (max-width: 375px) {
+  }
 `;
 
 const Coupons = ({ width, height }) => {

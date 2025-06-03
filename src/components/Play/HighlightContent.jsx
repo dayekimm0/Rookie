@@ -8,44 +8,55 @@ import { useState } from "react";
 const SlideBox = styled.div`
   width: 200px;
   height: 300px;
-  border: 4px solid #9ca3af;
+  border: 4px solid var(--gray6);
   border-radius: 1rem;
-  background-color: white;
+  background-color: var(--light);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   font-weight: bold;
-  transition: transform 0.3s, opacity 0.3s;
-  position: relative; /* z-index 적용을 위해 */
+  transition: transform 0.3s, opacity 0.3s, top 0.3s;
+  position: relative;
 
+  /* 계단 형식 효과 */
   &.diff-0 {
-    opacity: 1;
-    border-color: #2563eb;
+    z-index: 5;
     transform: scale(1);
-    z-index: 3;
+    opacity: 1;
+    bottom: 0;
+    border-color: var(--main);
   }
   &.diff-1 {
+    z-index: 4;
+    transform: scale(0.9);
     opacity: 0.7;
-    transform: scale(0.85);
-    z-index: 2;
+    bottom: -10px; /* 위로 20px 올라감 */
   }
   &.diff-2 {
-    opacity: 0.4;
+    z-index: 3;
+    transform: scale(0.8);
+    opacity: 0.5;
+    bottom: -20px; /* 위로 40px 올라감 */
+  }
+  &.diff-3 {
+    z-index: 2;
     transform: scale(0.7);
-    z-index: 1;
+    opacity: 0.3;
+    bottom: -30px; /* 위로 60px 올라감 */
   }
   &.diff-more {
+    z-index: 1;
+    transform: scale(0.6);
     opacity: 0;
-    transform: scale(0.7);
-    z-index: 0;
+    bottom: -40px; /* 위로 80px 올라감 */
   }
 `;
 
 const SliderWrapper = styled.div`
   width: 100%;
   padding: 50px 0;
-  overflow: visible; /* 슬라이드가 컨테이너 밖으로 나와도 잘리지 않도록 */
+  overflow: visible;
 `;
 
 const HighlightContent = () => {
@@ -64,6 +75,7 @@ const HighlightContent = () => {
     if (diff === 0) return "diff-0";
     if (diff === 1) return "diff-1";
     if (diff === 2) return "diff-2";
+    if (diff === 3) return "diff-3";
     return "diff-more";
   };
 
@@ -84,9 +96,9 @@ const HighlightContent = () => {
           }, 0);
         }}
         style={{
-          paddingLeft: "100px",
-          paddingRight: "100px",
-        }} /* 좌우 패딩 주어 끝 슬라이드 보이도록 */
+          paddingLeft: "160px",
+          paddingRight: "180px",
+        }}
       >
         {cards.map((card, idx) => {
           const diff = getDiff(idx, activeIndex, cards.length);
