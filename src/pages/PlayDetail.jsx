@@ -3,6 +3,7 @@ import RecoPlay from "../components/PlayDetail/RecoPlay";
 import MainPlay from "../components/PlayDetail/MainPlay";
 import RecoClip from "../components/PlayDetail/RecoClip";
 import RecoProductPart from "../components/PlayDetail/RecoProductPart";
+import PostCommentPart from "../components/PlayDetail/PostCommentPart";
 
 const Container = styled.div`
   width: 100%;
@@ -43,13 +44,49 @@ const Divider = styled.div`
   margin-top: 18px;
 `;
 
-const CommentList = styled.div`
+const CommentWrapper = styled.div`
   margin-top: 24px;
   background: var(--gray2);
   width: 100%;
   height: 520px;
   border-radius: 14px;
   color: var(--light);
+  padding: 18px 20px;
+`;
+
+const CommentTop = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  hr {
+    width: 100%;
+  }
+`;
+
+const CommentTitle = styled.h2`
+  gap: 6px;
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--light);
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  span {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--light);
+  }
+`;
+
+const CommentList = styled.div`
+  width: 100%;
+  height: 78%;
+  margin-bottom: 8px;
 `;
 
 const PlayDetail = () => {
@@ -60,7 +97,17 @@ const PlayDetail = () => {
           <MainPlay />
           <Divider />
           <RecoProductPart />
-          <CommentList>댓글창</CommentList>
+          <CommentWrapper>
+            <CommentTop>
+              <CommentTitle>
+                댓글 <span>294</span>
+              </CommentTitle>
+              <hr />
+            </CommentTop>
+            <CommentList></CommentList>
+            <hr />
+            <PostCommentPart />
+          </CommentWrapper>
         </RightContent>
         <LeftContent>
           <RecoPlayWrapper>
