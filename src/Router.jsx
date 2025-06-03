@@ -4,12 +4,18 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Logon from "./pages/Logon";
 import Mypage from "./pages/Mypage";
+import MyShopping from "./components/Mypage/MyShopping";
+import MyVideo from "./components/Mypage/Myvideo";
+import MyPlay from "./components/Mypage/MyPlay";
+import MyClip from "./components/Mypage/MyClip";
+import MySetting from "./components/Mypage/MySetting";
 import Payment from "./pages/Payment";
 import Cart from "./pages/Cart";
 import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
 import Play from "./pages/Play";
+import PlayDetail from "./pages/PlayDetail";
 import TeamHome from "./pages/TeamHome"; // TeamHome 컴포넌트 추가
 
 const router = createBrowserRouter([
@@ -24,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "play",
         element: <Play />,
+      },
+      {
+        path: "play/:id",
+        element: <PlayDetail />,
       },
       {
         path: "store",
@@ -60,6 +70,30 @@ const router = createBrowserRouter([
       {
         path: "mypage",
         element: <Mypage />,
+        children: [
+          {
+            index: true,
+            element: <MyShopping />,
+          },
+          {
+            path: "myvideo",
+            element: <MyVideo />,
+            children: [
+              {
+                path: "myplay",
+                element: <MyPlay />,
+              },
+              {
+                path: "myclip",
+                element: <MyClip />,
+              },
+            ],
+          },
+          {
+            path: "mysetting",
+            element: <MySetting />,
+          },
+        ],
       },
       {
         path: "cart",

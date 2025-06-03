@@ -39,6 +39,7 @@ const Button = styled.button`
   margin: 0px 20px 0px 20px;
   box-shadow: 0 12px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.5s;
+  font-family: "Figtree", "Pretendard", sans-serif;
   &:hover {
     background: var(--light);
   }
