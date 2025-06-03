@@ -6,7 +6,7 @@ import MainSlide from "../components/Home/MainSlide";
 import MyhomeMainSlide from "../components/Home/MyhomeMainSlide";
 import bannerStrike from "../images/banners/banner-strike.png";
 import bannerStrike_m from "../images/banners/bannerStrike_mh.png";
-import PlaySlide from "../components/Home/PlaySlide";
+import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
 import HomeList from "../components/Home/HomeList";
 import HighlightSlide from "../components/Slides/HighlightSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
@@ -14,6 +14,7 @@ import CollaboBanner from "../components/Home/CollaboBanner";
 import HomeProducts from "../components/Home/HomeProducts";
 import authStore from "../stores/AuthStore";
 import useAllProductsQuery from "../hook/useAllProductsQuery";
+import { homeSlideTab } from "../data/playTabs";
 
 const Container = styled.div`
   width: 100%;
@@ -177,8 +178,6 @@ const Home = () => {
   const { kiaTinypingCollabo, newest, popular } = useMemo(() => {
     const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
 
-    // const collabo = shuffled.filter((item) => item.collaboration).slice(0, 4);
-
     const kiaTinypingCollabo = allProducts
       .filter(
         (item) =>
@@ -234,7 +233,10 @@ const Home = () => {
         max={21}
       />
 
-      <PlaySlide />
+      <PlaySlidewithTabs
+        allTab={homeSlideTab.allTab}
+        tabs={homeSlideTab.tabs}
+      />
       <HomeList />
       <RankingTable />
       <PopularPlayer />

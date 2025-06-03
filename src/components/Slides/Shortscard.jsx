@@ -9,6 +9,7 @@ const Container = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--grayD);
     @media screen and (max-width: 1024px) {
       font-size: 1.4rem;
     }
