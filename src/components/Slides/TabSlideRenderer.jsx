@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -27,7 +27,7 @@ const SlideContainer = styled.div`
   }
 `;
 
-const TabSlideRenderer = ({ items }) => {
+const TabSlideRenderer = ({ items, onSwiperReady }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -38,6 +38,12 @@ const TabSlideRenderer = ({ items }) => {
 
   const handleNext = useCallback(() => {
     swiper?.slideNext();
+  }, [swiper]);
+
+  useEffect(() => {
+    if (swiper && onSwiperReady) {
+      onSwiperReady(swiper);
+    }
   }, [swiper]);
 
   const slides = useMemo(() => {

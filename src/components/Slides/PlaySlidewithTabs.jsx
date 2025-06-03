@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
@@ -71,6 +71,15 @@ const Title = styled.div`
 const PlaySlidewithTabs = ({ allTab, tabs }) => {
   const [isAll, setIsAll] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
+  const swiperRef = useRef(null);
+
+  const handleTabSelect = (mode, tab) => {
+    setIsAll(mode === "all");
+    setSelectedTab(tab);
+    setTimeout(() => {
+      swiperRef.current?.slideTo?.(0, 0);
+    }, 0);
+  };
 
   return (
     <>
@@ -87,15 +96,18 @@ const PlaySlidewithTabs = ({ allTab, tabs }) => {
         tabs={tabs}
         isAllTab={isAll}
         selectedTab={selectedTab}
-        onSelectTab={(mode, tab) => {
-          setIsAll(mode === "all");
-          setSelectedTab(tab);
-        }}
+        onSelectTab={handleTabSelect}
       />
       {isAll ? (
-        <AllTabSlide allTab={allTab} />
+        <AllTabSlide
+          allTab={allTab}
+          onSwiperReady={(s) => (swiperRef.current = s)}
+        />
       ) : (
-        <SingleTabSlide selectedTab={selectedTab} />
+        <SingleTabSlide
+          selectedTab={selectedTab}
+          onSwiperReady={(s) => (swiperRef.current = s)}
+        />
       )}
     </>
   );
