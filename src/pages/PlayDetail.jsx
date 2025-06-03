@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import RecoPlay from "../components/PlayDetail/RecoPlay";
 import MainPlay from "../components/PlayDetail/MainPlay";
-import RecoProduct from "../components/PlayDetail/RecoProduct";
 import RecoClip from "../components/PlayDetail/RecoClip";
+import RecoProductPart from "../components/PlayDetail/RecoProductPart";
 
 const Container = styled.div`
   width: 100%;
@@ -43,23 +43,13 @@ const Divider = styled.div`
   margin-top: 18px;
 `;
 
-const RecoProductWrapper = styled.div`
+const CommentList = styled.div`
+  margin-top: 24px;
+  background: var(--gray2);
   width: 100%;
-  margin-top: 26px;
-`;
-
-const RecoProductList = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const RecoProductTitle = styled.h1`
-  font-size: 2.2rem;
+  height: 520px;
+  border-radius: 14px;
   color: var(--light);
-  font-weight: 600;
-  margin-bottom: 26px;
 `;
 
 const PlayDetail = () => {
@@ -69,14 +59,8 @@ const PlayDetail = () => {
         <RightContent>
           <MainPlay />
           <Divider />
-          <RecoProductWrapper>
-            <RecoProductTitle>여기서 추천하는 ROOK</RecoProductTitle>
-            <RecoProductList>
-              <RecoProduct />
-              <RecoProduct />
-              <RecoProduct />
-            </RecoProductList>
-          </RecoProductWrapper>
+          <RecoProductPart />
+          <CommentList>댓글창</CommentList>
         </RightContent>
         <LeftContent>
           <RecoPlayWrapper>
