@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import MainCard from "./MainCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
-import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
+import { NaviLeftBtn, NaviRightBtn } from "../Slides/NaviBtnStyles";
 import { getTodayMatches } from "../../util";
 
 const Container = styled.div`
