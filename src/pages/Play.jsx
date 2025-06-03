@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import PlayList from "../components/Play/PlayList";
 import ClipList from "../components/Play/ClipList";
+import HighlightContent from "../components/Play/HighlightContent";
 
 const Container = styled.div`
   width: 100%;
   padding: 0 5%;
+  margin-top: 5%;
   gap: 100px;
   display: flex;
   flex-direction: column;
@@ -18,6 +20,7 @@ const Container = styled.div`
 const Play = () => {
   return (
     <Container>
+      <HighlightContent />
       <PlayList type="weekly play" title="WEEKLY PLAY" />
       <PlayList type="interview" title="INTERVIEW" />
       <PlayList type="hot clip" title="HOT CLIP" />
