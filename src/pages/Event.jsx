@@ -138,7 +138,7 @@ const Event = () => {
         {mascortImg ? (
           <img src={mascortImg} alt={`${teamName} 마스코트`} />
         ) : (
-          <p>마스코트 없음</p>
+          <p></p>
         )}
       </MascortImg>
     </Container>
