@@ -16,6 +16,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
 import Play from "./pages/Play";
 import PlayDetail from "./pages/PlayDetail";
+import TeamHome from "./pages/TeamHome"; // TeamHome 컴포넌트 추가
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: "store/:teamCode/:id",
         element: <ProductDetail />,
+      },
+      {
+        path: "TeamHome", // TeamHome 접근용
+        element: <TeamHome />,
+      },
+      {
+        path: "TeamHome/:teamCode", // 구단별 접근용
+        element: <TeamHome />,
       },
       {
         path: "event",
