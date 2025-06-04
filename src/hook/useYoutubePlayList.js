@@ -25,6 +25,20 @@ export const fetchYoutubePlaylist = async ({ queryKey }) => {
   return res.data.items || [];
 };
 
+const fetchVideoDetails = async ({ queryKey }) => {
+  const [_key, videoIds] = queryKey;
+
+  const res = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
+    params: {
+      part: "snippet,statistics",
+      id: videoIds,
+      key: API_KEY,
+    },
+  });
+
+  return res.data.items;
+};
+
 export const useYoutubePlaylist = (
   playlistId,
   maxResults = 12,
@@ -39,5 +53,17 @@ export const useYoutubePlaylist = (
     cacheTime: 1000 * 60 * 10, // 10분간 쿼리 캐시 유지
     retry: 1,
     refetchOnWindowFocus: false, // 탭 이동 시 재요청 방지
+  });
+};
+
+export const useYoutubeVideoDetails = (videoIds, enabled = true) => {
+  return useQuery({
+    queryKey: ["youtubeVideoDetails", videoIds],
+    queryFn: fetchVideoDetails,
+    enabled: !!videoIds && enabled,
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 };
