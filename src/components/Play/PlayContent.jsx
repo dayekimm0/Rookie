@@ -27,15 +27,11 @@ const TeamInfo = styled.div`
   gap: 5px;
 `;
 
-const Date = styled.p`
-  font-size: 2.2rem;
-`;
+const TeamLogo = styled.img``;
 
-const Verses = styled.p`
+const ChannelName = styled.p`
   font-size: 1.8rem;
 `;
-
-const TeamLogo = styled.img``;
 
 const TeamName = styled.p`
   font-size: 1.8rem;
@@ -51,13 +47,12 @@ const VideoTitle = styled.p`
 
 const PlayContent = ({
   type,
-  date,
-  verses,
+  thumbnailSrc,
+  channelName,
   teamLogo,
   teamName,
   influencerName,
   videoTitle,
-  thumbnailSrc,
 }) => {
   return (
     <ContentCard>
@@ -65,20 +60,21 @@ const PlayContent = ({
       <Description>
         {type === "weekly play" && (
           <>
-            <Date>{date}</Date>
-            <Verses>{verses}</Verses>
+            <ChannelName>{channelName}</ChannelName>
+            <VideoTitle>{videoTitle}</VideoTitle>
           </>
         )}
 
         {type === "interview" && (
           <>
-            <Date>{date}</Date>
+            <ChannelName>{channelName}</ChannelName>
             <VideoTitle>{videoTitle}</VideoTitle>
           </>
         )}
 
         {type === "hot clip" && (
           <>
+            <ChannelName>{channelName}</ChannelName>
             <VideoTitle>{videoTitle}</VideoTitle>
           </>
         )}

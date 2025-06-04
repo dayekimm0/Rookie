@@ -30,7 +30,7 @@ const VideoTitle = styled.p`
   font-size: 1.4rem;
 `;
 
-const ClipContent = ({ type, influencerId, videoTitle, thumbnailSrc }) => {
+const ClipContent = ({ type, thumbnailSrc, influencerId, videoTitle }) => {
   return (
     <ContentCard>
       <Thumbnail src={thumbnailSrc} alt="video thumbnail" />
