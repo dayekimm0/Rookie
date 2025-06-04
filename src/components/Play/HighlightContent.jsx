@@ -3,21 +3,26 @@ import { Navigation } from "swiper/modules";
 import styled from "styled-components";
 import "swiper/css";
 import "swiper/css/navigation";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
+import { PlayLeftBtn, PlayRightBtn } from "../Slides/NaviBtnStyles";
+import Arrow from "../../images/icons/main_banner_arr.svg";
+
+// 전체 슬라이더 래퍼
+const SliderWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  overflow: visible;
+`;
 
 // 슬라이드 개별 박스
 const SlideBox = styled.div`
-  width: 200px;
-  height: 300px;
-  border: 4px solid var(--gray6);
+  max-width: 280px;
+  aspect-ratio: 9/16;
   border-radius: 1rem;
   background-color: var(--light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.5rem;
   font-weight: bold;
-  position: absolute;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   transition: transform 0.3s, opacity 0.3s, bottom 0.3s;
@@ -26,47 +31,62 @@ const SlideBox = styled.div`
   &.diff-0 {
     z-index: 5;
     transform: translateX(-50%) scale(1);
-    opacity: 0.8;
     bottom: 0;
     border-color: var(--main);
   }
   &.diff-1 {
     z-index: 4;
     transform: translateX(-50%) scale(0.9);
-    opacity: 0.7;
-    bottom: -10px;
+    filter: brightness(70%) blur(0.1rem);
   }
   &.diff-2 {
     z-index: 3;
-    transform: translateX(-50%) scale(0.8);
-    opacity: 0.5;
-    bottom: -20px;
+    transform: translateX(-50%) scale(0.85);
+    filter: brightness(50%) blur(0.2rem);
   }
   &.diff-3 {
     z-index: 2;
-    transform: translateX(-50%) scale(0.7);
-    opacity: 0.3;
-    bottom: -30px;
+    transform: translateX(-50%) scale(0.8);
+    filter: brightness(30%) blur(0.3rem);
   }
   &.diff-more {
     z-index: 1;
-    transform: translateX(-50%) scale(0.6);
+    transform: translateX(-50%) scale(0.75);
+    filter: brightness(10%) blur(0.4rem);
     opacity: 0;
-    bottom: -40px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    &.diff-3 {
+      transform: translateX(-50%) scale(0.75);
+      filter: brightness(10%) blur(0.4rem);
+      opacity: 0;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    &.diff-2 {
+      transform: translateX(-50%) scale(0.75);
+      filter: brightness(10%) blur(0.4rem);
+      opacity: 0;
+    }
   }
 `;
 
-// 전체 슬라이더 래퍼
-const SliderWrapper = styled.div`
-  width: 100%;
-  padding: 50px 0;
-  overflow: visible;
-  position: relative;
+const HighlightLeftBtn = styled(PlayLeftBtn)`
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const HighlightRightBtn = styled(PlayRightBtn)`
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const HighlightContent = () => {
   const cards = Array.from({ length: 20 }, (_, i) => i + 1);
   const [activeIndex, setActiveIndex] = useState(3);
+  const swiperRef = useRef(null);
 
   const getDiff = (idx, active, length) => {
     const diff = Math.abs((idx % length) - active);
@@ -81,28 +101,39 @@ const HighlightContent = () => {
     return "diff-more";
   };
 
+  const handlePrev = useCallback(() => {
+    swiperRef.current?.slidePrev();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    swiperRef.current?.slideNext();
+  }, []);
+
   return (
     <SliderWrapper>
       <Swiper
         modules={[Navigation]}
-        navigation
-        slidesPerView={7}
-        centeredSlides={true}
         loop={true}
-        spaceBetween={-350} // 겹치기 효과
-        onSlideChange={(swiper) => {
-          setActiveIndex(swiper.realIndex % cards.length);
+        centeredSlides={true}
+        spaceBetween={-50}
+        breakpoints={{
+          0: { slidesPerView: 3 },
+          520: { slidesPerView: 5 },
+          1024: { slidesPerView: 7 },
         }}
         onSwiper={(swiper) => {
+          swiperRef.current = swiper;
           setTimeout(() => {
             setActiveIndex(swiper.realIndex % cards.length);
           }, 0);
         }}
+        onSlideChange={(swiper) => {
+          setActiveIndex(swiper.realIndex % cards.length);
+        }}
         style={{
-          overflow: "visible",
-          paddingLeft: "160px",
-          paddingRight: "180px",
-          position: "relative",
+          paddingLeft: "50px",
+          paddingRight: "50px",
+          height: "100%",
         }}
       >
         {cards.map((card, idx) => {
@@ -112,9 +143,9 @@ const HighlightContent = () => {
             <SwiperSlide
               key={idx}
               style={{
-                width: "200px",
                 position: "relative",
-                height: "300px",
+                maxWidth: "280px",
+                aspectRatio: "9/16",
               }}
             >
               <SlideBox className={className}>Card {card}</SlideBox>
@@ -122,6 +153,13 @@ const HighlightContent = () => {
           );
         })}
       </Swiper>
+
+      <HighlightLeftBtn onClick={handlePrev}>
+        <img src={Arrow} alt="prev" />
+      </HighlightLeftBtn>
+      <HighlightRightBtn onClick={handleNext}>
+        <img src={Arrow} alt="next" />
+      </HighlightRightBtn>
     </SliderWrapper>
   );
 };

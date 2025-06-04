@@ -25,4 +25,16 @@ export const homeSlideTab = {
       max: 15,
     },
   ],
+  mypageTabs: [
+    {
+      name: "PLAY",
+      playlistId: "PLuY-NTS_5IpxSLENcrLkC1_E7RuWldqXR",
+      max: 15,
+    },
+    {
+      name: "CLIP",
+      playlistId: "PLuY-NTS_5Ipwm3kK7npcPz7F-KJsP68My",
+      max: 15,
+    },
+  ],
 };

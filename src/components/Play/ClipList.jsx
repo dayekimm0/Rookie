@@ -4,12 +4,26 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import ClipContent from "./ClipContent";
+import PlusIcon from "../../images/icons/plusIcon.svg";
 
 const ContentList = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 40px;
+  color: var(--light);
+
+  @media screen and (max-width: 1024px) {
+    gap: 30px;
+  }
+
+  @media screen and (max-width: 768px) {
+    gap: 20px;
+  }
+
+  @media screen and (max-width: 500px) {
+    gap: 15px;
+  }
 `;
 
 const ContentTitle = styled.div`
@@ -18,11 +32,51 @@ const ContentTitle = styled.div`
   align-items: center;
   h2 {
     font-size: 3rem;
-    color: var(--light);
   }
-  h4 {
-    font-size: 2rem;
-    color: var(--light);
+
+  .more {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 2px;
+    span {
+      font-size: 2rem;
+      font-weight: 300;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    h2 {
+      font-size: 2.5rem;
+    }
+    .more {
+      span {
+        font-size: 1.6rem;
+      }
+      img {
+        width: 18px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    h2 {
+      font-size: 2rem;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    h2 {
+      font-size: 1.6rem;
+    }
+    .more {
+      span {
+        font-size: 1.1rem;
+      }
+      img {
+        width: 13px;
+      }
+    }
   }
 `;
 
@@ -33,9 +87,9 @@ const StyledSwiper = styled(Swiper)`
 const ClipList = ({ type, title }) => {
   const sampleData = [
     {
+      thumbnailSrc: "/thumbnail.jpg",
       influencerId: "@influencer1",
       videoTitle: "하이라이트 모음",
-      thumbnailSrc: "/thumbnail.jpg",
     },
   ];
 
@@ -50,13 +104,45 @@ const ClipList = ({ type, title }) => {
     <ContentList>
       <ContentTitle>
         <h2>{title}</h2>
-        <h4>+ MORE</h4>
+        <div className="more">
+          <span>더보기</span>
+          <img src={PlusIcon} alt="icon" />
+        </div>
       </ContentTitle>
       <StyledSwiper
         scrollbar={{ draggable: true }}
-        slidesPerView={7}
-        slidesPerGroup={5}
-        spaceBetween={10}
+        breakpoints={{
+          0: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 6,
+          },
+          400: {
+            slidesPerView: 2,
+            slidesPerGroup: 3,
+            spaceBetween: 6,
+          },
+          500: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            spaceBetween: 14,
+          },
+          768: {
+            slidesPerView: 4,
+            slidesPerGroup: 4,
+            spaceBetween: 14,
+          },
+          1024: {
+            slidesPerView: 5,
+            slidesPerGroup: 5,
+            spaceBetween: 20,
+          },
+          1440: {
+            slidesPerView: 7,
+            slidesPerGroup: 7,
+            spaceBetween: 20,
+          },
+        }}
       >
         {clipItems}
       </StyledSwiper>

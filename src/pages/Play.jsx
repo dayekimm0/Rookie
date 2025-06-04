@@ -14,14 +14,15 @@ const Container = styled.div`
 
   @media screen and (max-width: 1024px) {
     padding: 0 3%;
+    gap: 50px;
   }
 `;
 
 const Play = () => {
   return (
     <Container>
-      <HighlightContent />
       <PlayList type="weekly play" title="WEEKLY PLAY" />
+      <HighlightContent />
       <PlayList type="interview" title="INTERVIEW" />
       <PlayList type="hot clip" title="HOT CLIP" />
       <PlayList type="team play" title="TEAM PLAY" />
