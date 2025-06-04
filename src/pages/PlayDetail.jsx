@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import RecoPlay from "../components/PlayDetail/RecoPlay";
 import MainPlay from "../components/PlayDetail/MainPlay";
-import RecoProduct from "../components/PlayDetail/RecoProduct";
 import RecoClip from "../components/PlayDetail/RecoClip";
+import RecoProductPart from "../components/PlayDetail/RecoProductPart";
+import PostCommentPart from "../components/PlayDetail/PostCommentPart";
+import CommentList from "../components/PlayDetail/CommentList";
 
 const Container = styled.div`
   width: 100%;
   background: var(--gray1);
   padding: 0 5%;
+  overflow: hidden;
 `;
 
 const PlayContent = styled.div`
@@ -43,23 +46,43 @@ const Divider = styled.div`
   margin-top: 18px;
 `;
 
-const RecoProductWrapper = styled.div`
+const CommentWrapper = styled.div`
+  margin-top: 24px;
+  background: var(--gray2);
   width: 100%;
-  margin-top: 26px;
+  height: 520px;
+  border-radius: 14px;
+  color: var(--light);
+  padding: 18px 20px;
 `;
 
-const RecoProductList = styled.div`
+const CommentTop = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  gap: 8px;
+  hr {
+    width: 100%;
+  }
 `;
 
-const RecoProductTitle = styled.h1`
-  font-size: 2.2rem;
+const CommentTitle = styled.h2`
+  gap: 6px;
+  font-size: 2rem;
+  font-weight: 300;
   color: var(--light);
-  font-weight: 600;
-  margin-bottom: 26px;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  span {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--light);
+  }
 `;
 
 const PlayDetail = () => {
@@ -69,14 +92,18 @@ const PlayDetail = () => {
         <RightContent>
           <MainPlay />
           <Divider />
-          <RecoProductWrapper>
-            <RecoProductTitle>여기서 추천하는 ROOK</RecoProductTitle>
-            <RecoProductList>
-              <RecoProduct />
-              <RecoProduct />
-              <RecoProduct />
-            </RecoProductList>
-          </RecoProductWrapper>
+          <RecoProductPart />
+          <CommentWrapper>
+            <CommentTop>
+              <CommentTitle>
+                댓글 <span>294</span>
+              </CommentTitle>
+              <hr />
+            </CommentTop>
+            <CommentList />
+            <hr />
+            <PostCommentPart />
+          </CommentWrapper>
         </RightContent>
         <LeftContent>
           <RecoPlayWrapper>
