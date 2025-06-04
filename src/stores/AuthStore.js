@@ -11,6 +11,7 @@ const authStore = create(
       userProfile: null,
       isLoading: true,
       gamePlayed: false,
+      comments: [], //playdetail 댓글 추가
       setUser: (user, profile, gamePlayed) => {
         console.log(
           "🟢 setUser 호출, user:",
@@ -39,6 +40,17 @@ const authStore = create(
             ...newAddress,
           },
         })),
+      //댓글 추가
+      addComment: (comment) =>
+        set((state) => ({
+          comments: [
+            ...state.comments,
+            {
+              ...comment,
+              author: state.userProfile?.nickname,
+            },
+          ],
+        })),
     }),
 
     {
@@ -47,6 +59,7 @@ const authStore = create(
       partialize: (state) => ({
         user: state.user,
         gamePlayed: state.gamePlayed,
+        comments: state.comments,
       }),
     }
   )
