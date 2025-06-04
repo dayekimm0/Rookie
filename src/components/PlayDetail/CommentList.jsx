@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import { db } from "../../firebase";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import styled from "styled-components";
 import Comments from "./Comments";
 
