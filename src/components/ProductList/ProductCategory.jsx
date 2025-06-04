@@ -6,25 +6,22 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import SortSelect from "./SortSelect";
 import useProductStore from "../../stores/ProductStore";
 
-const CategoryWrapper = styled.div`
-  width: 100%;
-`;
+const CategoryWrapper = styled.div``;
 
 const CategoryContainer = styled.div`
-  width: 100%;
-  background: var(--light);
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
   @media screen and (max-width: 1024px) {
     display: none;
   }
 `;
 
 const Category = styled.div`
-  height: 50px;
-  background: var(--dark);
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
 `;
 
 const CategoryItem = styled.div`
@@ -33,15 +30,17 @@ const CategoryItem = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+  background: var(--grayF5);
+  border-radius: 50px;
   color: ${({ active }) => (active ? "var(--dark)" : "var(--gray8)")};
   background: ${({ active }) => (active ? "var(--main)" : "transparent")};
-  font-weight: ${({ active }) => (active ? 600 : 400)};
-  padding: 10px 30px;
+  /* font-weight: ${({ active }) => (active ? 600 : 400)}; */
+  padding: 10px 16px;
   cursor: pointer;
   transition: 0.3s;
   &:hover {
-    background: var(--main);
-    color: var(--dark);
+    background: var(--gray1);
+    color: var(--main);
     font-weight: 600;
   }
 
@@ -235,13 +234,6 @@ const ProductCategory = ({ products = [] }) => {
     }
   };
 
-  // ▼ 브랜드 클릭 시 드롭다운 닫고 브랜드 선택
-  // const handleBrandClick = (brand) => {
-  //   setSelectedBrand(brand);
-  //   setSelectedCategory("COLLABORATION");
-  //   setDropdownOpen(false);
-  // };
-
   useEffect(() => {
     if (
       selectCollabo === "COLLABORATION" &&
@@ -264,7 +256,6 @@ const ProductCategory = ({ products = [] }) => {
     <CategoryWrapper>
       {/* PC */}
       <CategoryContainer>
-        <SortSelect value={sort} onChange={setSort} />
         <Category>
           {Categories.map((category) => (
             <CategoryItem
@@ -275,35 +266,8 @@ const ProductCategory = ({ products = [] }) => {
               {category}
             </CategoryItem>
           ))}
+          <SortSelect value={sort} onChange={setSort} />
         </Category>
-        {/* 
-        {selectCollabo === "COLLABORATION" && dropdownOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <LayoutGroup>
-              <CollaboCategory>
-                <MotionBg
-                  animate={bgStyle}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                />
-                {subBrands.map((brand) => (
-                  <CollaboBrand
-                    key={brand}
-                    ref={(el) => (brandRefs.current[brand] = el)}
-                    onClick={() => handleBrandClick(brand)}
-                  >
-                    <span className={selectedBrand === brand ? "active" : ""}>
-                      {brand}
-                    </span>
-                  </CollaboBrand>
-                ))}
-              </CollaboCategory>
-            </LayoutGroup>
-          </motion.div>
-        )} */}
       </CategoryContainer>
 
       {/* Mobile/Tablet */}

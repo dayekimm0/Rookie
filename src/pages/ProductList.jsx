@@ -234,7 +234,7 @@ const ProductList = () => {
   if (error) return <div>에러 :{error.message}</div>;
   return (
     <Container>
-      <ProductBanner team={bannerKey || "kbo"} />
+      {/* <ProductBanner team={bannerKey || "kbo"} /> */}
       <ProductCategory />
       <PaginateProduct items={filteredAndSortedProducts} />
     </Container>
