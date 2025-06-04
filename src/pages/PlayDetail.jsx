@@ -4,11 +4,13 @@ import MainPlay from "../components/PlayDetail/MainPlay";
 import RecoClip from "../components/PlayDetail/RecoClip";
 import RecoProductPart from "../components/PlayDetail/RecoProductPart";
 import PostCommentPart from "../components/PlayDetail/PostCommentPart";
+import CommentList from "../components/PlayDetail/CommentList";
 
 const Container = styled.div`
   width: 100%;
   background: var(--gray1);
   padding: 0 5%;
+  overflow: hidden;
 `;
 
 const PlayContent = styled.div`
@@ -83,12 +85,6 @@ const CommentTitle = styled.h2`
   }
 `;
 
-const CommentList = styled.div`
-  width: 100%;
-  height: 78%;
-  margin-bottom: 8px;
-`;
-
 const PlayDetail = () => {
   return (
     <Container>
@@ -104,7 +100,7 @@ const PlayDetail = () => {
               </CommentTitle>
               <hr />
             </CommentTop>
-            <CommentList></CommentList>
+            <CommentList />
             <hr />
             <PostCommentPart />
           </CommentWrapper>

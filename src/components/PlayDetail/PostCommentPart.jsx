@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import authStore from "../../stores/AuthStore";
+import { auth, db } from "../../firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const PostComment = styled.form`
   height: 50px;
@@ -72,8 +74,37 @@ const PostCommentPart = () => {
 
   const isDisabled = value.trim() === "";
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (value.trim() === "") return;
+
+    const newComment = {
+      text: value,
+      author: userName,
+      createdAt: serverTimestamp(),
+      userId: user?.uid, // 유저의 UID 등 필요한 정보
+    };
+
+    try {
+      // Firestore에 댓글 추가
+      await addDoc(collection(db, "comments"), newComment);
+
+      // 로컬 상태에도 추가 (즉시 UI에 반영)
+      addComment({
+        ...newComment,
+        createdAt: new Date(), // 로컬에서 즉시 보이도록 Date로 넣어줌
+        id: Date.now(), // 로컬에서 map할 때 key로 사용
+      });
+
+      // 입력창 초기화
+      setValue("");
+    } catch (error) {
+      console.error("댓글 업로드 실패:", error);
+    }
+  };
+
   return (
-    <PostComment>
+    <PostComment onSubmit={handleSubmit}>
       <UserInfo>
         <UserTeam>
           <img src="" alt="" />

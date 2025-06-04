@@ -1,31 +1,13 @@
 import styled from "styled-components";
 import RecoProduct from "./RecoProduct";
+import { Swiper, SwiperSlide } from "swiper/react";
+// import { Scrollbar } from "swiper/modules";
+import "swiper/css/scrollbar";
+import "swiper/css";
 
 const RecoProductWrapper = styled.div`
   width: 100%;
   margin-top: 26px;
-`;
-
-const RecoProductList = styled.div`
-  display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
-  gap: 60px;
-  padding-bottom: 18px;
-  scroll-behavior: smooth;
-
-  &::-webkit-scrollbar {
-    height: 4px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: var(--grayF5);
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background: var(--gray3);
-    border-radius: 4px;
-  }
 `;
 
 const RecoProductTitle = styled.h1`
@@ -36,17 +18,56 @@ const RecoProductTitle = styled.h1`
 `;
 
 const RecoProductPart = () => {
+  const slideCount = 7;
+  const slides = Array.from({ length: slideCount }, (_, i) => (
+    <SwiperSlide key={i}>
+      <RecoProduct />
+    </SwiperSlide>
+  ));
   return (
     <RecoProductWrapper>
       <RecoProductTitle>여기서 추천하는 ROOK</RecoProductTitle>
-      <RecoProductList>
-        <RecoProduct />
-        <RecoProduct />
-        <RecoProduct />
-        <RecoProduct />
-        <RecoProduct />
-        <RecoProduct />
-      </RecoProductList>
+      <Swiper
+        // modules={Scrollbar}
+        // scrollbar={{ draggable: true }}
+        slidesPerView={3}
+        slidesPerGroup={2}
+        spaceBetween={20}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+            slidesPerGroup: 2,
+            spaceBetween: 6,
+          },
+          400: {
+            slidesPerView: 1,
+            slidesPerGroup: 3,
+            spaceBetween: 6,
+          },
+          500: {
+            slidesPerView: 1,
+            slidesPerGroup: 3,
+            spaceBetween: 14,
+          },
+          768: {
+            slidesPerView: 2,
+            slidesPerGroup: 4,
+            spaceBetween: 14,
+          },
+          1024: {
+            slidesPerView: 2,
+            slidesPerGroup: 5,
+            spaceBetween: 20,
+          },
+          1440: {
+            slidesPerView: 3,
+            slidesPerGroup: 7,
+            spaceBetween: 20,
+          },
+        }}
+      >
+        {slides}
+      </Swiper>
     </RecoProductWrapper>
   );
 };
