@@ -31,14 +31,7 @@ const DateButton = styled.button`
   }
 `;
 
-const days = [
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+const days = ["Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
 
 const WeeklyBanner = () => {
   const [selectedDay, setSelectedDay] = useState("Tuesday");

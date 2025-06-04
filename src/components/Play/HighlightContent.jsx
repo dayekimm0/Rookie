@@ -5,19 +5,22 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useState } from "react";
 
+// 전체 슬라이더 래퍼
+const SliderWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  overflow: visible;
+`;
+
 // 슬라이드 개별 박스
 const SlideBox = styled.div`
-  width: 200px;
-  height: 300px;
-  border: 4px solid var(--gray6);
+  max-width: 280px;
+  aspect-ratio: 9/16;
   border-radius: 1rem;
   background-color: var(--light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.5rem;
   font-weight: bold;
-  position: absolute;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   transition: transform 0.3s, opacity 0.3s, bottom 0.3s;
@@ -26,42 +29,46 @@ const SlideBox = styled.div`
   &.diff-0 {
     z-index: 5;
     transform: translateX(-50%) scale(1);
-    opacity: 0.8;
     bottom: 0;
     border-color: var(--main);
   }
   &.diff-1 {
     z-index: 4;
     transform: translateX(-50%) scale(0.9);
-    opacity: 0.7;
-    bottom: -10px;
+    filter: brightness(70%) blur(0.1rem);
   }
   &.diff-2 {
     z-index: 3;
-    transform: translateX(-50%) scale(0.8);
-    opacity: 0.5;
-    bottom: -20px;
+    transform: translateX(-50%) scale(0.85);
+    filter: brightness(50%) blur(0.2rem);
   }
   &.diff-3 {
     z-index: 2;
-    transform: translateX(-50%) scale(0.7);
-    opacity: 0.3;
-    bottom: -30px;
+    transform: translateX(-50%) scale(0.8);
+    filter: brightness(30%) blur(0.3rem);
   }
   &.diff-more {
     z-index: 1;
-    transform: translateX(-50%) scale(0.6);
+    transform: translateX(-50%) scale(0.75);
+    filter: brightness(10%) blur(0.4rem);
     opacity: 0;
-    bottom: -40px;
   }
-`;
 
-// 전체 슬라이더 래퍼
-const SliderWrapper = styled.div`
-  width: 100%;
-  padding: 50px 0;
-  overflow: visible;
-  position: relative;
+  @media screen and (max-width: 1024px) {
+    &.diff-3 {
+      transform: translateX(-50%) scale(0.75);
+      filter: brightness(10%) blur(0.4rem);
+      opacity: 0;
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    &.diff-2 {
+      transform: translateX(-50%) scale(0.75);
+      filter: brightness(10%) blur(0.4rem);
+      opacity: 0;
+    }
+  }
 `;
 
 const HighlightContent = () => {
@@ -86,10 +93,14 @@ const HighlightContent = () => {
       <Swiper
         modules={[Navigation]}
         navigation
-        slidesPerView={7}
+        breakpoints={{
+          0: { slidesPerView: 3 },
+          520: { slidesPerView: 5 },
+          1024: { slidesPerView: 7 },
+        }}
         centeredSlides={true}
         loop={true}
-        spaceBetween={-350} // 겹치기 효과
+        spaceBetween={-50} // 겹치기 효과
         onSlideChange={(swiper) => {
           setActiveIndex(swiper.realIndex % cards.length);
         }}
@@ -99,10 +110,9 @@ const HighlightContent = () => {
           }, 0);
         }}
         style={{
-          overflow: "visible",
-          paddingLeft: "160px",
-          paddingRight: "180px",
-          position: "relative",
+          paddingLeft: "50px",
+          paddingRight: "50px",
+          height: "100%",
         }}
       >
         {cards.map((card, idx) => {
@@ -112,9 +122,9 @@ const HighlightContent = () => {
             <SwiperSlide
               key={idx}
               style={{
-                width: "200px",
                 position: "relative",
-                height: "300px",
+                maxWidth: "280px",
+                aspectRatio: "9/16",
               }}
             >
               <SlideBox className={className}>Card {card}</SlideBox>
