@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
 import authStore from "../../stores/AuthStore";
-import { auth, db } from "../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const PostComment = styled.form`
   height: 50px;
@@ -65,7 +63,8 @@ const SubmitBtn = styled.input`
 
 const PostCommentPart = () => {
   const [value, setValue] = useState("");
-  const { user, userProfile, isLoading } = authStore();
+  const { user, userProfile } = authStore();
+  const addComment = authStore((state) => state.addComment);
   const userName = userProfile?.nickname || "사용자";
 
   const handleChange = (e) => {
@@ -74,32 +73,25 @@ const PostCommentPart = () => {
 
   const isDisabled = value.trim() === "";
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (value.trim() === "") return;
+    if (isDisabled) return;
 
     const newComment = {
+      id: Date.now(), // 간단한 고유 id
       text: value,
       author: userName,
-      createdAt: serverTimestamp(),
-      userId: user?.uid, // 유저의 UID 등 필요한 정보
+      userProfileImage: userProfile?.profileImage || "",
+      createdAt: new Date().toISOString(),
+      userId: user?.uid,
     };
 
     try {
-      // Firestore에 댓글 추가
-      await addDoc(collection(db, "comments"), newComment);
-
-      // 로컬 상태에도 추가 (즉시 UI에 반영)
-      addComment({
-        ...newComment,
-        createdAt: new Date(), // 로컬에서 즉시 보이도록 Date로 넣어줌
-        id: Date.now(), // 로컬에서 map할 때 key로 사용
-      });
-
-      // 입력창 초기화
+      addComment(newComment);
       setValue("");
+      console.log("✅ 댓글이 authStore에 저장됨:", newComment);
     } catch (error) {
-      console.error("댓글 업로드 실패:", error);
+      console.error("❌ 댓글 저장 실패:", error);
     }
   };
 
@@ -107,7 +99,9 @@ const PostCommentPart = () => {
     <PostComment onSubmit={handleSubmit}>
       <UserInfo>
         <UserTeam>
-          <img src="" alt="" />
+          {userProfile?.profileImage ? (
+            <img src={userProfile.profileImage} alt="profile" />
+          ) : null}
         </UserTeam>
         <UserName>{userName}</UserName>
       </UserInfo>
@@ -117,7 +111,7 @@ const PostCommentPart = () => {
         onChange={handleChange}
         required
       />
-      <SubmitBtn type="submit" value="댓글" disabled={isDisabled}></SubmitBtn>
+      <SubmitBtn type="submit" value="댓글" disabled={isDisabled} />
     </PostComment>
   );
 };

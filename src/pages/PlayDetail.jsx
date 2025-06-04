@@ -50,7 +50,7 @@ const CommentWrapper = styled.div`
   margin-top: 24px;
   background: var(--gray2);
   width: 100%;
-  height: 520px;
+  height: 540px;
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
@@ -63,9 +63,6 @@ const CommentTop = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  hr {
-    width: 100%;
-  }
 `;
 
 const CommentTitle = styled.h2`
@@ -98,10 +95,8 @@ const PlayDetail = () => {
               <CommentTitle>
                 댓글 <span>294</span>
               </CommentTitle>
-              <hr />
             </CommentTop>
             <CommentList />
-            <hr />
             <PostCommentPart />
           </CommentWrapper>
         </RightContent>

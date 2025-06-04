@@ -1,10 +1,12 @@
 import styled from "styled-components";
+import authStore from "../../stores/AuthStore";
 
 const CommentWrapper = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 8px;
+  margin-bottom: 24px;
 `;
 
 const UserImg = styled.div`
@@ -12,6 +14,11 @@ const UserImg = styled.div`
   height: 42px;
   background: var(--grayF5);
   border-radius: 50%;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const CommentItem = styled.div`
@@ -39,27 +46,48 @@ const UserName = styled.div`
   }
 `;
 
-const Comment = styled.div``;
+const Comment = styled.div`
+  color: var(--light);
+  font-size: 1.4rem;
+`;
+
+// 시간 계산 함수 예시 (optional)
+const timeAgo = (date) => {
+  const now = new Date();
+  const diff = (now - new Date(date)) / 1000; // 초 단위
+
+  if (diff < 60) return `${Math.floor(diff)}초 전`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)}일 전`;
+  return `${Math.floor(diff / 604800)}주 전`;
+};
 
 const Comments = () => {
+  const comments = authStore((state) => state.comments || []);
+
   return (
-    <CommentWrapper>
-      <UserImg>
-        <img src="" alt="" />
-      </UserImg>
-      <CommentItem>
-        <UserInfo>
-          <UserName>
-            dayekoongya
-            <p>2시간 전</p>
-          </UserName>
-        </UserInfo>
-        <Comment>
-          이긴것도 좋지만 이젠 두산의 미래를 이끌어나갈 젊은 야수들의 활약이 더
-          반갑다
-        </Comment>
-      </CommentItem>
-    </CommentWrapper>
+    <>
+      {comments.length === 0 && <p>댓글이 없습니다.</p>}
+      {comments.map((comment) => (
+        <CommentWrapper key={comment.id}>
+          <UserImg>
+            {comment.userProfileImage ? (
+              <img src={comment.userProfileImage} alt="profile" />
+            ) : null}
+          </UserImg>
+          <CommentItem>
+            <UserInfo>
+              <UserName>
+                {comment.author || "user"}
+                <p>{timeAgo(comment.createdAt)}</p>
+              </UserName>
+            </UserInfo>
+            <Comment>{comment.text}</Comment>
+          </CommentItem>
+        </CommentWrapper>
+      ))}
+    </>
   );
 };
 
