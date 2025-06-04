@@ -3,7 +3,9 @@ import { Navigation } from "swiper/modules";
 import styled from "styled-components";
 import "swiper/css";
 import "swiper/css/navigation";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
+import { PlayLeftBtn, PlayRightBtn } from "../Slides/NaviBtnStyles";
+import Arrow from "../../images/icons/main_banner_arr.svg";
 
 // 전체 슬라이더 래퍼
 const SliderWrapper = styled.div`
@@ -62,7 +64,7 @@ const SlideBox = styled.div`
     }
   }
 
-  @media screen and (max-width: 520px) {
+  @media screen and (max-width: 500px) {
     &.diff-2 {
       transform: translateX(-50%) scale(0.75);
       filter: brightness(10%) blur(0.4rem);
@@ -71,9 +73,20 @@ const SlideBox = styled.div`
   }
 `;
 
+const HighlightLeftBtn = styled(PlayLeftBtn)`
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const HighlightRightBtn = styled(PlayRightBtn)`
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
 const HighlightContent = () => {
   const cards = Array.from({ length: 20 }, (_, i) => i + 1);
   const [activeIndex, setActiveIndex] = useState(3);
+  const swiperRef = useRef(null);
 
   const getDiff = (idx, active, length) => {
     const diff = Math.abs((idx % length) - active);
@@ -88,26 +101,34 @@ const HighlightContent = () => {
     return "diff-more";
   };
 
+  const handlePrev = useCallback(() => {
+    swiperRef.current?.slidePrev();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    swiperRef.current?.slideNext();
+  }, []);
+
   return (
     <SliderWrapper>
       <Swiper
         modules={[Navigation]}
-        navigation
+        loop={true}
+        centeredSlides={true}
+        spaceBetween={-50}
         breakpoints={{
           0: { slidesPerView: 3 },
           520: { slidesPerView: 5 },
           1024: { slidesPerView: 7 },
         }}
-        centeredSlides={true}
-        loop={true}
-        spaceBetween={-50} // 겹치기 효과
-        onSlideChange={(swiper) => {
-          setActiveIndex(swiper.realIndex % cards.length);
-        }}
         onSwiper={(swiper) => {
+          swiperRef.current = swiper;
           setTimeout(() => {
             setActiveIndex(swiper.realIndex % cards.length);
           }, 0);
+        }}
+        onSlideChange={(swiper) => {
+          setActiveIndex(swiper.realIndex % cards.length);
         }}
         style={{
           paddingLeft: "50px",
@@ -132,6 +153,13 @@ const HighlightContent = () => {
           );
         })}
       </Swiper>
+
+      <HighlightLeftBtn onClick={handlePrev}>
+        <img src={Arrow} alt="prev" />
+      </HighlightLeftBtn>
+      <HighlightRightBtn onClick={handleNext}>
+        <img src={Arrow} alt="next" />
+      </HighlightRightBtn>
     </SliderWrapper>
   );
 };

@@ -87,9 +87,9 @@ const StyledSwiper = styled(Swiper)`
 const ClipList = ({ type, title }) => {
   const sampleData = [
     {
+      thumbnailSrc: "/thumbnail.jpg",
       influencerId: "@influencer1",
       videoTitle: "하이라이트 모음",
-      thumbnailSrc: "/thumbnail.jpg",
     },
   ];
 
@@ -111,9 +111,38 @@ const ClipList = ({ type, title }) => {
       </ContentTitle>
       <StyledSwiper
         scrollbar={{ draggable: true }}
-        slidesPerView={7}
-        slidesPerGroup={5}
-        spaceBetween={10}
+        breakpoints={{
+          0: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 6,
+          },
+          400: {
+            slidesPerView: 2,
+            slidesPerGroup: 3,
+            spaceBetween: 6,
+          },
+          500: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            spaceBetween: 14,
+          },
+          768: {
+            slidesPerView: 4,
+            slidesPerGroup: 4,
+            spaceBetween: 14,
+          },
+          1024: {
+            slidesPerView: 5,
+            slidesPerGroup: 5,
+            spaceBetween: 20,
+          },
+          1440: {
+            slidesPerView: 7,
+            slidesPerGroup: 7,
+            spaceBetween: 20,
+          },
+        }}
       >
         {clipItems}
       </StyledSwiper>

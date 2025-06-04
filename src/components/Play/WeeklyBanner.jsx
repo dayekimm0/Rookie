@@ -29,6 +29,21 @@ const DateButton = styled.button`
     background: ${({ selected }) => (selected ? "var(--main)" : "var(--main)")};
     color: ${({ selected }) => (selected ? "var(--gray1)" : "var(--gray1)")};
   }
+
+  @media screen and (max-width: 1024px) {
+    height: 50px;
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 40px;
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 30px;
+    font-size: 1.2rem;
+  }
 `;
 
 const days = ["Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
