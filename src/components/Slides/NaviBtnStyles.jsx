@@ -187,6 +187,41 @@ export const MyhomeNaviRightBtn = styled.button`
   }
 `;
 
+export const UpNaviLeftBtn = styled.button`
+  z-index: 2;
+  background: none;
+  border: none;
+  cursor: ${({ disabled }) => (disabled ? "auto" : "pointer")};
+  img {
+    transform: rotate(-180deg);
+    display: inline-block;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  &:hover {
+    img {
+      opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+    }
+  }
+`;
+
+export const UpNaviRightBtn = styled.button`
+  z-index: 2;
+  background: none;
+  border: none;
+  cursor: ${({ disabled }) => (disabled ? "auto" : "pointer")};
+  img {
+    display: inline-block;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  &:hover {
+    img {
+      opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+    }
+  }
+`;
+
 export const PlayLeftBtn = styled.button`
   position: absolute;
   z-index: 2;

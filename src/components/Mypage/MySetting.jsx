@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getTeamColor } from "../../util";
-import { getEmblem } from "../../util";
-import { getScrollbarWidth } from "../../util";
+import { getTeamColor, getEmblem, getScrollbarWidth } from "../../util";
 import authStore from "../../stores/AuthStore";
 import MypageModal from "./MypageModal";
 
@@ -10,6 +8,12 @@ import MypageModal from "./MypageModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import partnerLogo from "../../images/logos/Partner_Logo.svg";
+
+const Inner = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
 
 const UpBox = styled.div`
   width: 100%;
@@ -23,7 +27,7 @@ const UpBox = styled.div`
   @media screen and (max-width: 1024px) {
     height: 96px;
     padding: 24px;
-    margin: 30px 0 20px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -80,62 +84,6 @@ const UpBoxSub = styled.span`
   }
   @media screen and (max-width: 1024px) {
     font-size: 1rem;
-  }
-`;
-
-const MyShopping = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  gap: 30px;
-  margin-bottom: 30px;
-`;
-
-const MyShoppingTitle = styled.h4`
-  font-size: 2rem;
-  font-weight: bold;
-  @media screen and (max-width: 1024px) {
-    font-size: 1.6rem;
-  }
-`;
-
-const MyShoppingInner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  text-align: center;
-  gap: 60px;
-  @media screen and (max-width: 1024px) {
-    gap: 40px;
-  }
-  @media screen and (max-width: 500px) {
-    gap: 35px;
-  }
-`;
-
-const MyShoppingDetail = styled.h6`
-  font-size: 1.2rem;
-  line-height: 2.5;
-  b {
-    font-size: 2rem;
-    font-weight: 600;
-    line-height: 1;
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 1rem;
-    b {
-      font-size: 1.6rem;
-    }
-  }
-`;
-
-const MyShoppingLine = styled.span`
-  width: 1px;
-  height: 54px;
-  background: var(--dark);
-  @media screen and (max-width: 1024px) {
-    height: 48px;
   }
 `;
 
@@ -313,7 +261,7 @@ const Setting = () => {
   }, [teamModal]);
 
   return (
-    <>
+    <Inner>
       <UpBox>
         <UpBoxLeft>
           <UserTeam
@@ -340,34 +288,7 @@ const Setting = () => {
         </UpBoxLeft>
         <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
       </UpBox>
-      <MyShopping>
-        <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
-        <MyShoppingInner>
-          <MyShoppingDetail>
-            <b>2</b>
-            <br />
-            장바구니
-          </MyShoppingDetail>
-          <MyShoppingLine />
-          <MyShoppingDetail>
-            <b>1</b>
-            <br />
-            구매완료
-          </MyShoppingDetail>
-          <MyShoppingLine />
-          <MyShoppingDetail>
-            <b>0</b>
-            <br />
-            배송완료
-          </MyShoppingDetail>
-          <MyShoppingLine />
-          <MyShoppingDetail>
-            <b>1</b>
-            <br />
-            쿠폰
-          </MyShoppingDetail>
-        </MyShoppingInner>
-      </MyShopping>
+
       <MyInfo>
         <MyInfoTitle>계정 상세정보</MyInfoTitle>
         <MyInfoLine style={{ marginBottom: "40px" }} />
@@ -424,7 +345,7 @@ const Setting = () => {
           <DeleteLine />
         </Delete>
       </MyInfo>
-      {userProfile.email === "gosim@naver.com" ||
+      {/* {userProfile.email === "gosim@naver.com" ||
       userProfile.email === "mangom@daum.net" ? (
         <>
           <InquiryLink
@@ -446,12 +367,12 @@ const Setting = () => {
             ROOKie 파트너 입점신청 관련 공지
           </InquiryLink>
         </>
-      )}
+      )} */}
 
       {teamModal && (
         <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
       )}
-    </>
+    </Inner>
   );
 };
 
