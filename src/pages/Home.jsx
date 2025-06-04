@@ -8,7 +8,7 @@ import bannerStrike from "../images/banners/banner-strike.png";
 import bannerStrike_m from "../images/banners/bannerStrike_mh.png";
 import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
 import HomeList from "../components/Home/HomeList";
-import HighlightSlide from "../components/Slides/HighlightSlide";
+import ShortsSlide from "../components/Slides/ShortsSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
 import HomeProducts from "../components/Home/HomeProducts";
@@ -227,7 +227,7 @@ const Home = () => {
           <img src={bannerStrike_m} alt="banner" />
         </Link>
       </Banner>
-      <HighlightSlide
+      <ShortsSlide
         playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
         title={"하이라이트 CLIP"}
         max={21}

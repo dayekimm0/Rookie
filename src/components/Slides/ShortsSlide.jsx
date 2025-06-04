@@ -5,7 +5,10 @@ import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
-import { useYoutubePlaylist } from "../../hook/useYoutubePlaylist";
+import {
+  useYoutubePlaylist,
+  useYoutubeVideoDetails,
+} from "../../hook/useYoutubePlaylist";
 import Shortscard from "./Shortscard";
 
 const Title = styled.div`
@@ -91,7 +94,7 @@ const SlideContainer = styled.div`
   }
 `;
 
-const HighlightSlide = React.memo(({ playlistId, title, max }) => {
+const ShortsSlide = React.memo(({ playlistId, title, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -111,22 +114,35 @@ const HighlightSlide = React.memo(({ playlistId, title, max }) => {
     isError,
   } = useYoutubePlaylist(playlistId, max);
 
+  const videoIds = useMemo(() => {
+    return shorts
+      .map((item) => item.snippet.resourceId?.videoId || item.id?.videoId)
+      .filter(Boolean)
+      .join(",");
+  }, [shorts]);
+
+  const { data: details = [] } = useYoutubeVideoDetails(videoIds, !!videoIds);
+
   const slides = useMemo(() => {
-    return shorts.map((item) => {
-      const videoId = item.snippet.resourceId?.videoId || item.id.videoId;
-      const { title, thumbnails } = item.snippet;
+    return details.map((video) => {
+      const { id, snippet, statistics } = video;
 
       return (
-        <SwiperSlide key={videoId}>
+        <SwiperSlide key={id}>
           <Shortscard
-            thumbnail={thumbnails.maxres?.url || thumbnails.medium.url}
-            title={title}
-            onClick={() => console.log("Clicked:", videoId)}
+            thumbnail={
+              snippet.thumbnails?.maxres?.url || snippet.thumbnails?.medium?.url
+            }
+            title={snippet.title}
+            channelTitle={snippet.channelTitle}
+            views={statistics.viewCount}
+            likes={statistics.likeCount}
+            onClick={() => console.log("Clicked:", id)}
           />
         </SwiperSlide>
       );
     });
-  }, [shorts]);
+  }, [details]);
 
   if (isLoading) return <div>불러오는 중...</div>;
   if (isError) return <div>문제가 발생했어요.</div>;
@@ -204,4 +220,4 @@ const HighlightSlide = React.memo(({ playlistId, title, max }) => {
   );
 });
 
-export default HighlightSlide;
+export default ShortsSlide;
