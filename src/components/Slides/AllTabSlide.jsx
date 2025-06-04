@@ -1,6 +1,8 @@
 import TabSlideRenderer from "./TabSlideRenderer";
+import MyTabSlideRenderer from "../MypageSlides/MyTabSlideRandered";
 import { useQueries } from "@tanstack/react-query";
 import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { fetchYoutubePlaylist } from "../../hook/useYoutubePlaylist";
 
 const AllTabSlide = ({ allTab }) => {
@@ -11,6 +13,7 @@ const AllTabSlide = ({ allTab }) => {
       enabled: !!id,
     })),
   });
+  const location = useLocation();
 
   const isLoading = allQueries.some((q) => q.isLoading);
   const isError = allQueries.some((q) => q.isError);
@@ -28,7 +31,15 @@ const AllTabSlide = ({ allTab }) => {
   if (isLoading) return <div>불러오는 중...</div>;
   if (isError) return <div>문제가 발생했어요.</div>;
 
-  return <TabSlideRenderer items={items} />;
+  return (
+    <>
+      {location.pathname === "/mypage/myvideo" ? (
+        <MyTabSlideRenderer items={items} />
+      ) : (
+        <TabSlideRenderer items={items} />
+      )}
+    </>
+  );
 };
 
 export default AllTabSlide;

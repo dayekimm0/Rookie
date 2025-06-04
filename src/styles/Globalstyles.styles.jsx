@@ -17,6 +17,10 @@ const GlobalStyles = createGlobalStyle`
     color: inherit;
   }
 
+  button {
+    font-family: "Figtree", "Pretendard", sans-serif;
+  }
+
   :root {
     --light: #fff;
     --dark: #111;
