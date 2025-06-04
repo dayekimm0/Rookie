@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
 import ClipContent from "./ClipContent";
 import PlusIcon from "../../images/icons/plusIcon.svg";
 
@@ -20,23 +23,6 @@ const ContentList = styled.div`
 
   @media screen and (max-width: 500px) {
     gap: 15px;
-  }
-`;
-
-const Contents = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  justify-content: stretch;
-  gap: 1%;
-
-  @media screen and (max-width: 1024px) {
-    grid-template-columns: repeat(5, 1fr);
-    :nth-child(6) {
-      display: none;
-    }
-    :nth-child(7) {
-      display: none;
-    }
   }
 `;
 
@@ -94,6 +80,10 @@ const ContentTitle = styled.div`
   }
 `;
 
+const StyledSwiper = styled(Swiper)`
+  width: 100%;
+`;
+
 const ClipList = ({ type, title }) => {
   const sampleData = [
     {
@@ -102,6 +92,13 @@ const ClipList = ({ type, title }) => {
       thumbnailSrc: "/thumbnail.jpg",
     },
   ];
+
+  // ClipContent를 10개로 나열
+  const clipItems = Array.from({ length: 10 }).map((_, idx) => (
+    <SwiperSlide key={idx}>
+      <ClipContent {...sampleData[0]} type={type} />
+    </SwiperSlide>
+  ));
 
   return (
     <ContentList>
@@ -112,29 +109,14 @@ const ClipList = ({ type, title }) => {
           <img src={PlusIcon} alt="icon" />
         </div>
       </ContentTitle>
-      <Contents>
-        {sampleData.map((item, idx) => (
-          <ClipContent key={idx} {...item} type={type} />
-        ))}
-        {sampleData.map((item, idx) => (
-          <ClipContent key={idx} {...item} type={type} />
-        ))}
-        {sampleData.map((item, idx) => (
-          <ClipContent key={idx} {...item} type={type} />
-        ))}
-        {sampleData.map((item, idx) => (
-          <ClipContent key={idx} {...item} type={type} />
-        ))}
-        {sampleData.map((item, idx) => (
-          <ClipContent key={idx} {...item} type={type} />
-        ))}
-        {sampleData.map((item, idx) => (
-          <ClipContent key={idx} {...item} type={type} />
-        ))}
-        {sampleData.map((item, idx) => (
-          <ClipContent key={idx} {...item} type={type} />
-        ))}
-      </Contents>
+      <StyledSwiper
+        scrollbar={{ draggable: true }}
+        slidesPerView={7}
+        slidesPerGroup={5}
+        spaceBetween={10}
+      >
+        {clipItems}
+      </StyledSwiper>
     </ContentList>
   );
 };
