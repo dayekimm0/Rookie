@@ -22,22 +22,7 @@ const Description = styled.div`
   gap: 5px;
 `;
 
-const TeamInfo = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-
-const TeamLogo = styled.img``;
-
 const ChannelName = styled.p`
-  font-size: 1.8rem;
-`;
-
-const TeamName = styled.p`
-  font-size: 1.8rem;
-`;
-
-const InfluencerName = styled.p`
   font-size: 1.8rem;
 `;
 
@@ -45,56 +30,13 @@ const VideoTitle = styled.p`
   font-size: 1.4rem;
 `;
 
-const PlayContent = ({
-  type,
-  thumbnailSrc,
-  channelName,
-  teamLogo,
-  teamName,
-  influencerName,
-  videoTitle,
-}) => {
+const PlayContent = ({ thumbnailSrc, channelName, videoTitle }) => {
   return (
     <ContentCard>
       <Thumbnail src={thumbnailSrc} alt="video thumbnail" />
       <Description>
-        {type === "weekly play" && (
-          <>
-            <ChannelName>{channelName}</ChannelName>
-            <VideoTitle>{videoTitle}</VideoTitle>
-          </>
-        )}
-
-        {type === "interview" && (
-          <>
-            <ChannelName>{channelName}</ChannelName>
-            <VideoTitle>{videoTitle}</VideoTitle>
-          </>
-        )}
-
-        {type === "hot clip" && (
-          <>
-            <ChannelName>{channelName}</ChannelName>
-            <VideoTitle>{videoTitle}</VideoTitle>
-          </>
-        )}
-
-        {type === "team play" && (
-          <>
-            <TeamInfo>
-              <TeamLogo src={teamLogo} alt="team logo" />
-              <TeamName>{teamName}</TeamName>
-            </TeamInfo>
-            <VideoTitle>{videoTitle}</VideoTitle>
-          </>
-        )}
-
-        {type === "rookie play" && (
-          <>
-            <InfluencerName>{influencerName}</InfluencerName>
-            <VideoTitle>{videoTitle}</VideoTitle>
-          </>
-        )}
+        <ChannelName>{channelName}</ChannelName>
+        <VideoTitle>{videoTitle}</VideoTitle>
       </Description>
     </ContentCard>
   );

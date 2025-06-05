@@ -26,8 +26,8 @@ const Play = () => {
       <PlayList type="interview" title="INTERVIEW" />
       <PlayList type="hot clip" title="HOT CLIP" />
       <PlayList type="team play" title="TEAM PLAY" />
-      <PlayList type="rookie play" title="ROOKie PLAY" />
-      <ClipList type="rookie clip" title="ROOKie CLIP" />
+      <PlayList type="rookie play" title="ROOKIE PLAY" />
+      <ClipList type="rookie clip" title="ROOKIE CLIP" />
     </Container>
   );
 };
