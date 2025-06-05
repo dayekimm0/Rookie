@@ -15,6 +15,7 @@ import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Event from "./pages/Event";
 import Play from "./pages/Play";
+import PlayAll from "./pages/PlayAll";
 import PlayDetail from "./pages/PlayDetail";
 import TeamHome from "./pages/TeamHome"; // TeamHome 컴포넌트 추가
 
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "play",
         element: <Play />,
+      },
+      {
+        path: "playall",
+        element: <PlayAll />,
       },
       {
         path: "play/:id",
