@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import useProductStore from "../stores/ProductStore";
 import { filterAndSortProducts } from "../productlist_utils/filterSort";
-import ProductBanner from "../components/ProductList/ProductBanner";
 import ProductCategory from "../components/ProductList/ProductCategory";
 import PaginateProduct from "../components/ProductList/PaginateProduct";
 import { shuffleArray } from "../productlist_utils/productShuffle";
@@ -17,6 +16,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   background: var(--light);
+  padding: 0 5%;
   overflow: hidden;
   @media screen and (max-width: 1440px) {
     width: 100%;
@@ -32,6 +32,22 @@ const Container = styled.div`
   }
   @media screen and (max-width: 375px) {
     width: 100%;
+  }
+`;
+
+const Contents = styled.div`
+  margin-top: 5%;
+  min-width: 1310px;
+  min-height: 500px; /* 높이를 고정(또는 적절히 조정) */
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  p {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -98,6 +114,7 @@ const SvgSpinner = styled.svg`
 `;
 
 const ProductList = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   const { teamCode } = useParams();
   const {
     selectCollabo,
@@ -196,12 +213,7 @@ const ProductList = () => {
     setShuffledProducts,
     setInitialShuffleDone,
   ]);
-  // // 최초 로딩 시 선택 브랜드 초기화
-  // useEffect(() => {
-  //   if (!selectedBrand?.trim() && brands.length > 0) {
-  //     setSelectedBrand(brands[0]);
-  //   }
-  // }, [brands, selectedBrand, setSelectedBrand]);
+
   const baseProducts = sort === "random" ? shuffledProducts : allProducts;
   // 필터링 & 정렬
   const filteredAndSortedProducts = filterAndSortProducts(
@@ -234,9 +246,18 @@ const ProductList = () => {
   if (error) return <div>에러 :{error.message}</div>;
   return (
     <Container>
-      {/* <ProductBanner team={bannerKey || "kbo"} /> */}
-      <ProductCategory />
-      <PaginateProduct items={filteredAndSortedProducts} />
+      <Contents>
+        <ProductCategory
+          products={allProducts}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+        {filteredAndSortedProducts.length > 0 ? (
+          <PaginateProduct items={filteredAndSortedProducts} />
+        ) : (
+          <p style={{ color: "#888", fontSize: "16px" }}>상품이 없습니다.</p>
+        )}
+      </Contents>
     </Container>
   );
 };

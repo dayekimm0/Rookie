@@ -2,12 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-// Wrapper for responsive positioning
 const SortWrapper = styled.div`
-  position: absolute;
-  right: 22%;
-  margin-top: 5%;
-
   @media screen and (max-width: 1440px) {
     right: 12%;
   }
@@ -23,11 +18,11 @@ const SortWrapper = styled.div`
 
 const Sort = styled.select`
   padding: 10px;
-  padding-right: 30px;
+  padding-right: 20px;
   appearance: none;
   border: none;
   background: transparent;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: var(--dark);
   font-weight: 500;
   cursor: pointer;

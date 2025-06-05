@@ -41,6 +41,7 @@ const TextArea = styled.textarea`
   background: none;
   border: none;
   font-size: 1.5rem;
+  overflow: hidden;
   transition: all 0.3s;
   &:focus {
     outline: none;
@@ -49,6 +50,7 @@ const TextArea = styled.textarea`
   &::placeholder {
     opacity: 1;
     transition: opacity 0.3s;
+    font-family: "Figtree", "Pretendard", sans-serif;
   }
 `;
 
@@ -56,8 +58,9 @@ const SubmitBtn = styled.input`
   width: 70px;
   height: 70%;
   border-radius: 60px;
-  background: var(--grayD);
   border: none;
+  background: ${({ disabled }) => (disabled ? "var(--grayD)" : "var(--main)")};
+  font-weight: ${({ disabled }) => (disabled ? "400" : "500")};
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;
 
@@ -67,6 +70,15 @@ const PostCommentPart = () => {
   const addComment = authStore((state) => state.addComment);
   const userName = userProfile?.nickname || "사용자";
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // ✅ textarea에 엔터 입력 자체를 방지
+      if (!isDisabled) {
+        handleSubmit(); // 댓글 제출
+      }
+    }
+  };
+
   const handleChange = (e) => {
     setValue(e.target.value);
   };
@@ -74,12 +86,14 @@ const PostCommentPart = () => {
   const isDisabled = value.trim() === "";
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (isDisabled) return;
 
+    const cleanValue = value.trim();
+
     const newComment = {
-      id: Date.now(), // 간단한 고유 id
-      text: value,
+      id: Date.now(),
+      text: cleanValue,
       author: userName,
       userProfileImage: userProfile?.profileImage || "",
       createdAt: new Date().toISOString(),
@@ -88,8 +102,7 @@ const PostCommentPart = () => {
 
     try {
       addComment(newComment);
-      setValue("");
-      console.log("✅ 댓글이 authStore에 저장됨:", newComment);
+      setValue(""); // ✅ 입력값 초기화
     } catch (error) {
       console.error("❌ 댓글 저장 실패:", error);
     }
@@ -106,10 +119,10 @@ const PostCommentPart = () => {
         <UserName>{userName}</UserName>
       </UserInfo>
       <TextArea
-        placeholder="댓글 추가하기"
         value={value}
         onChange={handleChange}
-        required
+        onKeyDown={handleKeyDown}
+        placeholder="댓글 추가하기"
       />
       <SubmitBtn type="submit" value="댓글" disabled={isDisabled} />
     </PostComment>
