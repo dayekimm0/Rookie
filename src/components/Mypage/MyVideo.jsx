@@ -1,7 +1,7 @@
 import MyPlaySlidewithTabs from "../MypageSlides/MyPlaySlidewithTabs";
+import MyShortsSlide from "../MypageSlides/MyShortsSlide";
 import { homeSlideTab } from "../../data/playTabs";
 import styled from "styled-components";
-import ShortsSlide from "../Slides/ShortsSlide";
 
 const Title = styled.div`
   display: flex;
@@ -38,13 +38,13 @@ const MyVideo = () => {
   return (
     <>
       <Title>
-        <h3>추천영상</h3>
+        <h3>좋아요 표시한 동영상</h3>
       </Title>
       <MyPlaySlidewithTabs
         allTab={homeSlideTab.allTab}
         mypageTabs={homeSlideTab.mypageTabs}
       />
-      <ShortsSlide
+      <MyShortsSlide
         playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
         title={"하이라이트 CLIP"}
         max={21}
