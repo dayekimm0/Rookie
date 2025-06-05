@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -87,13 +88,17 @@ const Container = styled.div`
 `;
 
 const PlayList = ({ type, title }) => {
+  const navigate = useNavigate();
+
+  const handleMoreClick = () => {
+    navigate("/playall");
+  };
+
+  // 샘플 데이터 (실제는 type별 API 호출 등으로 변경)
   const baseData = [
     {
       thumbnailSrc: "/thumbnail.jpg",
       channelName: "KBO",
-      teamLogo: "/logo.png",
-      teamName: "NC",
-      influencerName: "인플루언서1",
       influencerId: "@influencer1",
       videoTitle: "하이라이트 모음",
     },
@@ -122,7 +127,7 @@ const PlayList = ({ type, title }) => {
     <ContentList>
       <ContentTitle>
         <h2>{title}</h2>
-        <div className="more">
+        <div className="more" onClick={handleMoreClick}>
           <span>더보기</span>
           <img src={PlusIcon} alt="icon" />
         </div>
@@ -170,7 +175,7 @@ const PlayList = ({ type, title }) => {
         >
           {sampleData.map((item, idx) => (
             <SwiperSlide key={idx}>
-              <PlayContent {...item} type={type} />
+              <PlayContent {...item} />
             </SwiperSlide>
           ))}
         </Swiper>

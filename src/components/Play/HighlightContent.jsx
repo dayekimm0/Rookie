@@ -84,7 +84,7 @@ const HighlightRightBtn = styled(PlayRightBtn)`
 `;
 
 const HighlightContent = () => {
-  const cards = Array.from({ length: 20 }, (_, i) => i + 1);
+  const cards = Array.from({ length: 21 }, (_, i) => i + 1);
   const [activeIndex, setActiveIndex] = useState(3);
   const swiperRef = useRef(null);
 
