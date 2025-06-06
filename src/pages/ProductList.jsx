@@ -38,7 +38,7 @@ const Container = styled.div`
 const Contents = styled.div`
   margin-top: 5%;
   min-width: 1310px;
-  min-height: 500px; /* 높이를 고정(또는 적절히 조정) */
+  min-height: 500px;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -48,6 +48,22 @@ const Contents = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    min-width: 1024px;
+  }
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    min-width: 760px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    min-width: 500px;
+  }
+  @media screen and (max-width: 375px) {
+    width: 100%;
+    min-width: 375px;
   }
 `;
 
