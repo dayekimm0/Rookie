@@ -5,7 +5,7 @@ export const getPrice = (priceStr) => {
 
 export const filterAndSortProducts = (
   products,
-  { selectCollabo, selectedBrand, sort }
+  { selectCollabo, selectedBrand, sort, searchTerm }
 ) => {
   let filtered = products;
 
@@ -22,6 +22,14 @@ export const filterAndSortProducts = (
   } else if (selectCollabo !== "ALL") {
     // category 값 기준 필터
     filtered = filtered.filter((item) => item.category === selectCollabo);
+  }
+
+  // 검색어 필터링 추가
+  if (searchTerm && searchTerm.trim() !== "") {
+    const lowerSearch = searchTerm.toLowerCase();
+    filtered = filtered.filter((item) =>
+      item.name.toLowerCase().includes(lowerSearch)
+    );
   }
 
   switch (sort) {

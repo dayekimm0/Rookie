@@ -6,7 +6,9 @@ import ProductCard from "../ProductCard";
 
 const ProductsList = styled.div`
   width: 100%;
-  margin-top: 100px;
+  min-width: 100%;
+  min-height: 100%;
+  margin-top: 1%;
   display: flex;
   justify-content: center;
   align-items: center;

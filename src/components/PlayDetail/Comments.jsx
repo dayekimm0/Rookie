@@ -51,10 +51,10 @@ const Comment = styled.div`
   font-size: 1.4rem;
 `;
 
-// 시간 계산 함수 예시 (optional)
+// 시간 계산 함수 예시
 const timeAgo = (date) => {
   const now = new Date();
-  const diff = (now - new Date(date)) / 1000; // 초 단위
+  const diff = (now - new Date(date)) / 1000;
 
   if (diff < 60) return `${Math.floor(diff)}초 전`;
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
