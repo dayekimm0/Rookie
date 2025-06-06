@@ -31,10 +31,25 @@ const Coupon = styled.img`
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 0fr);
+  grid-template-columns: repeat(4, auto);
+  gap: 30px;
   justify-content: center;
   align-content: center;
-  padding-left: 10px;
+
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: repeat(2, auto); /* 2개씩 */
+    justify-content: center; /* 중앙 정렬 유지 */
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, auto); /* 2개씩 */
+    justify-content: center; /* 중앙 정렬 유지 */
+  }
+
+  @media screen and (max-width: 500px) {
+    grid-template-columns: repeat(2, auto); /* 더 좁아져도 2개 유지 */
+    justify-content: center;
+  }
 `;
 
 const Coupons = ({ width, height }) => {

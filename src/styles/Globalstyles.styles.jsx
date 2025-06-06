@@ -55,6 +55,11 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.6rem;
   }
 
+  body.modal-open {
+    overflow: hidden !important;
+    height: 100%;
+  }
+
   #root {
     height: 100%;
   }

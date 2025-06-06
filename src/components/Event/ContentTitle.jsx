@@ -112,11 +112,19 @@ const TextLast = styled.div`
 `;
 
 const CouponBox = styled.div`
-  img {
-    margin-right: 30px;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (max-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 16px;
+    justify-content: center;
+    align-content: center;
+    padding: 0 16px;
   }
 
-  @media screen and (max-width: 1176px) {
+  /* @media screen and (max-width: 1176px) {
     display: grid;
     grid-template-columns: repeat(2, 0fr);
     grid-template-rows: repeat(2, 130px);
@@ -154,7 +162,7 @@ const CouponBox = styled.div`
     img {
       margin-right: 0px;
     }
-  }
+  } */
 `;
 
 const ContentsTitle = () => {

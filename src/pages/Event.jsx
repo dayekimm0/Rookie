@@ -23,6 +23,18 @@ const Background = styled.div`
   top: -5%;
   left: -6.5%;
   pointer-events: none;
+
+  @media screen and (max-width: 1024px) {
+    width: 110%;
+    top: -5%;
+    left: -6.5%;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 110%;
+    top: -5%;
+    left: -6.5%;
+  }
 `;
 
 // 배경 이미지 스타일
@@ -56,7 +68,50 @@ const MascortImg = styled.div`
     height: 332px;
     position: absolute;
     bottom: 15%;
-    right: 20%;
+    right: 18%;
+
+    @media screen and (max-width: 1440px) {
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      bottom: 14%;
+      right: 16%;
+    }
+    @media screen and (max-width: 1300px) {
+      width: 290px;
+      height: 290px;
+      position: absolute;
+      bottom: 13%;
+      right: 14%;
+    }
+    @media screen and (max-width: 1200px) {
+      width: 280px;
+      height: 280px;
+      position: absolute;
+      bottom: 13%;
+      right: 12%;
+    }
+    @media screen and (max-width: 1100px) {
+      width: 270px;
+      height: 270px;
+      position: absolute;
+      bottom: 12%;
+      right: 10%;
+    }
+    @media screen and (max-width: 1024px) {
+      width: 260px;
+      height: 260px;
+      position: absolute;
+      bottom: 12%;
+      right: 6%;
+    }
+    @media screen and (max-width: 868px) {
+      width: 250px;
+      height: 250px;
+      position: absolute;
+      bottom: 12%;
+      right: 2%;
+    }
 
     @media screen and (max-width: 768px) {
       display: none;
@@ -139,9 +194,7 @@ const Event = () => {
         <MascortImg ref={mascortRef}>
           {mascortImg ? (
             <img src={mascortImg} alt={`${teamName} 마스코트`} />
-          ) : (
-            <p />
-          )}
+          ) : null}
         </MascortImg>
       </ContentWrapper>
     </Container>
