@@ -181,7 +181,7 @@ const ProductList = () => {
     }
   }, [allProducts, selectedBrand, setSelectedBrand]);
 
-  // 최초 랜덤 셔플 한 번 실행 (sort가 'random'일 때만)
+  // 최초 랜덤 셔플 한 번 실행
   useEffect(() => {
     if (sort === "random" && !initialShuffleDone && allProducts.length > 0) {
       const shuffled = shuffleArray(allProducts);
@@ -198,7 +198,7 @@ const ProductList = () => {
 
   const baseProducts = sort === "random" ? shuffledProducts : allProducts;
 
-  // 1) 필터링된 상품
+  // 필터링
   const filteredProducts = useMemo(() => {
     return baseProducts.filter((p) => {
       if (selectCollabo === "COLLABORATION") {
@@ -211,7 +211,6 @@ const ProductList = () => {
     });
   }, [baseProducts, selectCollabo, selectedBrand, selectedCategory]);
 
-  // 2) ALL 카테고리면 무작위 섞고, 아니면 필터+정렬
   const finalProducts = useMemo(() => {
     if (selectedCategory === "ALL") {
       // 전체 카테고리일 땐 랜덤 섞기
