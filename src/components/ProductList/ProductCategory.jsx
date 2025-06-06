@@ -96,6 +96,7 @@ const SearchBar = styled.div`
         }
       }
       .search_btn {
+        cursor: pointer;
         font-size: 16px;
       }
     }

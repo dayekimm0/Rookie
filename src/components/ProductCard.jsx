@@ -90,6 +90,12 @@ const ProductInfo = styled.div`
     cursor: pointer;
     font-size: 1.8rem;
     line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   .price {
     font-size: 1.8rem;

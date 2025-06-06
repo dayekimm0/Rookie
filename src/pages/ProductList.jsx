@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
@@ -141,22 +141,7 @@ const ProductList = () => {
     "ssg_lds",
   ];
 
-  const teamCodeToBannerKey = {
-    ssg_lds: "ssg",
-    ds_bas: "doosan",
-    hw_egs: "hanwha",
-    kiwoom: "kiwoom",
-    lg_twins: "lg",
-    lt_gnt: "lotte",
-    nc_dns: "nc",
-    ss_lns: "samsung",
-    kia_tgs: "kia",
-    kt_wiz: "kt",
-  };
-
-  const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
-
-  // React Query로 직접 fetch
+  // 데이터 fetch
   const {
     data: allProducts = [],
     isLoading,
@@ -165,15 +150,12 @@ const ProductList = () => {
     queryKey: ["teamProducts", teamCode || "all"],
     queryFn: async () => {
       if (teamCode) {
-        // 특정 팀만 fetch
         const res = await fetch(
           `https://rookiejson.netlify.app/teamJson/${teamCode}.json`
         );
         if (!res.ok) throw new Error("팀 상품 로딩 실패");
-        const data = await res.json();
-        return data;
+        return res.json();
       } else {
-        // 전체 팀 fetch
         const requests = teamCodes.map((code) =>
           fetch(`https://rookiejson.netlify.app/teamJson/${code}.json`).then(
             (res) => {
@@ -199,7 +181,7 @@ const ProductList = () => {
     }
   }, [allProducts, selectedBrand, setSelectedBrand]);
 
-  // 최초 랜덤 셔플 한 번 실행
+  // 최초 랜덤 셔플 한 번 실행 (sort가 'random'일 때만)
   useEffect(() => {
     if (sort === "random" && !initialShuffleDone && allProducts.length > 0) {
       const shuffled = shuffleArray(allProducts);
@@ -215,9 +197,10 @@ const ProductList = () => {
   ]);
 
   const baseProducts = sort === "random" ? shuffledProducts : allProducts;
-  // 필터링 & 정렬
-  const filteredAndSortedProducts = filterAndSortProducts(
-    baseProducts.filter((p) => {
+
+  // 1) 필터링된 상품
+  const filteredProducts = useMemo(() => {
+    return baseProducts.filter((p) => {
       if (selectCollabo === "COLLABORATION") {
         return selectedBrand ? p.brand === selectedBrand : true;
       }
@@ -225,9 +208,32 @@ const ProductList = () => {
         return p.category === selectedCategory;
       }
       return true;
-    }),
-    { selectCollabo, selectedBrand, sort }
-  );
+    });
+  }, [baseProducts, selectCollabo, selectedBrand, selectedCategory]);
+
+  // 2) ALL 카테고리면 무작위 섞고, 아니면 필터+정렬
+  const finalProducts = useMemo(() => {
+    if (selectedCategory === "ALL") {
+      // 전체 카테고리일 땐 랜덤 섞기
+      return shuffleArray(filteredProducts);
+    } else {
+      // 특정 카테고리일 땐 기존 필터 + 정렬 유지
+      return filterAndSortProducts(filteredProducts, {
+        selectCollabo,
+        selectedBrand,
+        sort,
+        searchTerm,
+      });
+    }
+  }, [
+    filteredProducts,
+    selectedCategory,
+    selectCollabo,
+    selectedBrand,
+    sort,
+    searchTerm,
+  ]);
+
   if (isLoading)
     return (
       <SlideLoaderWrapper>
@@ -244,6 +250,7 @@ const ProductList = () => {
       </SlideLoaderWrapper>
     );
   if (error) return <div>에러 :{error.message}</div>;
+
   return (
     <Container>
       <Contents>
@@ -252,8 +259,8 @@ const ProductList = () => {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
         />
-        {filteredAndSortedProducts.length > 0 ? (
-          <PaginateProduct items={filteredAndSortedProducts} />
+        {finalProducts.length > 0 ? (
+          <PaginateProduct items={finalProducts} />
         ) : (
           <p style={{ color: "#888", fontSize: "16px" }}>상품이 없습니다.</p>
         )}
@@ -261,4 +268,5 @@ const ProductList = () => {
     </Container>
   );
 };
+
 export default ProductList;
