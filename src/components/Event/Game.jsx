@@ -185,6 +185,72 @@ const TextBoxImg = styled.img`
   }
 `;
 
+/* Alert Modal start*/
+const AlertModalContent = styled.div`
+  animation: ${ScaleUp} 0.5s ease-out;
+  background-color: var(--dark);
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.2);
+  color: var(--light);
+  position: relative;
+`;
+
+const AlertTitle = styled.h2`
+  font-family: "GmarketSans";
+  font-size: 3.6rem;
+  font-weight: bold;
+  margin-bottom: 14px;
+  user-select: none;
+  @media screen and (max-width: 600px) {
+    font-size: 3rem;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 2.8rem;
+  }
+`;
+
+const AlertDesc = styled.p`
+  font-size: 1.2rem;
+  white-space: pre-line;
+  margin-bottom: 24px;
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 0.9rem;
+  }
+`;
+
+const AlertConfirmButton = styled.button`
+  background-color: var(--main);
+  color: var(--dark);
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    background: var(--light);
+    opacity: 0.9;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1rem;
+    padding: 8px 22px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 0.9rem;
+    padding: 6px 20px;
+  }
+`;
+/* Alert Modal end*/
+
 /* ==================== 게임 로직 START ==================== */
 
 const coupons = [
@@ -273,6 +339,9 @@ const Game = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gamePlayedFlag, setGamePlayedFlag] = useState(false);
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
   const navigate = useNavigate();
 
   const user = authStore((state) => state.user);
@@ -315,16 +384,40 @@ const Game = () => {
     }
   }, [result]);
 
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+
+    if (isModalOpen || alertModalOpen) {
+      html.classList.add("modal-open");
+      body.classList.add("modal-open");
+    } else {
+      html.classList.remove("modal-open");
+      body.classList.remove("modal-open");
+    }
+
+    return () => {
+      html.classList.remove("modal-open");
+      body.classList.remove("modal-open");
+    };
+  }, [isModalOpen, alertModalOpen]);
+
   // 비회원 이벤트 참여 막기
   const handleClick = async (index) => {
     if (!user) {
-      alert("로그인 후 이용가능합니다!");
+      // alert("로그인 후 이용가능합니다!");
+      setAlertMessage("로그인 후 이용가능합니다!");
+      setAlertModalOpen(true);
       return;
     }
 
     // 사용자 파이어스토어 저장값 불러와서 조건부랜더링 후 막기
     if (revealed[index] || gameStarted || gamePlayed || gamePlayedFlag) {
-      alert("이벤트 게임은 한 번만 참여 가능합니다.\n이미 참여하셨습니다!");
+      // alert("이벤트 게임은 한 번만 참여 가능합니다.\n이미 참여하셨습니다!");
+      setAlertMessage(
+        "이벤트 게임은 한 번만 참여 가능합니다.\n이미 참여하셨습니다!"
+      );
+      setAlertModalOpen(true);
       return;
     }
 
@@ -336,7 +429,9 @@ const Game = () => {
       if (latest.exists() && latest.data().gamePlayed) {
         setGamePlayed(true);
         setGamePlayedFlag(true);
-        alert("이미 게임을 진행하셨습니다.");
+        // alert("이미 게임을 진행하셨습니다.");
+        setAlertMessage("이미 게임을 진행하셨습니다.");
+        setAlertModalOpen(true);
         return;
       }
 
@@ -359,7 +454,9 @@ const Game = () => {
       }
     } catch (error) {
       console.error("게임 처리 중 오류 발생:", error);
-      alert("게임 참여 중 오류가 발생했습니다. 다시 시도해주세요.");
+      // alert("게임 참여 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setAlertMessage("게임 참여 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setAlertModalOpen(true);
       setGameStarted(false);
     }
   };
@@ -424,6 +521,7 @@ const Game = () => {
             right: 0,
             bottom: 0,
             zIndex: 1000,
+            overflow: "hidden",
           },
         }}
       >
@@ -436,6 +534,41 @@ const Game = () => {
             마이페이지로 이동
           </MyPageButton>
         </CouponModalContent>
+      </Modal>
+      <Modal
+        isOpen={alertModalOpen}
+        onRequestClose={() => setAlertModalOpen(false)}
+        ariaHideApp={false}
+        style={{
+          content: {
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "transparent",
+            border: "none",
+            padding: "0",
+            height: "280px",
+          },
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            overflow: "hidden",
+          },
+        }}
+      >
+        <AlertModalContent>
+          <CloseButton onClick={() => setAlertModalOpen(false)}>✕</CloseButton>
+          <AlertTitle>알림</AlertTitle>
+          <AlertDesc>{alertMessage}</AlertDesc>
+          <AlertConfirmButton onClick={() => setAlertModalOpen(false)}>
+            확인
+          </AlertConfirmButton>
+        </AlertModalContent>
       </Modal>
     </Container>
   );
