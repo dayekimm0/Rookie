@@ -5,6 +5,8 @@ import RecoClip from "../components/PlayDetail/RecoClip";
 import RecoProductPart from "../components/PlayDetail/RecoProductPart";
 import PostCommentPart from "../components/PlayDetail/PostCommentPart";
 import CommentList from "../components/PlayDetail/CommentList";
+import Shortscard from "../components/Slides/Shortscard";
+import { useYoutubePlaylist } from "../hook/useYoutubePlaylist";
 
 const Container = styled.div`
   width: 100%;
@@ -83,6 +85,20 @@ const CommentTitle = styled.h2`
 `;
 
 const PlayDetail = () => {
+  // ✅ 재생목록 ID 설정 (예: "PL...." 실제 playlistId로 교체!)
+  const playlistId = "PLuY-NTS_5Ipwm3kK7npcPz7F-KJsP68My"; // 예: Shorts 재생목록 ID
+  const {
+    data: playlist = [],
+    isLoading,
+    isError,
+  } = useYoutubePlaylist(playlistId, 1);
+
+  // ✅ 첫 번째 영상의 썸네일을 가져오기
+  const thumbnailUrl = playlist.length
+    ? playlist[0].snippet.thumbnails?.high?.url ||
+      playlist[0].snippet.thumbnails?.medium?.url
+    : "";
+
   return (
     <Container>
       <PlayContent>
@@ -108,7 +124,10 @@ const PlayDetail = () => {
             <RecoPlay />
             <RecoPlay />
           </RecoPlayWrapper>
-          <RecoClip />
+          {/* ✅ 썸네일만 필요하면 이렇게 props로 넘기기 */}
+          {isLoading && <div>로딩중...</div>}
+          {isError && <div>문제가 발생했어요.</div>}
+          {!isLoading && !isError && <RecoClip thumbnailUrl={thumbnailUrl} />}
         </LeftContent>
       </PlayContent>
     </Container>

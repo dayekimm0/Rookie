@@ -12,10 +12,10 @@ const ClipWrapper = styled.div`
   }
 `;
 
-const RecoClip = () => {
+const RecoClip = ({ thumbnailUrl }) => {
   return (
     <ClipWrapper>
-      <img src={clip} alt="clip_thumbnail" />
+      <img src={thumbnailUrl} alt="clip_thumbnail" />
     </ClipWrapper>
   );
 };
