@@ -221,3 +221,185 @@ export const UpNaviRightBtn = styled.button`
     }
   }
 `;
+
+export const PlayLeftBtn = styled.button`
+  position: absolute;
+  z-index: 2;
+  top: 40%;
+  left: -3%;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: ${({ disabled }) => (disabled ? "hidden" : "visible")};
+  cursor: pointer;
+  img {
+    transform: rotate(-180deg);
+    display: inline-block;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  &:hover {
+    img {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    top: 37%;
+    img {
+      width: 12px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    top: 35%;
+    img {
+      width: 10px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    top: 33%;
+    img {
+      width: 8px;
+    }
+  }
+`;
+
+export const PlayRightBtn = styled.button`
+  position: absolute;
+  z-index: 2;
+  top: 40%;
+  right: -3%;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    -90deg,
+    var(--bg) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: ${({ disabled }) => (disabled ? "hidden" : "visible")};
+  cursor: pointer;
+  img {
+    display: inline-block;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  &:hover {
+    img {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    top: 37%;
+    img {
+      width: 12px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    top: 35%;
+    img {
+      width: 10px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    top: 33%;
+    img {
+      width: 8px;
+    }
+  }
+`;
+
+export const ClipLeftBtn = styled.button`
+  position: absolute;
+  z-index: 2;
+  top: 45%;
+  left: -3%;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: ${({ disabled }) => (disabled ? "hidden" : "visible")};
+  cursor: pointer;
+  img {
+    transform: rotate(-180deg);
+    display: inline-block;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  &:hover {
+    img {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    img {
+      width: 12px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    img {
+      width: 10px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    top: 40%;
+    img {
+      width: 8px;
+    }
+  }
+`;
+
+export const ClipRightBtn = styled.button`
+  position: absolute;
+  z-index: 2;
+  top: 45%;
+  right: -3%;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    -90deg,
+    var(--bg) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: ${({ disabled }) => (disabled ? "hidden" : "visible")};
+  cursor: pointer;
+  img {
+    display: inline-block;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  &:hover {
+    img {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    img {
+      width: 12px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    img {
+      width: 10px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    top: 40%;
+    img {
+      width: 8px;
+    }
+  }
+`;

@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
 import authStore from "../../stores/AuthStore";
-import { auth, db } from "../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const PostComment = styled.form`
   height: 50px;
@@ -43,6 +41,7 @@ const TextArea = styled.textarea`
   background: none;
   border: none;
   font-size: 1.5rem;
+  overflow: hidden;
   transition: all 0.3s;
   &:focus {
     outline: none;
@@ -51,6 +50,7 @@ const TextArea = styled.textarea`
   &::placeholder {
     opacity: 1;
     transition: opacity 0.3s;
+    font-family: "Figtree", "Pretendard", sans-serif;
   }
 `;
 
@@ -58,15 +58,26 @@ const SubmitBtn = styled.input`
   width: 70px;
   height: 70%;
   border-radius: 60px;
-  background: var(--grayD);
   border: none;
+  background: ${({ disabled }) => (disabled ? "var(--grayD)" : "var(--main)")};
+  font-weight: ${({ disabled }) => (disabled ? "400" : "500")};
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;
 
 const PostCommentPart = () => {
   const [value, setValue] = useState("");
-  const { user, userProfile, isLoading } = authStore();
+  const { user, userProfile } = authStore();
+  const addComment = authStore((state) => state.addComment);
   const userName = userProfile?.nickname || "사용자";
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // ✅ textarea에 엔터 입력 자체를 방지
+      if (!isDisabled) {
+        handleSubmit(); // 댓글 제출
+      }
+    }
+  };
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -74,32 +85,26 @@ const PostCommentPart = () => {
 
   const isDisabled = value.trim() === "";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (value.trim() === "") return;
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (isDisabled) return;
+
+    const cleanValue = value.trim();
 
     const newComment = {
-      text: value,
+      id: Date.now(),
+      text: cleanValue,
       author: userName,
-      createdAt: serverTimestamp(),
-      userId: user?.uid, // 유저의 UID 등 필요한 정보
+      userProfileImage: userProfile?.profileImage || "",
+      createdAt: new Date().toISOString(),
+      userId: user?.uid,
     };
 
     try {
-      // Firestore에 댓글 추가
-      await addDoc(collection(db, "comments"), newComment);
-
-      // 로컬 상태에도 추가 (즉시 UI에 반영)
-      addComment({
-        ...newComment,
-        createdAt: new Date(), // 로컬에서 즉시 보이도록 Date로 넣어줌
-        id: Date.now(), // 로컬에서 map할 때 key로 사용
-      });
-
-      // 입력창 초기화
-      setValue("");
+      addComment(newComment);
+      setValue(""); // ✅ 입력값 초기화
     } catch (error) {
-      console.error("댓글 업로드 실패:", error);
+      console.error("❌ 댓글 저장 실패:", error);
     }
   };
 
@@ -107,17 +112,19 @@ const PostCommentPart = () => {
     <PostComment onSubmit={handleSubmit}>
       <UserInfo>
         <UserTeam>
-          <img src="" alt="" />
+          {userProfile?.profileImage ? (
+            <img src={userProfile.profileImage} alt="profile" />
+          ) : null}
         </UserTeam>
         <UserName>{userName}</UserName>
       </UserInfo>
       <TextArea
-        placeholder="댓글 추가하기"
         value={value}
         onChange={handleChange}
-        required
+        onKeyDown={handleKeyDown}
+        placeholder="댓글 추가하기"
       />
-      <SubmitBtn type="submit" value="댓글" disabled={isDisabled}></SubmitBtn>
+      <SubmitBtn type="submit" value="댓글" disabled={isDisabled} />
     </PostComment>
   );
 };
