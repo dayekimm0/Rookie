@@ -19,13 +19,6 @@ const Container = styled.div`
     padding-top: 15px;
   }
 
-  .slideWrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    /* overflow: hidden; */
-  }
-
   .slideArrWrap {
     width: 520px;
     position: relative;
@@ -74,15 +67,6 @@ const Container = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    .slideWrap {
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: start;
-      gap: 14px;
-      &.inner {
-        margin: 0;
-      }
-    }
     .slideArrWrap {
       width: 100%;
     }
@@ -103,6 +87,34 @@ const Container = styled.div`
   }
 `;
 
+const SlideContainer = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  .swiper {
+    overflow: visible !important;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    gap: 14px;
+    .swiper {
+      width: 94%;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    .swiper {
+      width: calc(100% - 30px);
+    }
+  }
+`;
+
 const MyhomeMainSlide = ({ isMyhome }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
@@ -116,33 +128,6 @@ const MyhomeMainSlide = ({ isMyhome }) => {
   const handleNext = () => {
     swiper?.slideNext();
   };
-
-  useEffect(() => {
-    if (!swiper) return;
-
-    const applyOffsetIfHorizontal = () => {
-      const width = window.innerWidth;
-
-      const isHorizontal = width < 1024;
-
-      if (isHorizontal) {
-        const offsetValue =
-          width <= 500 ? 15 : width <= 1024 ? width * 0.03 : width * 0.05;
-
-        swiper.params.slidesOffsetBefore = offsetValue;
-        swiper.params.slidesOffsetAfter = offsetValue;
-      } else {
-        swiper.params.slidesOffsetBefore = 0;
-        swiper.params.slidesOffsetAfter = 0;
-      }
-
-      swiper.update();
-    };
-
-    applyOffsetIfHorizontal();
-    window.addEventListener("resize", applyOffsetIfHorizontal);
-    return () => window.removeEventListener("resize", applyOffsetIfHorizontal);
-  }, [swiper]);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 500);
@@ -170,9 +155,7 @@ const MyhomeMainSlide = ({ isMyhome }) => {
   }, []);
 
   const gameDay = getTodayMatches();
-
   const myhome = getTeamShortName(isMyhome);
-
   const matches = gameDay.matches;
 
   const myMatch = matches.find(
@@ -184,7 +167,7 @@ const MyhomeMainSlide = ({ isMyhome }) => {
 
   return (
     <Container>
-      <div className="slideWrap inner">
+      <SlideContainer>
         {!isMobile && (
           <MyhomeCard
             hometeam={myMatch.homeTeam.code}
@@ -197,15 +180,14 @@ const MyhomeMainSlide = ({ isMyhome }) => {
         <div className="slideArrWrap">
           <div className="slider-container">
             <Swiper
-              observer={true}
-              observeParents={true}
               slidesPerView={1}
               spaceBetween={20}
               direction="vertical"
               mousewheel={true}
               onSlideChange={(e) => {
-                setIsBeginning(e.isBeginning);
-                setIsEnd(e.isEnd);
+                if (e.isBeginning !== isBeginning)
+                  setIsBeginning(e.isBeginning);
+                if (e.isEnd !== isEnd) setIsEnd(e.isEnd);
               }}
               onSwiper={(e) => {
                 setSwiper(e);
@@ -266,7 +248,8 @@ const MyhomeMainSlide = ({ isMyhome }) => {
             <img src={Arrow} alt="button" />
           </MyhomeNaviRightBtn>
         </div>
-      </div>
+      </SlideContainer>
+
       <h6 className="timeLine inner">{timeString}</h6>
     </Container>
   );

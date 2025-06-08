@@ -221,6 +221,7 @@ const Home = () => {
       ) : (
         <MainSlide />
       )}
+      <HomeList />
       <Banner className="inner">
         <Link to={"/event"}>
           <img src={bannerStrike} alt="banner" />
@@ -237,7 +238,7 @@ const Home = () => {
         allTab={homeSlideTab.allTab}
         tabs={homeSlideTab.tabs}
       />
-      <HomeList />
+
       <RankingTable />
       <PopularPlayer />
       <CollaboBanner />

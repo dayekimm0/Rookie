@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getEmblem } from "../../util";
 
@@ -65,7 +65,7 @@ const HomeList = () => {
   return (
     <Container className="inner">
       <div>
-        <h3>구단 홈 바로가기</h3>
+        <h3>구단별 영상 바로가기</h3>
       </div>
       <Lists>
         <li>

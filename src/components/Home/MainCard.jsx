@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import { getEmblem, getTeamName, getTeamColor } from "../../util";
+import YouTube from "react-youtube";
 
 const Card = styled.div`
   width: 100%;
@@ -12,7 +13,7 @@ const Card = styled.div`
     padding: 10px;
     height: 120px;
     font-weight: 300;
-    background: var(--dark);
+    background: #060606;
     position: relative;
     display: flex;
     justify-content: center;
@@ -57,6 +58,32 @@ const Card = styled.div`
     aspect-ratio: 16 / 9;
     position: relative;
     overflow: hidden;
+  }
+
+  .yt-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    & > iframe {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .transition-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #fff;
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
   }
 
   @media screen and (max-width: 1440px) {
@@ -172,54 +199,238 @@ const HomeBg = styled.div`
   }
 `;
 
-const MainCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
-  const [isVideo, setIsVideo] = useState(false);
-  const homeEmblem = useMemo(() => getEmblem(hometeam), [hometeam]);
-  const awayEmblem = useMemo(() => getEmblem(awayteam), [awayteam]);
-  const homeColor = useMemo(() => getTeamColor(hometeam), [hometeam]);
-  const awayColor = useMemo(() => getTeamColor(awayteam), [awayteam]);
-  const homeName = useMemo(() => getTeamName(hometeam), [hometeam]);
-  const awayName = useMemo(() => getTeamName(awayteam), [awayteam]);
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
 
-  const formattedDate = useMemo(() => {
-    const d = new Date(date);
-    return d.toLocaleDateString("ko-KR", {
-      month: "long",
-      day: "numeric",
-    });
-  }, [date]);
+  .path {
+    stroke: #fff;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
 
-  return (
-    <Card>
-      <div className="head">
-        <ul>
-          <li className="teams">
-            <figure>
-              <img src={homeEmblem} alt="emblem" />
-            </figure>
-            <p>{homeName}</p>
-          </li>
-          <li className="teams">
-            <figure>
-              <img src={awayEmblem} alt="emblem" />
-            </figure>
-            <p>{awayName}</p>
-          </li>
-        </ul>
-        <div className="timetable">
-          <p className="date">
-            {formattedDate} ({day})
-          </p>
-          <p className="time">18:30</p>
-          <p className="ground">{stadium}</p>
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+`;
+const Spinner = () => (
+  <SvgSpinner viewBox="0 0 50 50">
+    <circle
+      className="path"
+      cx="25"
+      cy="25"
+      r="20"
+      fill="none"
+      strokeWidth="5"
+    />
+  </SvgSpinner>
+);
+
+const MainCard = React.memo(
+  ({
+    hometeam,
+    awayteam,
+    stadium,
+    date,
+    day,
+    videoId,
+    nextVideos,
+    thumbnail,
+  }) => {
+    const [isVideo, setIsVideo] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+    const [tryPlay, setTryPlay] = useState(false);
+    const [videoQueue, setVideoQueue] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const handleReady = () => {
+      setIsReady(true);
+    };
+
+    const handleError = () => {
+      console.warn("YouTube player error 발생");
+      setIsReady(false);
+    };
+
+    const homeEmblem = useMemo(() => getEmblem(hometeam), [hometeam]);
+    const awayEmblem = useMemo(() => getEmblem(awayteam), [awayteam]);
+    const homeColor = useMemo(() => getTeamColor(hometeam), [hometeam]);
+    const awayColor = useMemo(() => getTeamColor(awayteam), [awayteam]);
+    const homeName = useMemo(() => getTeamName(hometeam), [hometeam]);
+    const awayName = useMemo(() => getTeamName(awayteam), [awayteam]);
+
+    const formattedDate = useMemo(() => {
+      const d = new Date(date);
+      return d.toLocaleDateString("ko-KR", {
+        month: "long",
+        day: "numeric",
+      });
+    }, [date]);
+
+    useEffect(() => {
+      if (videoId) {
+        setIsVideo(true);
+      }
+    }, [videoId]);
+
+    //다음 영상 재생
+    useEffect(() => {
+      if (videoId && nextVideos?.length) {
+        const fullQueue = [
+          { videoId, from: "highlight", title: "하이라이트", thumbnail },
+          ...nextVideos,
+        ];
+        setVideoQueue(fullQueue);
+        setCurrentIndex(0);
+      }
+    }, [videoId, nextVideos]);
+
+    const [isTransitioning, setIsTransitioning] = useState(false);
+
+    const handleEnd = () => {
+      if (currentIndex + 1 < videoQueue.length) {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentIndex((prev) => prev + 1);
+          setTryPlay(true); // 다음 영상도 자동 재생
+          setIsTransitioning(false);
+        }, 2000);
+      }
+    };
+
+    const currentVideo = videoQueue[currentIndex];
+
+    return (
+      <Card>
+        <div className="head">
+          <ul>
+            <li className="teams">
+              <figure>
+                <img src={awayEmblem} alt="emblem" />
+              </figure>
+              <p>{awayName}</p>
+            </li>
+            <li className="teams">
+              <figure>
+                <img src={homeEmblem} alt="emblem" />
+              </figure>
+              <p>{homeName}</p>
+            </li>
+          </ul>
+          <div className="timetable">
+            <p className="date">
+              {formattedDate} ({day})
+            </p>
+            <p className="time">18:30</p>
+            <p className="ground">{stadium}</p>
+          </div>
         </div>
-      </div>
-      <div className="video">
-        {" "}
-        {isVideo ? (
-          ""
-        ) : (
-          <VideoInner $bg={awayColor}>
+        <div className="video">
+          {currentVideo && tryPlay ? (
+            <>
+              {!isReady && !isTransitioning && (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    background: "#000",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#fff",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 3,
+                  }}
+                >
+                  <Spinner />
+                  <p style={{ marginTop: "10px", fontSize: "1.4rem" }}>
+                    영상 로딩 중...
+                  </p>
+                </div>
+              )}
+              {isTransitioning && (
+                <div className="transition-overlay">
+                  <p>잠시 후 다음 컨텐츠가 이어집니다...</p>
+                </div>
+              )}
+              <YouTube
+                videoId={currentVideo.videoId}
+                onReady={handleReady}
+                onEnd={handleEnd}
+                onError={handleError}
+                opts={{
+                  playerVars: { autoplay: 1, rel: 0, modestbranding: 1 },
+                }}
+                className="yt-player"
+                style={{
+                  visibility: isReady ? "visible" : "hidden",
+                }}
+              />
+            </>
+          ) : currentIndex === 0 && currentVideo?.thumbnail ? (
+            <img
+              src={currentVideo.thumbnail}
+              alt="thumbnail"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                cursor: "pointer",
+              }}
+              onClick={() => setTryPlay(true)}
+            />
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#000",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                color: "#fff",
+                fontSize: "1.4rem",
+              }}
+              onClick={() => setTryPlay(true)}
+            >
+              영상 시작하기
+            </div>
+          )}
+        </div>
+
+        {/* <VideoInner $bg={awayColor}>
             <HomeBg $bg={homeColor}>
               <svg
                 preserveAspectRatio="none"
@@ -233,11 +444,10 @@ const MainCard = React.memo(({ hometeam, awayteam, stadium, date, day }) => {
               <img className="homeEmblem" src={homeEmblem} alt="emblem" />
             </HomeBg>
             <img className="awayEmblem" src={awayEmblem} alt="emblem" />
-          </VideoInner>
-        )}
-      </div>
-    </Card>
-  );
-});
+          </VideoInner> */}
+      </Card>
+    );
+  }
+);
 
 export default MainCard;
