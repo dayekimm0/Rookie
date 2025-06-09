@@ -48,11 +48,11 @@ const router = createBrowserRouter([
         element: <ProductDetail />,
       },
       {
-        path: "TeamHome", // TeamHome 접근용
+        path: "teamhome", // TeamHome 접근용 수정 완료
         element: <TeamHome />,
       },
       {
-        path: "TeamHome/:teamCode", // 구단별 접근용
+        path: "teamhome/:teamCode", // 구단별 접근용 수정 완료
         element: <TeamHome />,
       },
       {

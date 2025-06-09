@@ -1,0 +1,192 @@
+[
+  {
+    "teamCode": "ds_bas",
+    "teamName": "두산베어스",
+    "games": 60,
+    "wins": 23,
+    "losses": 34,
+    "ties": 3,
+    "winRate": "0.404",
+    "stats": {
+      "battingAverage": "0.268",
+      "era": "4.29",
+      "hits": 636,
+      "homeRuns": 39,
+      "steals": 53,
+      "strikeouts": 499,
+      "doublePlay": 39,
+      "errors": 40
+    }
+  },
+  {
+    "teamCode": "lg_twins",
+    "teamName": "LG트윈스",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "ssg_lds",
+    "teamName": "SSG랜더스",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "kia_tgs",
+    "teamName": "KIA타이거즈",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "kt_wiz",
+    "teamName": "kt wiz",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "lt_gnt",
+    "teamName": "롯데자이언츠",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "nc_dns",
+    "teamName": "NC다이노스",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "ss_lns",
+    "teamName": "삼성라이온즈",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "hw_egs",
+    "teamName": "한화이글스",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  },
+  {
+    "teamCode": "kiwoom",
+    "teamName": "키움히어로즈",
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "winRate": "0.000",
+    "stats": {
+      "battingAverage": "0.000",
+      "era": "0.00",
+      "hits": 0,
+      "homeRuns": 0,
+      "steals": 0,
+      "strikeouts": 0,
+      "doublePlay": 0,
+      "errors": 0
+    }
+  }
+]
