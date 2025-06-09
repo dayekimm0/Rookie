@@ -150,6 +150,7 @@ const MainSlide = () => {
                   videoId={match.videoId}
                   thumbnail={match.thumbnail}
                   nextVideos={match.nextVideos}
+                  time={match.time}
                 />
               </SwiperSlide>
             ))}

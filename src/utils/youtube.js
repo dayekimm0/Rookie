@@ -61,11 +61,22 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
         }
       }
 
+      let thumbnail = null;
+      if (matchedVideo?.snippet?.thumbnails?.maxres?.url) {
+        thumbnail = matchedVideo.snippet.thumbnails.maxres.url;
+      } else if (matchedVideo?.snippet?.thumbnails?.standard?.url) {
+        thumbnail = matchedVideo.snippet.thumbnails.standard.url;
+      } else if (matchedVideo?.snippet?.thumbnails?.high?.url) {
+        thumbnail = matchedVideo.snippet.thumbnails.high.url;
+      } else if (matchedVideo?.snippet?.thumbnails?.medium?.url) {
+        thumbnail = matchedVideo.snippet.thumbnails.medium.url;
+      }
+
       return {
         ...game,
         highlightVideo: matchedVideo ?? null,
         videoId: matchedVideo?.snippet?.resourceId?.videoId ?? null,
-        thumbnail: matchedVideo?.snippet?.thumbnails?.high?.url ?? null,
+        thumbnail,
         homePlaylist: homePlaylistId,
         awayPlaylist: awayPlaylistId,
         nextVideos,

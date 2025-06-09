@@ -84,6 +84,12 @@ const Card = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 2;
+    @media screen and (max-width: 1024px) {
+      font-size: 1.4rem;
+    }
+    @media screen and (max-width: 500px) {
+      font-size: 1.3rem;
+    }
   }
 
   @media screen and (max-width: 1440px) {
@@ -264,6 +270,7 @@ const MainCard = React.memo(
     videoId,
     nextVideos,
     thumbnail,
+    time,
   }) => {
     const [isVideo, setIsVideo] = useState(false);
     const [isReady, setIsReady] = useState(false);
@@ -349,7 +356,7 @@ const MainCard = React.memo(
             <p className="date">
               {formattedDate} ({day})
             </p>
-            <p className="time">18:30</p>
+            <p className="time">{time}</p>
             <p className="ground">{stadium}</p>
           </div>
         </div>

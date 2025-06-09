@@ -7,6 +7,7 @@ import MyhomeCard from "./MyhomeCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { MyhomeNaviLeftBtn, MyhomeNaviRightBtn } from "../Slides/NaviBtnStyles";
 import { getTodayMatches, getTeamShortName } from "../../util";
+import { useMatchedGameVideos } from "../../hook/useYoutubePlaylist";
 
 const Container = styled.div`
   width: 100%;
@@ -154,10 +155,13 @@ const MyhomeMainSlide = ({ isMyhome }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const gameDay = getTodayMatches();
+  const { date, day, matches, isLoading, isError } = useMatchedGameVideos();
   const myhome = getTeamShortName(isMyhome);
-  const matches = gameDay.matches;
 
+  if (isLoading) return <div>불러오는 중...</div>;
+  if (isError) return <div>문제가 발생했어요.</div>;
+
+  // 어제 경기 중 내 구단 경기 찾기
   const myMatch = matches.find(
     (match) => match.homeTeam.name === myhome || match.awayTeam.name === myhome
   );
@@ -173,8 +177,12 @@ const MyhomeMainSlide = ({ isMyhome }) => {
             hometeam={myMatch.homeTeam.code}
             awayteam={myMatch.awayTeam.code}
             stadium={myMatch.stadium}
-            date={gameDay.date}
-            day={gameDay.day}
+            date={date}
+            day={day}
+            videoId={myMatch.videoId}
+            thumbnail={myMatch.thumbnail}
+            nextVideos={myMatch.nextVideos}
+            time={myMatch.time}
           />
         )}
         <div className="slideArrWrap">
@@ -223,8 +231,12 @@ const MyhomeMainSlide = ({ isMyhome }) => {
                     hometeam={myMatch.homeTeam.code}
                     awayteam={myMatch.awayTeam.code}
                     stadium={myMatch.stadium}
-                    date={gameDay.date}
-                    day={gameDay.day}
+                    date={date}
+                    day={day}
+                    videoId={myMatch.videoId}
+                    thumbnail={myMatch.thumbnail}
+                    nextVideos={myMatch.nextVideos}
+                    time={myMatch.time}
                   />
                 </SwiperSlide>
               )}
@@ -234,8 +246,12 @@ const MyhomeMainSlide = ({ isMyhome }) => {
                     hometeam={match.homeTeam.code}
                     awayteam={match.awayTeam.code}
                     stadium={match.stadium}
-                    date={gameDay.date}
-                    day={gameDay.day}
+                    date={date}
+                    day={day}
+                    videoId={match.videoId}
+                    thumbnail={match.thumbnail}
+                    nextVideos={match.nextVideos}
+                    time={match.time}
                   />
                 </SwiperSlide>
               ))}
