@@ -31,11 +31,12 @@ const ContentWrapper = styled.div`
 const getMode = (pathname) => {
   if (pathname === "/login" || pathname === "/logon") return "hidden";
   if (pathname.startsWith("/store")) return "light";
-  if (pathname.startsWith("/store/:productId")) return "light";
   if (pathname.startsWith("/event")) return "dark";
   if (pathname.startsWith("/payment")) return "light";
   if (pathname.startsWith("/mypage")) return "light";
   if (pathname.startsWith("/cart")) return "light";
+  if (pathname.startsWith("/teamhome")) return "dark";
+  if (pathname.startsWith("/play")) return "dark";
   return "dark";
 };
 

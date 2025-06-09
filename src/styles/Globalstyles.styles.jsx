@@ -17,6 +17,10 @@ const GlobalStyles = createGlobalStyle`
     color: inherit;
   }
 
+  button {
+    font-family: "Figtree", "Pretendard", sans-serif;
+  }
+
   :root {
     --light: #fff;
     --dark: #111;
@@ -49,6 +53,11 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: "Figtree", "Pretendard", sans-serif;
     font-size: 1.6rem;
+  }
+
+  body.modal-open {
+    overflow: hidden !important;
+    height: 100%;
   }
 
   #root {

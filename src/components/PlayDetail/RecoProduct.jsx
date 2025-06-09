@@ -12,6 +12,7 @@ const RecoProductImg = styled.div`
   height: 120px;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
   img {
     width: 100%;
     height: 100%;

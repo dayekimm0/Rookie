@@ -30,7 +30,8 @@ const ProductImg = styled.div`
   max-width: 100%;
   height: 310px;
   margin-bottom: 24px;
-
+  overflow: hidden;
+  position: relative;
   img {
     width: 100%;
     height: 100%;
@@ -38,9 +39,9 @@ const ProductImg = styled.div`
     border-radius: 4px;
     filter: brightness(0.95);
     cursor: pointer;
-    transition: scale 0.3s;
+    transition: transform 0.3s ease;
     &:hover {
-      scale: 1.08;
+      transform: scale(1.06);
     }
   }
   @media screen and (max-width: 1440px) {
@@ -89,6 +90,12 @@ const ProductInfo = styled.div`
     cursor: pointer;
     font-size: 1.8rem;
     line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   .price {
     font-size: 1.8rem;
