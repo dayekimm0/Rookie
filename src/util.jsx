@@ -229,3 +229,32 @@ export const getScrollbarWidth = () => {
   document.body.removeChild(div);
   return width;
 };
+
+export const getTeamNameShortEng = (team) => {
+  const target = team;
+
+  switch (target) {
+    case "kia_tgs":
+      return "KIA";
+    case "ss_lns":
+      return "삼성";
+    case "lg_twins":
+      return "LG";
+    case "ds_bas":
+      return "두산";
+    case "kt_wiz":
+      return "KT";
+    case "ssg_lds":
+      return "SSG";
+    case "lt_gnt":
+      return "롯데";
+    case "hw_egs":
+      return "한화";
+    case "nc_dns":
+      return "NC";
+    case "kw_hrs":
+      return "키움";
+    default:
+      return "Unknown";
+  }
+};

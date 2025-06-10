@@ -208,14 +208,19 @@ const MyhomeMainSlide = ({ isMyhome }) => {
                   slidesPerView: 1.1,
                   spaceBetween: 6,
                 },
+                400: {
+                  direction: "horizontal",
+                  slidesPerView: 1.1,
+                  spaceBetween: 6,
+                },
                 500: {
                   direction: "horizontal",
-                  slidesPerView: 1.7,
+                  slidesPerView: 1.5,
                   spaceBetween: 14,
                 },
                 768: {
                   direction: "horizontal",
-                  slidesPerView: 2.5,
+                  slidesPerView: 2.3,
                   spaceBetween: 14,
                 },
                 1024: {
@@ -266,7 +271,7 @@ const MyhomeMainSlide = ({ isMyhome }) => {
         </div>
       </SlideContainer>
 
-      <h6 className="timeLine inner">{timeString}</h6>
+      {/* <h6 className="timeLine inner">{timeString}</h6> */}
     </Container>
   );
 };

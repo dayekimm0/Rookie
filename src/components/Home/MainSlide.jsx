@@ -114,7 +114,7 @@ const MainSlide = () => {
             onFromEdge={() => setIsEnd(false)}
             breakpoints={{
               0: {
-                slidesPerView: 1.1,
+                slidesPerView: 1,
                 spaceBetween: 6,
               },
               400: {
@@ -122,11 +122,11 @@ const MainSlide = () => {
                 spaceBetween: 6,
               },
               500: {
-                slidesPerView: 1.7,
+                slidesPerView: 1.5,
                 spaceBetween: 14,
               },
               768: {
-                slidesPerView: 2.5,
+                slidesPerView: 2.3,
                 spaceBetween: 14,
               },
               1024: {
@@ -164,7 +164,7 @@ const MainSlide = () => {
         </NaviRightBtn>
       </SliderContainerwrap>
 
-      <h6 className="timeLine inner">{timeString} 이거 수정 들어가야함</h6>
+      {/* <h6 className="timeLine inner">{timeString}</h6> */}
     </Container>
   );
 };

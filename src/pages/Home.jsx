@@ -81,7 +81,7 @@ const ProductCardWrap = styled.div`
 `;
 
 const Banner = styled.div`
-  margin-top: 40px;
+  margin-top: 80px;
   a {
     display: inline-block;
   }
@@ -95,8 +95,11 @@ const Banner = styled.div`
       display: none;
     }
   }
+  @media screen and (max-width: 1024px) {
+    margin-top: 60px;
+  }
   @media screen and (max-width: 768px) {
-    margin-top: 35px;
+    margin-top: 50px;
     img {
       &:nth-of-type(1) {
         display: none;
@@ -105,6 +108,9 @@ const Banner = styled.div`
         display: block;
       }
     }
+  }
+  @media screen and (max-width: 500px) {
+    margin-top: 40px;
   }
 `;
 

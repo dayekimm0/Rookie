@@ -1,101 +1,27 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import ReactPlayer from "react-player";
+import ProductBanner from "../components/ProductList/ProductBanner";
+import TeamStat from "../components/TeamHome/TeamStat";
+import ShortsSlide from "../components/Slides/ShortsSlide";
+import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
+import { homeSlideTab } from "../data/playTabs";
+import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 
 const Container = styled.div`
   min-height: 100vh;
-  background: black;
-  color: white;
+  color: var(--light);
 `;
 
-// ProductBanner.jsx와 동일한 스타일
-const BannerBox = styled.div`
+// ProductBanner와 TeamInfoOverlay를 감싸는 래퍼
+const BannerWrapper = styled.div`
   position: relative;
-  width: 100%;
-  height: 500px;
-
-  @media screen and (max-width: 1440px) {
-    height: 400px;
-  }
-  @media screen and (max-width: 1024px) {
-    height: 300px;
-  }
-
-  @media screen and (max-width: 500px) {
-    height: 200px;
-  }
-`;
-
-const BannerPlayer = styled(ReactPlayer)`
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  @media (max-width: 1440px) {
-    width: 100% !important;
-    height: 400px !important;
-  }
-
-  @media (max-width: 1024px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-
-  @media (max-width: 768px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-  @media (max-width: 500px) {
-    width: 100% !important;
-    height: 200px !important;
-  }
-`;
-
-const BannerImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-
-  @media (max-width: 1440px) {
-    width: 100% !important;
-    height: 400px !important;
-  }
-  @media (max-width: 1024px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-  @media (max-width: 768px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-
-  @media (max-width: 500px) {
-    width: 100% !important;
-    height: 200px !important;
-  }
 `;
 
 const TeamHome = () => {
   const { teamCode } = useParams();
-  const currentTeamCode = teamCode || "ds_bas";
 
-  // teamCode를 bannerKey로 변환하는 매핑
+  // teamCode를 bannerKey로 변환하는 매핑 (ProductList.jsx와 동일)
   const teamCodeToBannerKey = {
     ssg_lds: "ssg",
     ds_bas: "doosan",
@@ -109,46 +35,40 @@ const TeamHome = () => {
     kt_wiz: "kt",
   };
 
-  const bannerKey = teamCodeToBannerKey[currentTeamCode] || "kbo";
-
-  // bannerLinks 데이터 (bannerLinks.js와 동일)
-  const bannerLinks = {
-    doosan: { type: "video", src: "/videos/banner_doosan.mp4" },
-    hanwha: { type: "video", src: "/videos/banner_hanwha.mov" },
-    kiwoom: { type: "video", src: "/videos/banner_kiwoom.mov" },
-    lg: { type: "video", src: "/videos/banner_lg.mov" },
-    lotte: { type: "video", src: "/videos/banner_lotte.mov" },
-    nc: { type: "video", src: "/videos/banner_nc.mov" },
-    samsung: { type: "video", src: "/videos/banner_samsung.mov" },
-    ssg: { type: "video", src: "/videos/banner_ssg.mov" },
-    kt: { type: "image", src: "/api/placeholder/1728/500" },
-    kia: { type: "image", src: "/api/placeholder/1728/500" },
-    kbo: { type: "video", src: "/videos/banner_kbo.mov" },
-  };
-
-  const banner = bannerLinks[bannerKey] || bannerLinks["kbo"];
+  const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
 
   return (
     <Container>
-      {/* ProductBanner Section - 구단별 영상/이미지 */}
-      <BannerBox>
-        {banner.type === "video" ? (
-          <BannerPlayer
-            url={banner.src}
-            playing
-            loop
-            muted
-            controls={false}
-            width="100%"
-            height="100%"
-            playsinline
-          />
-        ) : (
-          <BannerImg src={banner.src} alt={`${bannerKey} 배너 이미지`} />
-        )}
-      </BannerBox>
+      <BannerWrapper>
+        {/* ProductBanner 컴포넌트 재활용 */}
+        <ProductBanner team={bannerKey} />
+
+        {/* TeamStat에서 팀 정보 오버레이만 표시 */}
+        <TeamStat teamCode={teamCode} showOverlayOnly={true} />
+      </BannerWrapper>
+
+      {/* TeamStat에서 스탯 테이블만 표시 */}
+      <TeamStat teamCode={teamCode} showStatsOnly={true} />
 
       {/* 추후 추가될 섹션들... */}
+
+      {/* 영상 모아보기 */}
+      <PlaySlidewithTabs
+        teamCode={teamCode}
+        allTab={homeSlideTab.allTab}
+        tabs={homeSlideTab.tabs}
+        title={"영상 모아보기"}
+      />
+
+      {/* 경기일정 */}
+      <UpcomingMatch teamCode={teamCode} />
+      {/* 클립 */}
+      <ShortsSlide
+        teamCode={teamCode}
+        playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
+        title={"TEAM CLIP"}
+        max={21}
+      />
     </Container>
   );
 };
