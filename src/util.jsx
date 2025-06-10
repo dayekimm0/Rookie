@@ -9,7 +9,7 @@ import emblem_lotteG from "./images/emblem/emblem_lotteG.svg";
 import emblem_hanwhaE from "./images/emblem/emblem_hanwhaE.svg";
 import emblem_ncD from "./images/emblem/emblem_ncD.svg";
 import emblem_kiwoomH from "./images/emblem/emblem_kiwoomH.svg";
-import games from "./data/kbo_2025_may_mock.json";
+import games from "./data/gameList_final.json";
 
 export const getEmblem = (code) => {
   const targetEmblem = String(code);
@@ -114,6 +114,20 @@ export function getTodayMatches() {
   };
 }
 
+export function getPreviousMatchDay() {
+  const today = new Date().toISOString().split("T")[0];
+  const pastGames = games.filter((d) => d.date < today);
+  const gameDay = pastGames.length > 0 ? pastGames[pastGames.length - 1] : null;
+
+  return gameDay
+    ? {
+        date: gameDay.date,
+        day: gameDay.day,
+        matches: gameDay.matches,
+      }
+    : null;
+}
+
 export const getTeamShortName = (fullName) => {
   switch (fullName) {
     case "기아 타이거즈":
@@ -214,4 +228,33 @@ export const getScrollbarWidth = () => {
   const width = div.offsetWidth - div.clientWidth;
   document.body.removeChild(div);
   return width;
+};
+
+export const getTeamNameShortEng = (team) => {
+  const target = team;
+
+  switch (target) {
+    case "kia_tgs":
+      return "KIA";
+    case "ss_lns":
+      return "삼성";
+    case "lg_twins":
+      return "LG";
+    case "ds_bas":
+      return "두산";
+    case "kt_wiz":
+      return "KT";
+    case "ssg_lds":
+      return "SSG";
+    case "lt_gnt":
+      return "롯데";
+    case "hw_egs":
+      return "한화";
+    case "nc_dns":
+      return "NC";
+    case "kw_hrs":
+      return "키움";
+    default:
+      return "Unknown";
+  }
 };

@@ -55,13 +55,13 @@ const TopSchedule = () => {
   const disableTransition = useHeaderStore((state) => state.disableTransition);
 
   const today = new Date().toISOString().split("T")[0];
+  const baseIndex = scheduleData.findIndex((item) => item.date >= today);
+  const safeIndex = baseIndex !== -1 ? baseIndex : scheduleData.length - 1;
 
-  const baseDate = today;
-  const baseIndex = scheduleData.findIndex((item) => item.date === baseDate);
   const threeDaySlice = [
-    scheduleData[baseIndex - 1],
-    scheduleData[baseIndex],
-    scheduleData[baseIndex + 1],
+    scheduleData[safeIndex - 1],
+    scheduleData[safeIndex],
+    scheduleData[safeIndex + 1],
   ].filter(Boolean);
 
   return (

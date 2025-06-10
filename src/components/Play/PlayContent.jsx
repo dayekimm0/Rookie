@@ -12,7 +12,7 @@ const ContentCard = styled.div`
 const Thumbnail = styled.img`
   width: 100%;
   aspect-ratio: 16/9;
-  border: 1px solid #ff0;
+  object-fit: cover;
   border-radius: 8px;
 `;
 
@@ -30,13 +30,13 @@ const VideoTitle = styled.p`
   font-size: 1.4rem;
 `;
 
-const PlayContent = ({ thumbnailSrc, channelName, videoTitle }) => {
+const PlayContent = ({ thumbnail, channelTitle, title, showChannel }) => {
   return (
     <ContentCard>
-      <Thumbnail src={thumbnailSrc} alt="video thumbnail" />
+      <Thumbnail src={thumbnail} alt="video thumbnail" />
       <Description>
-        <ChannelName>{channelName}</ChannelName>
-        <VideoTitle>{videoTitle}</VideoTitle>
+        {showChannel && <ChannelName>{channelTitle}</ChannelName>}
+        <VideoTitle>{title}</VideoTitle>
       </Description>
     </ContentCard>
   );

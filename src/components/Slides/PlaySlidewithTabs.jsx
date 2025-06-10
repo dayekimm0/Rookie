@@ -68,7 +68,7 @@ const Title = styled.div`
   }
 `;
 
-const PlaySlidewithTabs = ({ allTab, tabs }) => {
+const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상" }) => {
   const [isAll, setIsAll] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const swiperRef = useRef(null);
@@ -84,7 +84,7 @@ const PlaySlidewithTabs = ({ allTab, tabs }) => {
   return (
     <>
       <Title className="inner">
-        <h3>추천영상</h3>
+        <h3>{title}</h3>
         <div className="more">
           <span>더보기</span>
           <img src={PlusIcon} alt="icon" />

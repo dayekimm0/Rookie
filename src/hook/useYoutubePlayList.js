@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { HIGHLIGHT_PLAYLIST_ID } from "../data/teamPlaylists";
+import { getPreviousMatchDay } from "../util";
+import { matchHighlightToGames } from "../utils/youtube";
+import { useEffect, useState } from "react";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
@@ -39,6 +43,7 @@ const fetchVideoDetails = async ({ queryKey }) => {
   return res.data.items;
 };
 
+// 플레이리스트 정보보
 export const useYoutubePlaylist = (
   playlistId,
   maxResults = 12,
@@ -56,6 +61,7 @@ export const useYoutubePlaylist = (
   });
 };
 
+//유튜브 영상 디테일 정보
 export const useYoutubeVideoDetails = (videoIds, enabled = true) => {
   return useQuery({
     queryKey: ["youtubeVideoDetails", videoIds],
@@ -66,4 +72,56 @@ export const useYoutubeVideoDetails = (videoIds, enabled = true) => {
     retry: 1,
     refetchOnWindowFocus: false,
   });
+};
+
+// 메인홈 슬라이드
+export const useHighlightVideos = (maxResults = 30) => {
+  return useQuery({
+    queryKey: ["highlightVideos", maxResults],
+    queryFn: () =>
+      fetchYoutubePlaylist({
+        queryKey: ["youtubePlaylist", HIGHLIGHT_PLAYLIST_ID, maxResults],
+      }),
+    staleTime: 1000 * 60 * 5,
+    onError: (err) => {
+      console.error("❗ useHighlightVideos 에러 발생", err);
+    },
+  });
+};
+
+// 메인홈 최상단 하이라이트 -> 구단 컨텐츠 영상
+export const useMatchedGameVideos = () => {
+  const matchDay = getPreviousMatchDay();
+  const {
+    data: highlights,
+    isLoading: highlightsLoading,
+    isError,
+  } = useHighlightVideos(10);
+
+  const [matches, setMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!highlights) return;
+
+    const fetchMatchedGames = async () => {
+      const matched = await matchHighlightToGames(
+        matchDay.date,
+        matchDay.matches,
+        highlights
+      );
+      setMatches(matched);
+      setIsLoading(false);
+    };
+
+    fetchMatchedGames();
+  }, [highlights, matchDay.date, matchDay.matches]);
+
+  return {
+    date: matchDay.date,
+    day: matchDay.day,
+    matches,
+    isLoading: highlightsLoading || isLoading,
+    isError,
+  };
 };
