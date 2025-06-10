@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PlayList from "../components/Play/PlayList";
 import ClipList from "../components/Play/ClipList";
-import HighlightContent from "../components/Play/HighlightContent";
+import HighlightList from "../components/Play/HighlightList";
 
 const Container = styled.div`
   width: 100%;
@@ -21,13 +21,13 @@ const Container = styled.div`
 const Play = () => {
   return (
     <Container>
-      <PlayList type="weekly play" title="WEEKLY PLAY" />
-      <HighlightContent />
+      <PlayList type="weeklyplay" title="WEEKLY PLAY" />
+      <HighlightList type="highlight" title="HIGHLIGHT" />
       <PlayList type="interview" title="INTERVIEW" />
-      <PlayList type="hot clip" title="HOT CLIP" />
-      <PlayList type="team play" title="TEAM PLAY" />
-      <PlayList type="rookie play" title="ROOKIE PLAY" />
-      <ClipList type="rookie clip" title="ROOKIE CLIP" />
+      <PlayList type="hotclip" title="HOT CLIP" />
+      <PlayList type="teamplay" title="TEAM PLAY" />
+      <PlayList type="rookieplay" title="ROOKIE PLAY" />
+      <ClipList type="rookieclip" title="ROOKIE CLIP" />
     </Container>
   );
 };
