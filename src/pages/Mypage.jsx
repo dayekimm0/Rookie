@@ -11,7 +11,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   background: var(--light);
-  padding: 50px 20px 0;
+  padding: 50px 40px 0;
   gap: 96px;
   @media screen and (max-width: 1024px) {
   width:  100%;
@@ -21,6 +21,7 @@ const Container = styled.div`
   @media screen and (max-width: 500px) {
   padding: 0 15px;
   flex-direction: column;
+  gap: 14px;
   }
 `;
 
@@ -36,21 +37,28 @@ const LeftInner = styled.div`
   @media screen and (max-width: 768px) {
   width:  180px;
   }
+  @media screen and (max-width: 600px) {
+  width:  160px;
+  }
   @media screen and (max-width: 500px) {
   width: 100%;
+  margin-top: 24px;
   }
 `;
 
 const RightInner = styled.div`
-max-width: 944px;
+  max-width: 944px;
   width: calc(100% - 376px);
   display: flex;
   flex-direction: column;
   @media screen and (max-width: 1024px) {
-    width: calc(100% - 314px);
-  }
-  @media screen and (max-width: 1024px) {
     width: calc(100% - 264px);
+  }
+  @media screen and (max-width: 768px) {
+  width: calc(100% - 214px);
+  }
+  @media screen and (max-width: 600px) {
+  width: calc(100% - 194px);
   }
   @media screen and (max-width: 500px) {
     width: 100%;
@@ -204,7 +212,7 @@ const Nav = styled.div`
   justify-content: start;
   ul {
     width: 100%;
-    padding: 10px 30px;
+    padding: 0 30px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -215,6 +223,28 @@ const Nav = styled.div`
       background: var(--grayD);
     }
   }
+  @media screen and (max-width: 1024px) {
+    height: 192px;
+    ul {
+      gap: 16px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    height: 42px;
+    justify-content: center;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--grayD);
+    border-bottom: 1px solid var(--grayD);
+    ul {
+      width: auto;
+      flex-direction: row;
+      gap: 58px;
+    }
+    span {
+      display: none;
+    }
+  }
 `;
 
 const NavItem = styled.li`
@@ -222,6 +252,14 @@ const NavItem = styled.li`
   font-size: 1.8rem;
   font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+  font-size: 1.6rem;
+  margin-right: 8px;
+  }
+  @media screen and (max-width: 500px) {
+  font-size: 1.2rem;
+  margin-right: 0px;
+  }
 `;
 
 const SlideLoaderWrapper = styled.div`
@@ -334,7 +372,6 @@ const Mypage = () => {
       ) : (
         <>
           <LeftInner>
-            {location.pathname === "/mypage/mysetting" ? null : (
               <Profile>
            <div className="user">
                  <UserTeam
@@ -369,7 +406,6 @@ const Mypage = () => {
                   </Icon>
                 </ProfileUnder>
               </Profile>
-            )}
 
             <Nav>
               <ul>
