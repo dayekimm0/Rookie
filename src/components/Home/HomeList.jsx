@@ -1,6 +1,6 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getEmblem } from "../../util";
+import { getEmblem, getTeamJsonCode } from "../../util";
 
 const Container = styled.div`
   margin-top: 120px;
@@ -10,7 +10,7 @@ const Container = styled.div`
     margin-bottom: 40px;
   }
   @media screen and (max-width: 1024px) {
-    margin-top: 90px;
+    margin-top: 100px;
     h3 {
       font-size: 2.5rem;
       margin-bottom: 30px;
@@ -20,84 +20,83 @@ const Container = styled.div`
     margin-top: 80px;
     h3 {
       font-size: 2rem;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
   }
   @media screen and (max-width: 500px) {
     margin-top: 50px;
     h3 {
       font-size: 1.6rem;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
   }
 `;
 
 const Lists = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+
   li {
-    width: 10%;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    img {
-      width: 100%;
+    a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1;
+      background: #1d1d1d;
+      border-radius: 8px;
+      border: 1px solid #1d1d1d;
+      transition: border 0.3s;
+      img {
+        width: 100%;
+      }
+
+      &:hover {
+        /* background: var(--main); */
+        border: 1px solid var(--main);
+      }
     }
+  }
+  @media screen and (max-width: 1440px) {
+    gap: 8px;
   }
   @media screen and (max-width: 1024px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
     li {
-      width: 20%;
-      padding: 10px;
+      a {
+        padding: 8px;
+      }
     }
   }
-
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 768px) {
     li {
-      width: 20%;
-      padding: 2px;
+      a {
+        padding: 0px;
+      }
     }
+  }
+  @media screen and (max-width: 500px) {
+    gap: 6px;
   }
 `;
+
+const lists = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const HomeList = () => {
   return (
     <Container className="inner">
       <div>
-        <h3>구단 홈 바로가기</h3>
+        <h3>구단홈 바로가기</h3>
       </div>
       <Lists>
-        <li>
-          <img src={getEmblem(1)} alt="kia" />
-        </li>
-        <li>
-          <img src={getEmblem(2)} alt="samsung" />
-        </li>
-        <li>
-          <img src={getEmblem(3)} alt="lg" />
-        </li>
-        <li>
-          <img src={getEmblem(4)} alt="kt" />
-        </li>
-        <li>
-          <img src={getEmblem(5)} alt="kia" />
-        </li>
-        <li>
-          <img src={getEmblem(6)} alt="kia" />
-        </li>
-        <li>
-          <img src={getEmblem(7)} alt="kia" />
-        </li>
-        <li>
-          <img src={getEmblem(8)} alt="kia" />
-        </li>
-        <li>
-          <img src={getEmblem(9)} alt="kia" />
-        </li>
-        <li>
-          <img src={getEmblem(10)} alt="kia" />
-        </li>
+        {lists.map((number) => (
+          <li key={`teamhomeList${number}`}>
+            <Link to={`/teamhome/${getTeamJsonCode(number)}`}>
+              <img src={getEmblem(number)} alt="teamEmblem" />
+            </Link>
+          </li>
+        ))}
       </Lists>
     </Container>
   );

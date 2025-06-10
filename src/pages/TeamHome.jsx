@@ -3,10 +3,14 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ProductBanner from "../components/ProductList/ProductBanner";
 import TeamStat from "../components/TeamHome/TeamStat";
+import ShortsSlide from "../components/Slides/ShortsSlide";
+import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
+import { homeSlideTab } from "../data/playTabs";
+import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 
 const Container = styled.div`
   min-height: 100vh;
-  color: white;
+  color: var(--light);
 `;
 
 // ProductBanner와 TeamInfoOverlay를 감싸는 래퍼
@@ -47,6 +51,24 @@ const TeamHome = () => {
       <TeamStat teamCode={teamCode} showStatsOnly={true} />
 
       {/* 추후 추가될 섹션들... */}
+
+      {/* 영상 모아보기 */}
+      <PlaySlidewithTabs
+        teamCode={teamCode}
+        allTab={homeSlideTab.allTab}
+        tabs={homeSlideTab.tabs}
+        title={"영상 모아보기"}
+      />
+
+      {/* 경기일정 */}
+      <UpcomingMatch teamCode={teamCode} />
+      {/* 클립 */}
+      <ShortsSlide
+        teamCode={teamCode}
+        playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
+        title={"TEAM CLIP"}
+        max={21}
+      />
     </Container>
   );
 };
