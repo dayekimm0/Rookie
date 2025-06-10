@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ProductBanner from "../components/ProductList/ProductBanner";
 import TeamStat from "../components/TeamHome/TeamStat";
+import TeamVideoProduct from "../components/TeamHome/TeamVideoProduct";
 import ShortsSlide from "../components/Slides/ShortsSlide";
 import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
 import { homeSlideTab } from "../data/playTabs";
@@ -16,6 +17,18 @@ const Container = styled.div`
 // ProductBanner와 TeamInfoOverlay를 감싸는 래퍼
 const BannerWrapper = styled.div`
   position: relative;
+`;
+
+// 신상품/인기상품 임시 공간
+const PlaceholderSection = styled.div`
+  height: 1400px;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light);
+  font-size: 24px;
+  opacity: 0.5;
 `;
 
 const TeamHome = () => {
@@ -50,7 +63,24 @@ const TeamHome = () => {
       {/* TeamStat에서 스탯 테이블만 표시 */}
       <TeamStat teamCode={teamCode} showStatsOnly={true} />
 
-      {/* 추후 추가될 섹션들... */}
+      {/* TEAM STORE 영역 */}
+      <TeamVideoProduct
+        teamCode={teamCode}
+        sectionType="TEAM_STORE"
+        title="TEAM STORE"
+      />
+
+      {/* 신상품/인기상품 임시 공간 (1400px) */}
+      <PlaceholderSection>
+        신상품(NEW) / 인기상품(BEST) 영역 (1400px)
+      </PlaceholderSection>
+
+      {/* ROOKie 파트너존 영역 */}
+      <TeamVideoProduct
+        teamCode={teamCode}
+        sectionType="ROOKIE_PARTNER"
+        title="ROOKie 파트너존"
+      />
 
       {/* 영상 모아보기 */}
       <PlaySlidewithTabs
