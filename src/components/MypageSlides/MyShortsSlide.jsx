@@ -29,8 +29,8 @@ const SlideContainer = styled.div`
   overflow: hidden;
   .swiper {
     overflow: visible !important;
-    h5 {
-      color: var(--gray1);
+    p {
+      color: var(--gray1); 
     }
   }
 `;
