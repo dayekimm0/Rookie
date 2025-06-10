@@ -40,7 +40,7 @@ const ShortsCard = ({
   views,
   likes,
 }) => {
-  console.log(channelTitle, views, likes);
+  // console.log(channelTitle, views, likes);
   return (
     <Container>
       <CardWrapper onClick={onClick}>
