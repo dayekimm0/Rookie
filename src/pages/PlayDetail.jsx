@@ -7,6 +7,7 @@ import PostCommentPart from "../components/PlayDetail/PostCommentPart";
 import CommentList from "../components/PlayDetail/CommentList";
 import Shortscard from "../components/Slides/Shortscard";
 import { useYoutubePlaylist } from "../hook/useYoutubePlaylist";
+import { useParams } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -85,6 +86,7 @@ const CommentTitle = styled.h2`
 `;
 
 const PlayDetail = () => {
+  const { videoId } = useParams();
   // ✅ 재생목록 ID 설정 (예: "PL...." 실제 playlistId로 교체!)
   const playlistId = "PLuY-NTS_5Ipwm3kK7npcPz7F-KJsP68My"; // 예: Shorts 재생목록 ID
   const {
@@ -127,7 +129,9 @@ const PlayDetail = () => {
           {/* ✅ 썸네일만 필요하면 이렇게 props로 넘기기 */}
           {isLoading && <div>로딩중...</div>}
           {isError && <div>문제가 발생했어요.</div>}
-          {!isLoading && !isError && <RecoClip thumbnailUrl={thumbnailUrl} />}
+          {!isLoading && !isError && (
+            <RecoClip thumbnailUrl={thumbnailUrl} videoId={playlist[0].id} />
+          )}
         </LeftContent>
       </PlayContent>
     </Container>

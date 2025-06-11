@@ -36,10 +36,10 @@ const VideoTitle = styled.p`
   -webkit-box-orient: vertical;
 `;
 
-const PlayContent = ({ type, thumbnail, channelTitle, title }) => {
+const PlayContent = ({ type, thumbnail, channelTitle, title, onClick }) => {
   const showChannel = type === "teamplay" || type === "rookieplay";
   return (
-    <ContentCard>
+    <ContentCard onClick={onClick} style={{ cursor: "pointer" }}>
       <Thumbnail src={thumbnail} alt="video thumbnail" />
       <Description>
         {/* <ChannelName>{channelTitle}</ChannelName> */}
