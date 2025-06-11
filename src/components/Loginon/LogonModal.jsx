@@ -34,6 +34,7 @@ const ModalContent = styled.div`
   }
   @media screen and (max-width: 600px) {
     width: 100%;
+    max-width: 462px;
     padding: 50px 30px 30px;
     margin: 0 15px;
   }
@@ -126,6 +127,10 @@ const ModalButton = styled.button`
   align-items: center;
   font-size: 2rem;
   cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background: var(--gray2);
+  }
   @media screen and (max-width: 1024px) {
     height: 50px;
     font-size: 1.6rem;
