@@ -15,9 +15,6 @@ import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
 
-// json 데이터
-// import videoData from "../../../public/video_data.json";
-
 const ContentList = styled.div`
   height: 100%;
   display: flex;
@@ -28,11 +25,9 @@ const ContentList = styled.div`
   @media screen and (max-width: 1024px) {
     gap: 30px;
   }
-
   @media screen and (max-width: 768px) {
     gap: 20px;
   }
-
   @media screen and (max-width: 500px) {
     gap: 15px;
   }
@@ -43,6 +38,7 @@ const ContentTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   h2 {
+    font-weight: bold;
     font-size: 3rem;
   }
 
@@ -106,7 +102,6 @@ const PlayList = ({ type, title }) => {
   useEffect(() => {
     const load = async () => {
       const config = playContents[type];
-
       if (!config) return;
 
       let items = [];
@@ -114,7 +109,7 @@ const PlayList = ({ type, title }) => {
       if (config.playlists) {
         items = await fetchTeamPlaylists(config.playlists);
       } else {
-        items = await fetchPlaylistVideos(config.playlistId, config.max);
+        items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
       setVideos(items);

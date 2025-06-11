@@ -24,6 +24,7 @@ const Container = styled.div`
 
 const ContentTitle = styled.h2`
   font-size: 3rem;
+  font-weight: bold;
 
   @media screen and (max-width: 1024px) {
     font-size: 2.5rem;
@@ -41,7 +42,7 @@ const ContentTitle = styled.h2`
 const ContentList = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 40px 20px;
+  gap: 60px 20px;
 
   @media (max-width: 1440px) {
     grid-template-columns: repeat(4, 1fr);
@@ -49,17 +50,17 @@ const ContentList = styled.div`
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px 18px;
+    gap: 48px 18px;
   }
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px 14px;
+    gap: 48px 14px;
   }
 
   @media (max-width: 500px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px 10px;
+    gap: 32px 10px;
   }
 `;
 
@@ -81,7 +82,7 @@ const PlayAll = () => {
       if (config.playlists) {
         items = await fetchTeamPlaylists(config.playlists);
       } else {
-        items = await fetchPlaylistVideos(config.playlistId, config.max || 30);
+        items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
       setVideos(items);
