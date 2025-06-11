@@ -15,6 +15,8 @@ import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { useNavigate } from "react-router-dom";
 
+import ClipDetail from "../ClipDetail";
+
 const ContentList = styled.div`
   height: 100%;
   display: flex;
@@ -120,6 +122,8 @@ const HighlightList = ({ type, title }) => {
   const [videos, setVideos] = useState([]);
   const [swiper, setSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -128,85 +132,99 @@ const HighlightList = ({ type, title }) => {
       if (!config) return;
 
       const fetched = await fetchPlaylistVideos(config.playlistId, config.max);
-      setVideos(fetched);
+
+      // 최신순 정렬
+      const sorted = fetched.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     loadVideos();
   }, [type]);
 
-  const handlePrev = useCallback(() => {
-    swiper?.slidePrev();
-  }, [swiper]);
+  const handlePrev = () => swiper?.slidePrev();
+  const handleNext = () => swiper?.slideNext();
 
-  const handleNext = useCallback(() => {
-    swiper?.slideNext();
-  }, [swiper]);
+  const handleMoreClick = () => navigate("/playall");
 
-  const handleMoreClick = () => {
-    navigate("/playall");
+  const handleOpenModal = (id) => {
+    setSelectedVideoId(id);
+    swiper?.autoplay?.stop();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    swiper?.autoplay?.start();
   };
 
   return (
-    <ContentList>
-      <ContentTitle>
-        <h2>{title}</h2>
-        {/* <div className="more" onClick={handleMoreClick}>
-          <span>더보기</span>
-          <img src={PlusIcon} alt="icon" />
-        </div> */}
-      </ContentTitle>
+    <>
+      <ContentList>
+        <ContentTitle>
+          <h2>{title}</h2>
+          <div className="more" onClick={handleMoreClick}>
+            <span>더보기</span>
+            <img src={PlusIcon} alt="icon" />
+          </div>
+        </ContentTitle>
 
-      <Container>
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          onSwiper={setSwiper}
-          onSlideChange={(swiper) => {
-            setActiveIndex(swiper.realIndex);
-          }}
-          loop={videos.length > 7}
-          centeredSlides={true}
-          slidesPerView={7}
-          spaceBetween={-50}
-          autoplay={{ delay: 10000, disableOnInteraction: false }}
-          allowTouchMove={false}
-          breakpoints={{
-            0: { slidesPerView: 3 },
-            520: { slidesPerView: 5 },
-            1024: { slidesPerView: 7 },
-          }}
-          style={{ paddingLeft: "50px", paddingRight: "50px" }}
-        >
-          {videos.map((video, idx) => {
-            const diff = getDiff(idx, activeIndex, videos.length);
-            const className = getClassByDiff(diff);
+        <Container>
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            onSwiper={setSwiper}
+            onSlideChange={(swiper) => {
+              setActiveIndex(swiper.realIndex);
+            }}
+            loop={videos.length > 7}
+            centeredSlides={true}
+            slidesPerView={7}
+            spaceBetween={-50}
+            autoplay={{ delay: 10000, disableOnInteraction: false }}
+            allowTouchMove={false}
+            breakpoints={{
+              0: { slidesPerView: 3 },
+              520: { slidesPerView: 5 },
+              1024: { slidesPerView: 7 },
+            }}
+            style={{ paddingLeft: "50px", paddingRight: "50px" }}
+          >
+            {videos.map((video, idx) => {
+              const diff = getDiff(idx, activeIndex, videos.length);
+              const className = getClassByDiff(diff);
 
-            return (
-              <SwiperSlide
-                key={video.id}
-                data-swiper-slide-index={idx}
-                style={{
-                  position: "relative",
-                  maxWidth: "280px",
-                  aspectRatio: "9/16",
-                }}
-              >
-                <HighlightContent
-                  thumbnail={video.thumbnail}
-                  className={className}
-                />
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
+              return (
+                <SwiperSlide
+                  key={video.id}
+                  data-swiper-slide-index={idx}
+                  style={{
+                    position: "relative",
+                    maxWidth: "280px",
+                    aspectRatio: "9/16",
+                  }}
+                >
+                  <HighlightContent
+                    id={video.id}
+                    thumbnail={video.thumbnail}
+                    className={className}
+                    onOpenModal={handleOpenModal}
+                  />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
 
-        <HighlightLeftBtn onClick={handlePrev}>
-          <img src={Arrow} alt="prev" />
-        </HighlightLeftBtn>
-        <HighlightRightBtn onClick={handleNext}>
-          <img src={Arrow} alt="next" />
-        </HighlightRightBtn>
-      </Container>
-    </ContentList>
+          <HighlightLeftBtn onClick={handlePrev}>
+            <img src={Arrow} alt="prev" />
+          </HighlightLeftBtn>
+          <HighlightRightBtn onClick={handleNext}>
+            <img src={Arrow} alt="next" />
+          </HighlightRightBtn>
+        </Container>
+      </ContentList>
+      <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+    </>
   );
 };
 

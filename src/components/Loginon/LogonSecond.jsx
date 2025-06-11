@@ -11,7 +11,7 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
-import { getScrollbarWidth } from "../../util";
+// import { getScrollbarWidth } from "../../util";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import DaumPostcode from "react-daum-postcode";
@@ -59,24 +59,29 @@ const Input = styled.input`
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  font-family: "Figtree", "Pretendard", sans-serif;
   padding: 15px;
+  &:focus {
+    outline: none;
+    border: 1px solid var(--dark);
+  }
   &::placeholder {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
-    height: 50px;
-    font-size: 1.4rem;
+    height: 56px;
+    font-size: 1.6rem;
     &::placeholder {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
   }
   @media screen and (max-width: 600px) {
-    height: 40px;
-    font-size: 1rem;
+    height: 44px;
+    font-size: 1.2rem;
     &::placeholder {
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -92,24 +97,31 @@ const PostInput = styled.input`
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   padding: 15px;
-  &::placeholder {
-    font-size: 1.8rem;
+  &:focus {
+    outline: none;
+    border: 1px solid var(--dark);
+  }
+  &::placeholder,
+  input {
+    font-size: 1.6rem;
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
     height: 50px;
-    font-size: 1.4rem;
-    &::placeholder {
-      font-size: 1.4rem;
+    font-size: 1.6rem;
+    &::placeholder,
+    input {
+      font-size: 1.6rem;
     }
   }
   @media screen and (max-width: 600px) {
     height: 40px;
-    font-size: 1rem;
-    &::placeholder {
-      font-size: 1rem;
+    font-size: 1.2rem;
+    &::placeholder,
+    input {
+      font-size: 1.2rem;
     }
   }
 `;
@@ -121,18 +133,22 @@ const PostButton = styled.button`
   background: var(--dark);
   color: var(--light);
   border-radius: 4px;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background: var(--gray2);
+  }
   @media screen and (max-width: 1024px) {
     height: 50px;
     font-size: 1.4rem;
   }
   @media screen and (max-width: 600px) {
     height: 40px;
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 `;
 
@@ -198,7 +214,7 @@ const CheckText = styled.h5`
   @media screen and (max-width: 1024px) {
     font-size: 1.2rem;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 500px) {
     font-size: 1rem;
   }
 `;
@@ -206,15 +222,20 @@ const CheckText = styled.h5`
 const LoginBtn = styled.button`
   width: 100%;
   height: 70px;
-  background: var(--grayE);
   border: none;
   border-radius: 4px;
   font-size: 2.4rem;
-  color: var(--grayC);
+  color: var(--light);
   cursor: pointer;
+  background: ${({ $valid }) => ($valid ? "var(--dark)" : "var(--grayE)")};
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: ${({ $valid }) =>
+      $valid ? "var(--gray2)" : "var(--grayE)"};
+  }
   @media screen and (max-width: 1024px) {
     height: 56px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   @media screen and (max-width: 600px) {
     height: 40px;
@@ -263,7 +284,7 @@ const ModalCloseButton = styled.button`
   align-self: flex-end;
   background: none;
   border: none;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   cursor: pointer;
 `;
 // styled 부분
@@ -356,26 +377,6 @@ const LogonSecond = () => {
       await updateProfile(user, {
         displayName: formData.username,
       });
-
-      //  user콘솔
-      // console.log("Firestore에 저장 시도:", {
-      //   uid: user.uid,
-      //   username: formData.username,
-      //   favoriteTeam: formData.favoriteTeam,
-      //   birthdate: `${
-      //     formData.birthdate.year
-      //   }-${formData.birthdate.month.padStart(
-      //     2,
-      //     "0"
-      //   )}-${formData.birthdate.date.padStart(2, "0")}`,
-      //   phoneNumber: `${formData.phoneNumber.part1}-${formData.phoneNumber.part2}-${formData.phoneNumber.part3}`,
-      //   nickname: formData.nickname,
-      //   email: formData.email,
-      //   postalCode: formData.postalCode, // 우편번호 저장
-      //   address: formData.address, // 주소 저장
-      //   detailedAddress: formData.detailedAddress, // 상세주소 저장
-      //   createdAt: new Date().toISOString().split("T")[0],
-      // });
 
       // Firestore에 사용자 정보 저장
       await setDoc(doc(db, "users", user.uid), {
@@ -628,15 +629,7 @@ const LogonSecond = () => {
       </AllCheckWrapper>
       {errors.firebase && <ErrorMessage>{errors.firebase}</ErrorMessage>}
 
-      <LoginBtn
-        type="submit"
-        disabled={isLoading}
-        style={{
-          background:
-            isFormValid && !isLoading ? "var(--dark)" : "var(--grayE)",
-          color: isFormValid && !isLoading ? "var(--light)" : "var(--grayC)",
-        }}
-      >
+      <LoginBtn type="submit" disabled={isLoading} $valid={isFormValid}>
         {isLoading ? "로딩중..." : "회원가입"}
       </LoginBtn>
 

@@ -8,6 +8,7 @@ import Arrow from "../../images/icons/main_banner_arr.svg";
 import { ClipLeftBtn, ClipRightBtn } from "../Slides/NaviBtnStyles";
 
 import ClipContent from "./ClipContent";
+import ClipDetail from "../ClipDetail";
 
 import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
@@ -98,6 +99,7 @@ const ClipList = ({ type, title }) => {
   const [swiper, setSwiper] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -111,7 +113,12 @@ const ClipList = ({ type, title }) => {
         items = await fetchPlaylistVideos(config.playlistId, config.max);
       }
 
-      setVideos(items);
+      // 최신순 정렬
+      const sorted = items.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     load();
@@ -125,71 +132,88 @@ const ClipList = ({ type, title }) => {
     swiper?.slideNext();
   }, [swiper]);
 
+  const handleOpenModal = (id) => {
+    setSelectedVideoId(id);
+    swiper?.autoplay?.stop();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    swiper?.autoplay?.start();
+  };
+
   return (
-    <ContentList>
-      <ContentTitle>
-        <h2>{title}</h2>
-        {/* <div className="more">
+    <>
+      <ContentList>
+        <ContentTitle>
+          <h2>{title}</h2>
+          {/* <div className="more">
           <span>더보기</span>
           <img src={PlusIcon} alt="icon" />
         </div> */}
-      </ContentTitle>
+        </ContentTitle>
 
-      <Container>
-        <Swiper
-          onSwiper={setSwiper}
-          onSlideChange={(swiper) => {
-            setIsBeginning(swiper.isBeginning);
-            setIsEnd(swiper.isEnd);
-          }}
-          breakpoints={{
-            0: {
-              slidesPerView: 2,
-              slidesPerGroup: 2,
-              spaceBetween: 6,
-            },
-            400: {
-              slidesPerView: 2,
-              slidesPerGroup: 3,
-              spaceBetween: 6,
-            },
-            500: {
-              slidesPerView: 3,
-              slidesPerGroup: 3,
-              spaceBetween: 14,
-            },
-            768: {
-              slidesPerView: 4,
-              slidesPerGroup: 4,
-              spaceBetween: 14,
-            },
-            1024: {
-              slidesPerView: 5,
-              slidesPerGroup: 5,
-              spaceBetween: 20,
-            },
-            1440: {
-              slidesPerView: 7,
-              slidesPerGroup: 7,
-              spaceBetween: 20,
-            },
-          }}
-        >
-          {videos.map((video) => (
-            <SwiperSlide key={video.id}>
-              <ClipContent type={type} {...video} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <Container>
+          <Swiper
+            onSwiper={setSwiper}
+            onSlideChange={(swiper) => {
+              setIsBeginning(swiper.isBeginning);
+              setIsEnd(swiper.isEnd);
+            }}
+            breakpoints={{
+              0: {
+                slidesPerView: 2,
+                slidesPerGroup: 2,
+                spaceBetween: 6,
+              },
+              400: {
+                slidesPerView: 2,
+                slidesPerGroup: 3,
+                spaceBetween: 6,
+              },
+              500: {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 14,
+              },
+              768: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                spaceBetween: 14,
+              },
+              1024: {
+                slidesPerView: 5,
+                slidesPerGroup: 5,
+                spaceBetween: 20,
+              },
+              1440: {
+                slidesPerView: 7,
+                slidesPerGroup: 7,
+                spaceBetween: 20,
+              },
+            }}
+          >
+            {videos.map((video) => (
+              <SwiperSlide key={video.id}>
+                <ClipContent
+                  type={type}
+                  {...video}
+                  onOpenModal={handleOpenModal}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
-        <ClipLeftBtn onClick={handlePrev} disabled={isBeginning}>
-          <img src={Arrow} alt="prev" />
-        </ClipLeftBtn>
-        <ClipRightBtn onClick={handleNext} disabled={isEnd}>
-          <img src={Arrow} alt="next" />
-        </ClipRightBtn>
-      </Container>
-    </ContentList>
+          <ClipLeftBtn onClick={handlePrev} disabled={isBeginning}>
+            <img src={Arrow} alt="prev" />
+          </ClipLeftBtn>
+          <ClipRightBtn onClick={handleNext} disabled={isEnd}>
+            <img src={Arrow} alt="next" />
+          </ClipRightBtn>
+        </Container>
+      </ContentList>
+      <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+    </>
   );
 };
 

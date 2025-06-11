@@ -92,7 +92,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const PlayList = ({ type, title }) => {
+const PlayList = ({ type, title, id }) => {
   const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
   const [swiper, setSwiper] = useState(null);
@@ -112,6 +112,9 @@ const PlayList = ({ type, title }) => {
         items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
+      // 최신순 정렬
+      items.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
       setVideos(items);
     };
 
@@ -128,6 +131,10 @@ const PlayList = ({ type, title }) => {
 
   const handleMoreClick = () => {
     navigate("/playall", { state: { type, title } });
+  };
+
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
   };
 
   return (
@@ -182,7 +189,11 @@ const PlayList = ({ type, title }) => {
         >
           {videos.map((video) => (
             <SwiperSlide key={video.id}>
-              <PlayContent type={type} {...video} />
+              <PlayContent
+                type={type}
+                {...video}
+                onClick={() => handleDetailClick(video.id)}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
