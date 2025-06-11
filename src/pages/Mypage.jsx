@@ -8,14 +8,20 @@ import thumbs_up from ".././images/icons/thumbs-up.svg";
 import { getTeamColor, getEmblem } from ".././util";
 
 const Container = styled.div`
-  width: 100%;
   display: flex;
   justify-content: center;
   background: var(--light);
-  margin: 50px 0 20px;
+  padding: 50px 40px 0;
   gap: 96px;
-  @media screen and (max-width: 600px) {
-    padding: 0 15px;
+  @media screen and (max-width: 1024px) {
+  width:  100%;
+  padding: 40px 30px 0; 
+  gap: 34px;
+  }
+  @media screen and (max-width: 500px) {
+  padding: 0 15px;
+  flex-direction: column;
+  gap: 14px;
   }
 `;
 
@@ -25,16 +31,36 @@ const LeftInner = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  @media screen and (max-width: 1024px) {
+  width:  230px;
+  }
+  @media screen and (max-width: 768px) {
+  width:  180px;
+  }
+  @media screen and (max-width: 600px) {
+  width:  160px;
+  }
+  @media screen and (max-width: 500px) {
+  width: 100%;
+  margin-top: 24px;
+  }
 `;
 
 const RightInner = styled.div`
-  width: 944px;
+  max-width: 944px;
+  width: calc(100% - 376px);
   display: flex;
   flex-direction: column;
   @media screen and (max-width: 1024px) {
-    width: 480px;
+    width: calc(100% - 264px);
+  }
+  @media screen and (max-width: 768px) {
+  width: calc(100% - 214px);
   }
   @media screen and (max-width: 600px) {
+  width: calc(100% - 194px);
+  }
+  @media screen and (max-width: 500px) {
     width: 100%;
   }
 `;
@@ -48,20 +74,62 @@ const Profile = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  h4 {
-    font-size: 2.4rem;
-    line-height: 1.5;
-    font-weight: 700;
-  }
-  h6 {
-    font-size: 1.6rem;
-    color: var(--gray6);
+  .userName {
+    h4 {
+      font-size: 2.4rem;
+      line-height: 1.5;
+      font-weight: 700;
+      text-align: center;
+    }
+    h6 {
+      font-size: 1.6rem;
+      color: var(--gray6);
+    }
   }
   & > span {
     width: 86%;
     height: 1px;
     background: var(--gray1);
     margin: 26px 0;
+  }
+  @media screen and (max-width: 1024px) {
+    height: 296px;
+    .userName {
+      h4 {
+        font-size: 2.2rem;
+      }
+      h6 {
+        font-size: 1.2rem;
+      }
+    } 
+    & > span {
+    margin: 21px 0;
+  }
+  }
+  @media screen and (max-width: 500px) {
+    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    border: none;
+    .user {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .userName {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    h4 {
+      font-size: 1.8rem;
+      text-align: start;
+      }
+      h6 {
+        font-size: 1.2rem;
+      }
+    } 
+    & > span {
+    display: none;
+  }
   }
 `;
 
@@ -78,14 +146,25 @@ const UserTeam = styled.div`
     overflow: visible;
   }
   @media screen and (max-width: 1024px) {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 58px;
+    height: 58px;
+    border-radius: 4px;
   }
 `;
 
 const ProfileUnder = styled.div`
   display: flex;
   gap: 60px;
+  @media screen and (max-width: 1024px) {
+  gap: 50px;
+  }
+  @media screen and (max-width: 500px) {
+  gap: 0px;
+  }
 `;
 
 const Icon = styled.div`
@@ -104,6 +183,23 @@ const Icon = styled.div`
   span {
     font-weight: bold;
   }
+  @media screen and (max-width: 1024px) {
+  img {
+    width: 24px;
+  }
+    p {
+    font-size: 1rem;
+    }
+      span {
+        font-size: 1.4rem;
+  }
+  }
+  @media screen and (max-width: 500px) {
+    width:80px;
+      span {
+        font-size: 1.2rem;
+  }
+  }
 `;
 
 const Nav = styled.div`
@@ -116,7 +212,7 @@ const Nav = styled.div`
   justify-content: start;
   ul {
     width: 100%;
-    padding: 10px 30px;
+    padding: 0 30px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -127,6 +223,28 @@ const Nav = styled.div`
       background: var(--grayD);
     }
   }
+  @media screen and (max-width: 1024px) {
+    height: 192px;
+    ul {
+      gap: 16px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    height: 42px;
+    justify-content: center;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--grayD);
+    border-bottom: 1px solid var(--grayD);
+    ul {
+      width: auto;
+      flex-direction: row;
+      gap: 58px;
+    }
+    span {
+      display: none;
+    }
+  }
 `;
 
 const NavItem = styled.li`
@@ -134,6 +252,14 @@ const NavItem = styled.li`
   font-size: 1.8rem;
   font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
   cursor: pointer;
+  @media screen and (max-width: 1024px) {
+  font-size: 1.6rem;
+  margin-right: 8px;
+  }
+  @media screen and (max-width: 500px) {
+  font-size: 1.2rem;
+  margin-right: 0px;
+  }
 `;
 
 const SlideLoaderWrapper = styled.div`
@@ -246,23 +372,26 @@ const Mypage = () => {
       ) : (
         <>
           <LeftInner>
-            {location.pathname === "/mypage/mysetting" ? null : (
               <Profile>
-                <UserTeam
-                  $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
-                  style={{
-                    backgroundColor: getTeamColor(
-                      teamToEmblemId[userProfile.favoriteTeam] || "#fff"
-                    ),
-                  }}
-                >
-                  <TeamEmblem
-                    emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
-                  />
-                </UserTeam>
-
-                <h4>갓효바</h4>
-                <h6>삼성 라이온즈</h6>
+           <div className="user">
+                 <UserTeam
+                   $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                   style={{
+                     backgroundColor: getTeamColor(
+                       teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                     ),
+                   }}
+                 >
+                   <TeamEmblem
+                     emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                   />
+                 </UserTeam>
+            
+               <div className="userName">
+                 <h4>갓효바</h4>
+                 <h6>삼성 라이온즈</h6>
+               </div>
+           </div >
                 <span />
                 <ProfileUnder>
                   <Icon>
@@ -277,7 +406,6 @@ const Mypage = () => {
                   </Icon>
                 </ProfileUnder>
               </Profile>
-            )}
 
             <Nav>
               <ul>

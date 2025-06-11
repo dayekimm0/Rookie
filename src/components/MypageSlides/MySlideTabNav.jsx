@@ -5,7 +5,7 @@ const TabNav = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 36px;
 
   button {
     padding: 8px 18px;
