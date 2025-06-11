@@ -18,7 +18,7 @@ const DateButton = styled.button`
     selected ? "1px solid var(--main)" : "1px solid var(--gray6)"};
   border-radius: 50px;
   font-family: "Figtree";
-  font-weight: bold;
+  font-weight: 500;
   font-size: 1.8rem;
   cursor: pointer;
   background: ${({ selected }) => (selected ? "var(--main)" : "transparent")};
@@ -46,7 +46,7 @@ const DateButton = styled.button`
   }
 `;
 
-const days = ["Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+const days = ["TUE", "WED", "THUR", "FRI", "SAT", "SUN"];
 
 const WeeklyBanner = () => {
   const [selectedDay, setSelectedDay] = useState("Tuesday");

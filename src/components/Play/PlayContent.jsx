@@ -23,17 +23,37 @@ const Description = styled.div`
 `;
 
 const ChannelName = styled.p`
-  font-size: 1.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.3;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const VideoTitle = styled.p`
-  font-size: 1.4rem;
+  font-weight: 300;
+  font-size: 1.6rem;
+  line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   /* word-break: keep-all; */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const PlayContent = ({ type, thumbnail, channelTitle, title }) => {
