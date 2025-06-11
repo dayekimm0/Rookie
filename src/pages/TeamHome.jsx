@@ -8,6 +8,7 @@ import ShortsSlide from "../components/Slides/ShortsSlide";
 import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
 import { homeSlideTab } from "../data/playTabs";
 import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
+import InfluencerZone from "../components/TeamHome/InfluencerZone";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -63,6 +64,24 @@ const TeamHome = () => {
       {/* TeamStat에서 스탯 테이블만 표시 */}
       <TeamStat teamCode={teamCode} showStatsOnly={true} />
 
+      {/* 영상 모아보기 */}
+      <PlaySlidewithTabs
+        teamCode={teamCode}
+        allTab={homeSlideTab.allTab}
+        tabs={homeSlideTab.tabs}
+        title={"영상 모아보기"}
+      />
+
+      {/* 경기일정 */}
+      <UpcomingMatch teamCode={teamCode} />
+      {/* 클립 */}
+      <ShortsSlide
+        teamCode={teamCode}
+        playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
+        title={"TEAM CLIP"}
+        max={21}
+      />
+
       {/* TEAM STORE 영역 */}
       <TeamVideoProduct
         teamCode={teamCode}
@@ -82,23 +101,8 @@ const TeamHome = () => {
         title="ROOKie 파트너존"
       />
 
-      {/* 영상 모아보기 */}
-      <PlaySlidewithTabs
-        teamCode={teamCode}
-        allTab={homeSlideTab.allTab}
-        tabs={homeSlideTab.tabs}
-        title={"영상 모아보기"}
-      />
-
-      {/* 경기일정 */}
-      <UpcomingMatch teamCode={teamCode} />
-      {/* 클립 */}
-      <ShortsSlide
-        teamCode={teamCode}
-        playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
-        title={"TEAM CLIP"}
-        max={21}
-      />
+      {/* 인플루언서 영역 */}
+      <InfluencerZone />
     </Container>
   );
 };
