@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 
 const Banner = styled.div`
   display: flex;
@@ -48,6 +49,7 @@ const DateButton = styled.button`
 
 const days = ["Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
 
+console.log(fetchPlaylistVideos);
 const WeeklyBanner = () => {
   const [selectedDay, setSelectedDay] = useState("Tuesday");
 

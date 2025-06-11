@@ -5,6 +5,7 @@ import PlayContent from "../components/Play/PlayContent";
 import { playContents } from "../data/playcontents";
 import { fetchPlaylistVideos } from "../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../hook/useTeamPlayList";
+import ContentTag from "../components/Play/ContentTag";
 
 const Container = styled.div`
   width: 100%;
@@ -68,6 +69,7 @@ const PlayAll = () => {
   const title = location.state?.title;
 
   const [videos, setVideos] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -88,11 +90,18 @@ const PlayAll = () => {
     load();
   }, [type]);
 
+  const filteredVideos = selectedTeam
+    ? videos.filter((video) => video.teamName === selectedTeam)
+    : videos;
+
   return (
     <Container>
       <ContentTitle>{title}</ContentTitle>
+      {(type === "teamplay" || type === "rookieplay") && (
+        <ContentTag type={type} onSelect={setSelectedTeam} />
+      )}
       <ContentList>
-        {videos.map((item, idx) => (
+        {filteredVideos.map((item, idx) => (
           <PlayContent key={item.id || idx} {...item} type={type} />
         ))}
       </ContentList>

@@ -3,11 +3,11 @@ import axios from "axios";
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
 export const fetchPlaylistVideos = async (playlistId, maxResults = 10) => {
-  console.log("fetchPlaylistVideos called with:", {
-    playlistId,
-    maxResults,
-    API_KEY,
-  });
+  // console.log("fetchPlaylistVideos called with:", {
+  //   playlistId,
+  //   maxResults,
+  //   API_KEY,
+  // });
   try {
     const res = await axios.get(
       "https://www.googleapis.com/youtube/v3/playlistItems",
@@ -20,8 +20,7 @@ export const fetchPlaylistVideos = async (playlistId, maxResults = 10) => {
         },
       }
     );
-    console.log("YouTube API response:", res.data);
-
+    // console.log("YouTube API response:", res.data);
     return (
       res.data.items
         // 재생할 수 없는 영상 제외
@@ -51,7 +50,7 @@ export const fetchPlaylistVideos = async (playlistId, maxResults = 10) => {
         })
     );
   } catch (err) {
-    console.error("YouTube API 에러:", err);
+    // console.error("YouTube API 에러:", err);
     return [];
   }
 };
