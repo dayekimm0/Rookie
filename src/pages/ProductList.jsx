@@ -138,6 +138,7 @@ const ProductList = () => {
     sort,
     setSelectedBrand,
     selectedCategory,
+    setSelectedCategory,
     initialShuffleDone,
     setInitialShuffleDone,
     shuffledProducts,
@@ -156,6 +157,10 @@ const ProductList = () => {
     "kw_hrs",
     "ssg_lds",
   ];
+
+  useEffect(() => {
+    setSelectedCategory("ALL");
+  }, [teamCode, setSelectedCategory]);
 
   // 데이터 fetch
   const {
