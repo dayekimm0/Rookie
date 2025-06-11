@@ -38,10 +38,11 @@ const Banner = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  position: relative;
+  position: relative; 
   overflow: hidden;
   img {
     width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -59,9 +60,41 @@ const Banner = styled.div`
       padding: 10px 16px;
       border: none;
       border-radius: 4px;
-      margin-left: 22px;
+      margin-left: 18px;
       cursor: pointer;
     }
+  }
+  @media screen and (max-width: 1024px) {
+  height: 60px;
+  font-size: 1.6rem;
+    div {
+    a {
+      font-size: 1rem;
+      padding: 8px 14px;
+      margin-left: 10px;
+    }
+  }
+  }
+  @media screen and (max-width: 768px) {
+  height: 90px;
+  font-size: 1.4rem;
+  div {
+    width: 240px;
+    text-align: center;
+    line-height: 180%;
+    a {
+      font-size: 0.8rem;
+      padding: 8px 12px;
+      margin-left: 6px;
+    }
+  }
+  }
+  @media screen and (max-width: 500px) {
+  height: 60px;
+  font-size: 1.2rem;
+  div {
+  width: 100%;
+  }
   }
 `;
 
@@ -74,8 +107,17 @@ const MyShoppingInner = styled.div`
   @media screen and (max-width: 1024px) {
     gap: 40px;
   }
+  @media screen and (max-width: 768px) {
+    gap: 30px;
+  }
+  @media screen and (max-width: 600px) {
+    gap: 20px;
+  }
+  @media screen and (max-width: 550px) {
+    gap: 15px;
+  }
   @media screen and (max-width: 500px) {
-    gap: 35px;
+    gap: 30px;
   }
 `;
 
@@ -130,7 +172,7 @@ const InfoTitle = styled.div`
     justify-content: space-between;
     align-items: center;
     h2 {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       font-weight: 600;
     }
   }
@@ -143,21 +185,19 @@ const InfoTitle = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    h2 {
-      font-size: 1.6rem;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
+  li {
     h2 {
       font-size: 1.8rem;
     }
   }
+  }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 500px) {
+  li {
     h2 {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
     }
+  }
   }
 `;
 
@@ -165,37 +205,14 @@ const Items = styled.div`
   width: calc(100% + 15px);
   display: flex;
   flex-direction: column;
-  max-height: 520px;
   gap: 20px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  touch-action: auto;
-  scroll-behavior: auto;
-  scrollbar-gutter: stable;
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--grayC);
-  }
-
-  &::-webkit-scrollbar-track {
-    background: var(--light);
-  }
-
-  &::-webkit-scrollbar-button {
-    display: none;
-  }
 
   @media screen and (max-width: 1024px) {
-    max-height: 400px;
     gap: 15px;
   }
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    max-height: 100%;
     gap: 20px;
     overflow-y: visible;
   }

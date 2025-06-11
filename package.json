@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/dayekimm0/Rookie#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -36,6 +37,7 @@
     "react-paginate": "^8.3.0",
     "react-player": "^2.16.0",
     "react-router-dom": "^7.6.0",
+    "react-youtube": "^10.1.0",
     "styled-components": "^6.1.18",
     "styled-reset": "^4.5.2",
     "swiper": "^11.2.7",
