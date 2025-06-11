@@ -38,7 +38,6 @@ const VideoTitle = styled.p`
 
 const PlayContent = ({ type, thumbnail, channelTitle, title }) => {
   const showChannel = type === "teamplay" || type === "rookieplay";
-
   return (
     <ContentCard>
       <Thumbnail src={thumbnail} alt="video thumbnail" />
