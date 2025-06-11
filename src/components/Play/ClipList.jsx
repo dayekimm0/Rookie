@@ -39,6 +39,7 @@ const ContentTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   h2 {
+    font-weight: bold;
     font-size: 3rem;
   }
 
