@@ -5,10 +5,12 @@ import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import HighlightContent from "./HighlightContent";
 import { PlayLeftBtn, PlayRightBtn } from "../Slides/NaviBtnStyles";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import PlusIcon from "../../images/icons/plusIcon.svg";
+
+import HighlightContent from "./HighlightContent";
+
 import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { useNavigate } from "react-router-dom";
@@ -38,6 +40,7 @@ const ContentTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   h2 {
+    font-weight: bold;
     font-size: 3rem;
   }
 
@@ -129,7 +132,13 @@ const HighlightList = ({ type, title }) => {
       if (!config) return;
 
       const fetched = await fetchPlaylistVideos(config.playlistId, config.max);
-      setVideos(fetched);
+
+      // 최신순 정렬
+      const sorted = fetched.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     loadVideos();

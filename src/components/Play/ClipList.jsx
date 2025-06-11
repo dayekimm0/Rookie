@@ -40,6 +40,7 @@ const ContentTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   h2 {
+    font-weight: bold;
     font-size: 3rem;
   }
 
@@ -112,7 +113,12 @@ const ClipList = ({ type, title }) => {
         items = await fetchPlaylistVideos(config.playlistId, config.max);
       }
 
-      setVideos(items);
+      // 최신순 정렬
+      const sorted = items.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     load();

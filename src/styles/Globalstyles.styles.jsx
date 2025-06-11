@@ -53,7 +53,11 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: "Figtree", "Pretendard", sans-serif;
     font-size: 1.6rem;
+  input {
+    font-family: "Figtree", "Pretendard", sans-serif;
   }
+  }
+
 
   body.modal-open {
     overflow: hidden !important;
