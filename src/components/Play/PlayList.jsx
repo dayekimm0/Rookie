@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { PlayLeftBtn, PlayRightBtn } from "../Slides/NaviBtnStyles";
+
 import PlayContent from "./PlayContent";
 import WeeklyBanner from "./WeeklyBanner";
+
 import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
-
-// json 데이터
-// import videoData from "../../../public/video_data.json";
 
 const ContentList = styled.div`
   height: 100%;
@@ -25,11 +25,9 @@ const ContentList = styled.div`
   @media screen and (max-width: 1024px) {
     gap: 30px;
   }
-
   @media screen and (max-width: 768px) {
     gap: 20px;
   }
-
   @media screen and (max-width: 500px) {
     gap: 15px;
   }
@@ -40,6 +38,7 @@ const ContentTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   h2 {
+    font-weight: bold;
     font-size: 3rem;
   }
 
@@ -103,9 +102,6 @@ const PlayList = ({ type, title }) => {
   useEffect(() => {
     const load = async () => {
       const config = playContents[type];
-      console.log("type:", type);
-      console.log("config:", config);
-
       if (!config) return;
 
       let items = [];
@@ -113,10 +109,9 @@ const PlayList = ({ type, title }) => {
       if (config.playlists) {
         items = await fetchTeamPlaylists(config.playlists);
       } else {
-        items = await fetchPlaylistVideos(config.playlistId, config.max);
+        items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
-      console.log("Fetched items:", items);
       setVideos(items);
     };
 
@@ -132,7 +127,7 @@ const PlayList = ({ type, title }) => {
   }, [swiper]);
 
   const handleMoreClick = () => {
-    navigate("/playall");
+    navigate("/playall", { state: { type, title } });
   };
 
   return (
@@ -187,7 +182,7 @@ const PlayList = ({ type, title }) => {
         >
           {videos.map((video) => (
             <SwiperSlide key={video.id}>
-              <PlayContent {...video} />
+              <PlayContent type={type} {...video} />
             </SwiperSlide>
           ))}
         </Swiper>
