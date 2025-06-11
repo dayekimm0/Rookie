@@ -23,11 +23,9 @@ const ContentList = styled.div`
   @media screen and (max-width: 1024px) {
     gap: 30px;
   }
-
   @media screen and (max-width: 768px) {
     gap: 20px;
   }
-
   @media screen and (max-width: 500px) {
     gap: 15px;
   }
@@ -101,13 +99,12 @@ const HighlightRightBtn = styled(PlayRightBtn)`
   transform: translateY(-50%);
 `;
 
-// 현재 슬라이드와 활성 슬라이드 간 차이 계산 함수
 const getDiff = (slideIndex, activeIndex, length) => {
-  const rawDiff = Math.abs(slideIndex - activeIndex);
-  return Math.min(rawDiff, length - rawDiff);
+  let diff = Math.abs(slideIndex - activeIndex);
+  if (diff > length / 2) diff = length - diff;
+  return diff > 3 ? 4 : diff;
 };
 
-// 차이에 따른 클래스명 반환 함수
 const getClassByDiff = (diff) => {
   if (diff === 0) return "diff-0";
   if (diff === 1) return "diff-1";
@@ -120,8 +117,6 @@ const HighlightList = ({ type, title }) => {
   const [videos, setVideos] = useState([]);
   const [swiper, setSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -130,13 +125,7 @@ const HighlightList = ({ type, title }) => {
       if (!config) return;
 
       const fetched = await fetchPlaylistVideos(config.playlistId, config.max);
-      console.log("Fetched videos:", fetched); // 여기 추가
-      const videosWithMaxRes = fetched.map((video) => ({
-        ...video,
-        // maxresdefault로 교체하지 않고 원래 URL 그대로 사용
-        thumbnail: video.thumbnail,
-      }));
-      setVideos(videosWithMaxRes);
+      setVideos(fetched);
     };
 
     loadVideos();
@@ -169,15 +158,12 @@ const HighlightList = ({ type, title }) => {
           modules={[Navigation, Autoplay]}
           onSwiper={setSwiper}
           onSlideChange={(swiper) => {
-            setIsBeginning(swiper.isBeginning);
-            setIsEnd(swiper.isEnd);
             setActiveIndex(swiper.realIndex);
           }}
-          loop={true}
+          loop={videos.length > 7}
           centeredSlides={true}
           slidesPerView={7}
           spaceBetween={-50}
-          navigation={{ prevEl: ".highlight-prev", nextEl: ".highlight-next" }}
           autoplay={{ delay: 10000, disableOnInteraction: false }}
           allowTouchMove={false}
           breakpoints={{
@@ -194,6 +180,7 @@ const HighlightList = ({ type, title }) => {
             return (
               <SwiperSlide
                 key={video.id}
+                data-swiper-slide-index={idx}
                 style={{
                   position: "relative",
                   maxWidth: "280px",
@@ -209,18 +196,10 @@ const HighlightList = ({ type, title }) => {
           })}
         </Swiper>
 
-        <HighlightLeftBtn
-          className="highlight-prev"
-          onClick={handlePrev}
-          disabled={isBeginning}
-        >
+        <HighlightLeftBtn onClick={handlePrev}>
           <img src={Arrow} alt="prev" />
         </HighlightLeftBtn>
-        <HighlightRightBtn
-          className="highlight-next"
-          onClick={handleNext}
-          disabled={isEnd}
-        >
+        <HighlightRightBtn onClick={handleNext}>
           <img src={Arrow} alt="next" />
         </HighlightRightBtn>
       </Container>

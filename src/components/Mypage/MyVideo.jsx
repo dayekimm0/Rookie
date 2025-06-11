@@ -27,6 +27,7 @@ const Title = styled.div`
     }
   }
   @media screen and (max-width: 500px) {
+    margin-top: 6px;
     h3 {
       font-size: 1.6rem;
       margin-bottom: 15px;

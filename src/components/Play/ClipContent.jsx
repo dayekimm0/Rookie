@@ -12,7 +12,7 @@ const ContentCard = styled.div`
 const Thumbnail = styled.img`
   width: 100%;
   aspect-ratio: 9/16;
-  border: 1px solid #ff0;
+  object-fit: cover;
   border-radius: 8px;
 `;
 
@@ -22,25 +22,27 @@ const Description = styled.div`
   gap: 5px;
 `;
 
-const InfluencerId = styled.p`
+const ChannelName = styled.p`
   font-size: 1.8rem;
 `;
 
 const VideoTitle = styled.p`
   font-size: 1.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* word-break: keep-all; */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
-const ClipContent = ({ type, thumbnailSrc, influencerId, videoTitle }) => {
+const ClipContent = ({ type, thumbnail, channelTitle, title }) => {
   return (
     <ContentCard>
-      <Thumbnail src={thumbnailSrc} alt="video thumbnail" />
+      <Thumbnail src={thumbnail} alt="video thumbnail" />
       <Description>
-        {type === "rookie clip" && (
-          <>
-            <InfluencerId>{influencerId}</InfluencerId>
-            <VideoTitle>{videoTitle}</VideoTitle>
-          </>
-        )}
+        <ChannelName>{channelTitle}</ChannelName>
+        <VideoTitle>{title}</VideoTitle>
       </Description>
     </ContentCard>
   );

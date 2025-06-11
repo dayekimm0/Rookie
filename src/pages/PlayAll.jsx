@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 import PlayContent from "../components/Play/PlayContent";
+import { playContents } from "../data/playcontents";
+import { fetchPlaylistVideos } from "../hook/useYoutubeContentList";
+import { fetchTeamPlaylists } from "../hook/useTeamPlayList";
 
 const Container = styled.div`
   width: 100%;
@@ -9,6 +13,7 @@ const Container = styled.div`
   gap: 100px;
   display: flex;
   flex-direction: column;
+  color: var(--light);
 
   @media screen and (max-width: 1024px) {
     padding: 0 3%;
@@ -16,51 +21,79 @@ const Container = styled.div`
   }
 `;
 
-const ContentList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  color: var(--light);
+const ContentTitle = styled.h2`
+  font-size: 3rem;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 15px;
+  @media screen and (max-width: 1024px) {
+    font-size: 2.5rem;
   }
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 12px;
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
   }
 
-  @media (max-width: 500px) {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
+  @media screen and (max-width: 500px) {
+    font-size: 1.6rem;
   }
 `;
 
-const PlayAll = ({ type }) => {
-  // 샘플 데이터 (실제 데이터로 교체 가능)
-  const baseData = [
-    {
-      thumbnailSrc: "/thumbnail.jpg",
-      channelName: "KBO",
-      influencerId: "@influencer1",
-      videoTitle: "하이라이트 모음",
-    },
-  ];
+const ContentList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 40px 20px;
 
-  const dataLength = 20;
+  @media (max-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 
-  const sampleData = Array.from(
-    { length: dataLength },
-    (_, i) => baseData[i % baseData.length]
-  );
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 18px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 14px;
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 10px;
+  }
+`;
+
+const PlayAll = () => {
+  const location = useLocation();
+  const type = location.state?.type;
+  const title = location.state?.title;
+
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    const load = async () => {
+      if (!type || !playContents[type]) return;
+
+      const config = playContents[type];
+      let items = [];
+
+      if (config.playlists) {
+        items = await fetchTeamPlaylists(config.playlists);
+      } else {
+        items = await fetchPlaylistVideos(config.playlistId, config.max || 30);
+      }
+
+      setVideos(items);
+    };
+
+    load();
+  }, [type]);
 
   return (
     <Container>
+      <ContentTitle>{title}</ContentTitle>
       <ContentList>
-        {sampleData.map((item, idx) => (
-          <PlayContent key={idx} {...item} type={type} />
+        {videos.map((item, idx) => (
+          <PlayContent key={item.id || idx} {...item} type={type} />
         ))}
       </ContentList>
     </Container>

@@ -1,12 +1,17 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-import ClipContent from "./ClipContent";
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { ClipLeftBtn, ClipRightBtn } from "../Slides/NaviBtnStyles";
+
+import ClipContent from "./ClipContent";
+
+import { playContents } from "../../data/playcontents";
+import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
+import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
 
 const ContentList = styled.div`
   position: relative;
@@ -83,32 +88,33 @@ const ContentTitle = styled.div`
   }
 `;
 
-const StyledSwiperWrapper = styled.div`
+const Container = styled.div`
   position: relative;
 `;
 
-const StyledSwiper = styled(Swiper)`
-  width: 100%;
-`;
-
 const ClipList = ({ type, title }) => {
-  const sampleData = [
-    {
-      thumbnailSrc: "/thumbnail.jpg",
-      influencerId: "@influencer1",
-      videoTitle: "하이라이트 모음",
-    },
-  ];
-
-  const clipItems = Array.from({ length: 21 }).map((_, idx) => (
-    <SwiperSlide key={idx}>
-      <ClipContent {...sampleData[0]} type={type} />
-    </SwiperSlide>
-  ));
-
+  const [videos, setVideos] = useState([]);
   const [swiper, setSwiper] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      const config = playContents[type];
+      if (!config) return;
+      let items = [];
+
+      if (config.playlists) {
+        items = await fetchTeamPlaylists(config.playlists);
+      } else {
+        items = await fetchPlaylistVideos(config.playlistId, config.max);
+      }
+
+      setVideos(items);
+    };
+
+    load();
+  }, [type]);
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -128,8 +134,8 @@ const ClipList = ({ type, title }) => {
         </div>
       </ContentTitle>
 
-      <StyledSwiperWrapper>
-        <StyledSwiper
+      <Container>
+        <Swiper
           onSwiper={setSwiper}
           onSlideChange={(swiper) => {
             setIsBeginning(swiper.isBeginning);
@@ -168,8 +174,12 @@ const ClipList = ({ type, title }) => {
             },
           }}
         >
-          {clipItems}
-        </StyledSwiper>
+          {videos.map((video) => (
+            <SwiperSlide key={video.id}>
+              <ClipContent type={type} {...video} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
         <ClipLeftBtn onClick={handlePrev} disabled={isBeginning}>
           <img src={Arrow} alt="prev" />
@@ -177,7 +187,7 @@ const ClipList = ({ type, title }) => {
         <ClipRightBtn onClick={handleNext} disabled={isEnd}>
           <img src={Arrow} alt="next" />
         </ClipRightBtn>
-      </StyledSwiperWrapper>
+      </Container>
     </ContentList>
   );
 };
