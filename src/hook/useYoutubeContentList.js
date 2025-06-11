@@ -26,6 +26,24 @@ export const fetchPlaylistVideos = async (
         },
       }
     );
+    // console.log("YouTube API response:", res.data);
+    return (
+      res.data.items
+        // 재생할 수 없는 영상 제외
+        .filter((item) => {
+          if (!item.snippet) return false;
+          const title = item.snippet.title.toLowerCase();
+          if (title === "private video" || title === "deleted video")
+            return false;
+          return true;
+        })
+        .map((item) => {
+          const thumbnails = item.snippet.thumbnails;
+          const thumbnail =
+            thumbnails.maxres?.url ||
+            thumbnails.standard?.url ||
+            thumbnails.high?.url ||
+            thumbnails.medium?.url;
 
     console.log("YouTube API response:", res.data);
 
@@ -65,7 +83,7 @@ export const fetchPlaylistVideos = async (
 
     return filtered;
   } catch (err) {
-    console.error("YouTube API 에러:", err);
+    // console.error("YouTube API 에러:", err);
     return [];
   }
 };

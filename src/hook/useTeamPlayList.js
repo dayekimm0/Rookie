@@ -12,6 +12,7 @@ export const fetchTeamPlaylists = async (playlists) => {
         }));
       })
     );
+    console.log(results);
 
     return results.flat();
   } catch (err) {
