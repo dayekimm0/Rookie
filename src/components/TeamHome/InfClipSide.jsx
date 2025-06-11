@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import BArrow from "../../images/icons/Bmain_banner_arr.svg";
+import BArrow from "../../images/icons/arrow_small_w.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import {
   useYoutubePlaylist,
@@ -17,7 +17,7 @@ const Container = styled.div`
     position: absolute;
     display: flex;
     gap: 16px;
-    top: -34px;
+    top: -40px;
     right: 0;
   }
 `;
@@ -29,13 +29,13 @@ const SlideContainer = styled.div`
   overflow: hidden;
   .swiper {
     overflow: visible !important;
-    p {
-      color: var(--gray1); 
+    h5 {
+      color: var(--gray1);
     }
   }
 `;
 
-const MyShortsSlide = React.memo(({ playlistId, max }) => {
+const InfClipSlide = React.memo(({ playlistId, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -166,4 +166,4 @@ const MyShortsSlide = React.memo(({ playlistId, max }) => {
   );
 });
 
-export default MyShortsSlide;
+export default InfClipSlide;

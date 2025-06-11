@@ -12,7 +12,7 @@ const ContentCard = styled.div`
 const Thumbnail = styled.img`
   width: 100%;
   aspect-ratio: 16/9;
-  border: 1px solid #ff0;
+  object-fit: cover;
   border-radius: 8px;
 `;
 
@@ -28,15 +28,24 @@ const ChannelName = styled.p`
 
 const VideoTitle = styled.p`
   font-size: 1.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* word-break: keep-all; */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
-const PlayContent = ({ thumbnailSrc, channelName, videoTitle }) => {
+const PlayContent = ({ type, thumbnail, channelTitle, title }) => {
+  const showChannel = type === "teamplay" || type === "rookieplay";
+
   return (
     <ContentCard>
-      <Thumbnail src={thumbnailSrc} alt="video thumbnail" />
+      <Thumbnail src={thumbnail} alt="video thumbnail" />
       <Description>
-        <ChannelName>{channelName}</ChannelName>
-        <VideoTitle>{videoTitle}</VideoTitle>
+        {/* <ChannelName>{channelTitle}</ChannelName> */}
+        {showChannel && <ChannelName>{channelTitle}</ChannelName>}
+        <VideoTitle>{title}</VideoTitle>
       </Description>
     </ContentCard>
   );

@@ -23,7 +23,7 @@ const SlideContainer = styled.div`
   margin: 0 auto;
   position: relative;
   overflow: hidden;
-  margin-bottom: 80px;
+  margin-bottom: 56px;
   .swiper {
     overflow: visible !important;
     h5 {

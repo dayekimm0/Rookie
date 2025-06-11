@@ -1,13 +1,22 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { PlayLeftBtn, PlayRightBtn } from "../Slides/NaviBtnStyles";
+
 import PlayContent from "./PlayContent";
 import WeeklyBanner from "./WeeklyBanner";
+
+import { playContents } from "../../data/playcontents";
+import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
+import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
+
+// json 데이터
+// import videoData from "../../../public/video_data.json";
 
 const ContentList = styled.div`
   height: 100%;
@@ -89,31 +98,30 @@ const Container = styled.div`
 
 const PlayList = ({ type, title }) => {
   const navigate = useNavigate();
-
-  const handleMoreClick = () => {
-    navigate("/playall");
-  };
-
-  // 샘플 데이터 (실제는 type별 API 호출 등으로 변경)
-  const baseData = [
-    {
-      thumbnailSrc: "/thumbnail.jpg",
-      channelName: "KBO",
-      influencerId: "@influencer1",
-      videoTitle: "하이라이트 모음",
-    },
-  ];
-
-  const dataLength = 15;
-
-  const sampleData = Array.from(
-    { length: dataLength },
-    (_, i) => baseData[i % baseData.length]
-  );
-
+  const [videos, setVideos] = useState([]);
   const [swiper, setSwiper] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      const config = playContents[type];
+
+      if (!config) return;
+
+      let items = [];
+
+      if (config.playlists) {
+        items = await fetchTeamPlaylists(config.playlists);
+      } else {
+        items = await fetchPlaylistVideos(config.playlistId, config.max);
+      }
+
+      setVideos(items);
+    };
+
+    load();
+  }, [type]);
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -122,6 +130,10 @@ const PlayList = ({ type, title }) => {
   const handleNext = useCallback(() => {
     swiper?.slideNext();
   }, [swiper]);
+
+  const handleMoreClick = () => {
+    navigate("/playall", { state: { type, title } });
+  };
 
   return (
     <ContentList>
@@ -133,7 +145,7 @@ const PlayList = ({ type, title }) => {
         </div>
       </ContentTitle>
 
-      {type === "weekly play" && <WeeklyBanner />}
+      {type === "weeklyplay" && <WeeklyBanner />}
 
       <Container>
         <Swiper
@@ -173,9 +185,9 @@ const PlayList = ({ type, title }) => {
             },
           }}
         >
-          {sampleData.map((item, idx) => (
-            <SwiperSlide key={idx}>
-              <PlayContent {...item} />
+          {videos.map((video) => (
+            <SwiperSlide key={video.id}>
+              <PlayContent type={type} {...video} />
             </SwiperSlide>
           ))}
         </Swiper>
