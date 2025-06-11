@@ -46,14 +46,14 @@ const Lists = styled.ul`
       background: #1d1d1d;
       border-radius: 8px;
       border: 1px solid #1d1d1d;
-      transition: border 0.3s;
+      transition: border 0.3s, background 0.3s;
       img {
         width: 100%;
       }
 
       &:hover {
-        /* background: var(--main); */
-        border: 1px solid var(--main);
+        background: var(--gray2);
+        border: 1px solid #444;
       }
     }
   }
