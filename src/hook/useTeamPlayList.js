@@ -8,6 +8,7 @@ export const fetchTeamPlaylists = async (playlists) => {
         return videos.map((video) => ({
           ...video,
           teamName: name,
+          channelTitle: name,
         }));
       })
     );
