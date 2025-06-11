@@ -63,7 +63,6 @@ const SlideBox = styled.div`
 `;
 
 const HighlightContent = ({ thumbnail, title, className }) => {
-  console.log("thumbnail:", thumbnail);
   return (
     <SlideBox className={className}>
       <img src={thumbnail} alt={title} />

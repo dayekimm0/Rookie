@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { PlayLeftBtn, PlayRightBtn } from "../Slides/NaviBtnStyles";
+
 import PlayContent from "./PlayContent";
 import WeeklyBanner from "./WeeklyBanner";
+
 import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
@@ -103,8 +106,6 @@ const PlayList = ({ type, title }) => {
   useEffect(() => {
     const load = async () => {
       const config = playContents[type];
-      console.log("type:", type);
-      console.log("config:", config);
 
       if (!config) return;
 
@@ -116,7 +117,6 @@ const PlayList = ({ type, title }) => {
         items = await fetchPlaylistVideos(config.playlistId, config.max);
       }
 
-      console.log("Fetched items:", items);
       setVideos(items);
     };
 
@@ -132,7 +132,7 @@ const PlayList = ({ type, title }) => {
   }, [swiper]);
 
   const handleMoreClick = () => {
-    navigate("/playall");
+    navigate("/playall", { state: { type, title } });
   };
 
   return (
@@ -187,7 +187,7 @@ const PlayList = ({ type, title }) => {
         >
           {videos.map((video) => (
             <SwiperSlide key={video.id}>
-              <PlayContent {...video} />
+              <PlayContent type={type} {...video} />
             </SwiperSlide>
           ))}
         </Swiper>
