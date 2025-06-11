@@ -26,29 +26,8 @@ export const fetchPlaylistVideos = async (
         },
       }
     );
-    // console.log("YouTube API response:", res.data);
-    return (
-      res.data.items
-        // 재생할 수 없는 영상 제외
-        .filter((item) => {
-          if (!item.snippet) return false;
-          const title = item.snippet.title.toLowerCase();
-          if (title === "private video" || title === "deleted video")
-            return false;
-          return true;
-        })
-        .map((item) => {
-          const thumbnails = item.snippet.thumbnails;
-          const thumbnail =
-            thumbnails.maxres?.url ||
-            thumbnails.standard?.url ||
-            thumbnails.high?.url ||
-            thumbnails.medium?.url;
-
-    console.log("YouTube API response:", res.data);
 
     const filtered = res.data.items
-      // 재생할 수 없는 영상 제외
       .filter((item) => {
         if (!item.snippet) return false;
         const title = item.snippet.title.toLowerCase();
@@ -72,9 +51,8 @@ export const fetchPlaylistVideos = async (
         };
       });
 
-    // 퓨처스리그 필터링
     if (type === "weeklyplay") {
-      const keyword = "KBO리그"; // 여기에 필터링할 단어 입력
+      const keyword = "KBO리그";
       return filtered.filter(
         (video) =>
           video.title.includes(keyword) || video.description?.includes(keyword)
@@ -83,7 +61,6 @@ export const fetchPlaylistVideos = async (
 
     return filtered;
   } catch (err) {
-    // console.error("YouTube API 에러:", err);
     return [];
   }
 };

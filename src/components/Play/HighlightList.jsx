@@ -150,10 +150,10 @@ const HighlightList = ({ type, title }) => {
     <ContentList>
       <ContentTitle>
         <h2>{title}</h2>
-        <div className="more" onClick={handleMoreClick}>
+        {/* <div className="more" onClick={handleMoreClick}>
           <span>더보기</span>
           <img src={PlusIcon} alt="icon" />
-        </div>
+        </div> */}
       </ContentTitle>
 
       <Container>
