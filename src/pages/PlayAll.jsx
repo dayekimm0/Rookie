@@ -11,14 +11,13 @@ const Container = styled.div`
   width: 100%;
   padding: 0 5%;
   margin-top: 5%;
-  gap: 100px;
+  gap: 40px;
   display: flex;
   flex-direction: column;
   color: var(--light);
 
   @media screen and (max-width: 1024px) {
     padding: 0 3%;
-    gap: 50px;
   }
 `;
 
@@ -85,7 +84,12 @@ const PlayAll = () => {
         items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
-      setVideos(items);
+      // 최신순 정렬
+      const sorted = items.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     load();
