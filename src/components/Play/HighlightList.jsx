@@ -128,7 +128,13 @@ const HighlightList = ({ type, title }) => {
       if (!config) return;
 
       const fetched = await fetchPlaylistVideos(config.playlistId, config.max);
-      setVideos(fetched);
+
+      // 최신순 정렬
+      const sorted = fetched.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     loadVideos();

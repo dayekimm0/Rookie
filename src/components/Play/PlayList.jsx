@@ -112,6 +112,9 @@ const PlayList = ({ type, title }) => {
         items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
+      // 최신순 정렬
+      items.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
       setVideos(items);
     };
 

@@ -111,7 +111,12 @@ const ClipList = ({ type, title }) => {
         items = await fetchPlaylistVideos(config.playlistId, config.max);
       }
 
-      setVideos(items);
+      // 최신순 정렬
+      const sorted = items.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     load();
