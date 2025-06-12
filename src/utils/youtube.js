@@ -41,7 +41,7 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
       const matchedVideo = highlightVideos.find((video) => {
         const title = video.snippet.title;
         return (
-          title.includes("KBO리그") &&
+          title.includes("SOL") &&
           dateKeywords.some((kw) => title.includes(kw)) &&
           (title.includes(home) || title.includes(away))
         );
