@@ -7,24 +7,24 @@ import coupon10 from "../../images/coupon/cp4.png";
 import styled from "styled-components";
 
 const Coupon = styled.img`
-  width: ${(props) => props.width || "209px"};
+  /* width: ${(props) => props.width || "209px"}; */
   height: ${(props) => props.height || "100px"};
   transition: transform 0.2s;
 
   @media screen and (max-width: 1024px) {
-    width: ${(props) => props.width || "209px"};
+    /* width: ${(props) => props.width || "209px"}; */
     height: ${(props) => props.height || "100px"};
   }
   @media screen and (max-width: 768px) {
-    width: ${(props) => props.width || "209px"};
+    /* width: ${(props) => props.width || "209px"}; */
     height: ${(props) => props.height || "96px"};
   }
   @media screen and (max-width: 500px) {
-    width: ${(props) => props.width || "170px"};
+    /* width: ${(props) => props.width || "170px"}; */
     height: ${(props) => props.height || "80px"};
   }
   @media screen and (max-width: 375px) {
-    width: ${(props) => props.width || "150px"};
+    /* width: ${(props) => props.width || "150px"}; */
     height: ${(props) => props.height || "60px"};
   }
 `;

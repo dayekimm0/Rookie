@@ -4,7 +4,7 @@ import styled, { keyframes } from "styled-components";
 import Modal from "react-modal";
 
 import authStore from "../../stores/AuthStore";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 import TextBox from "../../images/coupon/text_box.png";
@@ -296,7 +296,7 @@ const fails = [{ type: "fail", img: boom }];
 const getRandomCoupon = () => {
   // 모든 쿠폰의 가중치를 합산해서 전체 가중치 값을 계산
   // 전체 가중치 합산
-  const total = coupons.reduce((sum, item) => sum + item.weight, 0); // coupons weight value : 15 + 30 + 60 + 85 = 190
+  const total = coupons.reduce((sum, item) => sum + item.weight, 0); // 쿠폰 확률 : 15 + 30 + 60 + 85 = 190
 
   // 0 이상 total 미만의 실수 중 무작위 수를 생성
   // rand 수는 당첨되는지를 결정하는 역할
@@ -374,7 +374,6 @@ const Game = () => {
     }
   }, [user?.uid]);
 
-  // Always initialize the game board
   useEffect(() => {
     if (!result) {
       console.log("게임 시작: result 데이터 생성");
@@ -447,13 +446,30 @@ const Game = () => {
       setGamePlayed(true);
       setGamePlayedFlag(true);
       console.log("Firebase 저장 성공");
+      console.log(user.uid);
 
+      // 쿠폰에 당첨된 경우만 쿠폰 Firestore 저장
       if (item.type === "coupon") {
+        const couponData = {
+          type: item.type,
+          title: item.title,
+          timestamp: new Date(),
+        };
+
+        const userCouponsCol = collection(db, "users", user.uid, "wonCoupons");
+
+        await addDoc(userCouponsCol, couponData); // 쿠폰 기록 추가
+
         setModalContent(item);
         setIsModalOpen(true);
       }
     } catch (error) {
-      console.error("게임 처리 중 오류 발생:", error);
+      console.error(
+        "게임 처리 중 오류 발생:",
+        error.message,
+        error.code,
+        error.name
+      );
       // alert("게임 참여 중 오류가 발생했습니다. 다시 시도해주세요.");
       setAlertMessage("게임 참여 중 오류가 발생했습니다. 다시 시도해주세요.");
       setAlertModalOpen(true);
@@ -481,7 +497,7 @@ const Game = () => {
               onClick={() => handleClick(index)}
               className={revealed[index] ? "coupon-animated" : ""}
               style={{
-                cursor: gamePlayed || gamePlayedFlag ? "default" : "pointer", // Keep cursor change for UX
+                cursor: gamePlayed || gamePlayedFlag ? "default" : "pointer",
               }}
             >
               {revealed[index] ? (
