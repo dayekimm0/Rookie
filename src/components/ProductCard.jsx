@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getTeamJsonCode, getTeamNameKor } from "../util";
+import { getTeamNameKor } from "../util";
 
 const CardContainer = styled.div`
   width: 290px;
@@ -31,11 +31,11 @@ const ProductImg = styled.div`
   margin-bottom: 24px;
   overflow: hidden;
   position: relative;
+  border-radius: 4px;
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 4px;
     filter: brightness(0.95);
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -83,23 +83,26 @@ const ProductInfo = styled.div`
     }
   }
   .brand {
+    font-size: 1.6rem;
   }
   .name {
     height: 48px;
-    cursor: pointer;
     font-size: 1.8rem;
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: keep-all;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    div {
+      line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: keep-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
   .price {
     font-size: 1.8rem;
     cursor: pointer;
   }
+
   @media screen and (max-width: 1024px) {
     width: 100%;
 
@@ -149,7 +152,6 @@ const ProductCard = ({ data }) => {
   const { thumbnail, name, price, team, id } = data;
 
   const handleClick = () => {
-    const teamCode = getTeamJsonCode(team); // ← 함수 호출로 수정!
     navigate(`/store/${team}/${id}`);
   };
 
@@ -169,7 +171,9 @@ const ProductCard = ({ data }) => {
             />
           </svg>
         </div>
-        <div className="name">{name}</div>
+        <div className="name">
+          <div>{name}</div>
+        </div>
         <div className="price">{price}</div>
       </ProductInfo>
     </CardContainer>
