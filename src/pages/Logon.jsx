@@ -2,6 +2,7 @@ import styled from "styled-components";
 import LogonFirst from "../components/Loginon/LogonFirst";
 import LogonSecond from "../components/Loginon/LogonSecond";
 import LogonThird from "../components/Loginon/LogonThird";
+import LogonFourth from "../components/Loginon/LogonFourth";
 import logonStore from "../stores/LogonStore";
 
 const Container = styled.div`
@@ -68,13 +69,9 @@ const TitleSWrapper = styled.div`
 `;
 
 const LogonTitleS = styled.span`
-  width: 32.5%;
-  height: 6px;
-  border-radius: 3px;
+  width: 33.3333334%;
+  height: 5px;
   background: var(--grayF5);
-  @media screen and (max-width: 600px) {
-    height: 5px;
-  }
 `;
 
 const Logon = () => {
@@ -83,8 +80,8 @@ const Logon = () => {
   return (
     <Container
       style={{
-        height: step === 2 ? "100%" : "100vh",
-        margin: step === 2 ? "40px 0" : "0",
+        height: step === 3 ? "100%" : "100vh",
+        margin: step === 3 ? "40px 0" : "0",
       }}
     >
       <Inner>
@@ -111,6 +108,7 @@ const Logon = () => {
         {step === 1 && <LogonFirst />}
         {step === 2 && <LogonSecond />}
         {step === 3 && <LogonThird />}
+        {step === 4 && <LogonFourth />}
       </Inner>
     </Container>
   );
