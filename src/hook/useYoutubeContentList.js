@@ -87,7 +87,7 @@ export const fetchPlaylistVideos = async (
     let result = finalVideos;
 
     if (type === "weeklyplay") {
-      const keyword = "KBO리그";
+      const keyword = "SOL";
       result = result.filter(
         (video) =>
           video.title.includes(keyword) || video.description?.includes(keyword)
@@ -97,6 +97,7 @@ export const fetchPlaylistVideos = async (
     // 최신순 정렬
     result.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
+    console.log(result);
     return result;
   } catch (err) {
     console.error("YouTube API 에러:", err);
