@@ -3,10 +3,6 @@ import styled from "styled-components";
 import { getTeamColor, getEmblem, getScrollbarWidth } from "../../util";
 import authStore from "../../stores/AuthStore";
 import MypageModal from "./MypageModal";
-
-// FontAwesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import partnerLogo from "../../images/logos/Partner_Logo.svg";
 
 const Inner = styled.div`
@@ -18,8 +14,8 @@ const Inner = styled.div`
 const UpBox = styled.div`
   width: 100%;
   height: 120px;
-  border: 1px solid var(--gray3);
-  border-radius: 4px;
+  border: 1px solid var(--grayC);
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,7 +23,9 @@ const UpBox = styled.div`
   @media screen and (max-width: 1024px) {
     height: 96px;
     padding: 24px;
-    margin-bottom: 20px;
+  }
+  @media screen and (max-width: 500px) {
+    margin-bottom: 0px;
   }
 `;
 
@@ -65,6 +63,9 @@ const UpBoxTitle = styled.h4`
   span {
     font-size: 1.2rem;
     font-weight: 400;
+    br {
+      display: none;
+    }
   }
   @media screen and (max-width: 1024px) {
     font-size: 1.6rem;
@@ -72,10 +73,24 @@ const UpBoxTitle = styled.h4`
       font-size: 1rem;
     }
   }
+  @media screen and (max-width: 600px) {
+    span {
+      br {
+        display: block;
+      }
+    }
+  }
+  @media screen and (max-width: 500px) {
+    span {
+      br {
+        display: none;
+      }
+    }
+  }
 `;
 
 const UpBoxSub = styled.span`
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: var(--gray6);
   cursor: pointer;
   transition: color 0.3s;
@@ -83,6 +98,9 @@ const UpBoxSub = styled.span`
     color: var(--dark);
   }
   @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 500px) {
     font-size: 1rem;
   }
 `;
@@ -90,12 +108,25 @@ const UpBoxSub = styled.span`
 const MyInfo = styled.div`
   display: flex;
   flex-direction: column;
+  .myinfoLine {
+    width: 100%;
+    border: none;
+    height: 2px;
+    background-color: var(--grayE);
+    margin: 34px 0;
+  }
+  @media screen and (max-width: 500px) {
+    .myinfoLine {
+      margin: 24px 0;
+    }
+  }
 `;
 
 const MyInfoTitle = styled.h4`
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 20px;
+  padding-left: 8px;
   @media screen and (max-width: 1024px) {
     font-size: 1.6rem;
     margin-bottom: 16px;
@@ -106,22 +137,24 @@ const MyInfoLine = styled.span`
   width: 100%;
   height: 1px;
   background: var(--dark);
+  margin-bottom: 34px;
+  @media screen and (max-width: 500px) {
+    margin-bottom: 24px;
+  }
 `;
 
 const InfoElement = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: end;
-  margin-bottom: 60px;
-  @media screen and (max-width: 1024px) {
-    margin-bottom: 40px;
-  }
+  align-items: center;
+  padding: 0 8px;
 `;
 
 const InfoDetail = styled.h4`
   font-size: 1.6rem;
   line-height: 2;
+  word-break: keep-all;
   b {
     font-size: 1.8rem;
     font-weight: 700;
@@ -173,47 +206,14 @@ const Delete = styled.div`
   flex-direction: column;
   align-items: end;
   h6 {
-    margin-top: 17px;
     font-size: 1.2rem;
-    color: var(--gray8);
+    color: var(--grayC);
     cursor: pointer;
-  }
-  h6:hover + span {
-    opacity: 1;
-  }
-`;
-
-const DeleteLine = styled.span`
-  width: 66px;
-  height: 1px;
-  background: var(--gray8);
-  margin-top: 2px;
-  opacity: 0;
-  transition: opacity 0.3s;
-`;
-
-const InquiryLink = styled.a`
-  padding: 10px 20px;
-  background: var(--light);
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    background: var(--grayF5);
-  }
-  svg {
-    margin-right: 10px;
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 1.2rem;
-    height: 40px;
+    transition: color 0.4s;
+    margin-top: -14px;
+    &:hover {
+      color: var(--gray8);
+    }
   }
 `;
 
@@ -283,7 +283,10 @@ const Setting = () => {
               <PartnerLogo src={partnerLogo} alt="" />
             ) : null}
             <br />
-            <span>계정 생성일 {userProfile.createdAt}</span>
+            <span>
+              계정 생성일 <br />
+              {userProfile.createdAt}
+            </span>
           </UpBoxTitle>
         </UpBoxLeft>
         <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
@@ -291,7 +294,7 @@ const Setting = () => {
 
       <MyInfo>
         <MyInfoTitle>계정 상세정보</MyInfoTitle>
-        <MyInfoLine style={{ marginBottom: "40px" }} />
+        <MyInfoLine />
         <InfoElement>
           <InfoDetail>
             <b> 이메일</b>
@@ -300,6 +303,7 @@ const Setting = () => {
           </InfoDetail>
           <InfoButton>변경</InfoButton>
         </InfoElement>
+        <hr className="myinfoLine" />
         <InfoElement>
           <InfoDetail>
             <b> 비밀번호</b>
@@ -308,6 +312,7 @@ const Setting = () => {
           </InfoDetail>
           <InfoButton>변경</InfoButton>
         </InfoElement>
+        <hr className="myinfoLine" />
         <InfoElement>
           <InfoDetail>
             <b>닉네임</b>
@@ -316,6 +321,7 @@ const Setting = () => {
           </InfoDetail>
           <InfoButton>변경</InfoButton>
         </InfoElement>
+        <hr className="myinfoLine" />
         <InfoElement>
           <InfoDetail>
             <b>주소</b>
@@ -334,6 +340,7 @@ const Setting = () => {
           </InfoDetail>
           <InfoButton>변경</InfoButton>
         </InfoElement>
+        <hr className="myinfoLine" />
         <Delete>
           <h6
             onClick={() => {
@@ -342,32 +349,8 @@ const Setting = () => {
           >
             계정 삭제하기
           </h6>
-          <DeleteLine />
         </Delete>
       </MyInfo>
-      {/* {userProfile.email === "gosim@naver.com" ||
-      userProfile.email === "mangom@daum.net" ? (
-        <>
-          <InquiryLink
-            href="https://docs.google.com/forms/d/e/1FAIpQLScLQEzsdPMIHZiFxtQlq50tSpVLsZtvmxE3anLsND5uvQAQiw/viewform?usp=header"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faEdit} />
-            상품등록
-          </InquiryLink>
-        </>
-      ) : (
-        <>
-          <InquiryLink
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfS2-2IsVBBub-rmSk97nz1Fsw0eYLMsd5iOHtNdUNwH1HgKQ/viewform?usp=header"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ROOKie 파트너 입점신청 관련 공지
-          </InquiryLink>
-        </>
-      )} */}
 
       {teamModal && (
         <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />

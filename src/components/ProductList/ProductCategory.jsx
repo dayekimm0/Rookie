@@ -11,6 +11,9 @@ import useProductStore from "../../stores/ProductStore";
 
 const CategoryWrapper = styled.div`
   width: 100%;
+  @media screen and (max-width: 1440px) {
+    width: 68%;
+  }
 `;
 
 const CategoryContainer = styled.div`
@@ -108,6 +111,10 @@ const TabletContainer = styled.div`
 
   @media screen and (max-width: 1024px) {
     display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
     position: absolute;
     left: 3%;
     margin-top: 5%;
@@ -167,26 +174,6 @@ const SidebarItem = styled.div`
     align-items: center;
     font-size: 1.4rem;
     padding: 12px 0;
-  }
-`;
-
-const Dropdown = styled.div`
-  position: absolute;
-  top: 100%; /* 사이드바 바로 아래 */
-  left: 0;
-  background: #fff;
-  border: 1px solid var(--gray5);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  width: 180px;
-
-  @media screen and (max-width: 500px) {
-    position: fixed; /* 화면에 고정 */
-    top: 50px; /* 적절히 조절 (필요시 조정) */
-    left: 0;
-    right: 0;
-    margin: 0 10px;
-    border-radius: 8px;
   }
 `;
 
@@ -317,8 +304,7 @@ const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
                 key={cat}
                 active={selectCollabo === cat}
                 onClick={() => {
-                  setSelectCollabo(cat);
-                  if (cat === "COLLABORATION") setShowCollaborationBrands(true);
+                  handleCategoryClick(cat); // 통일된 동작
                 }}
               >
                 {cat}
