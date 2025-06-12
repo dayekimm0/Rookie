@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import PlayContent from "../components/Play/PlayContent";
@@ -63,13 +64,45 @@ const ContentList = styled.div`
   }
 `;
 
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 50px 0;
+`;
+
+const StyledPaginate = styled(ReactPaginate)`
+  display: flex;
+  list-style: none;
+  gap: 8px;
+
+  li {
+    padding: 0 12px;
+    cursor: pointer;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--gray8);
+    transition: 0.3s ease;
+    &.active {
+      color: var(--grayF5);
+      font-weight: 600;
+    }
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+`;
+
 const PlayAll = () => {
   const location = useLocation();
-  const type = location.state?.type;
-  const title = location.state?.title;
+  // const type = location.state?.type;
+  // const title = location.state?.title;
+  const { type = "", title = "" } = location.state || {};
 
   const [videos, setVideos] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 30;
 
   useEffect(() => {
     const load = async () => {
@@ -99,6 +132,19 @@ const PlayAll = () => {
     ? videos.filter((video) => video.teamName === selectedTeam)
     : videos;
 
+  const offset = currentPage * itemsPerPage;
+  const currentItems = filteredVideos.slice(offset, offset + itemsPerPage);
+  const pageCount = Math.ceil(filteredVideos.length / itemsPerPage);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  // 페이지 이동 시 스크롤 맨 위로
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   return (
     <Container>
       <ContentTitle>{title}</ContentTitle>
@@ -106,10 +152,27 @@ const PlayAll = () => {
         <ContentTag type={type} onSelect={setSelectedTeam} />
       )}
       <ContentList>
-        {filteredVideos.map((item, idx) => (
+        {currentItems.map((item, idx) => (
           <PlayContent key={item.id || idx} {...item} type={type} />
         ))}
+        {/* {filteredVideos.map((item, idx) => (
+          <PlayContent key={item.id || idx} {...item} type={type} />
+        ))} */}
       </ContentList>
+      <PaginationWrapper>
+        <StyledPaginate
+          previousLabel={"< PREV"}
+          nextLabel={"NEXT >"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          previousClassName={"prev"}
+          nextClassName={"next"}
+          disabledClassName={"disabled"}
+        />
+      </PaginationWrapper>
     </Container>
   );
 };

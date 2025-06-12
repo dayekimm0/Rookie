@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -98,6 +98,7 @@ const PlayList = ({ type, title, id }) => {
   const [swiper, setSwiper] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -114,12 +115,23 @@ const PlayList = ({ type, title, id }) => {
 
       // 최신순 정렬
       items.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
       setVideos(items);
     };
 
     load();
   }, [type]);
+
+  // 요일 필터링
+  const filteredVideos = useMemo(() => {
+    if (type !== "weeklyplay" || !selectedDay) return videos;
+
+    return videos.filter((video) => {
+      const dayNames = ["SUN", "MON", "TUE", "WED", "THUR", "FRI", "SAT"];
+      const date = new Date(video.publishedAt);
+      const videoDay = dayNames[date.getDay()];
+      return videoDay === selectedDay;
+    });
+  }, [videos, selectedDay, type]);
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -147,7 +159,12 @@ const PlayList = ({ type, title, id }) => {
         </div>
       </ContentTitle>
 
-      {type === "weeklyplay" && <WeeklyBanner />}
+      {type === "weeklyplay" && (
+        <WeeklyBanner
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
+      )}
 
       <Container>
         <Swiper
@@ -187,7 +204,7 @@ const PlayList = ({ type, title, id }) => {
             },
           }}
         >
-          {videos.map((video) => (
+          {filteredVideos.map((video) => (
             <SwiperSlide key={video.id}>
               <PlayContent
                 type={type}
@@ -196,6 +213,15 @@ const PlayList = ({ type, title, id }) => {
               />
             </SwiperSlide>
           ))}
+          {/* {videos.map((video) => (
+            <SwiperSlide key={video.id}>
+              <PlayContent
+                type={type}
+                {...video}
+                onClick={() => handleDetailClick(video.id)}
+              />
+            </SwiperSlide>
+          ))} */}
         </Swiper>
 
         <PlayLeftBtn onClick={handlePrev} disabled={isBeginning}>

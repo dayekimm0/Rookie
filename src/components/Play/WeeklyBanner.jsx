@@ -49,10 +49,7 @@ const DateButton = styled.button`
 
 const days = ["TUE", "WED", "THUR", "FRI", "SAT", "SUN"];
 
-console.log(fetchPlaylistVideos);
-const WeeklyBanner = () => {
-  const [selectedDay, setSelectedDay] = useState("Tuesday");
-
+const WeeklyBanner = ({ selectedDay, setSelectedDay }) => {
   return (
     <Banner>
       {days.map((day) => (
