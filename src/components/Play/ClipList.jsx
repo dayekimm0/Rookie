@@ -147,10 +147,10 @@ const ClipList = ({ type, title }) => {
       <ContentList>
         <ContentTitle>
           <h2>{title}</h2>
-          <div className="more">
-            <span>더보기</span>
-            <img src={PlusIcon} alt="icon" />
-          </div>
+          {/* <div className="more">
+          <span>더보기</span>
+          <img src={PlusIcon} alt="icon" />
+        </div> */}
         </ContentTitle>
 
         <Container>
