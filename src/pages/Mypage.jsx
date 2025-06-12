@@ -14,14 +14,14 @@ const Container = styled.div`
   padding: 50px 40px 0;
   gap: 96px;
   @media screen and (max-width: 1024px) {
-  width:  100%;
-  padding: 40px 30px 0; 
-  gap: 34px;
+    width: 100%;
+    padding: 40px 30px 0;
+    gap: 34px;
   }
   @media screen and (max-width: 500px) {
-  padding: 0 15px;
-  flex-direction: column;
-  gap: 14px;
+    padding: 0 15px;
+    flex-direction: column;
+    gap: 14px;
   }
 `;
 
@@ -32,17 +32,17 @@ const LeftInner = styled.div`
   flex-direction: column;
   gap: 12px;
   @media screen and (max-width: 1024px) {
-  width:  230px;
+    width: 230px;
   }
   @media screen and (max-width: 768px) {
-  width:  180px;
+    width: 180px;
   }
   @media screen and (max-width: 600px) {
-  width:  160px;
+    width: 160px;
   }
   @media screen and (max-width: 500px) {
-  width: 100%;
-  margin-top: 24px;
+    width: 100%;
+    margin-top: 24px;
   }
 `;
 
@@ -55,10 +55,10 @@ const RightInner = styled.div`
     width: calc(100% - 264px);
   }
   @media screen and (max-width: 768px) {
-  width: calc(100% - 214px);
+    width: calc(100% - 214px);
   }
   @media screen and (max-width: 600px) {
-  width: calc(100% - 194px);
+    width: calc(100% - 194px);
   }
   @media screen and (max-width: 500px) {
     width: 100%;
@@ -101,15 +101,16 @@ const Profile = styled.div`
       h6 {
         font-size: 1.2rem;
       }
-    } 
+    }
     & > span {
-    margin: 21px 0;
-  }
+      margin: 21px 0;
+    }
   }
   @media screen and (max-width: 500px) {
     height: 100%;
     flex-direction: row;
     justify-content: space-between;
+    align-items: start;
     border: none;
     .user {
       display: flex;
@@ -119,17 +120,17 @@ const Profile = styled.div`
     .userName {
       margin-left: 20px;
       margin-bottom: 20px;
-    h4 {
-      font-size: 1.8rem;
-      text-align: start;
+      h4 {
+        font-size: 1.8rem;
+        text-align: start;
       }
       h6 {
         font-size: 1.2rem;
       }
-    } 
+    }
     & > span {
-    display: none;
-  }
+      display: none;
+    }
   }
 `;
 
@@ -160,10 +161,10 @@ const ProfileUnder = styled.div`
   display: flex;
   gap: 60px;
   @media screen and (max-width: 1024px) {
-  gap: 50px;
+    gap: 50px;
   }
   @media screen and (max-width: 500px) {
-  gap: 0px;
+    gap: 0px;
   }
 `;
 
@@ -184,21 +185,21 @@ const Icon = styled.div`
     font-weight: bold;
   }
   @media screen and (max-width: 1024px) {
-  img {
-    width: 24px;
-  }
-    p {
-    font-size: 1rem;
+    img {
+      width: 24px;
     }
-      span {
-        font-size: 1.4rem;
-  }
+    p {
+      font-size: 1rem;
+    }
+    span {
+      font-size: 1.4rem;
+    }
   }
   @media screen and (max-width: 500px) {
-    width:80px;
-      span {
-        font-size: 1.2rem;
-  }
+    width: 80px;
+    span {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -253,12 +254,12 @@ const NavItem = styled.li`
   font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-  font-size: 1.6rem;
-  margin-right: 8px;
+    font-size: 1.6rem;
+    margin-right: 8px;
   }
   @media screen and (max-width: 500px) {
-  font-size: 1.2rem;
-  margin-right: 0px;
+    font-size: 1.2rem;
+    margin-right: 0px;
   }
 `;
 
@@ -349,8 +350,10 @@ const Mypage = () => {
   const menuItem = [
     { path: "/mypage", label: "나의 쇼핑" },
     { path: "/mypage/myvideo", label: "나의 동영상" },
-    { path: "/mypage/mysetting", label: "세팅" },
+    { path: "/mypage/mysetting", label: "프로필 설정" },
   ];
+
+  const goVideo = () => navigate("/mypage/myvideo");
 
   const { isLoading } = authStore();
 
@@ -372,40 +375,40 @@ const Mypage = () => {
       ) : (
         <>
           <LeftInner>
-              <Profile>
-           <div className="user">
-                 <UserTeam
-                   $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
-                   style={{
-                     backgroundColor: getTeamColor(
-                       teamToEmblemId[userProfile.favoriteTeam] || "#fff"
-                     ),
-                   }}
-                 >
-                   <TeamEmblem
-                     emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
-                   />
-                 </UserTeam>
-            
-               <div className="userName">
-                 <h4>갓효바</h4>
-                 <h6>삼성 라이온즈</h6>
-               </div>
-           </div >
-                <span />
-                <ProfileUnder>
-                  <Icon>
-                    <img src={coupon} alt="coupon" />
-                    <p>내 쿠폰</p>
-                    <span>3</span>
-                  </Icon>
-                  <Icon>
-                    <img src={thumbs_up} alt="thumbs_up" />
-                    <p>좋아요</p>
-                    <span>132</span>
-                  </Icon>
-                </ProfileUnder>
-              </Profile>
+            <Profile>
+              <div className="user">
+                <UserTeam
+                  $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                  style={{
+                    backgroundColor: getTeamColor(
+                      teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                    ),
+                  }}
+                >
+                  <TeamEmblem
+                    emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                  />
+                </UserTeam>
+
+                <div className="userName">
+                  <h4>갓효바</h4>
+                  <h6>삼성 라이온즈</h6>
+                </div>
+              </div>
+              <span />
+              <ProfileUnder>
+                <Icon>
+                  <img src={coupon} alt="coupon" />
+                  <p>내 쿠폰</p>
+                  <span>3</span>
+                </Icon>
+                <Icon onClick={goVideo}>
+                  <img src={thumbs_up} alt="thumbs_up" />
+                  <p>좋아요</p>
+                  <span>132</span>
+                </Icon>
+              </ProfileUnder>
+            </Profile>
 
             <Nav>
               <ul>

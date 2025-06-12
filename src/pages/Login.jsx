@@ -34,6 +34,7 @@ const Inner = styled.div`
   }
   @media screen and (max-width: 600px) {
     width: 100%;
+    max-width: 462px;
     gap: 50px;
   }
 `;
@@ -99,10 +100,14 @@ const Input = styled.input`
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   padding: 15px;
+  &:focus {
+    outline: none;
+    border: 1px solid var(--dark);
+  }
   &::placeholder {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
@@ -114,9 +119,9 @@ const Input = styled.input`
   }
   @media screen and (max-width: 600px) {
     height: 44px;
-    font-size: 1rem;
+    font-size: 1.2rem;
     &::placeholder {
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -145,7 +150,7 @@ const UnderInputBtn = styled.button`
     font-size: 1.2rem;
   }
   @media screen and (max-width: 600px) {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 `;
 
@@ -195,8 +200,8 @@ const SnsLogin = styled.h5`
     padding: 4px 16px;
   }
   @media screen and (max-width: 600px) {
-    font-size: 1rem;
-    padding: 4px 12px;
+    font-size: 1.2rem;
+    padding: 2px 12px;
   }
 `;
 
@@ -230,7 +235,7 @@ const LoginBtn = styled.button`
   cursor: pointer;
   @media screen and (max-width: 1024px) {
     height: 56px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   @media screen and (max-width: 600px) {
     height: 40px;

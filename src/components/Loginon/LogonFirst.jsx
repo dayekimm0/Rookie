@@ -7,24 +7,29 @@ const Input = styled.input`
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  font-family: "Figtree", "Pretendard", sans-serif;
   padding: 15px;
+  &:focus {
+    outline: none;
+    border: 1px solid var(--dark);
+  }
   &::placeholder {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
     height: 56px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     &::placeholder {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
   }
   @media screen and (max-width: 600px) {
     height: 44px;
-    font-size: 1rem;
+    font-size: 1.4rem;
     &::placeholder {
-      font-size: 1rem;
+      font-size: 1.4rem;
     }
   }
 `;
@@ -66,25 +71,44 @@ const StyledSelect = styled.select`
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
-  font-size: 1.8rem;
-  padding: 15px;
+  font-size: 1.6rem;
+  font-family: "Figtree", "Pretendard", sans-serif;
+  padding-left: 15px;
   background: ${({ $isTeamPlaceholder }) =>
     $isTeamPlaceholder ? "var(--grayF5)" : "var(--light)"};
 
   color: ${({ $isTeamPlaceholder }) =>
     $isTeamPlaceholder ? "var(--grayC)" : "var(--dark)"};
-
+  appearance: none;
+  background: white
+    url('data:image/svg+xml;utf8,<svg fill="gray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat right 10px center;
+  background-size: 16px;
+  &:focus {
+    outline: none;
+    border: 1px solid var(--dark);
+  }
+  &::placeholder,
   option {
+    font-size: 1.6rem;
     color: black;
     background: var(--grayF5);
   }
   @media screen and (max-width: 1024px) {
     height: 56px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
+    &::placeholder,
+    option {
+      font-size: 1.6rem;
+    }
   }
   @media screen and (max-width: 600px) {
     height: 44px;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    &::placeholder,
+    option {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -99,25 +123,44 @@ const StyledSelect2 = styled.select`
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
-  font-size: 1.8rem;
-  padding: 15px;
+  font-size: 1.6rem;
+  font-family: "Figtree", "Pretendard", sans-serif;
+  padding-left: 15px;
   background: ${({ $isBirthPlaceholder }) =>
     $isBirthPlaceholder ? "var(--grayF5)" : "var(--light)"};
 
   color: ${({ $isBirthPlaceholder }) =>
     $isBirthPlaceholder ? "var(--grayC)" : "var(--dark)"};
-
+  appearance: none;
+  background: white
+    url('data:image/svg+xml;utf8,<svg fill="gray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat right 10px center;
+  background-size: 16px;
+  &:focus {
+    outline: none;
+    border: 1px solid var(--dark);
+  }
+  &::placeholder,
   option {
+    font-size: 1.6rem;
     color: black;
     background: var(--grayF5);
   }
   @media screen and (max-width: 1024px) {
     height: 56px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
+    &::placeholder,
+    option {
+      font-size: 1.6rem;
+    }
   }
   @media screen and (max-width: 600px) {
     height: 44px;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    &::placeholder,
+    option {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -126,24 +169,29 @@ const Input2 = styled.input`
   height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  font-family: "Figtree", "Pretendard", sans-serif;
   padding: 15px;
+  &:focus {
+    outline: none;
+    border: 1px solid var(--dark);
+  }
   &::placeholder {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: var(--grayC);
   }
   @media screen and (max-width: 1024px) {
     height: 56px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     &::placeholder {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
   }
   @media screen and (max-width: 600px) {
     height: 44px;
-    font-size: 1rem;
+    font-size: 1.2rem;
     &::placeholder {
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -155,12 +203,18 @@ const LoginBtn = styled.button`
   border: none;
   border-radius: 4px;
   font-size: 2.4rem;
-  color: var(--grayC);
+  color: var(--light);
   cursor: pointer;
   margin-top: 30px;
+  background: ${({ $valid }) => ($valid ? "var(--dark)" : "var(--grayE)")};
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: ${({ $valid }) =>
+      $valid ? "var(--gray2)" : "var(--grayE)"};
+  }
   @media screen and (max-width: 1024px) {
     height: 56px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   @media screen and (max-width: 600px) {
     height: 40px;
@@ -379,13 +433,7 @@ const LogonFirst = () => {
             )}
           </SubTWrapper>
         </AllInputWrapper>
-        <LoginBtn
-          type="submit"
-          style={{
-            background: isFormValid ? "var(--dark)" : "var(--grayE)",
-            color: isFormValid ? "var(--light)" : "var(--grayC)",
-          }}
-        >
+        <LoginBtn type="submit" $valid={isFormValid}>
           다음
         </LoginBtn>
       </form>

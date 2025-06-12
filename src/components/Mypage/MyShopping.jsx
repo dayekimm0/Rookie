@@ -5,6 +5,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import banner_rookie from "../../images/banners/banner_rookie.png";
 import authStore from "../../stores/AuthStore";
+import LogonRookielogo from "../../images/logos/Logon_Rookie_logo.svg";
 
 const Inner = styled.div`
   display: flex;
@@ -16,17 +17,29 @@ const ProductPlus = styled.a`
   width: 100%;
   height: 60px;
   font-size: 1.4rem;
-  border: 1px solid var(--grayC);
+  border: 1px solid var(--grayD);
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: border 0.4s, background-color 0.4s;
   svg {
     margin: 0 6px 2px;
     path {
-      fill: var(--gray3);
+      fill: var(--gray6);
     }
+  }
+  &:hover {
+    border: 1px solid var(--grayC);
+    background-color: var(--grayFA);
+  }
+  @media screen and (max-width: 1024px) {
+    height: 50px;
+  }
+  @media screen and (max-width: 1024px) {
+    height: 40px;
+    font-size: 1.2rem;
   }
 `;
 
@@ -38,7 +51,7 @@ const Banner = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  position: relative; 
+  position: relative;
   overflow: hidden;
   img {
     width: 100%;
@@ -65,36 +78,36 @@ const Banner = styled.div`
     }
   }
   @media screen and (max-width: 1024px) {
-  height: 60px;
-  font-size: 1.6rem;
+    height: 60px;
+    font-size: 1.6rem;
     div {
-    a {
-      font-size: 1rem;
-      padding: 8px 14px;
-      margin-left: 10px;
+      a {
+        font-size: 1rem;
+        padding: 8px 14px;
+        margin-left: 10px;
+      }
     }
-  }
   }
   @media screen and (max-width: 768px) {
-  height: 90px;
-  font-size: 1.4rem;
-  div {
-    width: 240px;
-    text-align: center;
-    line-height: 180%;
-    a {
-      font-size: 0.8rem;
-      padding: 8px 12px;
-      margin-left: 6px;
+    height: 90px;
+    font-size: 1.4rem;
+    div {
+      width: 240px;
+      text-align: center;
+      line-height: 180%;
+      a {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        margin-left: 6px;
+      }
     }
   }
-  }
   @media screen and (max-width: 500px) {
-  height: 60px;
-  font-size: 1.2rem;
-  div {
-  width: 100%;
-  }
+    height: 60px;
+    font-size: 1.2rem;
+    div {
+      width: 100%;
+    }
   }
 `;
 
@@ -185,19 +198,19 @@ const InfoTitle = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-  li {
-    h2 {
-      font-size: 1.8rem;
+    li {
+      h2 {
+        font-size: 1.8rem;
+      }
     }
-  }
   }
 
   @media screen and (max-width: 500px) {
-  li {
-    h2 {
-      font-size: 1.4rem;
+    li {
+      h2 {
+        font-size: 1.4rem;
+      }
     }
-  }
   }
 `;
 
@@ -219,6 +232,32 @@ const Items = styled.div`
 
   @media screen and (max-width: 375px) {
     gap: 20px;
+  }
+`;
+
+const ListMiddle = styled.div`
+  height: 360px;
+  position: relative;
+  @media screen and (max-width: 1024px) {
+    height: 270px;
+  }
+  @media screen and (max-width: 500px) {
+    height: 170px;
+  }
+`;
+
+const Listimg = styled.img`
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  @media screen and (max-width: 1024px) {
+    width: 280px;
+  }
+  @media screen and (max-width: 768px) {
+    width: 240px;
   }
 `;
 
@@ -296,7 +335,9 @@ const MyShopping = () => {
               <ProductItem key={item.id} item={item} page="payment" />
             ))
           ) : (
-            <p>주문할 상품이 없습니다.</p>
+            <ListMiddle>
+              <Listimg src={LogonRookielogo} alt="LogonRookielogo" />
+            </ListMiddle>
           )}
         </Items>
       </List>

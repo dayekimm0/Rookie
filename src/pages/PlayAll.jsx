@@ -5,24 +5,25 @@ import PlayContent from "../components/Play/PlayContent";
 import { playContents } from "../data/playcontents";
 import { fetchPlaylistVideos } from "../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../hook/useTeamPlayList";
+import ContentTag from "../components/Play/ContentTag";
 
 const Container = styled.div`
   width: 100%;
   padding: 0 5%;
   margin-top: 5%;
-  gap: 100px;
+  gap: 40px;
   display: flex;
   flex-direction: column;
   color: var(--light);
 
   @media screen and (max-width: 1024px) {
     padding: 0 3%;
-    gap: 50px;
   }
 `;
 
 const ContentTitle = styled.h2`
   font-size: 3rem;
+  font-weight: bold;
 
   @media screen and (max-width: 1024px) {
     font-size: 2.5rem;
@@ -40,7 +41,7 @@ const ContentTitle = styled.h2`
 const ContentList = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 40px 20px;
+  gap: 60px 20px;
 
   @media (max-width: 1440px) {
     grid-template-columns: repeat(4, 1fr);
@@ -48,17 +49,17 @@ const ContentList = styled.div`
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px 18px;
+    gap: 48px 18px;
   }
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px 14px;
+    gap: 48px 14px;
   }
 
   @media (max-width: 500px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px 10px;
+    gap: 32px 10px;
   }
 `;
 
@@ -68,6 +69,7 @@ const PlayAll = () => {
   const title = location.state?.title;
 
   const [videos, setVideos] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -79,20 +81,32 @@ const PlayAll = () => {
       if (config.playlists) {
         items = await fetchTeamPlaylists(config.playlists);
       } else {
-        items = await fetchPlaylistVideos(config.playlistId, config.max || 30);
+        items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
-      setVideos(items);
+      // 최신순 정렬
+      const sorted = items.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
+
+      setVideos(sorted);
     };
 
     load();
   }, [type]);
 
+  const filteredVideos = selectedTeam
+    ? videos.filter((video) => video.teamName === selectedTeam)
+    : videos;
+
   return (
     <Container>
       <ContentTitle>{title}</ContentTitle>
+      {(type === "teamplay" || type === "rookieplay") && (
+        <ContentTag type={type} onSelect={setSelectedTeam} />
+      )}
       <ContentList>
-        {videos.map((item, idx) => (
+        {filteredVideos.map((item, idx) => (
           <PlayContent key={item.id || idx} {...item} type={type} />
         ))}
       </ContentList>

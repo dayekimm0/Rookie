@@ -1,26 +1,26 @@
 export const playContents = {
   weeklyplay: {
     type: "weeklyplay",
-    playlistId: "PLQSdHthiYH-_E5ElMhXJxm4a9YgDrF3ET",
+    playlistId: "PLuY-NTS_5IpxSLENcrLkC1_E7RuWldqXR",
     max: 50,
   },
 
   highlight: {
     type: "highlight",
     playlistId: "PLPuT2QymG4qUnwQCb6hlLsKBsGDtVNeoR",
-    max: 15,
+    max: 50,
   },
 
   interview: {
     type: "interview",
     playlistId: "PLPuT2QymG4qVJMnljxOpOMsY5TM3Ky9IR",
-    max: 15,
+    max: 50,
   },
 
   hotclip: {
     type: "hotclip",
     playlistId: "PLAW_wCuD_U-sInl6q13WSKLtQWD9bpjqT",
-    max: 15,
+    max: 50,
   },
 
   teamplay: {

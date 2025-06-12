@@ -107,14 +107,20 @@ const StyledLabel = styled.label`
   }
 `;
 
-const MainPlay = () => {
+const MainPlay = ({
+  thumbnail,
+  title,
+  channelTitle,
+  subscriberCount,
+  teamLogo,
+}) => {
   const [selected, setSelected] = useState("");
   return (
     <Container>
       <PlayThumbnail>
-        <img src={thumbnail1} alt="thumbnail1" />
+        <img src={thumbnail} alt="thumbnail1" />
       </PlayThumbnail>
-      <PlayTitle>5월 22일 SSG vs 두산 | 2025 정규시즌 H/L</PlayTitle>
+      <PlayTitle>{title}</PlayTitle>
       <PlayInfoWrapper>
         <PlayInfo>
           <TeamLogo>
@@ -122,9 +128,9 @@ const MainPlay = () => {
           </TeamLogo>
           <TeamInfo>
             <TeamName>
-              BEARS TV <p></p>
+              {channelTitle} <p></p>
             </TeamName>
-            <TeamSubscribe>마이팬 26.1만명</TeamSubscribe>
+            <TeamSubscribe>마이팬 26.1만명{subscriberCount}</TeamSubscribe>
           </TeamInfo>
         </PlayInfo>
         <PlayLike>

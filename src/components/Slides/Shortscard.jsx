@@ -14,7 +14,7 @@ const Container = styled.div`
       font-size: 1.4rem;
     }
     @media screen and (max-width: 500px) {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
     }
   }
 `;

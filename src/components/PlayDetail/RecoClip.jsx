@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import clip from "/src/images/mockup/playdetail_clip.jpg";
+import { useState } from "react";
+import ClipDetail from "../ClipDetail";
 
 const ClipWrapper = styled.div`
   display: flex;
@@ -12,11 +13,24 @@ const ClipWrapper = styled.div`
   }
 `;
 
-const RecoClip = () => {
+const RecoClip = ({ thumbnailUrl, videoId }) => {
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+
+  const handleClick = () => {
+    setSelectedVideoId(videoId);
+  };
+
+  const handleClose = () => {
+    setSelectedVideoId(null);
+  };
+
   return (
-    <ClipWrapper>
-      <img src={clip} alt="clip_thumbnail" />
-    </ClipWrapper>
+    <>
+      <ClipWrapper>
+        <img src={thumbnailUrl} alt="clip_thumbnail" />
+      </ClipWrapper>
+      <ClipDetail videoId={selectedVideoId} onClose={handleClose} />
+    </>
   );
 };
 
