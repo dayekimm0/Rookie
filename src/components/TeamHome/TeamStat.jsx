@@ -102,10 +102,7 @@ const GradientOverlay = styled.div`
 `;
 
 const StatsContainer = styled.div`
-  max-width: 1728px;
-  max-height: 116px;
-  margin: 0 auto;
-  padding: 0 20px;
+  margin-bottom: 100px;
   position: relative;
   z-index: 10;
 
@@ -114,7 +111,6 @@ const StatsContainer = styled.div`
   }
 `;
 
-// 가장 안전한 방법 - 개별 박스들
 const StatsWrapper = styled.div`
   border: 1px solid var(--gray3);
   border-radius: 8px;
@@ -269,7 +265,7 @@ const TeamStat = ({
     return (
       <StatsSection>
         <GradientOverlay />
-        <StatsContainer>
+        <StatsContainer className="inner">
           <StatsWrapper>
             <StatsGrid>
               {statsArray.map((stat, index) => (

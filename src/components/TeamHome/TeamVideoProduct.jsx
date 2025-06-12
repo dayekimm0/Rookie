@@ -15,15 +15,7 @@ const Section = styled.div`
   }
 `;
 
-const Container = styled.div`
-  max-width: 1728px;
-  margin: 0 auto;
-  padding: 0 20px;
-
-  @media screen and (max-width: 768px) {
-    padding: 0 15px;
-  }
-`;
+const Container = styled.div``;
 
 const SectionTitle = styled.h2`
   font-size: 32px;
@@ -267,7 +259,7 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
 
   return (
     <Section>
-      <Container>
+      <Container className="inner">
         <SectionTitle>{title}</SectionTitle>
 
         <ContentWrapper>
