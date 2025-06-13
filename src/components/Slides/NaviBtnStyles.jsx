@@ -195,12 +195,12 @@ export const UpNaviLeftBtn = styled.button`
   img {
     transform: rotate(-180deg);
     display: inline-block;
-    opacity: 0.5;
     transition: opacity 0.2s;
+    opacity: ${({ disabled }) => (disabled ? "0.3" : "1")};
   }
   &:hover {
     img {
-      opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+      opacity: ${({ disabled }) => (disabled ? "0.3" : "1")};
     }
   }
 `;
@@ -212,12 +212,13 @@ export const UpNaviRightBtn = styled.button`
   cursor: ${({ disabled }) => (disabled ? "auto" : "pointer")};
   img {
     display: inline-block;
-    opacity: 0.5;
+
     transition: opacity 0.2s;
+    opacity: ${({ disabled }) => (disabled ? "0.3" : "1")};
   }
   &:hover {
     img {
-      opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+      opacity: ${({ disabled }) => (disabled ? "0.3" : "1")};
     }
   }
 `;

@@ -56,9 +56,20 @@ const VideoTitle = styled.p`
   }
 `;
 
-const ClipContent = ({ type, thumbnail, channelTitle, title }) => {
+const ClipContent = ({
+  type,
+  thumbnail,
+  channelTitle,
+  title,
+  id,
+  onOpenModal,
+}) => {
+  const handleCardClick = () => {
+    onOpenModal(id); // 상위에서 모달 열기
+  };
+
   return (
-    <ContentCard>
+    <ContentCard onClick={handleCardClick}>
       <Thumbnail src={thumbnail} alt="video thumbnail" />
       <Description>
         <ChannelName>{channelTitle}</ChannelName>

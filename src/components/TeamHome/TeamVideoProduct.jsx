@@ -15,15 +15,7 @@ const Section = styled.div`
   }
 `;
 
-const Container = styled.div`
-  max-width: 1728px;
-  margin: 0 auto;
-  padding: 0 20px;
-
-  @media screen and (max-width: 768px) {
-    padding: 0 15px;
-  }
-`;
+const Container = styled.div``;
 
 const SectionTitle = styled.h2`
   font-size: 32px;
@@ -51,8 +43,7 @@ const ContentWrapper = styled.div`
 const VideoSection = styled.div`
   width: 1086px;
   height: 608px;
-  background: var(--gray8);
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
@@ -70,7 +61,7 @@ const VideoSection = styled.div`
 const VideoPlaceholder = styled.div`
   width: 100%;
   height: 100%;
-  background: var(--gray6);
+  background: var(--grayC);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,45 +75,45 @@ const VideoPlaceholder = styled.div`
   }
 `;
 
-const PlayButton = styled.div`
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+// const PlayButton = styled.div`
+//   width: 80px;
+//   height: 80px;
+//   background: rgba(255, 255, 255, 0.9);
+//   border-radius: 50%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   margin-bottom: 20px;
+//   cursor: pointer;
+//   transition: all 0.3s ease;
 
-  &:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.1);
-  }
+//   &:hover {
+//     background: rgba(255, 255, 255, 1);
+//     transform: scale(1.1);
+//   }
 
-  &::after {
-    content: "";
-    width: 0;
-    height: 0;
-    border-left: 25px solid #333;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    margin-left: 8px;
-  }
+//   &::after {
+//     content: "";
+//     width: 0;
+//     height: 0;
+//     border-left: 25px solid #333;
+//     border-top: 15px solid transparent;
+//     border-bottom: 15px solid transparent;
+//     margin-left: 8px;
+//   }
 
-  @media screen and (max-width: 768px) {
-    width: 60px;
-    height: 60px;
+//   @media screen and (max-width: 768px) {
+//     width: 60px;
+//     height: 60px;
 
-    &::after {
-      border-left: 18px solid #333;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      margin-left: 6px;
-    }
-  }
-`;
+//     &::after {
+//       border-left: 18px solid #333;
+//       border-top: 12px solid transparent;
+//       border-bottom: 12px solid transparent;
+//       margin-left: 6px;
+//     }
+//   }
+// `;
 
 // 우측 제품 리스트 영역
 const ProductSection = styled.div`
@@ -132,21 +123,21 @@ const ProductSection = styled.div`
 
   /* 스크롤바 스타일링 */
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 16px;
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--gray8);
+    background: var(--grayD);
     border-radius: 3px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var(--gray6);
-    border-radius: 3px;
+    background: var(--gray8);
+    border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: var(--gray4);
+    background: var(--gray8);
   }
 `;
 
@@ -155,11 +146,6 @@ const ProductItem = styled.div`
   gap: 12px;
   margin-bottom: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateX(5px);
-  }
 
   &:last-child {
     margin-bottom: 0;
@@ -170,7 +156,7 @@ const ProductItem = styled.div`
 const ProductImage = styled.div`
   width: 224px;
   height: 224px;
-  background: var(--gray8);
+  background: var(--grayC);
   border-radius: 8px;
   overflow: hidden;
   flex-shrink: 0;
@@ -185,7 +171,7 @@ const ProductImage = styled.div`
 const ProductImagePlaceholder = styled.div`
   width: 100%;
   height: 100%;
-  background: var(--gray6);
+  background: var(--grayC);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,7 +185,6 @@ const ProductInfo = styled.div`
   height: 224px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 16px 0;
 
   @media screen and (max-width: 1024px) {
@@ -210,7 +195,7 @@ const ProductInfo = styled.div`
 
 const InfluencerName = styled.div`
   font-size: 14px;
-  color: var(--gray4);
+  color: var(--grayC);
   margin-bottom: 8px;
 `;
 
@@ -219,7 +204,7 @@ const ProductName = styled.div`
   font-weight: 600;
   color: var(--light);
   line-height: 1.4;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 
   @media screen and (max-width: 768px) {
     font-size: 16px;
@@ -260,25 +245,32 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
       productName: "상품명(절반만 보임)",
       price: "29,000원",
     },
+    {
+      id: 4,
+      image: "/api/placeholder/224/224",
+      influencerName: "인플루언서명",
+      productName: "상품명(절반만 보임)",
+      price: "29,000원",
+    },
   ];
 
-  const videoTitle =
-    sectionType === "TEAM_STORE" ? "행복한 두린이날!" : "스파오 패션 리뷰";
+  // const videoTitle =
+  //   sectionType === "TEAM_STORE" ? "행복한 두린이날!" : "스파오 패션 리뷰";
 
   return (
     <Section>
-      <Container>
+      <Container className="inner">
         <SectionTitle>{title}</SectionTitle>
 
         <ContentWrapper>
           {/* 좌측 영상 영역 */}
           <VideoSection>
             <VideoPlaceholder>
-              <PlayButton />
+              {/* <PlayButton />
               <div>{videoTitle}</div>
               <div style={{ fontSize: "14px", opacity: 0.8, marginTop: "8px" }}>
                 구단 대표 콘텐츠를 만나보세요
-              </div>
+              </div> */}
             </VideoPlaceholder>
           </VideoSection>
 

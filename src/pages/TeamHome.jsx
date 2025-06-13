@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react"; // useMemo 추가
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ProductBanner from "../components/ProductList/ProductBanner";
@@ -9,6 +9,8 @@ import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
 import { homeSlideTab } from "../data/playTabs";
 import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 import InfluencerZone from "../components/TeamHome/InfluencerZone";
+import HomeProducts from "../components/Home/HomeProducts"; // 추가
+import useAllProductsQuery from "../hook/useAllProductsQuery"; // 추가
 
 const Container = styled.div`
   min-height: 100vh;
@@ -20,20 +22,87 @@ const BannerWrapper = styled.div`
   position: relative;
 `;
 
-// 신상품/인기상품 임시 공간
-const PlaceholderSection = styled.div`
-  height: 1400px;
+// 신상품/인기상품
+const ProductSection = styled.div`
   background: var(--dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--light);
-  font-size: 24px;
-  opacity: 0.5;
+  padding: 60px 0;
+
+  @media screen and (max-width: 1024px) {
+    padding: 40px 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 30px 0;
+  }
+`;
+
+// Home.jsx와 동일한 스타일 (.home_products)
+const TeamProducts = styled.div`
+  width: 1240px;
+  margin: 0 auto;
+
+  .brandGo {
+    svg {
+      stroke: var(--light);
+    }
+  }
+
+  @media screen and (max-width: 1440px) {
+    width: 100%;
+    padding: 0 5%;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    padding: 0 3%;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    padding: 0 15px;
+  }
+`;
+
+const ProductCardWrap = styled.div`
+  margin-top: 120px;
+  h3 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: var(--light);
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  @media screen and (max-width: 1024px) {
+    margin-top: 90px;
+    h3 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    margin-top: 80px;
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    margin-top: 50px;
+    h3 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+  }
 `;
 
 const TeamHome = () => {
   const { teamCode } = useParams();
+
+  // useAllProductsQuery로 전체 상품 데이터 로드
+  const { data: allProducts = [], isLoading: isProductLoading } =
+    useAllProductsQuery();
 
   // teamCode를 bannerKey로 변환하는 매핑 (ProductList.jsx와 동일)
   const teamCodeToBannerKey = {
@@ -50,6 +119,28 @@ const TeamHome = () => {
   };
 
   const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
+
+  // Home.jsx와 동일한 상품 분류 로직 (팀별 필터링 추가)
+  const { newest, popular } = useMemo(() => {
+    // 해당 팀의 상품만 필터링
+    const teamProducts = teamCode
+      ? allProducts.filter((item) => item.team === teamCode)
+      : allProducts;
+
+    // 랜덤하게 섞기
+    const shuffled = [...teamProducts].sort(() => 0.5 - Math.random());
+
+    // 신상품 4개
+    const newest = shuffled.slice(0, 4);
+
+    // 인기상품 8개 (신상품과 겹치지 않게)
+    const usedIds = new Set(newest.map((p) => p.id));
+    const popular = shuffled
+      .filter((item) => !usedIds.has(item.id))
+      .slice(0, 4);
+
+    return { newest, popular };
+  }, [allProducts, teamCode]);
 
   return (
     <Container>
@@ -89,10 +180,28 @@ const TeamHome = () => {
         title="TEAM STORE"
       />
 
-      {/* 신상품/인기상품 임시 공간 (1400px) */}
-      <PlaceholderSection>
-        신상품(NEW) / 인기상품(BEST) 영역 (1400px)
-      </PlaceholderSection>
+      {/* New 신상품 / Best 인기상품 섹션 */}
+      <ProductSection>
+        <TeamProducts>
+          <ProductCardWrap>
+            <h3>New 신상품</h3>
+            {isProductLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <HomeProducts products={newest} />
+            )}
+          </ProductCardWrap>
+
+          <ProductCardWrap>
+            <h3>Best 인기상품</h3>
+            {isProductLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <HomeProducts products={popular} />
+            )}
+          </ProductCardWrap>
+        </TeamProducts>
+      </ProductSection>
 
       {/* ROOKie 파트너존 영역 */}
       <TeamVideoProduct
