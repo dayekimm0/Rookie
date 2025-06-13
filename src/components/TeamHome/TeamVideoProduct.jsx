@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Section = styled.div`
   background: var(--dark);
   color: var(--light);
-  padding: 60px 0;
+  padding: 120px 0;
 
   @media screen and (max-width: 1024px) {
     padding: 40px 0;

@@ -13,7 +13,6 @@ import HomeProducts from "../components/Home/HomeProducts"; // 추가
 import useAllProductsQuery from "../hook/useAllProductsQuery"; // 추가
 
 const Container = styled.div`
-  min-height: 100vh;
   color: var(--light);
 `;
 
