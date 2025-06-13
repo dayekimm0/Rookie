@@ -79,7 +79,7 @@ export const fetchPlaylistVideos = async (
           original?.snippet?.channelTitle || item.snippet.channelTitle,
         thumbnail,
         description: original?.snippet?.description || item.snippet.description,
-        publishedAt: original?.snippet?.publishedAt, // ✅ 원본 업로드일
+        publishedAt: original?.snippet?.publishedAt, // 원본 업로드일
       };
     });
 
@@ -87,7 +87,7 @@ export const fetchPlaylistVideos = async (
     let result = finalVideos;
 
     if (type === "weeklyplay") {
-      const keyword = "KBO리그";
+      const keyword = "SOL";
       result = result.filter(
         (video) =>
           video.title.includes(keyword) || video.description?.includes(keyword)
