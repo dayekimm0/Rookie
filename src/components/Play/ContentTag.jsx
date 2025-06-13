@@ -54,17 +54,17 @@ const ContentTag = ({ type, onSelect }) => {
 
   const handleClick = (name) => {
     setSelectedKey(name);
-    if (onSelect) onSelect(name === "전체보기" ? null : name);
+    if (onSelect) onSelect(name === "전체" ? null : name);
   };
   return (
     <ContentList>
       <ContentTitle>
         <ContentsName
           key="all"
-          active={selectedKey === "전체보기"}
-          onClick={() => handleClick("전체보기")}
+          active={selectedKey === "전체"}
+          onClick={() => handleClick("전체")}
         >
-          전체보기
+          전체
         </ContentsName>
 
         {listToRender.map((item) => (
