@@ -6,8 +6,19 @@ import InfProducts from "./InfProducts";
 import InfProfileCard from "./InfProfileCard";
 import useAllProductsQuery from "../../hook/useAllProductsQuery";
 
+const Inner = styled.div`
+  padding: 100px 0 80px;
+  @media screen and (max-width: 1024px) {
+    padding: 80px 0 60px;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 60px 0 40px;
+  }
+`;
+
 const Container = styled.div`
-  margin-top: 130px;
+  position: relative;
+
   padding: 80px;
   background: #212121;
   border-radius: 18px;
@@ -108,32 +119,34 @@ const InfluencerZone = () => {
   }, [allProducts]);
 
   return (
-    <Container className="inner">
-      <ContentsArea>
-        <div className="videoWrap">
-          <div className="clipWrap">
-            <ContentTitle>ROOKie CLIP</ContentTitle>
-            <InfClipSlide
-              playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
-              max={21}
-            />
+    <Inner className="inner">
+      <Container>
+        <ContentsArea>
+          <div className="videoWrap">
+            <div className="clipWrap">
+              <ContentTitle>ROOKie CLIP</ContentTitle>
+              <InfClipSlide
+                playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
+                max={21}
+              />
+            </div>
+            <div className="playWrap">
+              <ContentTitle>ROOKie PLAY</ContentTitle>
+              <InfSlide
+                playlistId={"PLR9TDYZHxlTI2m7kth4EXqwj4VcfuaBSA"}
+                max={21}
+              />
+            </div>
           </div>
-          <div className="playWrap">
-            <ContentTitle>ROOKie PLAY</ContentTitle>
-            <InfSlide
-              playlistId={"PLR9TDYZHxlTI2m7kth4EXqwj4VcfuaBSA"}
-              max={21}
-            />
+          <hr className="line" />
+          <div className="storeWrap">
+            <ContentTitle>ROOKie STORE</ContentTitle>
+            {isProductLoading ? "Loading" : <InfProducts products={newest} />}
           </div>
-        </div>
-        <hr className="line" />
-        <div className="storeWrap">
-          <ContentTitle>ROOKie STORE</ContentTitle>
-          {isProductLoading ? "Loading" : <InfProducts products={newest} />}
-        </div>
-      </ContentsArea>
-      <InfProfileCard />
-    </Container>
+        </ContentsArea>
+        <InfProfileCard />
+      </Container>
+    </Inner>
   );
 };
 
