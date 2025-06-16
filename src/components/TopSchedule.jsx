@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import ScheduleBox from "./ScheduleBox";
 import scheduleData from "../data/gameList_final.json";
-import useHeaderStore from "../stores/headerStore";
+import useHeaderStore from "../stores/headerHeightStore";
 
 const Container = styled.div`
   position: relative;

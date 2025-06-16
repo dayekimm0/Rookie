@@ -79,7 +79,7 @@ export const fetchPlaylistVideos = async (
           original?.snippet?.channelTitle || item.snippet.channelTitle,
         thumbnail,
         description: original?.snippet?.description || item.snippet.description,
-        publishedAt: original?.snippet?.publishedAt, // ✅ 원본 업로드일
+        publishedAt: original?.snippet?.publishedAt, // 원본 업로드일
       };
     });
 

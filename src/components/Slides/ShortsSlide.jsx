@@ -10,6 +10,7 @@ import {
   useYoutubeVideoDetails,
 } from "../../hook/useYoutubePlaylist";
 import Shortscard from "./Shortscard";
+import Spinner from "../Spinner";
 
 const Title = styled.div`
   margin-top: 120px;
@@ -94,6 +95,25 @@ const SlideContainer = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
 const ShortsSlide = React.memo(({ playlistId, title, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
@@ -144,8 +164,18 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
     });
   }, [details]);
 
-  if (isLoading) return <div>불러오는 중...</div>;
-  if (isError) return <div>문제가 발생했어요.</div>;
+  if (isLoading)
+    return (
+      <SlideLoaderWrapper>
+        <Spinner />
+      </SlideLoaderWrapper>
+    );
+  if (isError)
+    return (
+      <SlideLoaderWrapper>
+        <div>문제가 발생하였습니다.</div>
+      </SlideLoaderWrapper>
+    );
 
   // console.log("shorts", shorts);
 

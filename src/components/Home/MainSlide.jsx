@@ -6,6 +6,7 @@ import MainCard from "./MainCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "../Slides/NaviBtnStyles";
 import { useMatchedGameVideos } from "../../hook/useYoutubePlaylist";
+import Spinner from "../Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -59,6 +60,25 @@ const SlideContainer = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
 const MainSlide = () => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
@@ -93,8 +113,18 @@ const MainSlide = () => {
 
   const { date, day, matches, isLoading, isError } = useMatchedGameVideos();
 
-  if (isLoading) return <div>불러오는 중...</div>;
-  if (isError) return <div>문제가 발생했어요.</div>;
+  if (isLoading)
+    return (
+      <SlideLoaderWrapper>
+        <Spinner />
+      </SlideLoaderWrapper>
+    );
+  if (isError)
+    return (
+      <SlideLoaderWrapper>
+        <div>문제가 발생하였습니다.</div>
+      </SlideLoaderWrapper>
+    );
 
   return (
     <Container>
