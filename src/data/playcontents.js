@@ -95,8 +95,8 @@ export const playContents = {
       },
       {
         name: "추신영",
-        playlistId: "PLPuT2QymG4qVPdsgx2xN18mhkNgizOktf",
-        max: 10,
+        playlistId: "PLPuT2QymG4qXnhU0yMOYaPxiUOAx-od-I",
+        max: 50,
       },
       {
         name: "옐이",
@@ -143,6 +143,11 @@ export const playContents = {
         playlistId: "PLPuT2QymG4qVPh5sP5z-J6Zr01Ze-tnZ2",
         max: 50,
       },
+      {
+        name: "셀레나",
+        playlistId: "PLPuT2QymG4qUyr_tSwQcdIBcMc29zZzpd",
+        max: 50,
+      },
     ],
     max: 15,
   },
@@ -163,6 +168,16 @@ export const playContents = {
       {
         name: "@reallyyelly_lg",
         playlistId: "PLPuT2QymG4qXmiV8VQCMbeEii_iChPbNo",
+        max: 10,
+      },
+      {
+        name: "@추신영",
+        playlistId: "PLPuT2QymG4qWF48woB6UkhjMui-Z_q9t4",
+        max: 10,
+      },
+      {
+        name: "@셀레나",
+        playlistId: "PLPuT2QymG4qUp6Ia4VOPjzdeUXNx4Ix4z",
         max: 10,
       },
     ],
