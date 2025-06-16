@@ -100,7 +100,7 @@ export const playContents = {
       },
       {
         name: "옐이",
-        playlistId: "PLPuT2QymG4qUhyBWLY0zVyKjW9VfQG2dL",
+        playlistId: "PL4vExWweB0MMU3DbIK119RMWHm7aA11Kj",
         max: 10,
       },
       {
@@ -130,8 +130,23 @@ export const playContents = {
       },
       {
         name: "채소",
-        playlistId: "PLPuT2QymG4qVl01fdniTL_Du8R3IkOKBR",
+        playlistId: "PL3LHuBDcSGN2BVya47YrVFS66WMKJI9ku",
         max: 10,
+      },
+      {
+        name: "삼림",
+        playlistId: "PLl9PiFCXP1EKMOF7dpn7GEqz5vLTGTxbB",
+        max: 50,
+      },
+      {
+        name: "이나린",
+        playlistId: "PLjFwk7vX_Ve3RVv4onzb5oQOkkWWhc0LS",
+        max: 50,
+      },
+      {
+        name: "따나따나",
+        playlistId: "PLCB8a_zQTpJbW_lJJPfrNgP7C-KFLkOIe",
+        max: 50,
       },
     ],
     max: 15,
