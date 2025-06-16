@@ -6,7 +6,7 @@ import lenis from "./lenisInstance";
 import { useEffect } from "react";
 import styled from "styled-components";
 import ScrollToTop from "./ScrollToTop";
-import useHeaderStore from "./stores/headerStore";
+import useHeaderStore from "./stores/headerHeightStore";
 
 const ContentWrapper = styled.div`
   position: relative;
