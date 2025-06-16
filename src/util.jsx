@@ -258,3 +258,30 @@ export const getTeamNameShortEng = (team) => {
       return "Unknown";
   }
 };
+
+export const getTeamCodeEng = (korName) => {
+  switch (korName) {
+    case "기아 타이거즈":
+      return "kia_tgs";
+    case "삼성 라이온즈":
+      return "ss_lns";
+    case "LG 트윈스":
+      return "lg_twins";
+    case "두산 베어스":
+      return "ds_bas";
+    case "KT 위즈":
+      return "kt_wiz";
+    case "SSG 랜더스":
+      return "ssg_lds";
+    case "롯데 자이언츠":
+      return "lt_gnt";
+    case "한화 이글스":
+      return "hw_egs";
+    case "NC 다이노스":
+      return "nc_dns";
+    case "키움 히어로즈":
+      return "kw_hrs";
+    default:
+      return "";
+  }
+};

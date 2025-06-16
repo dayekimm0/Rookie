@@ -15,6 +15,7 @@ import HomeProducts from "../components/Home/HomeProducts";
 import authStore from "../stores/AuthStore";
 import useAllProductsQuery from "../hook/useAllProductsQuery";
 import { homeSlideTab } from "../data/playTabs";
+import Spinner from "../components/Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -133,49 +134,6 @@ const SlideLoaderWrapper = styled.div`
   }
 `;
 
-const SvgSpinner = styled.svg`
-  animation: rotate 2s linear infinite;
-  width: 50px;
-  height: 50px;
-
-  .path {
-    stroke: #fff;
-    stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
-  }
-
-  @media screen and (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-  }
-
-  @media screen and (max-width: 480px) {
-    width: 30px;
-    height: 30px;
-  }
-
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes dash {
-    0% {
-      stroke-dasharray: 1, 150;
-      stroke-dashoffset: 0;
-    }
-    50% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -35;
-    }
-    100% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -124;
-    }
-  }
-`;
-
 const Home = () => {
   const { isLoading: isUserLoading, userProfile } = authStore();
   const { data: allProducts = [], isLoading: isProductLoading } =
@@ -211,16 +169,7 @@ const Home = () => {
     <Container>
       {isUserLoading ? (
         <SlideLoaderWrapper>
-          <SvgSpinner viewBox="0 0 50 50">
-            <circle
-              className="path"
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              strokeWidth="5"
-            />
-          </SvgSpinner>
+          <Spinner />
         </SlideLoaderWrapper>
       ) : userProfile?.favoriteTeam ? (
         <MyhomeMainSlide isMyhome={userProfile.favoriteTeam} />
