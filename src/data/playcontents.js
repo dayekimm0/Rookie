@@ -124,11 +124,6 @@ export const playContents = {
         max: 10,
       },
       {
-        name: "이나린",
-        playlistId: "PLPuT2QymG4qXP0OSYzeg2y2t2b6Ympyad",
-        max: 10,
-      },
-      {
         name: "채소",
         playlistId: "PL3LHuBDcSGN2BVya47YrVFS66WMKJI9ku",
         max: 10,
@@ -145,7 +140,7 @@ export const playContents = {
       },
       {
         name: "따나따나",
-        playlistId: "PLCB8a_zQTpJbW_lJJPfrNgP7C-KFLkOIe",
+        playlistId: "PLPuT2QymG4qVPh5sP5z-J6Zr01Ze-tnZ2",
         max: 50,
       },
     ],
