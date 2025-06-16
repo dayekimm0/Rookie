@@ -115,8 +115,8 @@ export const playContents = {
       },
       {
         name: "야박",
-        playlistId: "PLPuT2QymG4qWB8PRkp7oywU9KXIEgXZJK",
-        max: 10,
+        playlistId: "PL6mQCkgkh2Rc0KPcez3zAh3I2zjtfolOe",
+        max: 50,
       },
       {
         name: "코코예",
@@ -143,6 +143,11 @@ export const playContents = {
         playlistId: "PLPuT2QymG4qVPh5sP5z-J6Zr01Ze-tnZ2",
         max: 50,
       },
+      {
+        name: "엘트러버",
+        playlistId: "PLPuT2QymG4qXzmDgK3oyT7tcADWG-7wXZ",
+        max: 50,
+      },
     ],
     max: 15,
   },
@@ -165,7 +170,16 @@ export const playContents = {
         playlistId: "PLPuT2QymG4qXmiV8VQCMbeEii_iChPbNo",
         max: 10,
       },
+      {
+        name: "해써윱",
+        playlistId: "PLPuT2QymG4qV2NQOIaaR-H8pDQ1kRlHRf",
+        max: 10,
+      },
+      {
+        name: "엘트러버",
+        playlistId: "PLPuT2QymG4qUMu9DIJji7DDxbBaxOylmo",
+        max: 10,
+      },
     ],
-    max: 15,
   },
 };
