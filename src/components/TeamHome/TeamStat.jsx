@@ -6,18 +6,15 @@ import teamStatData from "../../data/team_stat.json";
 const TeamInfoOverlay = styled.div`
   position: absolute;
   bottom: 40px;
-  left: 40px;
   z-index: 10;
   color: var(--light);
 
   @media screen and (max-width: 1024px) {
     bottom: 30px;
-    left: 30px;
   }
 
   @media screen and (max-width: 768px) {
     bottom: 20px;
-    left: 20px;
   }
 `;
 
@@ -56,6 +53,16 @@ const RecordKeys = styled.span`
 // value 부분 (60 | 23승 34패 3무 | 0.404)
 const RecordValues = styled.span`
   color: var(--light);
+`;
+
+// 구분자 스타일 추가
+const Separator = styled.span`
+  color: var(--light);
+  margin: 0 20px;
+
+  @media screen and (max-width: 768px) {
+    margin: 0 15px;
+  }
 `;
 
 // 스탯 테이블 영역
@@ -246,15 +253,17 @@ const TeamStat = ({
   // 오버레이만 표시
   if (showOverlayOnly) {
     return (
-      <TeamInfoOverlay>
+      <TeamInfoOverlay className="inner">
         <TeamName>{teamName}</TeamName>
         <TeamRecord>
-          <RecordKeys>경기 수</RecordKeys> <RecordValues>{games}</RecordValues>{" "}
-          | <RecordKeys>성적</RecordKeys>{" "}
+          <RecordKeys>경기 수</RecordKeys> <RecordValues>{games}</RecordValues>
+          <Separator>|</Separator>
+          <RecordKeys>성적</RecordKeys>{" "}
           <RecordValues>
             {wins}승 {losses}패 {ties}무
-          </RecordValues>{" "}
-          | <RecordKeys>승률</RecordKeys> <RecordValues>{winRate}</RecordValues>
+          </RecordValues>
+          <Separator>|</Separator>
+          <RecordKeys>승률</RecordKeys> <RecordValues>{winRate}</RecordValues>
         </TeamRecord>
       </TeamInfoOverlay>
     );
