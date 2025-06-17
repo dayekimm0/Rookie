@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { getEmblem, getTeamJsonCode } from "../../util";
 
@@ -47,6 +47,7 @@ const Lists = styled.ul`
       border-radius: 8px;
       border: 1px solid #1d1d1d;
       transition: border 0.3s, background 0.3s;
+      overflow: hidden;
       img {
         width: 100%;
       }
@@ -83,14 +84,24 @@ const Lists = styled.ul`
 
 const lists = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const HomeList = () => {
+const HomeList = ({ title }) => {
+  const location = useLocation();
+
+  const currentTeamCode = location.pathname.startsWith("/teamhome")
+    ? location.pathname.split("/")[2]
+    : null;
+
+  const filteredLists = currentTeamCode
+    ? lists.filter((id) => getTeamJsonCode(id) !== currentTeamCode)
+    : lists;
+
   return (
     <Container className="inner">
       <div>
-        <h3>구단홈 바로가기</h3>
+        <h3>{title}</h3>
       </div>
       <Lists>
-        {lists.map((number) => (
+        {filteredLists.map((number) => (
           <li key={`teamhomeList${number}`}>
             <Link to={`/teamhome/${getTeamJsonCode(number)}`}>
               <img src={getEmblem(number)} alt="teamEmblem" />

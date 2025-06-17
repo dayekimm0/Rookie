@@ -7,12 +7,12 @@ import InfProfileCard from "./InfProfileCard";
 import useAllProductsQuery from "../../hook/useAllProductsQuery";
 
 const Inner = styled.div`
-  padding: 100px 0 80px;
+  padding-top: 100px;
   @media screen and (max-width: 1024px) {
-    padding: 80px 0 60px;
+    padding-top: 80px;
   }
   @media screen and (max-width: 768px) {
-    padding: 60px 0 40px;
+    padding-top: 60px;
   }
 `;
 

@@ -50,7 +50,6 @@ const Upbtn = styled.div`
   transition: opacity 0.3s;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.1);
-
   svg {
     width: 22px;
     path {

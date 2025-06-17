@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import lenis from "../lenisInstance";
 import LogoSvg from "./LogoSvg";
 import Footerbtns from "./FooterItem/Footerbtns";
 
@@ -10,11 +9,29 @@ const Container = styled.footer`
   background: ${({ mode }) => (mode === "light" ? "#fff" : "var(--bg)")};
   position: relative;
   color: var(--gray8);
+  @media screen and (max-width: 1600px) {
+    padding-top: ${({ $pathname }) =>
+      $pathname === "/event"
+        ? "0"
+        : $pathname.startsWith("/teamhome") === true
+        ? "180px"
+        : "95px"};
+  }
   @media screen and (max-width: 1024px) {
-    padding-top: ${({ $pathname }) => ($pathname !== "/event" ? "75px" : "0")};
+    padding-top: ${({ $pathname }) =>
+      $pathname === "/event"
+        ? "0"
+        : $pathname.startsWith("/teamhome") === true
+        ? "150px"
+        : "75px"};
   }
   @media screen and (max-width: 768px) {
-    padding-top: ${({ $pathname }) => ($pathname !== "/event" ? "65px" : "0")};
+    padding-top: ${({ $pathname }) =>
+      $pathname === "/event"
+        ? "0"
+        : $pathname.startsWith("/teamhome") === true
+        ? "110px"
+        : "60px"};
   }
 
   .inner {
