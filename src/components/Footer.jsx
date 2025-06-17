@@ -10,28 +10,13 @@ const Container = styled.footer`
   position: relative;
   color: var(--gray8);
   @media screen and (max-width: 1600px) {
-    padding-top: ${({ $pathname }) =>
-      $pathname === "/event"
-        ? "0"
-        : $pathname.startsWith("/teamhome") === true
-        ? "180px"
-        : "95px"};
+    padding-top: ${({ $pathname }) => ($pathname === "/event" ? "0" : "95px")};
   }
   @media screen and (max-width: 1024px) {
-    padding-top: ${({ $pathname }) =>
-      $pathname === "/event"
-        ? "0"
-        : $pathname.startsWith("/teamhome") === true
-        ? "150px"
-        : "75px"};
+    padding-top: ${({ $pathname }) => ($pathname === "/event" ? "0" : "75px")};
   }
   @media screen and (max-width: 768px) {
-    padding-top: ${({ $pathname }) =>
-      $pathname === "/event"
-        ? "0"
-        : $pathname.startsWith("/teamhome") === true
-        ? "110px"
-        : "60px"};
+    padding-top: ${({ $pathname }) => ($pathname === "/event" ? "0" : "60px")};
   }
 
   .inner {

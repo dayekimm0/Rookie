@@ -1,0 +1,187 @@
+{
+  "teams": [
+    {
+      "team": "ds_bas",
+      "influencers": [
+        {
+          "name": "팡뉴하",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qVqosm1F0u54czPbatZn8JN",
+          "clip": null
+        },
+        {
+          "name": "@min_puleum",
+          "profile": "",
+          "description": "",
+          "play": null,
+          "clip": "PLPuT2QymG4qVEbsjuXQligURfnt9jSPaA"
+        },
+        {
+          "name": "셀레나",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qUyr_tSwQcdIBcMc29zZzpd",
+          "clip": "PLPuT2QymG4qUp6Ia4VOPjzdeUXNx4Ix4z"
+        }
+      ]
+    },
+    {
+      "team": "ssg_lds",
+      "influencers": [
+        {
+          "name": "굥이",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qVSd23EgDfTJRglCGb6dG-8",
+          "clip": "@271_one"
+        },
+        {
+          "name": "@271_one",
+          "profile": "",
+          "description": "",
+          "play": null,
+          "clip": "PLPuT2QymG4qVw950AXM3ID6Si1krju9C6"
+        }
+      ]
+    },
+    {
+      "team": "nc_dns",
+      "influencers": [
+        {
+          "name": "추신영",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qXnhU0yMOYaPxiUOAx-od-I",
+          "clip": "PLPuT2QymG4qWF48woB6UkhjMui-Z_q9t4"
+        },
+        {
+          "name": "다이노띵",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qUHmfmOotEHVyA7bGo3w_DA",
+          "clip": null
+        }
+      ]
+    },
+    {
+      "team": "lt_gnt",
+      "influencers": [
+        {
+          "name": "옐이",
+          "profile": "",
+          "description": "",
+          "play": "PL4vExWweB0MMU3DbIK119RMWHm7aA11Kj",
+          "clip": null
+        },
+        {
+          "name": "따나따나",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qVPh5sP5z-J6Zr01Ze-tnZ2",
+          "clip": null
+        }
+      ]
+    },
+    {
+      "team": "hw_egs",
+      "influencers": [
+        {
+          "name": "승희",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qVMIUZl9s0diFv8qLA9z44B",
+          "clip": null
+        }
+      ]
+    },
+    {
+      "team": "lg_twins",
+      "influencers": [
+        {
+          "name": "라젤",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qU9l3G6Be6ogukhnKoi502-",
+          "clip": null
+        },
+        {
+          "name": "@reallyyelly_lg",
+          "profile": "",
+          "description": "",
+          "play": null,
+          "clip": "PLPuT2QymG4qXmiV8VQCMbeEii_iChPbNo"
+        },
+        {
+          "name": "엘트러버",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qXzmDgK3oyT7tcADWG-7wXZ",
+          "clip": "PLPuT2QymG4qUMu9DIJji7DDxbBaxOylmo"
+        }
+      ]
+    },
+    {
+      "team": "ss_lns",
+      "influencers": [
+        {
+          "name": "야박",
+          "profile": "",
+          "description": "",
+          "play": "PL6mQCkgkh2Rc0KPcez3zAh3I2zjtfolOe",
+          "clip": null
+        },
+        {
+          "name": "해써윱",
+          "profile": "",
+          "description": "",
+          "play": null,
+          "clip": "PLPuT2QymG4qV2NQOIaaR-H8pDQ1kRlHRf"
+        }
+      ]
+    },
+    {
+      "team": "kia_tgs",
+      "influencers": [
+        {
+          "name": "코코예",
+          "profile": "",
+          "description": "",
+          "play": "PLPuT2QymG4qWu4i2SQeBVYtYAVRcTfFr7",
+          "clip": null
+        }
+      ]
+    },
+    {
+      "team": "kt_wiz",
+      "influencers": [
+        {
+          "name": "채소",
+          "profile": "",
+          "description": "",
+          "play": "PL3LHuBDcSGN2BVya47YrVFS66WMKJI9ku",
+          "clip": null
+        },
+        {
+          "name": "삼림",
+          "profile": "",
+          "description": "",
+          "play": "PLl9PiFCXP1EKMOF7dpn7GEqz5vLTGTxbB",
+          "clip": null
+        }
+      ]
+    },
+    {
+      "team": "kw_hrs",
+      "influencers": [
+        {
+          "name": "이나린",
+          "profile": "",
+          "description": "",
+          "play": "PLjFwk7vX_Ve3RVv4onzb5oQOkkWWhc0LS",
+          "clip": null
+        }
+      ]
+    }
+  ]
+}

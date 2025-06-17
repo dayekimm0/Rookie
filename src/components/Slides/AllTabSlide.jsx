@@ -3,7 +3,7 @@ import MyTabSlideRenderer from "../MypageSlides/MyTabSlideRandered";
 import { useQueries } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchYoutubePlaylist } from "../../hook/useYoutubePlaylist";
+import { fetchYoutubePlaylist } from "../../hook/useYoutubePlayList";
 import styled from "styled-components";
 import Spinner from "../Spinner";
 

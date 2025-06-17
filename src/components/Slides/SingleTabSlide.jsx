@@ -1,6 +1,6 @@
 import TabSlideRenderer from "./TabSlideRenderer";
 import MyTabSlideRenderer from "../MypageSlides/MyTabSlideRandered";
-import { useYoutubePlaylist } from "../../hook/useYoutubePlaylist";
+import { useYoutubePlaylist } from "../../hook/useYoutubePlayList";
 import { useLocation } from "react-router-dom";
 
 const SingleTabSlide = ({ selectedTab, onSwiperReady }) => {
