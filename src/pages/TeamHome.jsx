@@ -11,6 +11,7 @@ import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 import InfluencerZone from "../components/TeamHome/InfluencerZone";
 import HomeProducts from "../components/Home/HomeProducts"; // 추가
 import useAllProductsQuery from "../hook/useAllProductsQuery"; // 추가
+import HomeList from "../components/Home/HomeList";
 
 const Container = styled.div`
   color: var(--light);
@@ -218,6 +219,7 @@ const TeamHome = () => {
 
       {/* 인플루언서 영역 */}
       <InfluencerZone />
+      <HomeList title={"타 구단 바로가기"} />
     </Container>
   );
 };

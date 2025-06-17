@@ -5,7 +5,7 @@ import "swiper/css";
 import MainCard from "./MainCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "../Slides/NaviBtnStyles";
-import { useMatchedGameVideos } from "../../hook/useYoutubePlaylist";
+import { useMatchedGameVideos } from "../../hook/useYoutubePlayList";
 import Spinner from "../Spinner";
 
 const Container = styled.div`

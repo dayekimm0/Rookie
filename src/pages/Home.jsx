@@ -176,7 +176,7 @@ const Home = () => {
       ) : (
         <MainSlide />
       )}
-      <HomeList />
+      <HomeList title={"구단홈 바로가기"} />
       <Banner className="inner">
         <Link to={"/event"}>
           <img src={bannerStrike} alt="banner" />
