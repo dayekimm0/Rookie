@@ -8,7 +8,7 @@ import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
 import {
   useYoutubePlaylist,
   useYoutubeVideoDetails,
-} from "../../hook/useYoutubePlaylist";
+} from "../../hook/useYoutubePlayList";
 import Shortscard from "./Shortscard";
 import Spinner from "../Spinner";
 

@@ -6,10 +6,11 @@ import authStore from "../../stores/AuthStore";
 import { getTeamCodeEng } from "../../util";
 
 const ToggleWrapper = styled.div`
+  margin-right: 18px;
   width: 84px;
   height: 28px;
   border-radius: 999px;
-  background: var(--gray1);
+  background: var(--gray2);
   position: relative;
   display: flex;
   align-items: center;
@@ -46,7 +47,7 @@ const Circle = styled.div`
   top: 0px;
   left: ${({ $active }) => (!$active ? "calc(84px - 28px)" : "0px")};
   transition: left 0.3s ease;
-  border: 2px solid var(--gray1);
+  border: 2px solid var(--gray2);
   overflow: hidden;
   img {
     width: 100%;
