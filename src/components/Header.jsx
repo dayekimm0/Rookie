@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -6,6 +12,7 @@ import {
   getTeamJsonCode,
   getTeamColor,
   getScrollbarWidth,
+  getTeamCodeEng,
 } from "../util";
 import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
@@ -15,11 +22,15 @@ import rookieemblem from "../images/logos/emblem_rookie.png";
 import logo from "../images/logos/Rookie_logo.svg";
 import kbologo2 from "../images/emblem/emblem_kbo2.svg";
 import TopSchedule from "./TopSchedule";
-import useHeaderStore from "../stores/headerStore";
+import useHeaderStore from "../stores/headerHeightStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import logonStore from "../stores/LogonStore";
 import arrowSmall from "../images/icons/RBarrow_logo.svg";
+import HeaderToggle from "./HeaderItem/HeaderToggle";
+import { useToggleStore, useSearchStore } from "../stores/headersStore";
+import SearchPc from "./Search/SearchPc";
+import SearchMobile from "./Search/SearchMobile";
 
 const Container = styled.header`
   position: fixed;
@@ -117,7 +128,17 @@ const Profile = styled.div`
   }
   @media screen and (max-width: 500px) {
     right: 15px;
-    gap: 8px;
+    gap: 10px;
+  }
+`;
+
+const UserWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  @media screen and (max-width: 500px) {
+    gap: 5px;
   }
 `;
 
@@ -132,6 +153,10 @@ const Emblem = styled.div`
     height: 100%;
     object-fit: cover;
     overflow: visible;
+  }
+  @media screen and (max-width: 1440px) {
+    width: 45px;
+    height: 45px;
   }
   @media screen and (max-width: 1024px) {
     width: 36px;
@@ -257,10 +282,10 @@ const User = styled.div`
 `;
 
 const InfoBtn = styled.i`
-  margin-left: 16px;
+  margin-left: 5px;
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-    margin-left: 6px;
+    margin-left: 5px;
     font-size: 1.2rem;
   }
   @media screen and (max-width: 1024px) {
@@ -336,60 +361,6 @@ const SearchPcBtn = styled.div`
   cursor: pointer;
   .closemark {
     font-size: 25px;
-  }
-  @media screen and (max-width: 1024px) {
-    display: none;
-  }
-`;
-
-const SearchPcWrap = styled.div`
-  position: absolute;
-  width: 100%;
-  padding: 40px;
-  background: ${({ mode }) => (mode === "light" ? "#fff" : "#222")};
-  border-bottom: 1px solid;
-  border-color: ${({ mode }) => (mode === "light" ? "#ddd" : "#444")};
-
-  .searchPc {
-    margin: 0 auto;
-    padding: 15px;
-    width: 700px;
-    max-width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    border: 1px solid;
-    border-color: ${({ mode }) => (mode === "light" ? "#ddd" : "#444")};
-
-    input {
-      flex: 1;
-      background: none;
-      border: none;
-      color: ${({ mode }) => (mode === "light" ? "#111" : "#fff")};
-      font-size: 1.6rem;
-      font-family: "Figtree", "Pretendard", sans-serif;
-      &::placeholder {
-        color: ${({ mode }) => (mode === "light" ? "#aaa" : "#aaa")};
-        transition: opacity 0.4s;
-        opacity: 1;
-      }
-      &:focus {
-        outline: none;
-        &::placeholder {
-          opacity: 0;
-        }
-      }
-    }
-
-    button {
-      border: none;
-      padding: 0;
-      background: none;
-      color: ${({ mode }) => (mode === "light" ? "#111" : "#fff")};
-      font-size: 20px;
-      cursor: pointer;
-    }
   }
   @media screen and (max-width: 1024px) {
     display: none;
@@ -490,49 +461,6 @@ const MobileMenuWrap = styled.div`
       }
     }
 
-    .search_bar {
-      position: relative;
-      border-bottom: 1px solid #111;
-      padding-bottom: 8px;
-      #search_form_mb {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 8px;
-        button,
-        input {
-          border: none;
-          background: none;
-        }
-        font-size: 0;
-        position: relative;
-        .search_txt {
-          border-radius: 100px;
-          background: #fff;
-          width: 100%;
-          overflow: hidden;
-          transition: all 0.4s;
-          font-size: 1.2rem;
-          color: #111;
-          &::placeholder {
-            font-size: 1.2rem;
-            font-family: "pretendard";
-            transition: all 0.4s;
-            color: var(--grayC);
-          }
-          &:focus {
-            outline: none;
-            &::placeholder {
-              color: transparent;
-            }
-          }
-        }
-        .search_btn {
-          font-size: 16px;
-        }
-      }
-    }
-
     .mb_menus {
       flex: 1;
       display: flex;
@@ -584,8 +512,11 @@ const Header = ({ mode }) => {
   const setHeaderHeight = useHeaderStore((state) => state.setHeaderHeight);
   const headerHeight = useHeaderStore((state) => state.headerHeight);
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
+  const isTeamMode = useToggleStore((state) => state.isTeamMode);
 
+  const navigate = useNavigate();
   const location = useLocation();
+  const pathname = location.pathname;
   const headerRef = useRef(null);
 
   const teamToEmblemId = {
@@ -601,19 +532,36 @@ const Header = ({ mode }) => {
     "키움 히어로즈": "10",
   };
 
-  const navigate = useNavigate();
+  const teamStores = [
+    { name: "KBO", code: "kbo" },
+    { name: "기아 타이거즈", code: "kia_tgs" },
+    { name: "삼성 라이온즈", code: "ss_lns" },
+    { name: "LG 트윈스", code: "lg_twins" },
+    { name: "두산 베어스", code: "ds_bas" },
+    { name: "KT 위즈", code: "kt_wiz" },
+    { name: "SSG 랜더스", code: "ssg_lds" },
+    { name: "롯데 자이언츠", code: "lt_gnt" },
+    { name: "한화 이글스", code: "hw_egs" },
+    { name: "NC 다이노스", code: "nc_dns" },
+    { name: "키움 히어로즈", code: "kw_hrs" },
+  ];
 
   useLayoutEffect(() => {
-    const updateHeight = () => {
-      if (headerRef.current) {
-        const height = headerRef.current.offsetHeight;
-        setHeaderHeight(height);
-      }
-    };
+    const headerEl = headerRef.current;
+    if (!headerEl) return;
 
-    updateHeight();
-    window.addEventListener("resize", updateHeight);
-    return () => window.removeEventListener("resize", updateHeight);
+    const resizeObserver = new ResizeObserver(() => {
+      setHeaderHeight(headerEl.offsetHeight);
+    });
+
+    resizeObserver.observe(headerEl);
+
+    // 초기 측정 (필요할 수 있음)
+    setHeaderHeight(headerEl.offsetHeight);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, [setHeaderHeight]);
 
   const { user, userProfile, isLoading } = authStore();
@@ -624,18 +572,19 @@ const Header = ({ mode }) => {
   const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
   const [lineVisible, setLineVisible] = useState(true);
   const itemRefs = useRef([]);
-  const menus = [
-    { label: "HOME", path: "/" },
-    { label: "PLAY", path: "/play" },
-    { label: "STORE", path: "/store" },
-    { label: "EVENT", path: "/event" },
-  ];
-
-  const activeIndex = menus.findIndex(({ path, disabled }) => {
-    if (disabled) return false;
-    if (path === "/") return location.pathname === "/";
-    return location.pathname.startsWith(path);
-  });
+  let activeIndex = -1;
+  if (
+    (!isTeamMode && pathname === "/") || // ROOKie일 때 메인 홈
+    (isTeamMode && pathname.startsWith("/teamhome")) // TEAM일 때 구단 홈
+  ) {
+    activeIndex = 0;
+  } else if (pathname.startsWith("/play")) {
+    activeIndex = 1;
+  } else if (pathname.startsWith("/store")) {
+    activeIndex = 2;
+  } else if (pathname.startsWith("/event")) {
+    activeIndex = 3;
+  }
 
   useLayoutEffect(() => {
     const updateLineStyle = () => {
@@ -648,13 +597,11 @@ const Header = ({ mode }) => {
         setLineVisible(true);
       } else {
         setLineVisible(false);
-        setLineStyle({ left: 0, width: 0 });
       }
     };
 
     updateLineStyle();
     window.addEventListener("resize", updateLineStyle);
-
     return () => window.removeEventListener("resize", updateLineStyle);
   }, [location.pathname, activeIndex]);
 
@@ -683,11 +630,8 @@ const Header = ({ mode }) => {
     }
   };
 
-  //search 버튼 토글
-  const [searchOpen, setSearchOpen] = useState(false);
-  const handleClickSearchPc = () => {
-    setSearchOpen((prev) => !prev);
-  };
+  //searchPc 버튼 토글
+  const { searchOpen, toggleSearch, closeSearch } = useSearchStore();
 
   //mobile 메뉴 토글
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -715,12 +659,30 @@ const Header = ({ mode }) => {
 
   // 페이지 이동 시 search, user dropdown 닫기
   useEffect(() => {
-    setSearchOpen(false);
+    closeSearch();
     setIsOpen(false);
     setMobileMenuOpen(false);
     setMobileStoreOpen(false);
   }, [location.pathname]);
   const teams = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  //헤더 팀 토글 클릭 시
+
+  const handleClickHome = (e) => {
+    if (isTeamMode && user && userProfile) {
+      e.preventDefault();
+      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
+      if (teamCode) navigate(`/teamhome/${teamCode}`);
+    }
+  };
+  const handleClickMobileHome = (e) => {
+    setMobileMenuOpen(false);
+    if (isTeamMode && user && userProfile) {
+      e.preventDefault();
+      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
+      if (teamCode) navigate(`/teamhome/${teamCode}`);
+    }
+  };
 
   return (
     <Container ref={headerRef}>
@@ -731,7 +693,9 @@ const Header = ({ mode }) => {
         </Logo>
         <Items>
           <Item ref={(el) => (itemRefs.current[0] = el)}>
-            <Link to="/">HOME</Link>
+            <Link to="/" onClick={handleClickHome}>
+              {isTeamMode ? "TEAM" : "HOME"}
+            </Link>
           </Item>
           <Item ref={(el) => (itemRefs.current[1] = el)}>
             <Link to="/play">PLAY</Link>
@@ -775,7 +739,8 @@ const Header = ({ mode }) => {
               lineVisible ? { duration: 0.3, ease: "easeOut" } : { duration: 0 }
             }
             style={{
-              display: lineVisible ? "block" : "none",
+              opacity: lineVisible ? 1 : 0,
+              transition: "opacity 0.2s ease",
             }}
           />
         </Items>
@@ -792,17 +757,20 @@ const Header = ({ mode }) => {
             </>
           ) : user && userProfile ? (
             <>
-              <Emblem>
-                <TeamEmblem
-                  emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
-                />
-              </Emblem>
-              <UserName>
-                <Link to="/mypage">{userProfile.nickname}</Link>
-                <InfoBtn className="info-btn" onClick={toggleUserBox}>
-                  {isopen ? "▲" : "▼"}
-                </InfoBtn>
-              </UserName>
+              <HeaderToggle />
+              <UserWrap>
+                <Emblem>
+                  <TeamEmblem
+                    emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                  />
+                </Emblem>
+                <UserName>
+                  <Link to="/mypage">{userProfile.nickname}</Link>
+                  <InfoBtn className="info-btn" onClick={toggleUserBox}>
+                    {isopen ? "▲" : "▼"}
+                  </InfoBtn>
+                </UserName>
+              </UserWrap>
               <User $isopen={isopen}>
                 <UserInfo>
                   <UserTeam
@@ -841,22 +809,15 @@ const Header = ({ mode }) => {
             </>
           )}
           <SearchPcBtn>
-            {searchOpen ? (
-              <FontAwesomeIcon
-                icon={faXmark}
-                onClick={handleClickSearchPc}
-                className="closemark"
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                onClick={handleClickSearchPc}
-              />
-            )}
+            <FontAwesomeIcon
+              icon={searchOpen ? faXmark : faMagnifyingGlass}
+              onClick={toggleSearch}
+              className={searchOpen ? "closemark" : ""}
+            />
           </SearchPcBtn>
           <MobileMenuBtn
             onClick={handleClickMobileMenu}
-            className={mobileMenuOpen && "active"}
+            className={mobileMenuOpen ? "active" : ""}
           >
             <span></span>
             <span></span>
@@ -864,36 +825,10 @@ const Header = ({ mode }) => {
           </MobileMenuBtn>
         </Profile>
       </Nav>
-      {searchOpen && (
-        <SearchPcWrap mode={mode}>
-          <form
-            id="searchPc"
-            className="searchPc"
-            name="searchPc"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="text"
-              placeholder="찾으시는 상품을 입력해주세요."
-              // onKeyUp={onCheckEnter}
-            />
-            {/* {showNoResult && (
-                      <div className="noSearchbox">
-                        검색하신 상품이 존재하지 않습니다.
-                      </div>
-                    )} */}
-            <button>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                onClick={handleClickSearchPc}
-              />
-            </button>
-          </form>
-        </SearchPcWrap>
-      )}
+      <SearchPc mode={mode} />
 
       <MobileMenuWrap
-        className={mobileMenuOpen && "active"}
+        className={mobileMenuOpen ? "active" : ""}
         $headerHeight={headerHeight}
         $folded={isFolded}
         data-lenis-prevent
@@ -901,28 +836,11 @@ const Header = ({ mode }) => {
         <div className="bg_black"></div>
         <div className="menu_inner">
           <div className="inner_wrap">
-            <div className="search_bar">
-              <form
-                id="search_form_mb"
-                name="search_bar_mb"
-                className="search_form_mb"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <input
-                  className="search_txt"
-                  type="text"
-                  placeholder="search"
-                  // onKeyUp={onCheckEnter}
-                />
-                <button className="search_btn">
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </button>
-              </form>
-            </div>
+            <SearchMobile />
             <ul className="mb_menus">
               <li>
-                <Link to={"/"} onClick={() => setMobileMenuOpen(false)}>
-                  HOME
+                <Link to={"/"} onClick={handleClickMobileHome}>
+                  {isTeamMode ? "TEAM" : "HOME"}
                 </Link>
               </li>
               <li>
@@ -947,94 +865,16 @@ const Header = ({ mode }) => {
                       ROOKie
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(0)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      KBO
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(1)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      기아 타이거즈
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(2)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      삼성 라이온즈
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(3)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      LG 트윈스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(4)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      두산 베어스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(5)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      KT 위즈
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      tto={`/store/${getTeamJsonCode(6)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      SSG 랜더스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(7)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      롯데 자이언츠
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(8)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      한화 이글스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(9)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      NC 다이노스
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/store/${getTeamJsonCode(10)}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      키움 히어로즈
-                    </Link>
-                  </li>
+                  {teamStores.map(({ name, code }) => (
+                    <li key={code}>
+                      <Link
+                        to={`/store/${code}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {name}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </li>
               <li>

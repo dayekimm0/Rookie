@@ -104,6 +104,10 @@ const SearchBar = styled.div`
       }
     }
   }
+  @media screen and (max-width: 1024px) {
+    width: 80%;
+    margin-bottom: 20%;
+  }
 `;
 
 const TabletContainer = styled.div`
@@ -179,6 +183,8 @@ const SidebarItem = styled.div`
 
 const Sort = styled.div`
   margin-top: 10px;
+  @media screen and (max-width: 1024px) {
+  }
   @media screen and (max-width: 500px) {
     margin-left: 3%;
   }
@@ -290,6 +296,27 @@ const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
 
       {/* Mobile/Tablet */}
       <TabletContainer>
+        <SearchBar>
+          <div className="search_bar">
+            <form
+              id="search_form_mb"
+              name="search_bar_mb"
+              className="search_form_mb"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                className="search_txt"
+                type="text"
+                placeholder="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button className="search_btn">
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </button>
+            </form>
+          </div>
+        </SearchBar>
         <Sidebar>
           <SidebarToggle onClick={() => setShowCategories((prev) => !prev)}>
             <span>CATEGORY</span>

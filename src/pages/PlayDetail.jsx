@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import RecoPlay from "../components/PlayDetail/RecoPlay";
 import MainPlay from "../components/PlayDetail/MainPlay";
@@ -5,9 +7,11 @@ import RecoClip from "../components/PlayDetail/RecoClip";
 import RecoProductPart from "../components/PlayDetail/RecoProductPart";
 import PostCommentPart from "../components/PlayDetail/PostCommentPart";
 import CommentList from "../components/PlayDetail/CommentList";
-import Shortscard from "../components/Slides/Shortscard";
-import { useYoutubePlaylist } from "../hook/useYoutubePlaylist";
-import { useParams } from "react-router-dom";
+import {
+  fetchVideoDetailById,
+  fetchChannelThumbnail,
+  fetchRelatedVideosByChannelId,
+} from "../hook/useYoutubeContentList";
 
 const Container = styled.div`
   width: 100%;
@@ -87,25 +91,41 @@ const CommentTitle = styled.h2`
 
 const PlayDetail = () => {
   const { videoId } = useParams();
-  // ✅ 재생목록 ID 설정 (예: "PL...." 실제 playlistId로 교체!)
-  const playlistId = "PLuY-NTS_5Ipwm3kK7npcPz7F-KJsP68My"; // 예: Shorts 재생목록 ID
-  const {
-    data: playlist = [],
-    isLoading,
-    isError,
-  } = useYoutubePlaylist(playlistId, 1);
+  const [videoInfo, setVideoInfo] = useState(null);
+  const [channelThumbnail, setChannelThumbnail] = useState(null);
+  const [relatedVideos, setRelatedVideos] = useState([]);
 
-  // ✅ 첫 번째 영상의 썸네일을 가져오기
-  const thumbnailUrl = playlist.length
-    ? playlist[0].snippet.thumbnails?.high?.url ||
-      playlist[0].snippet.thumbnails?.medium?.url
-    : "";
+  useEffect(() => {
+    const loadVideoAndChannel = async () => {
+      const videoData = await fetchVideoDetailById(videoId);
+      setVideoInfo(videoData);
+
+      const thumbnail = await fetchChannelThumbnail(videoData.channelId);
+      setChannelThumbnail(thumbnail);
+
+      const related = await fetchRelatedVideosByChannelId(
+        videoData.channelId,
+        videoId
+      );
+      setRelatedVideos(related);
+    };
+
+    if (videoId) loadVideoAndChannel();
+  }, [videoId]);
+
+  if (!videoInfo) return <div>로딩 중...</div>;
 
   return (
     <Container>
       <PlayContent>
         <RightContent>
-          <MainPlay />
+          <MainPlay
+            videoId={videoId}
+            title={videoInfo.title}
+            channelTitle={videoInfo.channelTitle}
+            subscriberCount={videoInfo.subscriberCount}
+            teamLogo={channelThumbnail}
+          />
           <Divider />
           <RecoProductPart />
           <CommentWrapper>
@@ -120,18 +140,17 @@ const PlayDetail = () => {
         </RightContent>
         <LeftContent>
           <RecoPlayWrapper>
-            <RecoPlay />
-            <RecoPlay />
-            <RecoPlay />
-            <RecoPlay />
-            <RecoPlay />
+            {relatedVideos.map((video) => (
+              <RecoPlay
+                key={video.id}
+                videoId={video.id}
+                title={video.title}
+                thumbnail={video.thumbnail}
+                channelTitle={video.channelTitle}
+              />
+            ))}
           </RecoPlayWrapper>
-          {/* ✅ 썸네일만 필요하면 이렇게 props로 넘기기 */}
-          {isLoading && <div>로딩중...</div>}
-          {isError && <div>문제가 발생했어요.</div>}
-          {!isLoading && !isError && (
-            <RecoClip thumbnailUrl={thumbnailUrl} videoId={playlist[0].id} />
-          )}
+          <RecoClip />
         </LeftContent>
       </PlayContent>
     </Container>

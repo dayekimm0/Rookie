@@ -37,7 +37,7 @@ const router = createBrowserRouter([
         element: <PlayAll />,
       },
       {
-        path: "play/:id",
+        path: "play/:videoId",
         element: <PlayDetail />,
       },
       {

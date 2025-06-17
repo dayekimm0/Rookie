@@ -6,8 +6,9 @@ import MainCard from "./MainCard";
 import MyhomeCard from "./MyhomeCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { MyhomeNaviLeftBtn, MyhomeNaviRightBtn } from "../Slides/NaviBtnStyles";
-import { getTodayMatches, getTeamShortName } from "../../util";
+import { getTeamShortName } from "../../util";
 import { useMatchedGameVideos } from "../../hook/useYoutubePlaylist";
+import Spinner from "../Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -116,6 +117,25 @@ const SlideContainer = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
 const MyhomeMainSlide = ({ isMyhome }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
@@ -158,8 +178,18 @@ const MyhomeMainSlide = ({ isMyhome }) => {
   const { date, day, matches, isLoading, isError } = useMatchedGameVideos();
   const myhome = getTeamShortName(isMyhome);
 
-  if (isLoading) return <div>불러오는 중...</div>;
-  if (isError) return <div>문제가 발생했어요.</div>;
+  if (isLoading)
+    return (
+      <SlideLoaderWrapper>
+        <Spinner />
+      </SlideLoaderWrapper>
+    );
+  if (isError)
+    return (
+      <SlideLoaderWrapper>
+        <div>문제가 발생하였습니다.</div>
+      </SlideLoaderWrapper>
+    );
 
   // 어제 경기 중 내 구단 경기 찾기
   const myMatch = matches.find(

@@ -95,12 +95,12 @@ export const playContents = {
       },
       {
         name: "추신영",
-        playlistId: "PLPuT2QymG4qVPdsgx2xN18mhkNgizOktf",
-        max: 10,
+        playlistId: "PLPuT2QymG4qXnhU0yMOYaPxiUOAx-od-I",
+        max: 50,
       },
       {
         name: "옐이",
-        playlistId: "PLPuT2QymG4qUhyBWLY0zVyKjW9VfQG2dL",
+        playlistId: "PL4vExWweB0MMU3DbIK119RMWHm7aA11Kj",
         max: 10,
       },
       {
@@ -115,8 +115,8 @@ export const playContents = {
       },
       {
         name: "야박",
-        playlistId: "PLPuT2QymG4qWB8PRkp7oywU9KXIEgXZJK",
-        max: 10,
+        playlistId: "PL6mQCkgkh2Rc0KPcez3zAh3I2zjtfolOe",
+        max: 50,
       },
       {
         name: "코코예",
@@ -124,14 +124,39 @@ export const playContents = {
         max: 10,
       },
       {
-        name: "이나린",
-        playlistId: "PLPuT2QymG4qXP0OSYzeg2y2t2b6Ympyad",
+        name: "채소",
+        playlistId: "PL3LHuBDcSGN2BVya47YrVFS66WMKJI9ku",
         max: 10,
       },
       {
-        name: "채소",
-        playlistId: "PLPuT2QymG4qVl01fdniTL_Du8R3IkOKBR",
-        max: 10,
+        name: "삼림",
+        playlistId: "PLl9PiFCXP1EKMOF7dpn7GEqz5vLTGTxbB",
+        max: 50,
+      },
+      {
+        name: "이나린",
+        playlistId: "PLjFwk7vX_Ve3RVv4onzb5oQOkkWWhc0LS",
+        max: 50,
+      },
+      {
+        name: "따나따나",
+        playlistId: "PLPuT2QymG4qVPh5sP5z-J6Zr01Ze-tnZ2",
+        max: 50,
+      },
+      {
+        name: "엘트러버",
+        playlistId: "PLPuT2QymG4qXzmDgK3oyT7tcADWG-7wXZ",
+        max: 50,
+      },
+      {
+        name: "셀레나",
+        playlistId: "PLPuT2QymG4qUyr_tSwQcdIBcMc29zZzpd",
+        max: 50,
+      },
+      {
+        name: "다이노띵",
+        playlistId: "PLPuT2QymG4qUHmfmOotEHVyA7bGo3w_DA",
+        max: 50,
       },
     ],
     max: 15,
@@ -153,6 +178,26 @@ export const playContents = {
       {
         name: "@reallyyelly_lg",
         playlistId: "PLPuT2QymG4qXmiV8VQCMbeEii_iChPbNo",
+        max: 10,
+      },
+      {
+        name: "해써윱",
+        playlistId: "PLPuT2QymG4qV2NQOIaaR-H8pDQ1kRlHRf",
+        max: 10,
+      },
+      {
+        name: "엘트러버",
+        playlistId: "PLPuT2QymG4qUMu9DIJji7DDxbBaxOylmo",
+        max: 10,
+      },
+      {
+        name: "추신영",
+        playlistId: "PLPuT2QymG4qWF48woB6UkhjMui-Z_q9t4",
+        max: 10,
+      },
+      {
+        name: "셀레나",
+        playlistId: "PLPuT2QymG4qUp6Ia4VOPjzdeUXNx4Ix4z",
         max: 10,
       },
     ],
