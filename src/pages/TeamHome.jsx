@@ -1,4 +1,4 @@
-import { useMemo } from "react"; // useMemo 추가
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ProductBanner from "../components/ProductList/ProductBanner";
@@ -120,7 +120,7 @@ const TeamHome = () => {
   const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
 
   // Home.jsx와 동일한 상품 분류 로직 (팀별 필터링 추가)
-  const { newest, popular } = useMemo(() => {
+  const { newest, popular, teamStoreProducts } = useMemo(() => {
     // 해당 팀의 상품만 필터링
     const teamProducts = teamCode
       ? allProducts.filter((item) => item.team === teamCode)
@@ -138,7 +138,13 @@ const TeamHome = () => {
       .filter((item) => !usedIds.has(item.id))
       .slice(0, 4);
 
-    return { newest, popular };
+    // TEAM STORE용 상품 4개 (신상품, 인기상품과 겹치지 않게)
+    popular.forEach((p) => usedIds.add(p.id));
+    const teamStoreProducts = shuffled
+      .filter((item) => !usedIds.has(item.id))
+      .slice(0, 4);
+
+    return { newest, popular, teamStoreProducts };
   }, [allProducts, teamCode]);
 
   return (
@@ -164,6 +170,7 @@ const TeamHome = () => {
 
       {/* 경기일정 */}
       <UpcomingMatch teamCode={teamCode} />
+
       {/* 클립 */}
       <ShortsSlide
         teamCode={teamCode}
