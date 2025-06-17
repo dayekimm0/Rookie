@@ -1,23 +1,37 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import TeamhomeBtn from "./TeamhomeBtn";
-import { useLocation } from "react-router-dom";
 
 const UpbtnWrap = styled.div`
-  position: fixed;
-  z-index: 88;
+  position: ${({ $fixed }) => ($fixed ? "fixed" : "absolute")};
+  bottom: ${({ $fixed }) => ($fixed ? "25px" : "auto")};
+  transform: ${({ $fixed }) =>
+    $fixed ? "none" : "translateY(calc(-100% - 20px))"};
+  height: auto;
   right: 25px;
+  z-index: 88;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
-  bottom: 25px;
 
+  @media screen and (max-width: 1600px) {
+    right: 5%;
+  }
   @media screen and (max-width: 1024px) {
     right: 3%;
   }
-
+  @media screen and (max-width: 768px) {
+    bottom: ${({ $fixed }) => ($fixed ? "15px" : "auto")};
+    transform: ${({ $fixed }) =>
+      $fixed ? "none" : "translateY(calc(-100% - 15px))"};
+    gap: 5px;
+  }
   @media screen and (max-width: 500px) {
     right: 15px;
-    bottom: 15px;
+    transform: ${({ $fixed }) =>
+      $fixed ? "none" : "translateY(calc(-100% - 12px))"};
   }
 `;
 
@@ -59,6 +73,7 @@ const Upbtn = styled.div`
 `;
 
 const Footerbtns = ({ mode, isVisible }) => {
+  const [isFixed, setIsFixed] = useState(true);
   const { pathname } = useLocation();
 
   const isTeamhome = pathname.startsWith("/teamhome");
@@ -67,8 +82,35 @@ const Footerbtns = ({ mode, isVisible }) => {
     lenis.scrollTo(0); // Lenis scrollTop
   };
 
+  useEffect(() => {
+    let frame;
+
+    const loop = () => {
+      const scrollY = window.scrollY;
+      const viewportBottom = scrollY + window.innerHeight;
+      const screenWidth = window.innerWidth;
+
+      if (screenWidth <= 1600) {
+        const footerEl = document.querySelector("footer > .inner");
+        if (footerEl) {
+          const footerTop = footerEl.getBoundingClientRect().top + scrollY;
+          const distance = footerTop - viewportBottom;
+
+          setIsFixed(distance > 0);
+        }
+      } else {
+        setIsFixed(true);
+      }
+
+      frame = requestAnimationFrame(loop);
+    };
+
+    frame = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
-    <UpbtnWrap>
+    <UpbtnWrap $fixed={isFixed}>
       {isTeamhome && <TeamhomeBtn mode={mode} isVisible={isVisible} />}
       <Upbtn
         onClick={scrollToTop}

@@ -21,7 +21,8 @@ const Menus = styled.div`
   text-align: center;
   visibility: ${({ $show }) => ($show ? "visible" : "hidden")};
   opacity: ${({ $show }) => ($show ? "1" : "0")};
-  transition: visibility 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+  transition: visibility 0.3s ease, opacity 0.3s ease, height 0.3s ease;
   ul {
     display: flex;
     flex-direction: column;
@@ -71,6 +72,8 @@ const Teambtn = styled.div`
     path {
       stroke: ${({ $mode }) => ($mode === "light" ? "#888" : "#fff")};
     }
+    transform: ${({ $show }) => ($show ? "rotate(45deg)" : "rotate(0)")};
+    transition: transform 0.3s ease;
   }
 
   @media screen and (max-width: 1024px) {
@@ -130,19 +133,24 @@ const TeamhomeBtn = ({ mode, isVisible }) => {
           })}
         </ul>
       </Menus>
-      <Teambtn $mode={mode} $isVisible={isVisible} onClick={onClickBtn}>
+      <Teambtn
+        $mode={mode}
+        $isVisible={isVisible}
+        onClick={onClickBtn}
+        $show={showMenus}
+      >
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
           <path
             d="M12.9951 1.77148V24.2286"
             stroke="#666666"
-            stroke-width="1.66667"
-            stroke-linecap="round"
+            strokeWidth="1.66667"
+            strokeLinecap="round"
           />
           <path
             d="M24.2285 12.9951L1.77135 12.9951"
             stroke="#666666"
-            stroke-width="1.66667"
-            stroke-linecap="round"
+            strokeWidth="1.66667"
+            strokeLinecap="round"
           />
         </svg>
       </Teambtn>
