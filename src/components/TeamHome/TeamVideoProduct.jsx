@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import YouTube from "react-youtube";
+import { getTeamStoreVideo, getYoutubeThumbnail } from "../../utils/teamVideos";
 
 const Section = styled.div`
   background: var(--dark);
@@ -75,45 +77,101 @@ const VideoPlaceholder = styled.div`
   }
 `;
 
-// const PlayButton = styled.div`
-//   width: 80px;
-//   height: 80px;
-//   background: rgba(255, 255, 255, 0.9);
-//   border-radius: 50%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   margin-bottom: 20px;
-//   cursor: pointer;
-//   transition: all 0.3s ease;
+// 구단별 영상 썸네일
+const VideoThumbnail = styled.div`
+  width: 100%;
+  height: 100%;
+  background-image: url(${(props) => props.thumbnail});
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 
-//   &:hover {
-//     background: rgba(255, 255, 255, 1);
-//     transform: scale(1.1);
-//   }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+  }
+`;
 
-//   &::after {
-//     content: "";
-//     width: 0;
-//     height: 0;
-//     border-left: 25px solid #333;
-//     border-top: 15px solid transparent;
-//     border-bottom: 15px solid transparent;
-//     margin-left: 8px;
-//   }
+const PlayButton = styled.div`
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
 
-//   @media screen and (max-width: 768px) {
-//     width: 60px;
-//     height: 60px;
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
 
-//     &::after {
-//       border-left: 18px solid #333;
-//       border-top: 12px solid transparent;
-//       border-bottom: 12px solid transparent;
-//       margin-left: 6px;
-//     }
-//   }
-// `;
+  &::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 25px solid #333;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    margin-left: 8px;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+
+    &::after {
+      border-left: 18px solid #333;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      margin-left: 6px;
+    }
+  }
+`;
+
+const VideoInfo = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2;
+  color: white;
+
+  h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 768px) {
+    bottom: 15px;
+    left: 15px;
+
+    h3 {
+      font-size: 18px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+  }
+`;
 
 // 우측 제품 리스트 영역
 const ProductSection = styled.div`
@@ -222,6 +280,13 @@ const ProductPrice = styled.div`
 `;
 
 const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  // TEAM STORE인 경우에만 구단별 영상 데이터 가져오기
+  const videoData =
+    sectionType === "TEAM_STORE" ? getTeamStoreVideo(teamCode) : null;
+
   // Mock 데이터 - 추후 JSON으로 교체
   const mockProducts = [
     {
@@ -254,8 +319,18 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
     },
   ];
 
-  // const videoTitle =
-  //   sectionType === "TEAM_STORE" ? "행복한 두린이날!" : "스파오 패션 리뷰";
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
+
+  const handleReady = () => {
+    setIsReady(true);
+  };
+
+  const handleError = () => {
+    console.warn("YouTube player error 발생");
+    setIsReady(false);
+  };
 
   return (
     <Section>
@@ -265,13 +340,67 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
         <ContentWrapper>
           {/* 좌측 영상 영역 */}
           <VideoSection>
-            <VideoPlaceholder>
-              {/* <PlayButton />
-              <div>{videoTitle}</div>
-              <div style={{ fontSize: "14px", opacity: 0.8, marginTop: "8px" }}>
-                구단 대표 콘텐츠를 만나보세요
-              </div> */}
-            </VideoPlaceholder>
+            {sectionType === "TEAM_STORE" && videoData ? (
+              // TEAM STORE - 구단별 고정 영상
+              isPlaying ? (
+                <>
+                  {!isReady && (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        background: "#000",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#fff",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        zIndex: 3,
+                      }}
+                    >
+                      영상 로딩 중...
+                    </div>
+                  )}
+                  <YouTube
+                    videoId={videoData.videoId}
+                    onReady={handleReady}
+                    onError={handleError}
+                    opts={{
+                      width: "100%",
+                      height: "100%",
+                      playerVars: {
+                        autoplay: 1,
+                        rel: 0,
+                        modestbranding: 1,
+                      },
+                    }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      visibility: isReady ? "visible" : "hidden",
+                    }}
+                  />
+                </>
+              ) : (
+                <VideoThumbnail
+                  thumbnail={getYoutubeThumbnail(videoData.videoId)}
+                  onClick={handlePlay}
+                >
+                  <PlayButton />
+                  <VideoInfo>
+                    <h3>{videoData.title}</h3>
+                    <p>{videoData.description}</p>
+                  </VideoInfo>
+                </VideoThumbnail>
+              )
+            ) : (
+              // ROOKie 파트너존 - 기존 플레이스홀더
+              <VideoPlaceholder>
+                {/* 기존 주석 처리된 내용 그대로 유지 */}
+              </VideoPlaceholder>
+            )}
           </VideoSection>
 
           {/* 우측 제품 리스트 영역 */}
