@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import thumbnail1 from "/src/images/mockup/play_thumbnail1.png";
-import teamLogo from "/src/images/emblem/emblem_doosanB.svg";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faThumbsUp as farThumbsUp,
   faThumbsDown as farThumbsDown,
-} from "@fortawesome/free-regular-svg-icons"; // regular
+} from "@fortawesome/free-regular-svg-icons";
+import YouTube from "react-youtube";
 
 const Container = styled.div`
   width: 1200px;
@@ -17,16 +16,20 @@ const Container = styled.div`
 `;
 
 const PlayThumbnail = styled.div`
-  width: 1200px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 12px;
   overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  div {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  iframe {
+    width: 100% !important;
+    height: 100% !important;
   }
 `;
 
@@ -49,7 +52,7 @@ const PlayInfo = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
 `;
 
 const TeamLogo = styled.div`
@@ -61,6 +64,7 @@ const TeamLogo = styled.div`
   img {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
   }
 `;
@@ -78,7 +82,7 @@ const TeamName = styled.h2`
 
 const TeamSubscribe = styled.h3`
   font-size: 1.4rem;
-  color: var(--gray6);
+  color: var(--grayC);
 `;
 
 const PlayLike = styled.div`
@@ -108,29 +112,40 @@ const StyledLabel = styled.label`
 `;
 
 const MainPlay = ({
-  thumbnail,
+  videoId,
   title,
   channelTitle,
   subscriberCount,
   teamLogo,
 }) => {
   const [selected, setSelected] = useState("");
+  const opts = {
+    width: "100%",
+    playerVars: {
+      autoplay: 1,
+      controls: 1,
+      rel: 0,
+      modestbranding: 1,
+      fs: 1,
+      cc_load_policy: 0,
+    },
+  };
   return (
     <Container>
       <PlayThumbnail>
-        <img src={thumbnail} alt="thumbnail1" />
+        <YouTube videoId={videoId} opts={opts} />
       </PlayThumbnail>
       <PlayTitle>{title}</PlayTitle>
       <PlayInfoWrapper>
         <PlayInfo>
           <TeamLogo>
-            <img src={teamLogo} alt="teamLogo" />
+            <img src={teamLogo} alt="채널 썸네일" />
           </TeamLogo>
           <TeamInfo>
             <TeamName>
               {channelTitle} <p></p>
             </TeamName>
-            <TeamSubscribe>마이팬 26.1만명{subscriberCount}</TeamSubscribe>
+            <TeamSubscribe>마이팬 {subscriberCount}</TeamSubscribe>
           </TeamInfo>
         </PlayInfo>
         <PlayLike>
