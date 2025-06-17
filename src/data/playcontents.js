@@ -115,8 +115,8 @@ export const playContents = {
       },
       {
         name: "야박",
-        playlistId: "PLPuT2QymG4qWB8PRkp7oywU9KXIEgXZJK",
-        max: 10,
+        playlistId: "PL6mQCkgkh2Rc0KPcez3zAh3I2zjtfolOe",
+        max: 50,
       },
       {
         name: "코코예",
@@ -144,8 +144,18 @@ export const playContents = {
         max: 50,
       },
       {
+        name: "엘트러버",
+        playlistId: "PLPuT2QymG4qXzmDgK3oyT7tcADWG-7wXZ",
+        max: 50,
+      },
+      {
         name: "셀레나",
         playlistId: "PLPuT2QymG4qUyr_tSwQcdIBcMc29zZzpd",
+        max: 50,
+      },
+      {
+        name: "다이노띵",
+        playlistId: "PLPuT2QymG4qUHmfmOotEHVyA7bGo3w_DA",
         max: 50,
       },
     ],
@@ -171,12 +181,22 @@ export const playContents = {
         max: 10,
       },
       {
-        name: "@추신영",
+        name: "해써윱",
+        playlistId: "PLPuT2QymG4qV2NQOIaaR-H8pDQ1kRlHRf",
+        max: 10,
+      },
+      {
+        name: "엘트러버",
+        playlistId: "PLPuT2QymG4qUMu9DIJji7DDxbBaxOylmo",
+        max: 10,
+      },
+      {
+        name: "추신영",
         playlistId: "PLPuT2QymG4qWF48woB6UkhjMui-Z_q9t4",
         max: 10,
       },
       {
-        name: "@셀레나",
+        name: "셀레나",
         playlistId: "PLPuT2QymG4qUp6Ia4VOPjzdeUXNx4Ix4z",
         max: 10,
       },
