@@ -7,7 +7,7 @@ import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import {
   useYoutubePlaylist,
   useYoutubeVideoDetails,
-} from "../../hook/useYoutubePlaylist";
+} from "../../hook/useYoutubePlayList";
 import Shortscard from "../Slides/Shortscard";
 
 const Container = styled.div`
@@ -30,7 +30,7 @@ const SlideContainer = styled.div`
   .swiper {
     overflow: visible !important;
     p {
-      color: var(--gray1); 
+      color: var(--gray1);
     }
   }
 `;

@@ -175,19 +175,28 @@ const Card = styled.div`
 const MatchCard = ({ match, teamCode }) => {
   const matchDay = match;
 
+  const shortName = getTeamNameShortEng(teamCode);
+
   const homeMatch = matchDay.matches.find(
     (match) =>
-      match.awayTeam.name === getTeamNameShortEng(teamCode) ||
-      match.homeTeam.name === getTeamNameShortEng(teamCode)
+      match.awayTeam.name === shortName || match.homeTeam.name === shortName
   );
 
-  const homeCode = homeMatch.awayTeam.code;
-  const awayCode = homeMatch.homeTeam.code;
+  const isHome = homeMatch.homeTeam.name === shortName;
 
-  const homeEmblem = useMemo(() => getEmblem(homeCode), [homeCode]);
-  const awayEmblem = useMemo(() => getEmblem(awayCode), [awayCode]);
-  const homeName = useMemo(() => getTeamName(homeCode), [homeCode]);
-  const awayName = useMemo(() => getTeamName(awayCode), [awayCode]);
+  const leftTeam = isHome ? homeMatch.homeTeam : homeMatch.awayTeam;
+  const rightTeam = isHome ? homeMatch.awayTeam : homeMatch.homeTeam;
+
+  const leftEmblem = useMemo(() => getEmblem(leftTeam.code), [leftTeam.code]);
+  const rightEmblem = useMemo(
+    () => getEmblem(rightTeam.code),
+    [rightTeam.code]
+  );
+  const leftName = useMemo(() => getTeamName(leftTeam.code), [leftTeam.code]);
+  const rightName = useMemo(
+    () => getTeamName(rightTeam.code),
+    [rightTeam.code]
+  );
 
   const formattedDate = useMemo(() => {
     const d = new Date(matchDay.date);
@@ -210,15 +219,15 @@ const MatchCard = ({ match, teamCode }) => {
         <ul>
           <li className="teams">
             <figure>
-              <img src={awayEmblem} alt="emblem" />
+              <img src={leftEmblem} alt="emblem" />
             </figure>
-            <p>{awayName}</p>
+            <p>{leftName}</p>
           </li>
           <li className="teams">
             <figure>
-              <img src={homeEmblem} alt="emblem" />
+              <img src={rightEmblem} alt="emblem" />
             </figure>
-            <p>{homeName}</p>
+            <p>{rightName}</p>
           </li>
         </ul>
         <div className="timetable">
