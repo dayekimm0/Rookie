@@ -7,8 +7,11 @@ import RecoClip from "../components/PlayDetail/RecoClip";
 import RecoProductPart from "../components/PlayDetail/RecoProductPart";
 import PostCommentPart from "../components/PlayDetail/PostCommentPart";
 import CommentList from "../components/PlayDetail/CommentList";
-import Shortscard from "../components/Slides/Shortscard";
-import { useYoutubePlaylist } from "../hook/useYoutubePlaylist";
+import {
+  fetchVideoDetailById,
+  fetchChannelThumbnail,
+  fetchRelatedVideosByChannelId,
+} from "../hook/useYoutubeContentList";
 
 const Container = styled.div`
   width: 100%;
@@ -88,12 +91,41 @@ const CommentTitle = styled.h2`
 
 const PlayDetail = () => {
   const { videoId } = useParams();
+  const [videoInfo, setVideoInfo] = useState(null);
+  const [channelThumbnail, setChannelThumbnail] = useState(null);
+  const [relatedVideos, setRelatedVideos] = useState([]);
+
+  useEffect(() => {
+    const loadVideoAndChannel = async () => {
+      const videoData = await fetchVideoDetailById(videoId);
+      setVideoInfo(videoData);
+
+      const thumbnail = await fetchChannelThumbnail(videoData.channelId);
+      setChannelThumbnail(thumbnail);
+
+      const related = await fetchRelatedVideosByChannelId(
+        videoData.channelId,
+        videoId
+      );
+      setRelatedVideos(related);
+    };
+
+    if (videoId) loadVideoAndChannel();
+  }, [videoId]);
+
+  if (!videoInfo) return <div>로딩 중...</div>;
 
   return (
     <Container>
       <PlayContent>
         <RightContent>
-          <MainPlay />
+          <MainPlay
+            videoId={videoId}
+            title={videoInfo.title}
+            channelTitle={videoInfo.channelTitle}
+            subscriberCount={videoInfo.subscriberCount}
+            teamLogo={channelThumbnail}
+          />
           <Divider />
           <RecoProductPart />
           <CommentWrapper>
@@ -108,11 +140,15 @@ const PlayDetail = () => {
         </RightContent>
         <LeftContent>
           <RecoPlayWrapper>
-            <RecoPlay />
-            <RecoPlay />
-            <RecoPlay />
-            <RecoPlay />
-            <RecoPlay />
+            {relatedVideos.map((video) => (
+              <RecoPlay
+                key={video.id}
+                videoId={video.id}
+                title={video.title}
+                thumbnail={video.thumbnail}
+                channelTitle={video.channelTitle}
+              />
+            ))}
           </RecoPlayWrapper>
           <RecoClip />
         </LeftContent>
