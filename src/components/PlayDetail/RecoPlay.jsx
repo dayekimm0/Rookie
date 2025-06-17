@@ -49,14 +49,18 @@ const TimeAgo = styled.h3`
   color: var(--gray8);
 `;
 
-const RecoPlay = () => {
+const RecoPlay = ({ videoId, title, thumbnail, channelTitle }) => {
+  const handleClick = () => {
+    // 영상 상세 페이지로 이동
+    window.location.href = `/play/${videoId}`;
+  };
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <RecoPlayThumbnail>
-        <img src={thumbnail2} alt="thumbnail2" />
+        <img src={thumbnail} alt={title} />
       </RecoPlayThumbnail>
       <RecoPlayInfo>
-        <RecoPlayTitle>5월 25일 NC vs 두산 | 2025 정규시즌 H/L</RecoPlayTitle>
+        <RecoPlayTitle>{title}</RecoPlayTitle>
         <RecoPlayTeam>BEARS TV</RecoPlayTeam>
         <PlayDesc>
           <ViewCount>조회수 5.3만회</ViewCount>
