@@ -12,6 +12,7 @@ import InfluencerZone from "../components/TeamHome/InfluencerZone";
 import HomeProducts from "../components/Home/HomeProducts"; // 추가
 import useAllProductsQuery from "../hook/useAllProductsQuery"; // 추가
 import HomeList from "../components/Home/HomeList";
+import influencerData from "../data/influencer_playlist.json";
 
 const Container = styled.div`
   color: var(--light);
@@ -148,6 +149,10 @@ const TeamHome = () => {
     return { newest, popular, teamStoreProducts };
   }, [allProducts, teamCode]);
 
+  // 인플루언서 존 데이터
+  const teamData = influencerData.teams.find((team) => team.team === teamCode);
+  const influencers = teamData?.influencers || [];
+
   return (
     <Container>
       <BannerWrapper>
@@ -218,7 +223,9 @@ const TeamHome = () => {
       />
 
       {/* 인플루언서 영역 */}
-      <InfluencerZone />
+      {influencers.map((inf, i) => (
+        <InfluencerZone key={i} influencer={inf} teamCode={teamCode} />
+      ))}
       <HomeList title={"타 구단 바로가기"} />
     </Container>
   );

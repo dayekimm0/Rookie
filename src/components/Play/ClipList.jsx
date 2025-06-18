@@ -2,8 +2,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-
-import PlusIcon from "../../images/icons/plusIcon.svg";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { ClipLeftBtn, ClipRightBtn } from "../Slides/NaviBtnStyles";
 
@@ -13,10 +11,11 @@ import ClipDetail from "../ClipDetail";
 import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
+import useHeaderStore from "../../stores/headerHeightStore";
 
 const ContentList = styled.div`
   position: relative;
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -94,7 +93,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const ClipList = ({ type, title }) => {
+const ClipList = ({ type, title, externalVideos }) => {
   const [videos, setVideos] = useState([]);
   const [swiper, setSwiper] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
@@ -124,6 +123,14 @@ const ClipList = ({ type, title }) => {
     load();
   }, [type]);
 
+  //인플루언서 페이지 클립 전용
+  useEffect(() => {
+    if (Array.isArray(externalVideos)) {
+      setVideos(externalVideos);
+      return;
+    }
+  }, [externalVideos]);
+
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
   }, [swiper]);
@@ -141,6 +148,42 @@ const ClipList = ({ type, title }) => {
     setSelectedVideoId(null);
     swiper?.autoplay?.start();
   };
+
+  //클립 모달 스크롤 막기
+  useEffect(() => {
+    if (selectedVideoId) {
+      const y = window.scrollY;
+      lenis.stop();
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${y}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.dataset.scrollY = y;
+    } else {
+      const y = parseFloat(document.body.dataset.scrollY || "0");
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+
+      window.scrollTo(0, y);
+      lenis.start();
+    }
+  }, [selectedVideoId]);
+
+  //모달열림상태 헤더에게 전달
+  const { setScrollLocked } = useHeaderStore.getState();
+
+  useEffect(() => {
+    if (selectedVideoId) {
+      setScrollLocked(true);
+    } else {
+      setScrollLocked(false);
+    }
+  }, [selectedVideoId]);
 
   return (
     <>
@@ -212,7 +255,9 @@ const ClipList = ({ type, title }) => {
           </ClipRightBtn>
         </Container>
       </ContentList>
-      <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+      {selectedVideoId && (
+        <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+      )}
     </>
   );
 };

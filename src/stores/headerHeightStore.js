@@ -12,6 +12,9 @@ const useHeaderStore = create((set) => ({
 
   headerHeight: 177,
   setHeaderHeight: (value) => set({ headerHeight: value }),
+
+  isScrollLocked: false,
+  setScrollLocked: (value) => set({ isScrollLocked: value }),
 }));
 
 export default useHeaderStore;

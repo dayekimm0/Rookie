@@ -52,7 +52,7 @@ const ContentsArea = styled.div`
   width: 63%;
 
   .videoWrap {
-    & > div:last-of-type {
+    & > div:nth-of-type(2) {
       margin-top: 80px;
     }
   }
@@ -64,7 +64,7 @@ const ContentsArea = styled.div`
   }
   @media screen and (max-width: 1280px) {
     .videoWrap {
-      & > div:last-of-type {
+      & > div:nth-of-type(2) {
         margin-top: 70px;
       }
     }
@@ -77,7 +77,7 @@ const ContentsArea = styled.div`
   }
   @media screen and (max-width: 768px) {
     .videoWrap {
-      & > div:last-of-type {
+      & > div:nth-of-type(2) {
         margin-top: 50px;
       }
     }
@@ -106,7 +106,8 @@ const ContentTitle = styled.h4`
   }
 `;
 
-const InfluencerZone = () => {
+const InfluencerZone = ({ influencer, teamCode }) => {
+  const { name, profile, description, play, clip } = influencer;
   const { data: allProducts = [], isLoading: isProductLoading } =
     useAllProductsQuery();
 
@@ -123,20 +124,18 @@ const InfluencerZone = () => {
       <Container>
         <ContentsArea>
           <div className="videoWrap">
-            <div className="clipWrap">
-              <ContentTitle>ROOKie CLIP</ContentTitle>
-              <InfClipSlide
-                playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
-                max={21}
-              />
-            </div>
-            <div className="playWrap">
-              <ContentTitle>ROOKie PLAY</ContentTitle>
-              <InfSlide
-                playlistId={"PLR9TDYZHxlTI2m7kth4EXqwj4VcfuaBSA"}
-                max={21}
-              />
-            </div>
+            {clip && (
+              <div className="clipWrap">
+                <ContentTitle>ROOKie CLIP</ContentTitle>
+                <InfClipSlide playlistId={clip} max={21} />
+              </div>
+            )}
+            {play && (
+              <div className="playWrap">
+                <ContentTitle>ROOKie PLAY</ContentTitle>
+                <InfSlide playlistId={play} max={21} />
+              </div>
+            )}
           </div>
           <hr className="line" />
           <div className="storeWrap">
@@ -144,7 +143,15 @@ const InfluencerZone = () => {
             {isProductLoading ? "Loading" : <InfProducts products={newest} />}
           </div>
         </ContentsArea>
-        <InfProfileCard />
+        <InfProfileCard
+          name={name}
+          profile={profile}
+          description={description}
+          clipId={clip}
+          playId={play}
+          storeCount={newest.length}
+          teamCode={teamCode}
+        />
       </Container>
     </Inner>
   );

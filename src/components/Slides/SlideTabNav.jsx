@@ -3,9 +3,10 @@ import styled from "styled-components";
 
 const TabNav = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   margin-bottom: 24px;
+  flex-wrap: wrap;
 
   button {
     padding: 8px 18px;
@@ -15,11 +16,26 @@ const TabNav = styled.div`
     background: var(--gray2);
     color: var(--grayE);
     cursor: pointer;
+    word-break: keep-all;
 
     &.active {
       background: #f5f5f5;
       color: #111;
       font-weight: 600;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    gap: 10px;
+    button {
+      padding: 7px 16px;
+      font-size: 1.3rem;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    gap: 8px;
+    button {
+      padding: 6px 14px;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -32,7 +48,7 @@ const SlideTabNav = ({
   onSelectTab,
 }) => {
   return (
-    <TabNav className="inner">
+    <TabNav className="inner test">
       <button
         className={isAllTab ? "active" : ""}
         onClick={() => onSelectTab("all", null)}

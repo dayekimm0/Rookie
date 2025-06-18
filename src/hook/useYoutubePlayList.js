@@ -43,7 +43,7 @@ const fetchVideoDetails = async ({ queryKey }) => {
   return res.data.items;
 };
 
-// 플레이리스트 정보보
+// 플레이리스트 정보
 export const useYoutubePlaylist = (
   playlistId,
   maxResults = 12,
@@ -123,5 +123,50 @@ export const useMatchedGameVideos = () => {
     matches,
     isLoading: highlightsLoading || isLoading,
     isError,
+  };
+};
+
+//플레이리스트 영상 개수만 가져오는 훅
+export const usePlaylistCount = (playlistId, enabled = true) => {
+  return useQuery({
+    queryKey: ["playlistCount", playlistId],
+    queryFn: async () => {
+      if (!playlistId) return 0;
+
+      const res = await axios.get(
+        "https://www.googleapis.com/youtube/v3/playlistItems",
+        {
+          params: {
+            part: "id", // 최소한의 정보만 요청
+            playlistId,
+            maxResults: 1, // 속도 빠르게
+            key: API_KEY,
+          },
+        }
+      );
+
+      return res.data.pageInfo?.totalResults || 0;
+    },
+    enabled: !!playlistId && enabled,
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useTotalPlaylistVideoCount = (clipId, playId, enabled = true) => {
+  const { data: clipCount = 0, isLoading: clipLoading } = usePlaylistCount(
+    clipId,
+    !!clipId && enabled
+  );
+  const { data: playCount = 0, isLoading: playLoading } = usePlaylistCount(
+    playId,
+    !!playId && enabled
+  );
+
+  return {
+    totalCount: clipCount + playCount,
+    isLoading: clipLoading || playLoading,
   };
 };
