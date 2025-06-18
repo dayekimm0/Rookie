@@ -181,7 +181,7 @@ const ModalButton = styled.button`
   }
 `;
 
-const MypageModal = ({ isOpen, closeTeamModal }) => {
+const MyTeamModal = ({ isOpen, closeTeamModal }) => {
   useBodyScrollLock(isOpen);
   const { userProfile, setUser } = authStore();
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -310,4 +310,4 @@ const MypageModal = ({ isOpen, closeTeamModal }) => {
   );
 };
 
-export default MypageModal;
+export default MyTeamModal;

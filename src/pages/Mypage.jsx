@@ -5,8 +5,9 @@ import { Outlet } from "react-router-dom";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 import authStore from "../stores/AuthStore";
-import MyCoupon from "../components/Mypage/MyCoupon";
+import MyCoupon from "../components/Mypage/MyCouponModal";
 import coupon from ".././images/icons/coupon.svg";
+import partnerLogo from ".././images/logos/Partner_Logo.svg";
 import thumbs_up from ".././images/icons/thumbs-up.svg";
 import { getTeamColor, getEmblem } from ".././util";
 
@@ -77,6 +78,7 @@ const Profile = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   .userName {
     h4 {
       font-size: 2.4rem;
@@ -84,9 +86,16 @@ const Profile = styled.div`
       font-weight: 700;
       text-align: center;
     }
-    h6 {
-      font-size: 1.6rem;
-      color: var(--gray6);
+    .favoriteTeam {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      h6 {
+        font-size: 1.6rem;
+        text-align: center;
+        color: var(--gray6);
+      }
     }
   }
   & > span {
@@ -429,7 +438,13 @@ const Mypage = () => {
 
                 <div className="userName">
                   <h4>{userProfile.nickname}</h4>
-                  <h6>{userProfile.favoriteTeam}</h6>
+                  <div className="favoriteTeam">
+                    <h6>{userProfile.favoriteTeam}</h6>
+                    {userProfile.email === "gosim@naver.com" ||
+                    userProfile.email === "mangom@daum.net" ? (
+                      <img src={partnerLogo} alt="" />
+                    ) : null}
+                  </div>
                 </div>
               </div>
               <span />

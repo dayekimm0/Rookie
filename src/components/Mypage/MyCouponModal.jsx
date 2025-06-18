@@ -84,7 +84,8 @@ const ModalTWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-bottom: 40px;
+  border-top: 1px solid var(--grayE);
+  padding: 20px 0;
   overflow-wrap: break-word;
   @media screen and (max-width: 600px) {
     margin-bottom: 20px;
@@ -127,6 +128,7 @@ const ModalButton = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  margin-top: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
   &:hover {
@@ -142,7 +144,7 @@ const ModalButton = styled.button`
   }
 `;
 
-const MyCoupon = ({ isOpen, closeModal, coupons }) => {
+const MyCouponModal = ({ isOpen, closeModal, coupons }) => {
   const getDiscountText = (title) => {
     switch (title) {
       case "HOME RUN !":
@@ -187,4 +189,4 @@ const MyCoupon = ({ isOpen, closeModal, coupons }) => {
   );
 };
 
-export default MyCoupon;
+export default MyCouponModal;

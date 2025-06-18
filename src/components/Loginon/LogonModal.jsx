@@ -171,7 +171,7 @@ const LogonModal = ({ isOpen, closeModal, contentType }) => {
     }
   };
 
-  const { title, text1T, text2T, text1, text2 } = getModalContent();
+  const { title, text1T, text1, text2, text2T } = getModalContent();
 
   return (
     <ModalOverlay isOpen={isOpen} onClick={closeModal}>
