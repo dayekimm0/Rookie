@@ -17,4 +17,5 @@ export const useSearchStore = create((set) => ({
   searchOpen: false,
   toggleSearch: () => set((state) => ({ searchOpen: !state.searchOpen })),
   closeSearch: () => set({ searchOpen: false }),
+  setSearchOpen: (val) => set({ searchOpen: val }),
 }));
