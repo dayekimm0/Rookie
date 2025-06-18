@@ -11,6 +11,7 @@ import {
   fetchVideoDetailById,
   fetchChannelThumbnail,
   fetchRelatedVideosByChannelId,
+  fetchPlaylistVideos,
 } from "../hook/useYoutubeContentList";
 
 const Container = styled.div`
@@ -93,24 +94,37 @@ const PlayDetail = () => {
   const { videoId } = useParams();
   const [videoInfo, setVideoInfo] = useState(null);
   const [channelThumbnail, setChannelThumbnail] = useState(null);
-  const [relatedVideos, setRelatedVideos] = useState([]);
+  const [playlistVideos, setPlaylistVideos] = useState([]);
 
   useEffect(() => {
-    const loadVideoAndChannel = async () => {
+    const loadData = async () => {
       const videoData = await fetchVideoDetailById(videoId);
       setVideoInfo(videoData);
 
       const thumbnail = await fetchChannelThumbnail(videoData.channelId);
       setChannelThumbnail(thumbnail);
 
-      const related = await fetchRelatedVideosByChannelId(
-        videoData.channelId,
-        videoId
-      );
-      setRelatedVideos(related);
+      const playlistId = videoData.playlistId;
+      if (playlistId) {
+        const videos = await fetchPlaylistVideos(playlistId);
+        setPlaylistVideos(
+          videos.filter(
+            (video) =>
+              video.id !== videoId &&
+              !video.title.toLowerCase().includes("#shorts") &&
+              video.duration > 30
+          )
+        );
+      } else {
+        const related = await fetchRelatedVideosByChannelId(
+          videoData.channelId,
+          videoId
+        );
+        setPlaylistVideos(related);
+      }
     };
 
-    if (videoId) loadVideoAndChannel();
+    if (videoId) loadData();
   }, [videoId]);
 
   if (!videoInfo) return <div>로딩 중...</div>;
@@ -140,7 +154,7 @@ const PlayDetail = () => {
         </RightContent>
         <LeftContent>
           <RecoPlayWrapper>
-            {relatedVideos.map((video) => (
+            {playlistVideos.slice(0, 4).map((video) => (
               <RecoPlay
                 key={video.id}
                 videoId={video.id}
