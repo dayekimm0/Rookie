@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getTeamColor, getEmblem, getScrollbarWidth } from "../../util";
 import authStore from "../../stores/AuthStore";
-import MypageModal from "./MypageModal";
+import MypageModal from "./MyTeamModal";
+import SettingModal from "./SettingModal";
+import AddressModal from "./AddressModal";
 import partnerLogo from "../../images/logos/Partner_Logo.svg";
 
 const Inner = styled.div`
@@ -238,11 +240,11 @@ const Setting = () => {
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
+  const [teamModal, setTeamModal] = useState(false);
+
   const openTeamModal = () => {
     setTeamModal(true);
   };
-
-  const [teamModal, setTeamModal] = useState(false);
 
   const closeTeamModal = () => {
     setTeamModal(false);
@@ -259,6 +261,31 @@ const Setting = () => {
       document.body.style.paddingRight = "";
     }
   }, [teamModal]);
+
+  const [modalState, setModalState] = useState({
+    email: false,
+    password: false,
+    nickname: false,
+  });
+
+  const openModal = (type) => {
+    setModalState((prev) => ({ ...prev, [type]: true }));
+  };
+
+  const closeModal = (type) => {
+    setModalState((prev) => ({ ...prev, [type]: false }));
+  };
+
+  const [addressModal, setAddressModal] = useState(false);
+
+  const openAddressModal = () => {
+    setAddressModal(true);
+  };
+
+  const closeAddressModal = () => {
+    setAddressModal(false);
+    window.location.reload();
+  };
 
   return (
     <Inner>
@@ -301,7 +328,6 @@ const Setting = () => {
             <br />
             {userProfile.email}
           </InfoDetail>
-          <InfoButton>변경</InfoButton>
         </InfoElement>
         <hr className="myinfoLine" />
         <InfoElement>
@@ -310,7 +336,7 @@ const Setting = () => {
             <br />
             *********
           </InfoDetail>
-          <InfoButton>변경</InfoButton>
+          <InfoButton onClick={() => openModal("password")}>변경</InfoButton>
         </InfoElement>
         <hr className="myinfoLine" />
         <InfoElement>
@@ -319,7 +345,7 @@ const Setting = () => {
             <br />
             {userProfile.nickname}
           </InfoDetail>
-          <InfoButton>변경</InfoButton>
+          <InfoButton onClick={() => openModal("nickname")}>변경</InfoButton>
         </InfoElement>
         <hr className="myinfoLine" />
         <InfoElement>
@@ -338,7 +364,7 @@ const Setting = () => {
               <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
             )}
           </InfoDetail>
-          <InfoButton>변경</InfoButton>
+          <InfoButton onClick={openAddressModal}>변경</InfoButton>
         </InfoElement>
         <hr className="myinfoLine" />
         <Delete>
@@ -355,6 +381,26 @@ const Setting = () => {
       {teamModal && (
         <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
       )}
+
+      <SettingModal
+        isOpen={modalState.email}
+        closeModal={() => closeModal("email")}
+        contentType="email"
+      />
+      <SettingModal
+        isOpen={modalState.password}
+        closeModal={() => closeModal("password")}
+        contentType="password"
+      />
+      <SettingModal
+        isOpen={modalState.nickname}
+        closeModal={() => closeModal("nickname")}
+        contentType="nickname"
+      />
+      <AddressModal
+        isOpen={addressModal}
+        closeAddressModal={closeAddressModal}
+      />
     </Inner>
   );
 };

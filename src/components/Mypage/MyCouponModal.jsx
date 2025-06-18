@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import logo from "../../images/logos/Rookie_logo.svg";
-import useBodyScrollLock from "../../hook/useBodyScrollLock";
 
 const ModalOverlay = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== "isOpen",
@@ -14,7 +13,7 @@ const ModalOverlay = styled.div.withConfig({
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1500;
   visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -27,6 +26,7 @@ const ModalContent = styled.div`
   padding: 70px;
   position: relative;
   overflow-y: auto;
+  z-index: 2000;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   @media screen and (max-width: 1024px) {
     width: 480px;
@@ -84,7 +84,8 @@ const ModalTWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-bottom: 40px;
+  border-top: 1px solid var(--grayE);
+  padding: 20px 0;
   overflow-wrap: break-word;
   @media screen and (max-width: 600px) {
     margin-bottom: 20px;
@@ -106,7 +107,8 @@ const ModalTextT = styled.p`
 const ModalText = styled.p`
   font-size: 1.4rem;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 300;
+  color: var(--gray8);
   @media screen and (max-width: 1024px) {
     font-size: 1.2rem;
   }
@@ -126,6 +128,7 @@ const ModalButton = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  margin-top: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
   &:hover {
@@ -141,38 +144,21 @@ const ModalButton = styled.button`
   }
 `;
 
-const LogonModal = ({ isOpen, closeModal, contentType }) => {
-  useBodyScrollLock(isOpen);
-  const getModalContent = () => {
-    switch (contentType) {
-      case "required":
-        return {
-          title: "ROOKie 계정 & 웹사이트 이용약관",
-          text1T: "제1조 (목적)",
-          text1:
-            "이 약관은 온라인으로 제공하는 ROOKie 계정, 홈페이지 등 · 제반 서비스(이하 서비스)의 이용과 관련하여 회사와 회원 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.",
-          text2T: "제2조 (용어의 정의)",
-          text2:
-            "이 약관에서 사용하는 정의는 다음과 같습니다. 회사라 함은 온라인을 통하여 서비스를 제공하는 사업자를 의미합니다. “회원” 또는 “이용자”라 함은 본 약관에 동의하고 서비스 이용 자격을 부여받은 자를 의미합니다. 크래프톤 계정(이하 계정)이라 함은 회원의 식별과 서비스 이용을 위하여 회원이 선정하고 회사가 부여하는 문자, 숫자 또는 특수문자의 조합을 의미합니다.",
-        };
-      case "privacy":
-        return {
-          title: "개인정보 수집 및 이용",
-          text1T: "",
-          text1:
-            "본 개인정보 처리방침은 Rookie (본 방침에서 “Rookie”, “당사”, “당사의” 또는 “당사를”로 칭함) 가 디지털 체험, 모바일 앱, 매장, 온라인 또는 오프라인 행사, 프로모션 또는 기타 제품 또는 서비스를 포함하여 Rookie 웹사이트를 통해 고객이 Rookie와 상호 작용할 때 수집, 생성 및 처리하는 개인 데이터에 적용되며 이 모든 것은 “플랫폼”의 일부입니다. 또한 개인 데이터의 사용, 공유 및 보호 방법, 개인 데이터와 관련된 선택 사항 및 당사에 연락할 수 있는 방법에 대해서 설명합니다.",
-          text2T:
-            "개인 데이터 처리를 담당하는 Rookie 법인은 귀하가 플랫폼과 상호작용하는 방식 및 귀하가 거주하는 장소에 따라 달라집니다.",
-          text2:
-            "대한민국(“한국”)의 경우, 유한회사 Rookie는 Rookie 및 앱을 통한 한국 내 제품 구매, 마케팅, 특정 행사, 콘테스트, 프로모션 참여와 관련된 개인 데이터 처리에 대한 책임이 있습니다. Rookie는 Rookie앱을 포함하여 플랫폼과 관련된 기타 모든 개인 데이터 처리에 대한 책임이 있습니다.",
-        };
+const MyCouponModal = ({ isOpen, closeModal, coupons }) => {
+  const getDiscountText = (title) => {
+    switch (title) {
+      case "HOME RUN !":
+        return "80%";
+      case "TRIPLE !":
+        return "50%";
+      case "DOUBLE !":
+        return "30%";
+      case "SINGLE !":
+        return "10%";
       default:
-        return { title: "약관", text1: "약관 내용이 없습니다." };
+        return title; // 혹시 다른 이름의 쿠폰이 들어올 경우 대비
     }
   };
-
-  const { title, text1T, text1, text2, text2T } = getModalContent();
-
   return (
     <ModalOverlay isOpen={isOpen} onClick={closeModal}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -180,15 +166,20 @@ const LogonModal = ({ isOpen, closeModal, contentType }) => {
           <Logo>
             <LogoImg src={logo} alt="rookielogo" />
           </Logo>
-          <ModalTitle>{title}</ModalTitle>
+          <ModalTitle>내 쿠폰</ModalTitle>
         </LogoWrapper>
+        {coupons.length > 0 ? (
+          <ModalTWrapper>
+            <ModalTextT>{getDiscountText(coupons[0].title)}</ModalTextT>
+            <ModalText>
+              [EVENT] {coupons[0].title} COUPON | 적용 제한금액 없음
+            </ModalText>
+          </ModalTWrapper>
+        ) : null}
+
         <ModalTWrapper>
-          <ModalTextT>{text1T}</ModalTextT>
-          <ModalText>{text1}</ModalText>
-        </ModalTWrapper>
-        <ModalTWrapper>
-          <ModalTextT>{text2T}</ModalTextT>
-          <ModalText>{text2}</ModalText>
+          <ModalTextT>1,000원</ModalTextT>
+          <ModalText>[6월 특가] 10,000원이상 구매시 적용 가능</ModalText>
         </ModalTWrapper>
         <ModalButton type="button" onClick={closeModal}>
           돌아가기
@@ -198,4 +189,4 @@ const LogonModal = ({ isOpen, closeModal, contentType }) => {
   );
 };
 
-export default LogonModal;
+export default MyCouponModal;
