@@ -78,6 +78,26 @@ const Information = styled.p`
   }
 `;
 
+const WarningText = styled.p`
+  width: 100%;
+  max-width: 800px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--red);
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
+`;
+
 const AddressPlace = styled.div`
   width: 100%;
   max-width: 800px;
@@ -134,29 +154,53 @@ const MyAddress = () => {
     setRequest(e.target.value);
   };
 
-  const { userProfile, isLoading } = authStore();
+  const { userProfile, tempAddress, isLoading } = authStore();
 
   if (isLoading || !userProfile) {
     return <p>배송지 정보를 불러오는 중입니다...</p>;
   }
 
+  const username = tempAddress?.username ?? userProfile.username;
+  const postalCode = tempAddress?.postalCode ?? userProfile.postalCode;
+  const address = tempAddress?.address ?? userProfile.address;
+  const detailedAddress =
+    tempAddress?.detailedAddress ?? userProfile.detailedAddress;
+  const phoneNumber = tempAddress?.phoneNumber ?? userProfile.phoneNumber;
+
+  const hasTempAddress =
+    tempAddress &&
+    postalCode?.trim() !== "" &&
+    address?.trim() !== "" &&
+    detailedAddress?.trim() !== "";
+
+  const hasUserAddress =
+    userProfile.postalCode?.trim() !== "" &&
+    userProfile.address?.trim() !== "" &&
+    userProfile.detailedAddress?.trim() !== "";
+
   return (
     <AddressInfo>
       <AddressDetail>
         <AddressTitle>수령인</AddressTitle>
-        <Information>{userProfile.username}</Information>
+        <Information>{username}</Information>
       </AddressDetail>
       <AddressDetail>
         <AddressTitle>배송주소</AddressTitle>
         <AddressPlace>
-          <Information> {userProfile.postalCode}</Information>
-          <Information> {userProfile.address}</Information>
-          <Information> {userProfile.detailedAddress}</Information>
+          {hasTempAddress || hasUserAddress ? (
+            <>
+              <Information>{postalCode || "우편번호 없음"}</Information>
+              <Information>{address || "주소 없음"}</Information>
+              <Information>{detailedAddress || "상세주소 없음"}</Information>
+            </>
+          ) : (
+            <WarningText>주소를 입력해주세요.</WarningText>
+          )}
         </AddressPlace>
       </AddressDetail>
       <AddressDetail>
         <AddressTitle>연락처</AddressTitle>
-        <Information>{userProfile.phoneNumber}</Information>
+        <Information>{phoneNumber}</Information>
       </AddressDetail>
       <AddressDetail>
         <AddressTitle>요청사항</AddressTitle>
@@ -165,9 +209,7 @@ const MyAddress = () => {
           onChange={handleRequestChange}
           isRequestPlaceholder={request === "배송 요청사항을 선택해주세요."}
         >
-          <option selected disabled>
-            배송 요청사항을 선택해주세요.
-          </option>
+          <option disabled>배송 요청사항을 선택해주세요.</option>
           <option value="guard">경비실에 맡겨주세요.</option>
           <option value="door">문 앞에 놔주세요.</option>
           <option value="call">배송 전에 연락 주세요.</option>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import NewAddress from "./NewAddress";
 import PostModal from "./PostModal";
@@ -111,7 +111,10 @@ const CloseButton = styled.button`
 `;
 
 const AddressModal = ({ isOpen, closeModal }) => {
+  const { userProfile, tempAddress } = authStore();
+
   const [postModalOpen, setPostModalOpen] = useState(false);
+
   const [selectedAddress, setSelectedAddress] = useState({
     username: "",
     postalCode: "",
@@ -120,11 +123,23 @@ const AddressModal = ({ isOpen, closeModal }) => {
     phoneNumber: "",
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedAddress({
+        username: tempAddress?.username || userProfile?.username || "",
+        postalCode: tempAddress?.zonecode || userProfile?.postalCode || "",
+        address: tempAddress?.address || userProfile?.address || "",
+        detailAddress:
+          tempAddress?.detail || userProfile?.detailedAddress || "",
+        phoneNumber: tempAddress?.phoneNumber || userProfile?.phoneNumber || "",
+      });
+    }
+  }, [isOpen, tempAddress, userProfile]);
+
   const openPostModal = () => setPostModalOpen(true);
   const closePostModal = () => setPostModalOpen(false);
 
   const onAddressSelect = (data) => {
-    console.log(data);
     setSelectedAddress((prev) => ({
       ...prev,
       postalCode: data.postalCode,
@@ -133,7 +148,16 @@ const AddressModal = ({ isOpen, closeModal }) => {
     closePostModal();
   };
 
-  console.log(selectedAddress);
+  const handleSave = () => {
+    authStore.getState().updateTempAddress({
+      username: selectedAddress.username,
+      postalCode: selectedAddress.postalCode,
+      address: selectedAddress.address,
+      detailedAddress: selectedAddress.detailAddress,
+      phoneNumber: selectedAddress.phoneNumber,
+    });
+    closeModal();
+  };
 
   return (
     <>
@@ -155,22 +179,8 @@ const AddressModal = ({ isOpen, closeModal }) => {
             detailAddress={selectedAddress.detailAddress}
             phoneNumber={selectedAddress.phoneNumber}
             setSelectedAddress={setSelectedAddress}
-            onAddressSelect={onAddressSelect}
           />
-          <Button
-            type="button"
-            value="수정하기"
-            onClick={() => {
-              authStore.getState().updateUserAddress({
-                username: selectedAddress.username,
-                postalCode: selectedAddress.postalCode,
-                address: selectedAddress.address,
-                detailedAddress: selectedAddress.detailAddress,
-                phoneNumber: selectedAddress.phoneNumber,
-              });
-              closeModal(); // 모달 닫기
-            }}
-          />
+          <Button type="button" value="수정하기" onClick={handleSave} />
         </ModalContent>
       </ModalOverlay>
 
