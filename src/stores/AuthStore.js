@@ -12,6 +12,7 @@ const authStore = create(
       isLoading: true,
       gamePlayed: false,
       comments: [], //playdetail 댓글 추가
+      tempAddress: null, //임시 배송 주소
       setUser: (user, profile, gamePlayed) => {
         console.log(
           "🟢 setUser 호출, user:",
@@ -30,6 +31,7 @@ const authStore = create(
           user: null,
           userProfile: null,
           isLoading: false,
+          tempAddress: null,
         });
         try {
           localStorage.removeItem("auth-storage");
@@ -37,14 +39,39 @@ const authStore = create(
           console.warn("persist 제거 실패", e);
         }
       },
-      // 주소 수정
+
+      // 주소 수정 (실제 userProfile 주소 변경) - 안전하게 null 체크 추가
       updateUserAddress: (newAddress) =>
-        set((state) => ({
-          userProfile: {
+        set((state) => {
+          const updatedProfile = {
             ...state.userProfile,
             ...newAddress,
-          },
-        })),
+          };
+          return { userProfile: { ...updatedProfile } };
+        }),
+
+      updateTempAddress: (newAddress) =>
+        set((state) => {
+          const current = state.tempAddress || {};
+          const isDifferent =
+            current.zonecode !== newAddress.zonecode ||
+            current.address !== newAddress.address ||
+            current.detail !== newAddress.detail ||
+            current.username !== newAddress.username ||
+            current.phoneNumber !== newAddress.phoneNumber;
+
+          if (!isDifferent) return {};
+
+          return {
+            tempAddress: {
+              ...current,
+              ...newAddress,
+            },
+          };
+        }),
+
+      clearTempAddress: () => set(() => ({ tempAddress: null })),
+
       //댓글 추가
       addComment: (comment) =>
         set((state) => ({
@@ -63,6 +90,7 @@ const authStore = create(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
+        userProfile: state.userProfile, // userProfile 꼭 포함
         gamePlayed: state.gamePlayed,
         comments: state.comments,
       }),
