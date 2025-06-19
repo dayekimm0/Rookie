@@ -5,6 +5,7 @@ import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import MyAddress from "../components/Payment/MyAddress";
 import AddressModal from "../components/Payment/AddressModal";
+import LogonRookielogo from "../images/logos/Logon_Rookie_logo.svg";
 
 const Container = styled.div`
   width: 100%;
@@ -164,6 +165,32 @@ const Items = styled.div`
   }
 `;
 
+const ListMiddle = styled.div`
+  height: 360px;
+  position: relative;
+  @media screen and (max-width: 1024px) {
+    height: 270px;
+  }
+  @media screen and (max-width: 500px) {
+    height: 170px;
+  }
+`;
+
+const Listimg = styled.img`
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  @media screen and (max-width: 1024px) {
+    width: 280px;
+  }
+  @media screen and (max-width: 768px) {
+    width: 240px;
+  }
+`;
+
 const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -212,9 +239,20 @@ const Payment = () => {
   };
 
   const handlePaymentSubmit = () => {
-    alert("결제가 완료되었습니다.");
+    const purchasedOrder = {
+      orderItems,
+      coupon: selectedCoupon,
+      totalPrice,
+      purchasedAt: new Date().toISOString(), // 구매 시각 저장
+    };
+
+    const prevHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
+    prevHistory.push(purchasedOrder);
+    localStorage.setItem("orderHistory", JSON.stringify(prevHistory));
+
     localStorage.removeItem("cartItems");
     localStorage.removeItem("appliedCoupon");
+    alert("결제가 완료되었습니다.");
     navigate("/store");
   };
 
@@ -247,7 +285,9 @@ const Payment = () => {
                 <ProductItem key={item.id} item={item} page="payment" />
               ))
             ) : (
-              <p>주문할 상품이 없습니다.</p>
+              <ListMiddle>
+                <Listimg src={LogonRookielogo} alt="LogonRookielogo" />
+              </ListMiddle>
             )}
           </Items>
         </List>

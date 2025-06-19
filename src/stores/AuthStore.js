@@ -31,6 +31,11 @@ const authStore = create(
           userProfile: null,
           isLoading: false,
         });
+        try {
+          localStorage.removeItem("auth-storage");
+        } catch (e) {
+          console.warn("persist 제거 실패", e);
+        }
       },
       // 주소 수정
       updateUserAddress: (newAddress) =>
