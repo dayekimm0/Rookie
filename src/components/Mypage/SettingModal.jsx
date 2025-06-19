@@ -175,6 +175,17 @@ const ModalButton = styled.button`
   }
 `;
 
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  color: var(--dark);
+`;
+
 const SettingModal = ({ isOpen, closeModal, contentType }) => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -288,6 +299,7 @@ const SettingModal = ({ isOpen, closeModal, contentType }) => {
   return (
     <ModalOverlay isOpen={isOpen} onClick={closeModal}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
+        <CloseButton onClick={closeModal}>⨯</CloseButton>
         <LogoWrapper>
           <Logo>
             <LogoImg src={logo} alt="rookielogo" />

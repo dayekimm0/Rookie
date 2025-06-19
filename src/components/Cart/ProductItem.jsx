@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import CustomCheckbox from "./CustomCheckbox";
 import useCartStore from "../../stores/cartStore";
@@ -254,11 +255,16 @@ const MultiPrice = styled.li`
 
 const ProductItem = ({ item, isChecked, onToggle }) => {
   const { id, thumbnail, team, name, option, quantity, price } = item;
+  const { pathname } = useLocation();
+  console.log(pathname);
 
   return (
     <Item key={id}>
       <Thumbnail>
-        <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        {pathname === "/mypage" ? null : (
+          <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        )}
+
         <ItemImage src={thumbnail} />
       </Thumbnail>
       <ItemName>

@@ -33,6 +33,11 @@ const authStore = create(
           isLoading: false,
           tempAddress: null,
         });
+        try {
+          localStorage.removeItem("auth-storage");
+        } catch (e) {
+          console.warn("persist 제거 실패", e);
+        }
       },
 
       // 주소 수정 (실제 userProfile 주소 변경) - 안전하게 null 체크 추가

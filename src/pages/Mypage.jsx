@@ -132,6 +132,9 @@ const Profile = styled.div`
     .userName {
       margin-left: 20px;
       margin-bottom: 20px;
+      .favoriteTeam {
+        justify-content: start;
+      }
       h4 {
         font-size: 1.8rem;
         text-align: start;
@@ -402,6 +405,29 @@ const Mypage = () => {
   }, [userProfile]);
 
   console.log(coupons);
+
+  useEffect(() => {
+    if (!userProfile) {
+      navigate("/", { replace: true });
+    }
+  }, [userProfile, navigate]);
+
+  if (!userProfile) {
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
+  }
 
   return (
     <Container>
