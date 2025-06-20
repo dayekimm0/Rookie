@@ -31,12 +31,7 @@ const MyPlaySlidewithTabs = ({ allTab, mypageTabs }) => {
           allTab={allTab}
           onSwiperReady={(s) => (swiperRef.current = s)}
         />
-      ) : (
-        <SingleTabSlide
-          selectedTab={selectedTab}
-          onSwiperReady={(s) => (swiperRef.current = s)}
-        />
-      )}
+      ) : null}
     </>
   );
 };

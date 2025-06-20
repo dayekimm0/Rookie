@@ -2,6 +2,11 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import { useYoutubeVideoDetails } from "../../hook/useYoutubePlayList";
+
 import BArrow from "../../images/icons/Bmain_banner_arr.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import PlayCard from "../Slides/PlayCard";
@@ -33,9 +38,31 @@ const SlideContainer = styled.div`
 `;
 
 const MyTabSlideRenderer = ({ items, onSwiperReady }) => {
+  const [videoIds, setVideoIds] = useState([]);
+  const [likesLoading, setLikesLoading] = useState(true);
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setLikesLoading(false);
+        return;
+      }
+
+      const snap = await getDoc(doc(db, "userLikes", user.uid));
+      setVideoIds(snap.data()?.likes || []);
+      setLikesLoading(false);
+    };
+    fetchLikes();
+  }, []);
+
+  const { data: videos = [], isLoading: videosLoading } =
+    useYoutubeVideoDetails(videoIds, !likesLoading && videoIds.length > 0);
+
+  // swiper
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -52,21 +79,21 @@ const MyTabSlideRenderer = ({ items, onSwiperReady }) => {
   }, [swiper]);
 
   const slides = useMemo(() => {
-    return items.map((item) => {
-      const videoId = item.snippet.resourceId?.videoId || item.id?.videoId;
-      const { title, thumbnails } = item.snippet;
-
+    return videos.map((video) => {
+      const vid = video.id;
+      const { title, thumbnails } = video.snippet;
+      const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
       return (
-        <SwiperSlide key={videoId}>
-          <PlayCard
-            thumbnail={thumbnails?.maxres?.url || thumbnails?.medium?.url}
-            title={title}
-            onClick={() => console.log("Clicked:", videoId)}
-          />
+        <SwiperSlide key={vid}>
+          <PlayCard thumbnail={thumbUrl} title={title} />
         </SwiperSlide>
       );
     });
-  }, [items]);
+  }, [videos]);
+
+  if (likesLoading || videosLoading) {
+    return <p>로딩 중...</p>;
+  }
 
   return (
     <Container>

@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import ProductItem from "../Cart/ProductItem";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+
+import authStore from "../../stores/AuthStore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+import ProductItem from "../Cart/ProductItem";
+import useCartStore from "../../stores/cartStore";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import banner_rookie from "../../images/banners/banner_rookie.png";
-import authStore from "../../stores/AuthStore";
 import LogonRookielogo from "../../images/logos/Logon_Rookie_logo.svg";
 
 const Inner = styled.div`
@@ -264,7 +267,10 @@ const Listimg = styled.img`
 
 const MyShopping = () => {
   const { userProfile } = authStore();
+  const { cartItems } = useCartStore();
   const [orders, setOrders] = useState([]);
+  const [coupons, setCoupons] = useState([]);
+  console.log(coupons);
 
   useEffect(() => {
     const saveOrders = JSON.parse(localStorage.getItem("orderHistory")) || [];
@@ -272,6 +278,33 @@ const MyShopping = () => {
   }, []);
 
   const allOrderItems = orders.flatMap((order) => order.orderItems);
+  console.log(allOrderItems.length);
+
+  useEffect(() => {
+    const fetchWonCoupons = async () => {
+      if (!userProfile?.uid) return;
+
+      const db = getFirestore();
+      const WonCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "wonCoupons"
+      );
+
+      try {
+        const snapshot = await getDocs(WonCouponsRef);
+        const result = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCoupons(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchWonCoupons();
+  }, [userProfile]);
 
   return (
     <Inner>
@@ -302,13 +335,13 @@ const MyShopping = () => {
 
       <MyShoppingInner>
         <MyShoppingDetail>
-          <b>2</b>
+          <b>{cartItems.length}</b>
           <br />
           장바구니
         </MyShoppingDetail>
         <MyShoppingLine />
         <MyShoppingDetail>
-          <b>1</b>
+          <b>{allOrderItems.length}</b>
           <br />
           구매완료
         </MyShoppingDetail>
@@ -320,7 +353,7 @@ const MyShopping = () => {
         </MyShoppingDetail>
         <MyShoppingLine />
         <MyShoppingDetail>
-          <b>1</b>
+          <b>{coupons.length + 1}</b>
           <br />
           쿠폰
         </MyShoppingDetail>

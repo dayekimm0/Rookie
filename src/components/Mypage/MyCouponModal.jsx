@@ -93,7 +93,7 @@ const ModalTWrapper = styled.div`
 `;
 
 const ModalTextT = styled.p`
-  font-size: 1.8rem;
+  font-size: 2rem;
   line-height: 1.3;
   font-weight: bold;
   @media screen and (max-width: 1024px) {
@@ -148,13 +148,13 @@ const MyCouponModal = ({ isOpen, closeModal, coupons }) => {
   const getDiscountText = (title) => {
     switch (title) {
       case "HOME RUN !":
-        return "80%";
+        return "HOME RUN [80%]";
       case "TRIPLE !":
-        return "50%";
+        return "TRIPLE [50%]";
       case "DOUBLE !":
-        return "30%";
+        return "DOUBLE [30%]";
       case "SINGLE !":
-        return "10%";
+        return "SINGLE [10%]";
       default:
         return title; // 혹시 다른 이름의 쿠폰이 들어올 경우 대비
     }
@@ -178,8 +178,8 @@ const MyCouponModal = ({ isOpen, closeModal, coupons }) => {
         ) : null}
 
         <ModalTWrapper>
-          <ModalTextT>1,000원</ModalTextT>
-          <ModalText>[6월 특가] 10,000원이상 구매시 적용 가능</ModalText>
+          <ModalTextT>WELCOME! [5%]</ModalTextT>
+          <ModalText>[WELCOME] 10,000원이상 구매시 적용 가능</ModalText>
         </ModalTWrapper>
         <ModalButton type="button" onClick={closeModal}>
           돌아가기
