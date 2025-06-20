@@ -1,11 +1,14 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useSearchStore } from "../../stores/headersStore";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Wrapper = styled.div`
   .search_bar {
     position: relative;
-    border-bottom: 1px solid #111;
+    border-bottom: 1px solid var(--dark);
     padding-bottom: 8px;
 
     form {
@@ -23,12 +26,12 @@ const Wrapper = styled.div`
 
       .search_txt {
         border-radius: 100px;
-        background: #fff;
+        background: var(--light);
         width: 100%;
         overflow: hidden;
         transition: all 0.4s;
         font-size: 1.2rem;
-        color: #111;
+        color: var(--dark);
         &::placeholder {
           font-size: 1.2rem;
           font-family: "pretendard";
@@ -44,28 +47,51 @@ const Wrapper = styled.div`
       }
 
       .search_btn {
-        font-size: 16px;
+        font-size: 1.6rem;
       }
     }
   }
 `;
 
-const SearchMobile = () => {
+const SearchMobile = ({
+  mobileSearchOpen,
+  setMobileSearchOpen,
+  setMobileMenuOpen,
+}) => {
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const trimmed = keyword.trim();
+    if (!trimmed) return;
+
+    navigate(`/play/search?keyword=${encodeURIComponent(trimmed)}`);
+    setMobileSearchOpen(false);
+    setMobileMenuOpen(false);
+    setKeyword("");
+  };
+
+  useEffect(() => {
+    setMobileSearchOpen(false);
+    setMobileMenuOpen(false);
+    setKeyword("");
+  }, [location.pathname]);
+
   return (
     <Wrapper>
       <div className="search_bar">
-        <form
-          id="search_form_mb"
-          name="search_bar_mb"
-          onSubmit={(e) => e.preventDefault()}
-        >
+        <form id="search_form_mb" name="search_bar_mb" onSubmit={handleSearch}>
           <input
             className="search_txt"
             type="text"
             placeholder="search"
-            // onKeyUp={onCheckEnter}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            autoFocus
           />
-          <button className="search_btn">
+          <button className="search_btn" type="submit">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </form>

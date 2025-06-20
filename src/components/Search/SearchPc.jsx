@@ -1,19 +1,16 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSearchStore } from "../../stores/headersStore";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SearchPcWrap = styled.div`
   position: absolute;
   width: 100%;
   padding: 40px;
-  background: ${({ mode }) => (mode === "light" ? "#fff" : "#111")};
-  border-bottom: 1px solid;
-  border-color: ${({ mode }) => (mode === "light" ? "#ddd" : "#333")};
-
-  @media screen and (max-width: 1024px) {
-    display: none;
-  }
+  background: var(--bg);
+  border-bottom: 1px solid var(--gray3);
 `;
 
 const Form = styled.form`
@@ -25,17 +22,17 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 20px;
-  border: 1px solid ${({ mode }) => (mode === "light" ? "#ddd" : "#444")};
+  border: 1px solid var(--gray3);
 
   input {
     flex: 1;
     background: none;
     border: none;
-    color: ${({ mode }) => (mode === "light" ? "#111" : "#fff")};
+    color: var(--light);
     font-size: 1.6rem;
     font-family: "Figtree", "Pretendard", sans-serif;
     &::placeholder {
-      color: ${({ mode }) => (mode === "light" ? "#aaa" : "#aaa")};
+      color: var(--light);
       transition: opacity 0.4s;
       opacity: 1;
     }
@@ -50,21 +47,45 @@ const Form = styled.form`
   button {
     border: none;
     background: none;
-    color: ${({ mode }) => (mode === "light" ? "#111" : "#fff")};
+    color: var(--light);
     font-size: 20px;
     cursor: pointer;
   }
 `;
 
-const SearchPc = ({ mode }) => {
-  const { searchOpen } = useSearchStore();
+const SearchPc = () => {
+  const { searchOpen, setSearchOpen } = useSearchStore();
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const trimmedKeyword = keyword.trim();
+    if (!trimmedKeyword) return;
+
+    navigate(`/play/search?keyword=${encodeURIComponent(trimmedKeyword)}`);
+    setKeyword("");
+    setSearchOpen(false);
+  };
+
+  useEffect(() => {
+    setSearchOpen(false);
+    setKeyword("");
+  }, [location.pathname, setSearchOpen]);
 
   if (!searchOpen) return null;
 
   return (
-    <SearchPcWrap mode={mode}>
-      <Form mode={mode} onSubmit={(e) => e.preventDefault()}>
-        <input type="text" placeholder="찾으시는 상품을 입력해주세요." />
+    <SearchPcWrap>
+      <Form onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="찾으시는 동영상을 입력해주세요."
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          autoFocus
+        />
         <button type="submit">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>

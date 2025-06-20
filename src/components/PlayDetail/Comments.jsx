@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import authStore from "../../stores/AuthStore";
+import authStore from "../../stores/authStore";
 
 const CommentWrapper = styled.div`
   display: flex;
@@ -51,26 +51,22 @@ const Comment = styled.div`
   font-size: 1.4rem;
 `;
 
-// 시간 계산 함수 예시
-const timeAgo = (date) => {
-  const now = new Date();
-  const diff = (now - new Date(date)) / 1000;
-
-  if (diff < 60) return `${Math.floor(diff)}초 전`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
-  if (diff < 604800) return `${Math.floor(diff / 86400)}일 전`;
-  return `${Math.floor(diff / 604800)}주 전`;
-};
-
-const Comments = () => {
-  const comments = authStore((state) => state.comments || []);
+const Comments = ({ comments }) => {
+  const timeAgo = (date) => {
+    const now = new Date();
+    const diff = (now - new Date(date)) / 1000;
+    if (diff < 60) return `${Math.floor(diff)}초 전`;
+    if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+    if (diff < 604800) return `${Math.floor(diff / 86400)}일 전`;
+    return `${Math.floor(diff / 604800)}주 전`;
+  };
 
   return (
     <>
       {comments.length === 0 && <p>댓글이 없습니다.</p>}
-      {comments.map((comment) => (
-        <CommentWrapper key={comment.id}>
+      {comments.map((comment, index) => (
+        <CommentWrapper key={comment.id || index}>
           <UserImg>
             {comment.userProfileImage ? (
               <img src={comment.userProfileImage} alt="profile" />
@@ -80,7 +76,7 @@ const Comments = () => {
             <UserInfo>
               <UserName>
                 {comment.author || "user"}
-                <p>{timeAgo(comment.createdAt)}</p>
+                <p>{timeAgo(comment.createdAt?.toDate?.() || new Date())}</p>
               </UserName>
             </UserInfo>
             <Comment>{comment.text}</Comment>

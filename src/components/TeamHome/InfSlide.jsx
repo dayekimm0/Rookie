@@ -8,7 +8,7 @@ import InfPlayCard from "./InfPlayCard";
 import {
   useYoutubePlaylist,
   useYoutubeVideoDetails,
-} from "../../hook/useYoutubePlaylist";
+} from "../../hook/useYoutubePlayList";
 
 const Container = styled.div`
   position: relative;

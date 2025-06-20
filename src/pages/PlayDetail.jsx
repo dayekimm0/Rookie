@@ -95,6 +95,7 @@ const PlayDetail = () => {
   const [videoInfo, setVideoInfo] = useState(null);
   const [channelThumbnail, setChannelThumbnail] = useState(null);
   const [playlistVideos, setPlaylistVideos] = useState([]);
+  const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -112,7 +113,7 @@ const PlayDetail = () => {
             (video) =>
               video.id !== videoId &&
               !video.title.toLowerCase().includes("#shorts") &&
-              video.duration > 30
+              video.duration > 60
           )
         );
       } else {
@@ -145,11 +146,11 @@ const PlayDetail = () => {
           <CommentWrapper>
             <CommentTop>
               <CommentTitle>
-                댓글 <span>294</span>
+                댓글 <span>{commentCount}</span>
               </CommentTitle>
             </CommentTop>
-            <CommentList />
-            <PostCommentPart />
+            <CommentList videoId={videoId} onCountChange={setCommentCount} />
+            <PostCommentPart videoId={videoId} />
           </CommentWrapper>
         </RightContent>
         <LeftContent>

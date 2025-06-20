@@ -186,7 +186,7 @@ const InfProfileCard = () => {
     <Container>
       <div className="topProfile">
         <ProfileImg>
-          <img src="" alt="Profile" />
+          <img src="./" alt="Profile" />
         </ProfileImg>
         <Name>
           <h4>이름름</h4>
