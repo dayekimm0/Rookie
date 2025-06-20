@@ -353,7 +353,7 @@ const MyShopping = () => {
         </MyShoppingDetail>
         <MyShoppingLine />
         <MyShoppingDetail>
-          <b>{coupons.length + 1}</b>
+          <b>{coupons.length}</b>
           <br />
           쿠폰
         </MyShoppingDetail>
