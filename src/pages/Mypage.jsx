@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import authStore from "../stores/AuthStore";
 import { Outlet } from "react-router-dom";
-import coupon from ".././images/icons/coupon.svg";
-import thumbs_up from ".././images/icons/thumbs-up.svg";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+import authStore from "../stores/AuthStore";
 import { getTeamColor, getEmblem } from ".././util";
+import MyCoupon from "../components/Mypage/MyCouponModal";
+import coupon from ".././images/icons/coupon.svg";
+import partnerLogo from ".././images/logos/Partner_Logo.svg";
+import thumbs_up from ".././images/icons/thumbs-up.svg";
 
 const Container = styled.div`
   display: flex;
@@ -74,6 +78,7 @@ const Profile = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   .userName {
     h4 {
       font-size: 2.4rem;
@@ -81,9 +86,16 @@ const Profile = styled.div`
       font-weight: 700;
       text-align: center;
     }
-    h6 {
-      font-size: 1.6rem;
-      color: var(--gray6);
+    .favoriteTeam {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      h6 {
+        font-size: 1.6rem;
+        text-align: center;
+        color: var(--gray6);
+      }
     }
   }
   & > span {
@@ -120,6 +132,9 @@ const Profile = styled.div`
     .userName {
       margin-left: 20px;
       margin-bottom: 20px;
+      .favoriteTeam {
+        justify-content: start;
+      }
       h4 {
         font-size: 1.8rem;
         text-align: start;
@@ -340,6 +355,9 @@ const teamToEmblemId = {
 
 const Mypage = () => {
   const { userProfile } = authStore();
+  const [modalState, setModalState] = useState(false);
+  const [coupons, setCoupons] = useState([]);
+  console.log(coupons);
   const navigate = useNavigate();
   const location = useLocation();
   const TeamEmblem = ({ emblemId }) => {
@@ -353,9 +371,62 @@ const Mypage = () => {
     { path: "/mypage/mysetting", label: "프로필 설정" },
   ];
 
+  const myCouponOpen = () => {
+    setModalState((prev) => !prev);
+  };
+
   const goVideo = () => navigate("/mypage/myvideo");
 
   const { isLoading } = authStore();
+
+  useEffect(() => {
+    const fetchWonCoupons = async () => {
+      if (!userProfile?.uid) return;
+
+      const db = getFirestore();
+      const WonCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "wonCoupons"
+      );
+
+      try {
+        const snapshot = await getDocs(WonCouponsRef);
+        const result = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCoupons(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchWonCoupons();
+  }, [userProfile]);
+
+  useEffect(() => {
+    if (!userProfile) {
+      navigate("/", { replace: true });
+    }
+  }, [userProfile, navigate]);
+
+  if (!userProfile) {
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
+  }
 
   return (
     <Container>
@@ -391,16 +462,22 @@ const Mypage = () => {
                 </UserTeam>
 
                 <div className="userName">
-                  <h4>갓효바</h4>
-                  <h6>삼성 라이온즈</h6>
+                  <h4>{userProfile.nickname}</h4>
+                  <div className="favoriteTeam">
+                    <h6>{userProfile.favoriteTeam}</h6>
+                    {userProfile.email === "gosim@naver.com" ||
+                    userProfile.email === "mangom@daum.net" ? (
+                      <img src={partnerLogo} alt="" />
+                    ) : null}
+                  </div>
                 </div>
               </div>
               <span />
               <ProfileUnder>
-                <Icon>
+                <Icon onClick={myCouponOpen}>
                   <img src={coupon} alt="coupon" />
                   <p>내 쿠폰</p>
-                  <span>3</span>
+                  <span>{coupons.length + 1}</span>
                 </Icon>
                 <Icon onClick={goVideo}>
                   <img src={thumbs_up} alt="thumbs_up" />
@@ -431,6 +508,11 @@ const Mypage = () => {
           </RightInner>
         </>
       )}
+      <MyCoupon
+        coupons={coupons}
+        isOpen={modalState}
+        closeModal={() => setModalState(false)}
+      />
     </Container>
   );
 };

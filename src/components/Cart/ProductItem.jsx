@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import CustomCheckbox from "./CustomCheckbox";
 import useCartStore from "../../stores/cartStore";
@@ -23,6 +24,7 @@ const TabletGrid = `
 const Item = styled.div`
   width: 100%;
   display: grid;
+  column-gap: 20px;
   grid-template-columns: ${DeskTopGrid};
   justify-content: space-between;
   align-items: center;
@@ -254,27 +256,35 @@ const MultiPrice = styled.li`
 
 const ProductItem = ({ item, isChecked, onToggle }) => {
   const { id, thumbnail, team, name, option, quantity, price } = item;
+  const { pathname } = useLocation();
 
   return (
     <Item key={id}>
       <Thumbnail>
-        <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        {pathname === "/mypage" ? null : (
+          <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        )}
+
         <ItemImage src={thumbnail} />
       </Thumbnail>
       <ItemName>
         <TeamName>{getTeamNameKor(team)}</TeamName>
         <ProductName>{name}</ProductName>
       </ItemName>
+
       <ItemOption>
-        <li>
-          <p className="mobile">옵션</p>
-          <p className="option">{option}</p>
-        </li>
+        {option && option.length > 0 && option[0] && (
+          <li>
+            <p className="mobile">옵션</p>
+            <p className="option">{option[0]}</p>
+          </li>
+        )}
         <li>
           <p className="mobile">수량</p>
           <p className="quantity">{quantity}개</p>
         </li>
       </ItemOption>
+
       <SinglePrice>
         <p className="mobile">상품가격</p>
         <p>{price.toLocaleString()}원</p>

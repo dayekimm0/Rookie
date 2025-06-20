@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import MyAddress from "../components/Payment/MyAddress";
 import AddressModal from "../components/Payment/AddressModal";
+import LogonRookielogo from "../images/logos/Logon_Rookie_logo.svg";
+import authStore from "../stores/AuthStore";
+import useCartStore from "../stores/cartStore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Container = styled.div`
   width: 100%;
@@ -164,6 +169,32 @@ const Items = styled.div`
   }
 `;
 
+const ListMiddle = styled.div`
+  height: 360px;
+  position: relative;
+  @media screen and (max-width: 1024px) {
+    height: 270px;
+  }
+  @media screen and (max-width: 500px) {
+    height: 170px;
+  }
+`;
+
+const Listimg = styled.img`
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  @media screen and (max-width: 1024px) {
+    width: 280px;
+  }
+  @media screen and (max-width: 768px) {
+    width: 240px;
+  }
+`;
+
 const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -172,56 +203,124 @@ const Payment = () => {
   const couponFromCart = location.state?.coupon || null;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { user } = authStore();
+  const userUid = user?.uid || null;
+
   const [availableCoupons, setAvailableCoupons] = useState([]);
-  const [selectedCouponId, setSelectedCouponId] = useState(
-    couponFromCart?.id || ""
-  );
+  const [selectedCoupon, setSelectedCoupon] = useState(couponFromCart || null);
+
+  const clearCart = useCartStore((state) => state.clearCart);
+
+  // Firestore에서 유저 쿠폰 불러오기
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      if (!userUid) {
+        setAvailableCoupons([]);
+        return;
+      }
+
+      try {
+        const snapshot = await getDocs(
+          collection(db, "users", userUid, "wonCoupons")
+        );
+        const coupons = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAvailableCoupons(coupons);
+
+        if (couponFromCart) {
+          const matched = coupons.find((c) => c.id === couponFromCart.id);
+          setSelectedCoupon(matched || null);
+        }
+      } catch (err) {
+        console.error("쿠폰 불러오기 실패:", err);
+        setAvailableCoupons([]);
+      }
+    };
+
+    fetchCoupons();
+  }, [userUid, couponFromCart]);
 
   useEffect(() => {
-    const savedCoupons = localStorage.getItem("coupons");
-    if (savedCoupons) {
-      setAvailableCoupons(JSON.parse(savedCoupons));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = isModalOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [isModalOpen]);
 
-  const selectedCoupon =
-    availableCoupons.find((c) => c.id === selectedCouponId) || null;
+  const getDiscountPercent = (title) => {
+    switch (title) {
+      case "HOME RUN !":
+        return 80;
+      case "TRIPLE !":
+        return 50;
+      case "DOUBLE !":
+        return 30;
+      case "SINGLE !":
+      case "WELCOME!":
+        return 10;
+      default:
+        return 0;
+    }
+  };
 
   const productPrice = orderItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
-  const couponDiscountRate = selectedCoupon ? selectedCoupon.discountRate : 0;
-  const discount = productPrice * couponDiscountRate;
+  const discountPercent = selectedCoupon
+    ? getDiscountPercent(selectedCoupon.title)
+    : 0;
+  const discount = Math.floor((productPrice * discountPercent) / 100);
   const totalPrice = productPrice - discount;
 
-  const handleCouponChange = (e) => {
-    setSelectedCouponId(e.target.value);
+  const handleCouponChange = (coupon) => {
+    setSelectedCoupon(coupon);
   };
 
-  const handlePaymentSubmit = () => {
-    alert("결제가 완료되었습니다.");
-    localStorage.removeItem("cartItems");
-    localStorage.removeItem("appliedCoupon");
-    navigate("/store");
+  const handlePaymentSubmit = async () => {
+    try {
+      // 쿠폰 사용 시 Firestore에서 삭제
+      if (selectedCoupon && userUid) {
+        await deleteDoc(
+          doc(db, "users", userUid, "wonCoupons", selectedCoupon.id)
+        );
+        console.log("사용된 쿠폰 삭제 완료");
+      }
+
+      // 주문 내역 저장
+      const purchasedOrder = {
+        orderItems,
+        coupon: selectedCoupon,
+        totalPrice,
+        purchasedAt: new Date().toISOString(),
+      };
+
+      const prevHistory =
+        JSON.parse(localStorage.getItem("orderHistory")) || [];
+      prevHistory.push(purchasedOrder);
+      localStorage.setItem("orderHistory", JSON.stringify(prevHistory));
+
+      // 장바구니 비우기
+      clearCart();
+      localStorage.removeItem("cartItems");
+      localStorage.removeItem("appliedCoupon");
+
+      alert("결제가 완료되었습니다.");
+      navigate("/store");
+    } catch (error) {
+      console.error("결제 처리 중 오류 발생:", error);
+      alert("결제 중 문제가 발생했습니다. 다시 시도해 주세요.");
+    }
   };
 
   return (
     <Container>
       <Section>
         <Title>Payment</Title>
+
         <List>
           <InfoTitle>
             <li>
@@ -234,6 +333,7 @@ const Payment = () => {
           </InfoTitle>
           <MyAddress />
         </List>
+
         <List>
           <InfoTitle>
             <li>
@@ -241,28 +341,30 @@ const Payment = () => {
             </li>
             <span></span>
           </InfoTitle>
+
           <Items data-lenis-prevent>
             {orderItems.length > 0 ? (
               orderItems.map((item) => (
                 <ProductItem key={item.id} item={item} page="payment" />
               ))
             ) : (
-              <p>주문할 상품이 없습니다.</p>
+              <ListMiddle>
+                <Listimg src={LogonRookielogo} alt="LogonRookielogo" />
+              </ListMiddle>
             )}
           </Items>
         </List>
       </Section>
+
       <WingBanner
         page="payment"
         productPrice={productPrice}
-        discount={discount}
-        totalPrice={totalPrice}
-        coupon={selectedCoupon}
-        coupons={availableCoupons}
         selectedCoupon={selectedCoupon}
         onCouponChange={handleCouponChange}
+        coupons={availableCoupons}
         onPaymentSubmit={handlePaymentSubmit}
       />
+
       {isModalOpen && (
         <AddressModal
           isOpen={isModalOpen}

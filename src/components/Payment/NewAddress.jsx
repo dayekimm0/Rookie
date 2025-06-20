@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import authStore from "../../stores/AuthStore";
 import styled from "styled-components";
 
 const NewAddressInfo = styled.form`
@@ -162,19 +163,41 @@ const NewAddress = ({
   setSelectedAddress,
   onAddressSelect,
 }) => {
-  const [phone1, setPhone1] = useState("");
-  const [phone2, setPhone2] = useState("");
-  const [phone3, setPhone3] = useState("");
+  const [phone1, setPhone1] = useState(() =>
+    phoneNumber ? phoneNumber.split("-")[0] : ""
+  );
+  const [phone2, setPhone2] = useState(() =>
+    phoneNumber ? phoneNumber.split("-")[1] : ""
+  );
+  const [phone3, setPhone3] = useState(() =>
+    phoneNumber ? phoneNumber.split("-")[2] : ""
+  );
 
-  console.log(address);
+  const updateTempAddress = authStore((state) => state.updateTempAddress);
 
   useEffect(() => {
-    const phoneNumber = `${phone1}-${phone2}-${phone3}`;
+    const fullPhoneNumber = [phone1, phone2, phone3].filter(Boolean).join("-");
     setSelectedAddress((prev) => ({
       ...prev,
-      phoneNumber: phoneNumber,
+      phoneNumber: fullPhoneNumber,
     }));
   }, [phone1, phone2, phone3, setSelectedAddress]);
+
+  useEffect(() => {
+    if (!onAddressSelect) return;
+
+    setSelectedAddress((prev) => {
+      if (!prev) return prev;
+      updateTempAddress({
+        zonecode: prev.postalCode || "",
+        address: prev.address || "",
+        detail: prev.detailAddress || "",
+        username: prev.username || "",
+        phoneNumber: prev.phoneNumber || "",
+      });
+      return prev;
+    });
+  }, [setSelectedAddress, updateTempAddress]);
 
   return (
     <NewAddressInfo>
@@ -191,6 +214,7 @@ const NewAddress = ({
           }
         />
       </NewAddressDetail>
+
       <NewAddressDetail>
         <NewAddressTitle>배송주소</NewAddressTitle>
         <NewAddressPlace>
@@ -221,6 +245,7 @@ const NewAddress = ({
           />
         </NewAddressPlace>
       </NewAddressDetail>
+
       <NewAddressDetail>
         <NewAddressTitle>연락처</NewAddressTitle>
         <PhoneInput>

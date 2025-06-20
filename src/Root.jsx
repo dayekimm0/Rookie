@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import ScrollToTop from "./ScrollToTop";
 import useHeaderStore from "./stores/headerHeightStore";
+import authStore from "./stores/AuthStore";
 
 const ContentWrapper = styled.div`
   position: relative;
@@ -41,6 +42,7 @@ const getMode = (pathname) => {
 };
 
 function Root() {
+  const { user, userProfile, isLoading } = authStore();
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
   const foldIfScrolled = useHeaderStore((state) => state.foldIfScrolled);
   const unfold = useHeaderStore((state) => state.unfold);
@@ -53,6 +55,12 @@ function Root() {
   const isVisible = !hideHeaderPath.includes(location.pathname);
 
   const mode = getMode(location.pathname);
+
+  if (!user && userProfile && !isLoading) {
+    localStorage.removeItem("auth-storage");
+    location.reload();
+    return null;
+  }
 
   //페이지 이동 시 헤더 헤더 펼치기
   useEffect(() => {

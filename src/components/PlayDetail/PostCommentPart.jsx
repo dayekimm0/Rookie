@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
-import authStore from "../../stores/AuthStore";
+import authStore from "../../stores/authStore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const PostComment = styled.form`
   height: 50px;
@@ -64,47 +66,33 @@ const SubmitBtn = styled.input`
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;
 
-const PostCommentPart = () => {
+const PostCommentPart = ({ videoId, onCommentAdded }) => {
   const [value, setValue] = useState("");
   const { user, userProfile } = authStore();
-  const addComment = authStore((state) => state.addComment);
   const userName = userProfile?.nickname || "사용자";
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // ✅ textarea에 엔터 입력 자체를 방지
-      if (!isDisabled) {
-        handleSubmit(); // 댓글 제출
-      }
-    }
-  };
-
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
-
   const isDisabled = value.trim() === "";
 
-  const handleSubmit = (e) => {
-    if (e) e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // form 제출 막기
+    if (!user) return alert("로그인이 필요합니다.");
     if (isDisabled) return;
 
-    const cleanValue = value.trim();
-
     const newComment = {
-      id: Date.now(),
-      text: cleanValue,
+      text: value.trim(),
       author: userName,
+      userId: user.uid,
       userProfileImage: userProfile?.profileImage || "",
-      createdAt: new Date().toISOString(),
-      userId: user?.uid,
+      videoId,
+      createdAt: serverTimestamp(),
     };
 
     try {
-      addComment(newComment);
-      setValue(""); // ✅ 입력값 초기화
+      await addDoc(collection(db, "comments"), newComment);
+      setValue("");
+      console.log("✅ 댓글 저장 완료");
+      onCommentAdded?.();
     } catch (error) {
-      console.error("❌ 댓글 저장 실패:", error);
+      console.error("❌ 댓글 저장 실패:", error.message);
     }
   };
 
@@ -120,8 +108,13 @@ const PostCommentPart = () => {
       </UserInfo>
       <TextArea
         value={value}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            e.target.form?.requestSubmit();
+          }
+        }}
         placeholder="댓글 추가하기"
       />
       <SubmitBtn type="submit" value="댓글" disabled={isDisabled} />

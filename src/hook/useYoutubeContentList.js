@@ -183,11 +183,18 @@ export const fetchChannelThumbnail = async (channelId) => {
 export const fetchRelatedVideosByChannelId = async (
   channelId,
   excludeVideoId,
-  maxResults = 5
+  maxResults = 20
 ) => {
   if (!channelId) return [];
 
   try {
+    const decodeHTML = (str) => {
+      const txt = document.createElement("textarea");
+      txt.innerHTML = str;
+      return txt.value;
+    };
+
+    // 1) 채널 영상 리스트 조회
     const res = await axios.get(
       "https://www.googleapis.com/youtube/v3/search",
       {
@@ -202,23 +209,55 @@ export const fetchRelatedVideosByChannelId = async (
       }
     );
 
-    // 현재 재생중인 영상 제외
-    const relatedVideos = res.data.items
-      .filter((item) => item.id.videoId !== excludeVideoId)
-      .map((item) => ({
-        id: item.id.videoId,
-        title: item.snippet.title,
+    const videoIds = res.data.items
+      .map((item) => item.id.videoId)
+      .filter((id) => id !== excludeVideoId)
+      .join(",");
+
+    if (!videoIds) return [];
+
+    // 2) 영상 상세 정보 가져오기
+    const detailsRes = await axios.get(
+      "https://www.googleapis.com/youtube/v3/videos",
+      {
+        params: {
+          part: "contentDetails,snippet",
+          id: videoIds,
+          key: API_KEY,
+        },
+      }
+    );
+
+    const durationToSeconds = (duration) => {
+      const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+      const hours = parseInt(match[1] || "0", 10);
+      const minutes = parseInt(match[2] || "0", 10);
+      const seconds = parseInt(match[3] || "0", 10);
+      return hours * 3600 + minutes * 60 + seconds;
+    };
+
+    const filtered = detailsRes.data.items
+      .filter(
+        (video) =>
+          video.id !== excludeVideoId &&
+          !video.snippet.title.toLowerCase().includes("#shorts") &&
+          durationToSeconds(video.contentDetails.duration) > 60
+      )
+      .slice(0, 4)
+      .map((video) => ({
+        id: video.id,
+        title: decodeHTML(video.snippet.title),
         thumbnail:
-          item.snippet.thumbnails?.maxres?.url ||
-          item.snippet.thumbnails?.standard?.url ||
-          item.snippet.thumbnails?.high?.url ||
-          item.snippet.thumbnails?.medium?.url ||
+          video.snippet.thumbnails?.maxres?.url ||
+          video.snippet.thumbnails?.standard?.url ||
+          video.snippet.thumbnails?.high?.url ||
+          video.snippet.thumbnails?.medium?.url ||
           "",
-        channelTitle: item.snippet.channelTitle,
-        publishedAt: item.snippet.publishedAt,
+        channelTitle: decodeHTML(video.snippet.channelTitle),
+        publishedAt: video.snippet.publishedAt,
       }));
 
-    return relatedVideos;
+    return filtered;
   } catch (error) {
     console.error("추천 영상 불러오기 실패:", error);
     return [];

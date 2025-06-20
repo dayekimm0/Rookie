@@ -3,9 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSearchStore } from "../../stores/headersStore";
-import PlayAllContentList from "../../pages/PlayAllContentList";
-import { playContents } from "../../data/playcontents";
-import { fetchYoutubePlaylist } from "../../hook/useYoutubePlayList";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Wrapper = styled.div`
   .search_bar {
@@ -53,99 +51,33 @@ const Wrapper = styled.div`
       }
     }
   }
-  .results {
-    margin-top: 20px;
-  }
-
-  .results_title {
-    font-size: 1.4rem;
-    color: var(--dark);
-    margin-bottom: 10px;
-  }
 `;
 
-const SearchMobile = () => {
-  const { searchOpen } = useSearchStore();
+const SearchMobile = ({
+  mobileSearchOpen,
+  setMobileSearchOpen,
+  setMobileMenuOpen,
+}) => {
   const [keyword, setKeyword] = useState("");
-  const [videos, setVideos] = useState([]);
-  const [searchTrigger, setSearchTrigger] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const fetchFilteredVideos = async (keyword) => {
-    try {
-      const keywordLower = keyword.trim().toLowerCase();
-      const resultVideos = [];
-
-      for (const [key, content] of Object.entries(playContents)) {
-        if (Array.isArray(content.playlists)) {
-          for (const playlist of content.playlists) {
-            if (playlist.name?.toLowerCase().includes(keywordLower)) {
-              const rawVideos = await fetchYoutubePlaylist({
-                queryKey: [
-                  "youtubePlaylist",
-                  playlist.playlistId,
-                  playlist.max || 10,
-                ],
-              });
-
-              const parsed = rawVideos.map((item) => {
-                const snippet = item.snippet || {};
-                return {
-                  title: snippet.title || "",
-                  description: snippet.description || "",
-                  videoId: snippet.resourceId?.videoId || "",
-                  thumbnail: snippet.thumbnails?.medium?.url || "",
-                };
-              });
-
-              resultVideos.push(...parsed);
-            }
-          }
-        } else if (content.playlistId) {
-          if (key.toLowerCase().includes(keywordLower)) {
-            const rawVideos = await fetchYoutubePlaylist({
-              queryKey: [
-                "youtubePlaylist",
-                content.playlistId,
-                content.max || 10,
-              ],
-            });
-
-            const persed = rawVideos.map((item) => {
-              const snippet = item.snippet || {};
-              return {
-                title: snippet.title || "",
-                description: snippet.description || "",
-                videoId: snippet.resourceId?.videoId || "",
-                thumbnail: snippet.thumbnails?.medium?.url || "",
-              };
-            });
-
-            resultVideos.push(...persed);
-          }
-        }
-      }
-      return resultVideos;
-    } catch (error) {
-      console.error("모바일 검색 에러: ", error);
-      return [];
-    }
-  };
-
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    if (!keyword.trim()) return;
+    const trimmed = keyword.trim();
+    if (!trimmed) return;
 
-    const results = await fetchFilteredVideos(keyword);
-    setVideos(results);
-    setSearchTrigger(true);
+    navigate(`/play/search?keyword=${encodeURIComponent(trimmed)}`);
+    setMobileSearchOpen(false);
+    setMobileMenuOpen(false);
+    setKeyword("");
   };
 
   useEffect(() => {
-    if (!keyword.trim()) {
-      setSearchTrigger(false);
-      setVideos([]);
-    }
-  }, [keyword]);
+    setMobileSearchOpen(false);
+    setMobileMenuOpen(false);
+    setKeyword("");
+  }, [location.pathname]);
 
   return (
     <Wrapper>
@@ -154,22 +86,16 @@ const SearchMobile = () => {
           <input
             className="search_txt"
             type="text"
-            placeholder="search"
+            placeholder="찾으시는 동영상을 입력해주세요."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            // onKeyUp={onCheckEnter}
+            autoFocus
           />
           <button className="search_btn" type="submit">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </form>
       </div>
-      {searchTrigger && (
-        <div className="results">
-          <div className="results_title">"{keyword}" 검색 결과</div>
-          <PlayAllContentList videos={videos} type="search" />
-        </div>
-      )}
     </Wrapper>
   );
 };

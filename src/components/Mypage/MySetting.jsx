@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getTeamColor, getEmblem, getScrollbarWidth } from "../../util";
 import authStore from "../../stores/AuthStore";
-import MypageModal from "./MypageModal";
+import { deleteUser } from "firebase/auth";
+import { doc, deleteDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import MypageModal from "./MyTeamModal";
+import SettingModal from "./SettingModal";
+import AddressModal from "./AddressModal";
 import partnerLogo from "../../images/logos/Partner_Logo.svg";
 
 const Inner = styled.div`
@@ -217,6 +223,68 @@ const Delete = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
+
+  .path {
+    stroke: var(--main);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+`;
+
 const teamToEmblemId = {
   "기아 타이거즈": "1",
   "삼성 라이온즈": "2",
@@ -231,18 +299,44 @@ const teamToEmblemId = {
 };
 
 const Setting = () => {
-  const { userProfile } = authStore();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const user = authStore((state) => state.user);
+  const userProfile = authStore((state) => state.userProfile);
 
+  useEffect(() => {
+    if (!user || userProfile === null) {
+      navigate("/", { replace: true });
+    }
+  }, [user, userProfile, navigate]);
+
+  // ✅ user와 userProfile이 없을 경우 렌더링 차단
+  if (!user || userProfile === null) {
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
+  }
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
+  const [teamModal, setTeamModal] = useState(false);
+
   const openTeamModal = () => {
     setTeamModal(true);
   };
-
-  const [teamModal, setTeamModal] = useState(false);
 
   const closeTeamModal = () => {
     setTeamModal(false);
@@ -260,100 +354,198 @@ const Setting = () => {
     }
   }, [teamModal]);
 
+  const [modalState, setModalState] = useState({
+    email: false,
+    password: false,
+    nickname: false,
+  });
+
+  const openModal = (type) => {
+    setModalState((prev) => ({ ...prev, [type]: true }));
+  };
+
+  const closeModal = (type) => {
+    setModalState((prev) => ({ ...prev, [type]: false }));
+  };
+
+  const [addressModal, setAddressModal] = useState(false);
+
+  const openAddressModal = () => {
+    setAddressModal(true);
+  };
+
+  const closeAddressModal = () => {
+    setAddressModal(false);
+    window.location.reload();
+  };
+
+  if (userProfile === null) return null;
+
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      "정말 계정을 삭제하시겠습니까? 계정삭제 이후 사용자 데이터는 복구할 수 없습니다."
+    );
+    if (!confirmDelete) return;
+    setLoading(true);
+
+    try {
+      const user = auth.currentUser;
+
+      if (!user) {
+        setLoading(false);
+        alert("사용자 정보가 없습니다.");
+        return;
+      }
+
+      await deleteDoc(doc(db, "users", user.uid));
+
+      await deleteUser(user);
+
+      authStore.getState().clearUser();
+
+      alert("계정이 성공적으로 삭제되었습니다.");
+
+      navigate("/", { replace: true });
+
+      authStore.setState({ userProfile: null });
+    } catch (error) {
+      setLoading(false);
+      if (error.code === "auth/requires-recent-login") {
+        alert("보안을 위해 최근 로그인 후 다시 시도해 주세요.");
+      } else {
+        alert("오류가 발생하였습니다. 잠시호 다시 시도해주세요.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Inner>
-      <UpBox>
-        <UpBoxLeft>
-          <UserTeam
-            $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
-            style={{
-              backgroundColor: getTeamColor(
-                teamToEmblemId[userProfile.favoriteTeam] || "#fff"
-              ),
-            }}
-          >
-            <TeamEmblem
-              emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+      {loading ? (
+        <SlideLoaderWrapper>
+          <SvgSpinner viewBox="0 0 50 50">
+            <circle
+              className="path"
+              cx="25"
+              cy="25"
+              r="20"
+              fill="none"
+              strokeWidth="5"
             />
-          </UserTeam>
-          <UpBoxTitle>
-            {userProfile.username}
-            {userProfile.email === "gosim@naver.com" ||
-            userProfile.email === "mangom@daum.net" ? (
-              <PartnerLogo src={partnerLogo} alt="" />
-            ) : null}
-            <br />
-            <span>
-              계정 생성일 <br />
-              {userProfile.createdAt}
-            </span>
-          </UpBoxTitle>
-        </UpBoxLeft>
-        <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
-      </UpBox>
-
-      <MyInfo>
-        <MyInfoTitle>계정 상세정보</MyInfoTitle>
-        <MyInfoLine />
-        <InfoElement>
-          <InfoDetail>
-            <b> 이메일</b>
-            <br />
-            {userProfile.email}
-          </InfoDetail>
-          <InfoButton>변경</InfoButton>
-        </InfoElement>
-        <hr className="myinfoLine" />
-        <InfoElement>
-          <InfoDetail>
-            <b> 비밀번호</b>
-            <br />
-            *********
-          </InfoDetail>
-          <InfoButton>변경</InfoButton>
-        </InfoElement>
-        <hr className="myinfoLine" />
-        <InfoElement>
-          <InfoDetail>
-            <b>닉네임</b>
-            <br />
-            {userProfile.nickname}
-          </InfoDetail>
-          <InfoButton>변경</InfoButton>
-        </InfoElement>
-        <hr className="myinfoLine" />
-        <InfoElement>
-          <InfoDetail>
-            <b>주소</b>
-            {userProfile.address ? (
-              <>
+          </SvgSpinner>
+        </SlideLoaderWrapper>
+      ) : (
+        <>
+          <UpBox>
+            <UpBoxLeft>
+              <UserTeam
+                $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                style={{
+                  backgroundColor: getTeamColor(
+                    teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                  ),
+                }}
+              >
+                <TeamEmblem
+                  emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                />
+              </UserTeam>
+              <UpBoxTitle>
+                {userProfile.username}
+                {userProfile.email === "gosim@naver.com" ||
+                userProfile.email === "mangom@daum.net" ? (
+                  <PartnerLogo src={partnerLogo} alt="" />
+                ) : null}
                 <br />
-                {userProfile.address}
-                <br />
-                <InfoDetailDetail>
-                  {userProfile.detailedAddress}
-                </InfoDetailDetail>
-              </>
-            ) : (
-              <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
-            )}
-          </InfoDetail>
-          <InfoButton>변경</InfoButton>
-        </InfoElement>
-        <hr className="myinfoLine" />
-        <Delete>
-          <h6
-            onClick={() => {
-              alert("준비중인 서비스 입니다.");
-            }}
-          >
-            계정 삭제하기
-          </h6>
-        </Delete>
-      </MyInfo>
+                <span>
+                  계정 생성일 <br />
+                  {userProfile.createdAt}
+                </span>
+              </UpBoxTitle>
+            </UpBoxLeft>
+            <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
+          </UpBox>
 
-      {teamModal && (
-        <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
+          <MyInfo>
+            <MyInfoTitle>계정 상세정보</MyInfoTitle>
+            <MyInfoLine />
+            <InfoElement>
+              <InfoDetail>
+                <b> 이메일</b>
+                <br />
+                {userProfile.email}
+              </InfoDetail>
+            </InfoElement>
+            <hr className="myinfoLine" />
+            <InfoElement>
+              <InfoDetail>
+                <b> 비밀번호</b>
+                <br />
+                *********
+              </InfoDetail>
+              {/* <InfoButton onClick={() => openModal("password")}>변경</InfoButton> */}
+            </InfoElement>
+            <hr className="myinfoLine" />
+            <InfoElement>
+              <InfoDetail>
+                <b>닉네임</b>
+                <br />
+                {userProfile.nickname}
+              </InfoDetail>
+              <InfoButton onClick={() => openModal("nickname")}>
+                변경
+              </InfoButton>
+            </InfoElement>
+            <hr className="myinfoLine" />
+            <InfoElement>
+              <InfoDetail>
+                <b>주소</b>
+                {userProfile.address ? (
+                  <>
+                    <br />
+                    {userProfile.address}
+                    <br />
+                    <InfoDetailDetail>
+                      {userProfile.detailedAddress}
+                    </InfoDetailDetail>
+                  </>
+                ) : (
+                  <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
+                )}
+              </InfoDetail>
+              <InfoButton onClick={openAddressModal}>변경</InfoButton>
+            </InfoElement>
+            <hr className="myinfoLine" />
+            <Delete>
+              <h6 onClick={handleDeleteAccount}>계정 삭제하기</h6>
+            </Delete>
+          </MyInfo>
+
+          {teamModal && (
+            <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
+          )}
+
+          <SettingModal
+            isOpen={modalState.email}
+            closeModal={() => closeModal("email")}
+            contentType="email"
+          />
+          <SettingModal
+            isOpen={modalState.password}
+            closeModal={() => closeModal("password")}
+            contentType="password"
+          />
+          <SettingModal
+            isOpen={modalState.nickname}
+            closeModal={() => closeModal("nickname")}
+            contentType="nickname"
+          />
+          <AddressModal
+            isOpen={addressModal}
+            closeAddressModal={closeAddressModal}
+          />
+        </>
       )}
     </Inner>
   );

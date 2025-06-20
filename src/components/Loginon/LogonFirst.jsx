@@ -240,7 +240,7 @@ const LogonFirst = () => {
         </CheckWrapper>
         {/* {errors.agreements && <ErrorMessage>{errors.agreements}</ErrorMessage>} */}
       </AllCheckWrapper>
-      <LoginBtn type="submit" $valid={isFormValid}>
+      <LoginBtn type="submit" $valid={isFormValid} disabled={!isFormValid}>
         다음
       </LoginBtn>
 

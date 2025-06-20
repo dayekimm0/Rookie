@@ -1557,7 +1557,7 @@ const ProductDetail = () => {
       price: parsePrice(product.price),
       images: product.detail?.detail_images || [],
       team: product.team,
-      option: product.detail?.options || [],
+      option: selectedOption ? [selectedOption] : [],
       category: product.category,
       thumbnail: product.thumbnail,
       quantity,
