@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import YouTube from "react-youtube";
+import mockupProduct from "../images/mockup/lgtwins_uniform.png";
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -17,8 +18,8 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  max-width: 500px;
   aspect-ratio: 9 / 16;
+  width: 700px;
   height: 800px;
   display: flex;
   justify-content: center;
@@ -27,7 +28,7 @@ const ModalContent = styled.div`
 `;
 
 const ModalPlay = styled.div`
-  width: 100%;
+  width: 450px;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -39,15 +40,61 @@ const ModalPlay = styled.div`
 const CloseButton = styled.button`
   position: absolute;
   top: 0;
-  right: -20%;
-  background: rgba(255, 255, 255, 0.7);
+  right: 0;
+  font-size: 2.5rem;
+  background: none;
   border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 18px;
   cursor: pointer;
+  color: var(--light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 10;
+`;
+
+const ModalProducts = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  margin: 20px;
+  gap: 10px;
+  h1 {
+    width: 100%;
+    color: var(--light);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+`;
+
+const ModalProduct = styled.div`
+  width: 160px;
+`;
+
+const ProductThumbnail = styled.div`
+  width: 100%;
+  height: 160px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const ProductInfo = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-size: 1.4rem;
+    color: var(--light);
+  }
 `;
 
 const ClipDetail = ({ videoId, onClose }) => {
@@ -71,7 +118,7 @@ const ClipDetail = ({ videoId, onClose }) => {
   return ReactDOM.createPortal(
     <ModalWrapper>
       <ModalContent>
-        <CloseButton onClick={onClose}>×</CloseButton>
+        <CloseButton onClick={onClose}>X</CloseButton>
         <ModalPlay>
           <YouTube
             videoId={videoId}
@@ -79,6 +126,25 @@ const ClipDetail = ({ videoId, onClose }) => {
             style={{ width: "100%", height: "100%" }}
           />
         </ModalPlay>
+        <ModalProducts>
+          <h1>추천하는 ROOK</h1>
+          <ModalProduct>
+            <ProductThumbnail>
+              <img src={mockupProduct} alt="mockup" />
+            </ProductThumbnail>
+            <ProductInfo>
+              <p>최고심 콜라보 캐릭터 유니폼(PINK)</p>
+            </ProductInfo>
+          </ModalProduct>
+          <ModalProduct>
+            <ProductThumbnail>
+              <img src={mockupProduct} alt="mockup" />
+            </ProductThumbnail>
+            <ProductInfo>
+              <p>최고심 콜라보 캐릭터 유니폼(PINK)</p>
+            </ProductInfo>
+          </ModalProduct>
+        </ModalProducts>
       </ModalContent>
     </ModalWrapper>,
     document.body // 모달을 body 최상단에 렌더링

@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Comments from "./Comments";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 
 const CommentListWrapper = styled.div`
   width: 100%;
@@ -21,23 +29,31 @@ const CommentListWrapper = styled.div`
   }
 `;
 
-const CommentList = () => {
-  // const [comments, setComments] = useState([]);
-
-  // useEffect(() => {
-  //   const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     const newComments = [];
-  //     querySnapshot.forEach((doc) => {
-  //       newComments.push({ id: doc.id, ...doc.data() });
-  //     });
-  //     setComments(newComments);
-  //   });
-
-  //   return () => unsubscribe();
-  // }, []);
+const CommentList = ({ videoId, onCountChange }) => {
   const scrollRef = useRef(null);
   const [isScrollLocked, setIsScrollLocked] = useState(false);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    if (!videoId) return;
+
+    const q = query(
+      collection(db, "comments"),
+      where("videoId", "==", videoId),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const newComments = [];
+      querySnapshot.forEach((doc) => {
+        newComments.push({ id: doc.id, ...doc.data() });
+      });
+      setComments(newComments);
+      onCountChange?.(newComments.length);
+    });
+
+    return () => unsubscribe();
+  }, [videoId, onCountChange]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -79,7 +95,7 @@ const CommentList = () => {
 
   return (
     <CommentListWrapper ref={scrollRef}>
-      <Comments />
+      <Comments comments={comments} />
     </CommentListWrapper>
   );
 };
