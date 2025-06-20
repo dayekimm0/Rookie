@@ -5,6 +5,7 @@ import "swiper/css";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
 import PlayCard from "./PlayCard";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
@@ -28,9 +29,14 @@ const SlideContainer = styled.div`
 `;
 
 const TabSlideRenderer = ({ items, onSwiperReady }) => {
+  const navigate = useNavigate();
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
+  };
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -56,7 +62,7 @@ const TabSlideRenderer = ({ items, onSwiperReady }) => {
           <PlayCard
             thumbnail={thumbnails?.maxres?.url || thumbnails?.medium?.url}
             title={title}
-            onClick={() => console.log("Clicked:", videoId)}
+            onClick={() => handleDetailClick(videoId)}
           />
         </SwiperSlide>
       );

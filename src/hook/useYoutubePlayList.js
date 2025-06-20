@@ -29,7 +29,7 @@ export const fetchYoutubePlaylist = async ({ queryKey }) => {
   return res.data.items || [];
 };
 
-const fetchVideoDetails = async ({ queryKey }) => {
+export const fetchVideoDetails = async ({ queryKey }) => {
   const [_key, videoIds] = queryKey;
 
   const res = await axios.get("https://www.googleapis.com/youtube/v3/videos", {

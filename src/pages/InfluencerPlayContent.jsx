@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchPlaylistVideos } from "../hook/useYoutubeContentList";
 import influencerData from "../data/influencer_playlist.json";
-import InfAllContent from "../components/InfluencerPlay/InfAllContent";
+import InfAllContent from "../components/MorePlaypage/InfAllContent";
 
 const InfluencerPlayContent = () => {
   const { teamCode, name } = useParams();

@@ -35,15 +35,20 @@ const CardWrapper = styled.div`
 const ShortsCard = ({
   thumbnail,
   title,
-  onClick,
+  onOpenModal,
   channelTitle,
   views,
   likes,
+  id,
 }) => {
   // console.log(channelTitle, views, likes);
+  const handleCardClick = () => {
+    onOpenModal(id); // 상위에서 모달 열기
+  };
+
   return (
-    <Container>
-      <CardWrapper onClick={onClick}>
+    <Container onClick={handleCardClick}>
+      <CardWrapper>
         <img
           src={thumbnail}
           alt={title}

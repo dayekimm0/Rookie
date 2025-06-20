@@ -8,7 +8,7 @@ import Spinner from "../Spinner";
 import lenis from "../../lenisInstance";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import InfClipAllList from "./InfClipAllList";
+import MoreClipAllList from "./MoreClipAllList";
 
 const BackBtn = styled.div`
   padding-top: 60px;
@@ -97,12 +97,15 @@ const PlayListWrap = styled.div`
   }
   @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
+    gap: 48px 18px;
   }
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 48px 14px;
   }
   @media (max-width: 500px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 32px 10px;
   }
 `;
 
@@ -172,7 +175,6 @@ const InfAllContent = ({ clipVideos = [], playVideos = [] }) => {
   const [playReady, setPlayReady] = useState(false);
   const [loading, setLoading] = useState(true);
   const [allPlayPage, setAllPlayPage] = useState(0);
-
   const navigate = useNavigate();
 
   const itemsPerPage = useMemo(() => {
@@ -193,6 +195,10 @@ const InfAllContent = ({ clipVideos = [], playVideos = [] }) => {
 
   const offset = currentPage * itemsPerPage;
   const currentItems = filtered.slice(offset, offset + itemsPerPage);
+
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
+  };
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -291,6 +297,7 @@ const InfAllContent = ({ clipVideos = [], playVideos = [] }) => {
                     key={video.id || idx}
                     {...video}
                     type="influencer"
+                    onClick={() => handleDetailClick(video.id)}
                   />
                 ))}
               </PlayListWrap>
@@ -312,7 +319,7 @@ const InfAllContent = ({ clipVideos = [], playVideos = [] }) => {
       {(currentTab === "clip" || currentTab === "play") && (
         <>
           {currentTab === "clip" && (
-            <InfClipAllList
+            <MoreClipAllList
               externalVideos={currentItems}
               modalEnabled={true}
               type="clip"
@@ -326,22 +333,25 @@ const InfAllContent = ({ clipVideos = [], playVideos = [] }) => {
                   key={video.id || idx}
                   {...video}
                   type="influencer"
+                  onClick={() => handleDetailClick(video.id)}
                 />
               ))}
             </PlayListWrap>
           )}
 
-          <PaginationWrapper>
-            <StyledPaginate
-              previousLabel={"<"}
-              nextLabel={">"}
-              pageCount={pageCount}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              disabledClassName="disabled"
-              forcePage={currentPage}
-            />
-          </PaginationWrapper>
+          {currentTab === "play" && (
+            <PaginationWrapper>
+              <StyledPaginate
+                previousLabel={"<"}
+                nextLabel={">"}
+                pageCount={pageCount}
+                onPageChange={handlePageClick}
+                activeClassName="active"
+                disabledClassName="disabled"
+                forcePage={currentPage}
+              />
+            </PaginationWrapper>
+          )}
         </>
       )}
     </>

@@ -17,8 +17,10 @@ import Event from "./pages/Event";
 import Play from "./pages/Play";
 import PlayAll from "./pages/PlayAll";
 import PlayDetail from "./pages/PlayDetail";
+import SearchResultPage from "./pages/SearchResultPage";
 import TeamHome from "./pages/TeamHome";
 import InfluencerPlayContent from "./pages/InfluencerPlayContent";
+import TeamplayAll from "./pages/TeamplayAll";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "playall",
         element: <PlayAll />,
+      },
+      {
+        path: "play/search",
+        element: <SearchResultPage />,
       },
       {
         path: "play/:videoId",
@@ -60,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "teamhome/:teamCode",
         element: <TeamHome />,
+      },
+      {
+        path: "teamplayall",
+        element: <TeamplayAll />,
       },
       {
         path: "influencer/:teamCode/:name",

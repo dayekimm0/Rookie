@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ClipContent from "../Play/ClipContent";
 import useHeaderStore from "../../stores/headerHeightStore";
 import ClipDetail from "../ClipDetail";
+import ReactPaginate from "react-paginate";
 
 const ClipListWrap = styled.div`
   display: grid;
@@ -25,8 +26,51 @@ const ClipListWrap = styled.div`
   }
 `;
 
-const InfClipAllList = ({ externalVideos, modalEnabled = true, type }) => {
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+`;
+
+const StyledPaginate = styled(ReactPaginate)`
+  display: flex;
+  gap: 8px;
+  list-style: none;
+
+  li {
+    padding: 0 12px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: var(--gray8);
+
+    &.active {
+      font-weight: bold;
+      color: var(--grayF5);
+    }
+    &.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+`;
+
+const MoreClipAllList = ({
+  externalVideos = [],
+  modalEnabled = true,
+  type,
+}) => {
   const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 21;
+
+  const offset = currentPage * itemsPerPage;
+  const currentItems = externalVideos.slice(offset, offset + itemsPerPage);
+  const pageCount = Math.ceil(externalVideos.length / itemsPerPage);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+    lenis.scrollTo(0);
+  };
 
   useEffect(() => {
     if (!modalEnabled) return;
@@ -61,10 +105,12 @@ const InfClipAllList = ({ externalVideos, modalEnabled = true, type }) => {
     }
   }, [selectedVideoId]);
 
+  if (externalVideos.length === 0) return null;
+
   return (
     <>
       <ClipListWrap>
-        {externalVideos.map((video, idx) => (
+        {currentItems.map((video, idx) => (
           <ClipContent
             key={video.id || idx}
             {...video}
@@ -72,6 +118,18 @@ const InfClipAllList = ({ externalVideos, modalEnabled = true, type }) => {
           />
         ))}
       </ClipListWrap>
+      <PaginationWrapper>
+        <StyledPaginate
+          previousLabel={"<"}
+          nextLabel={">"}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          activeClassName="active"
+          disabledClassName="disabled"
+          forcePage={currentPage}
+        />
+      </PaginationWrapper>
+
       {modalEnabled && selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
@@ -82,4 +140,4 @@ const InfClipAllList = ({ externalVideos, modalEnabled = true, type }) => {
   );
 };
 
-export default InfClipAllList;
+export default MoreClipAllList;

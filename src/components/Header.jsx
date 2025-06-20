@@ -513,6 +513,7 @@ const Header = ({ mode }) => {
   const headerHeight = useHeaderStore((state) => state.headerHeight);
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
   const isTeamMode = useToggleStore((state) => state.isTeamMode);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -836,7 +837,11 @@ const Header = ({ mode }) => {
         <div className="bg_black"></div>
         <div className="menu_inner">
           <div className="inner_wrap">
-            <SearchMobile />
+            <SearchMobile
+              mobileSearchOpen={mobileSearchOpen}
+              setMobileSearchOpen={setMobileSearchOpen}
+              setMobileMenuOpen={setMobileMenuOpen}
+            />
             <ul className="mb_menus">
               <li>
                 <Link to={"/"} onClick={handleClickMobileHome}>

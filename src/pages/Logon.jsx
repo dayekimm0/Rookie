@@ -90,17 +90,17 @@ const Logon = () => {
           <TitleSWrapper>
             <LogonTitleS
               style={{
-                backgroundColor: step >= 1 ? "var(--dark)" : "var(--grayE)",
+                backgroundColor: step > 1 ? "var(--dark)" : "var(--grayE)",
               }}
             />
             <LogonTitleS
               style={{
-                backgroundColor: step >= 2 ? "var(--dark)" : "var(--grayE)",
+                backgroundColor: step > 2 ? "var(--dark)" : "var(--grayE)",
               }}
             />
             <LogonTitleS
               style={{
-                backgroundColor: step >= 3 ? "var(--dark)" : "var(--grayE)",
+                backgroundColor: step > 3 ? "var(--dark)" : "var(--grayE)",
               }}
             />
           </TitleSWrapper>

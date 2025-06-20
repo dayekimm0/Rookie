@@ -1,4 +1,8 @@
 import { teamPlaylists } from "../data/teamPlaylists";
+import {
+  fetchYoutubePlaylist,
+  fetchVideoDetails,
+} from "../hook/useYoutubePlayList";
 
 export const getPlaylistVideos = async (playlistId, max = 4) => {
   const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
@@ -85,4 +89,29 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
   );
 
   return matchedGames;
+};
+
+export const fetchAllTeamVideos = async (playlists) => {
+  const allItems = await Promise.all(
+    playlists.map(({ playlistId, max }) =>
+      fetchYoutubePlaylist({ queryKey: ["youtubePlaylist", playlistId, max] })
+    )
+  );
+  const flatItems = allItems.flat();
+
+  const videoIds = flatItems
+    .map((item) => item.snippet.resourceId?.videoId || item.id?.videoId)
+    .filter(Boolean)
+    .join(",");
+
+  const details = await fetchVideoDetails({
+    queryKey: ["youtubeVideoDetails", videoIds],
+  });
+
+  return details.map((video) => ({
+    id: video.id,
+    title: video.snippet.title,
+    thumbnail: video.snippet.thumbnails?.high?.url || "", // 혹시 없을 경우를 대비
+    channelTitle: video.snippet.channelTitle || "",
+  }));
 };
