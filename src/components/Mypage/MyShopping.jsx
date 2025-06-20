@@ -270,7 +270,6 @@ const MyShopping = () => {
   const { cartItems } = useCartStore();
   const [orders, setOrders] = useState([]);
   const [coupons, setCoupons] = useState([]);
-  console.log(coupons);
 
   useEffect(() => {
     const saveOrders = JSON.parse(localStorage.getItem("orderHistory")) || [];
@@ -278,32 +277,51 @@ const MyShopping = () => {
   }, []);
 
   const allOrderItems = orders.flatMap((order) => order.orderItems);
-  console.log(allOrderItems.length);
 
   useEffect(() => {
-    const fetchWonCoupons = async () => {
+    const fetchCoupons = async () => {
       if (!userProfile?.uid) return;
 
       const db = getFirestore();
-      const WonCouponsRef = collection(
+
+      const wonCouponsRef = collection(
         db,
         "users",
         userProfile.uid,
         "wonCoupons"
       );
+      const welcomeCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "welcomeCoupons"
+      );
 
       try {
-        const snapshot = await getDocs(WonCouponsRef);
-        const result = snapshot.docs.map((doc) => ({
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        const wonCoupons = wonSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
+          collectionType: "wonCoupons", // 필요하면 표시
         }));
-        setCoupons(result);
+
+        const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          collectionType: "welcomeCoupons",
+        }));
+
+        setCoupons([...wonCoupons, ...welcomeCoupons]);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchWonCoupons();
+
+    fetchCoupons();
   }, [userProfile]);
 
   return (
