@@ -23,7 +23,6 @@ const TeamName = styled.h2`
   font-weight: bold;
   margin-bottom: 20px;
   color: var(--light);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 
   @media screen and (max-width: 1024px) {
     font-size: 30px;
@@ -37,7 +36,9 @@ const TeamName = styled.h2`
 
 const TeamRecord = styled.div`
   font-size: 20px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 0;
 
   @media screen and (max-width: 768px) {
     font-size: 16px;
@@ -48,6 +49,7 @@ const TeamRecord = styled.div`
 const RecordKeys = styled.span`
   color: var(--light);
   opacity: 0.7;
+  margin-right: 8px;
 `;
 
 // value 부분 (60 | 23승 34패 3무 | 0.404)
@@ -57,7 +59,8 @@ const RecordValues = styled.span`
 
 // 구분자 스타일 추가
 const Separator = styled.span`
-  color: var(--light);
+  color: var(--grayD);
+  opacity: 0.7;
   margin: 0 20px;
 
   @media screen and (max-width: 768px) {
