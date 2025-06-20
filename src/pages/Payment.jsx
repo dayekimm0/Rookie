@@ -5,6 +5,7 @@ import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import MyAddress from "../components/Payment/MyAddress";
 import AddressModal from "../components/Payment/AddressModal";
+import LogonRookielogo from "../images/logos/Logon_Rookie_logo.svg";
 import authStore from "../stores/AuthStore";
 import useCartStore from "../stores/cartStore";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
@@ -168,6 +169,32 @@ const Items = styled.div`
   }
 `;
 
+const ListMiddle = styled.div`
+  height: 360px;
+  position: relative;
+  @media screen and (max-width: 1024px) {
+    height: 270px;
+  }
+  @media screen and (max-width: 500px) {
+    height: 170px;
+  }
+`;
+
+const Listimg = styled.img`
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  @media screen and (max-width: 1024px) {
+    width: 280px;
+  }
+  @media screen and (max-width: 768px) {
+    width: 240px;
+  }
+`;
+
 const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -231,7 +258,6 @@ const Payment = () => {
       case "DOUBLE !":
         return 30;
       case "SINGLE !":
-        return 10;
       case "WELCOME!":
         return 10;
       default:
@@ -255,29 +281,46 @@ const Payment = () => {
   };
 
   const handlePaymentSubmit = async () => {
-    if (selectedCoupon && userUid) {
-      try {
+    try {
+      // 쿠폰 사용 시 Firestore에서 삭제
+      if (selectedCoupon && userUid) {
         await deleteDoc(
           doc(db, "users", userUid, "wonCoupons", selectedCoupon.id)
         );
         console.log("사용된 쿠폰 삭제 완료");
-      } catch (err) {
-        console.error("쿠폰 삭제 실패:", err);
       }
+
+      // 주문 내역 저장
+      const purchasedOrder = {
+        orderItems,
+        coupon: selectedCoupon,
+        totalPrice,
+        purchasedAt: new Date().toISOString(),
+      };
+
+      const prevHistory =
+        JSON.parse(localStorage.getItem("orderHistory")) || [];
+      prevHistory.push(purchasedOrder);
+      localStorage.setItem("orderHistory", JSON.stringify(prevHistory));
+
+      // 장바구니 비우기
+      clearCart();
+      localStorage.removeItem("cartItems");
+      localStorage.removeItem("appliedCoupon");
+
+      alert("결제가 완료되었습니다.");
+      navigate("/store");
+    } catch (error) {
+      console.error("결제 처리 중 오류 발생:", error);
+      alert("결제 중 문제가 발생했습니다. 다시 시도해 주세요.");
     }
-
-    clearCart();
-
-    alert("결제가 완료되었습니다.");
-    localStorage.removeItem("cartItems");
-    localStorage.removeItem("appliedCoupon");
-    navigate("/store");
   };
 
   return (
     <Container>
       <Section>
         <Title>Payment</Title>
+
         <List>
           <InfoTitle>
             <li>
@@ -290,6 +333,7 @@ const Payment = () => {
           </InfoTitle>
           <MyAddress />
         </List>
+
         <List>
           <InfoTitle>
             <li>
@@ -297,13 +341,16 @@ const Payment = () => {
             </li>
             <span></span>
           </InfoTitle>
+
           <Items data-lenis-prevent>
             {orderItems.length > 0 ? (
               orderItems.map((item) => (
                 <ProductItem key={item.id} item={item} page="payment" />
               ))
             ) : (
-              <p>주문할 상품이 없습니다.</p>
+              <ListMiddle>
+                <Listimg src={LogonRookielogo} alt="LogonRookielogo" />
+              </ListMiddle>
             )}
           </Items>
         </List>

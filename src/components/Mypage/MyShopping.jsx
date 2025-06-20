@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ProductItem from "../Cart/ProductItem";
 import styled from "styled-components";
@@ -263,12 +264,14 @@ const Listimg = styled.img`
 
 const MyShopping = () => {
   const { userProfile } = authStore();
-  const location = useLocation();
-  const orderItems = location.state?.orderItems || [];
-  const productPrice = orderItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const saveOrders = JSON.parse(localStorage.getItem("orderHistory")) || [];
+    setOrders(saveOrders);
+  }, []);
+
+  const allOrderItems = orders.flatMap((order) => order.orderItems);
 
   return (
     <Inner>
@@ -329,10 +332,10 @@ const MyShopping = () => {
           </li>
           <span></span>
         </InfoTitle>
-        <Items data-lenis-prevent>
-          {orderItems.length > 0 ? (
-            orderItems.map((item) => (
-              <ProductItem key={item.id} item={item} page="payment" />
+        <Items>
+          {allOrderItems.length > 0 ? (
+            allOrderItems.map((item) => (
+              <ProductItem key={item.id} item={item} page="mypage" />
             ))
           ) : (
             <ListMiddle>

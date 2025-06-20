@@ -10,14 +10,19 @@ const Container = styled.div`
 
 const RecoPlayThumbnail = styled.div`
   width: 264px;
+  height: 150px;
   border-radius: 10px;
   overflow: hidden;
+  cursor: pointer;
   img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 
 const RecoPlayInfo = styled.div`
+  width: 225px;
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -27,6 +32,12 @@ const RecoPlayInfo = styled.div`
 const RecoPlayTitle = styled.h2`
   font-size: 1.8rem;
   color: var(--light);
+  display: -webkit-box;
+  -webkit-line-clamp: 2; // 최대 2줄까지만 보여줌
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
 `;
 const RecoPlayTeam = styled.div`
   color: var(--gray8);
@@ -51,7 +62,6 @@ const TimeAgo = styled.h3`
 
 const RecoPlay = ({ videoId, title, thumbnail, channelTitle }) => {
   const handleClick = () => {
-    // 영상 상세 페이지로 이동
     window.location.href = `/play/${videoId}`;
   };
   return (
@@ -61,7 +71,7 @@ const RecoPlay = ({ videoId, title, thumbnail, channelTitle }) => {
       </RecoPlayThumbnail>
       <RecoPlayInfo>
         <RecoPlayTitle>{title}</RecoPlayTitle>
-        <RecoPlayTeam>BEARS TV</RecoPlayTeam>
+        <RecoPlayTeam>{channelTitle}</RecoPlayTeam>
         <PlayDesc>
           <ViewCount>조회수 5.3만회</ViewCount>
           <p>・</p>
