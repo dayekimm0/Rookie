@@ -86,7 +86,7 @@ const SearchMobile = ({
           <input
             className="search_txt"
             type="text"
-            placeholder="search"
+            placeholder="찾으시는 동영상을 입력해주세요."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             autoFocus

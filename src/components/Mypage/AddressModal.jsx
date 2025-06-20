@@ -104,7 +104,6 @@ const ModalTWrapper = styled.div`
 const ModalText = styled.input`
   width: 100%;
   height: 62px;
-  height: 100%;
   border: 1px solid var(--grayC);
   border-radius: 4px;
   font-size: 1.6rem;
@@ -141,8 +140,8 @@ const PostWrapper = styled.div`
 `;
 
 const PostInput = styled.input`
+  height: 62px;
   width: 60%;
-  height: 70px;
   border: 1px solid var(--grayC);
   border-radius: 4px;
   font-size: 1.6rem;
@@ -158,14 +157,14 @@ const PostInput = styled.input`
   }
   @media screen and (max-width: 1024px) {
     height: 50px;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     &::placeholder,
     input {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
     }
   }
   @media screen and (max-width: 600px) {
-    height: 40px;
+    height: 44px;
     font-size: 1.2rem;
     &::placeholder,
     input {
@@ -175,8 +174,8 @@ const PostInput = styled.input`
 `;
 
 const PostButton = styled.button`
-  width: 38%;
-  height: 70px;
+  width: 39%;
+  height: 62px;
   border: 1px solid var(--dark);
   background: var(--dark);
   color: var(--light);
@@ -195,7 +194,7 @@ const PostButton = styled.button`
     font-size: 1.4rem;
   }
   @media screen and (max-width: 600px) {
-    height: 40px;
+    height: 44px;
     font-size: 1.2rem;
   }
 `;
@@ -227,11 +226,25 @@ const ModalButton = styled.button`
 `;
 
 const ModalCloseButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
   align-self: flex-end;
   background: none;
   border: none;
   font-size: 1.6rem;
   cursor: pointer;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  color: var(--dark);
 `;
 
 const AddressModal = ({ isOpen, closeAddressModal }) => {
@@ -324,6 +337,7 @@ const AddressModal = ({ isOpen, closeAddressModal }) => {
     <>
       <ModalOverlay isOpen={isOpen} onClick={closeAddressModal}>
         <ModalContent onClick={(e) => e.stopPropagation()}>
+          <CloseButton onClick={closeAddressModal}>⨯</CloseButton>
           <LogoWrapper>
             <Logo>
               <LogoImg src={logo} alt="rookielogo" />
