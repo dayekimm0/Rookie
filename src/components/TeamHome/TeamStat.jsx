@@ -49,7 +49,7 @@ const TeamRecord = styled.div`
 const RecordKeys = styled.span`
   color: var(--light);
   opacity: 0.7;
-  margin-right: 5px;
+  margin-right: 8px;
 `;
 
 // value 부분 (60 | 23승 34패 3무 | 0.404)
