@@ -11,6 +11,9 @@ const SearchPcWrap = styled.div`
   padding: 40px;
   background: var(--bg);
   border-bottom: 1px solid var(--gray3);
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const Form = styled.form`
