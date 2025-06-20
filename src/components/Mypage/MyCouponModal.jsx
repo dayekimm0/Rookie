@@ -1,4 +1,7 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 import logo from "../../images/logos/Rookie_logo.svg";
 
 const ModalOverlay = styled.div.withConfig({
@@ -93,7 +96,7 @@ const ModalTWrapper = styled.div`
 `;
 
 const ModalTextT = styled.p`
-  font-size: 1.8rem;
+  font-size: 2rem;
   line-height: 1.3;
   font-weight: bold;
   @media screen and (max-width: 1024px) {
@@ -148,17 +151,20 @@ const MyCouponModal = ({ isOpen, closeModal, coupons }) => {
   const getDiscountText = (title) => {
     switch (title) {
       case "HOME RUN !":
-        return "80%";
+        return "HOME RUN [80%]";
       case "TRIPLE !":
-        return "50%";
+        return "TRIPLE [50%]";
       case "DOUBLE !":
-        return "30%";
+        return "DOUBLE [30%]";
       case "SINGLE !":
-        return "10%";
+        return "SINGLE [10%]";
+      case "WELCOME!":
+        return "WELCOME [10%]";
       default:
-        return title; // 혹시 다른 이름의 쿠폰이 들어올 경우 대비
+        return title;
     }
   };
+
   return (
     <ModalOverlay isOpen={isOpen} onClick={closeModal}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -168,19 +174,22 @@ const MyCouponModal = ({ isOpen, closeModal, coupons }) => {
           </Logo>
           <ModalTitle>내 쿠폰</ModalTitle>
         </LogoWrapper>
-        {coupons.length > 0 ? (
-          <ModalTWrapper>
-            <ModalTextT>{getDiscountText(coupons[0].title)}</ModalTextT>
-            <ModalText>
-              [EVENT] {coupons[0].title} COUPON | 적용 제한금액 없음
-            </ModalText>
-          </ModalTWrapper>
-        ) : null}
 
-        <ModalTWrapper>
-          <ModalTextT>1,000원</ModalTextT>
-          <ModalText>[6월 특가] 10,000원이상 구매시 적용 가능</ModalText>
-        </ModalTWrapper>
+        {coupons.length > 0 ? (
+          coupons.map((coupon) => (
+            <ModalTWrapper key={coupon.id}>
+              <ModalTextT>{getDiscountText(coupon.title)}</ModalTextT>
+              <ModalText>
+                [EVENT] {coupon.title} COUPON | 적용 제한금액 없음
+              </ModalText>
+            </ModalTWrapper>
+          ))
+        ) : (
+          <ModalTWrapper>
+            <ModalTextT>쿠폰이 없습니다.</ModalTextT>
+          </ModalTWrapper>
+        )}
+
         <ModalButton type="button" onClick={closeModal}>
           돌아가기
         </ModalButton>

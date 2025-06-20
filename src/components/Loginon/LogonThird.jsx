@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 
 // import { getScrollbarWidth } from "../../util";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection, addDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import DaumPostcode from "react-daum-postcode";
 import useBodyScrollLock from "../../hook/useBodyScrollLock";
@@ -304,6 +304,21 @@ const LogonThird = () => {
         address: formData.address, // 주소 저장
         detailedAddress: formData.detailedAddress, // 상세주소 저장
         createdAt: new Date().toISOString().split("T")[0],
+      });
+
+      // 회원가입 완료시 쿠폰 발급
+      const welcomeCouponRef = collection(
+        db,
+        "users",
+        user.uid,
+        "welcomeCoupons"
+      );
+      await addDoc(welcomeCouponRef, {
+        title: "WELCOME!",
+        discountRate: 10,
+        condition: "최초 회원가입 완료시 쿠폰 발급",
+        timestamp: new Date(),
+        used: false,
       });
 
       await signOut(auth);

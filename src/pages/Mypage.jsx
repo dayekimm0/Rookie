@@ -5,11 +5,11 @@ import { Outlet } from "react-router-dom";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 import authStore from "../stores/AuthStore";
+import { getTeamColor, getEmblem } from ".././util";
 import MyCoupon from "../components/Mypage/MyCouponModal";
 import coupon from ".././images/icons/coupon.svg";
 import partnerLogo from ".././images/logos/Partner_Logo.svg";
 import thumbs_up from ".././images/icons/thumbs-up.svg";
-import { getTeamColor, getEmblem } from ".././util";
 
 const Container = styled.div`
   display: flex;
@@ -359,6 +359,7 @@ const Mypage = () => {
   const [coupons, setCoupons] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
@@ -370,41 +371,49 @@ const Mypage = () => {
     { path: "/mypage/mysetting", label: "프로필 설정" },
   ];
 
-  const myCouponOpen = () => {
-    setModalState((prev) => !prev);
-  };
-
-  const goVideo = () => navigate("/mypage/myvideo");
-
-  const { isLoading } = authStore();
-
   useEffect(() => {
-    const fetchWonCoupons = async () => {
+    const fetchCoupons = async () => {
       if (!userProfile?.uid) return;
 
       const db = getFirestore();
-      const WonCouponsRef = collection(
+      const wonCouponsRef = collection(
         db,
         "users",
         userProfile.uid,
         "wonCoupons"
       );
+      const welcomeCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "welcomeCoupons"
+      );
 
       try {
-        const snapshot = await getDocs(WonCouponsRef);
-        const result = snapshot.docs.map((doc) => ({
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        const wonCoupons = wonSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setCoupons(result);
+
+        const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // 두 쿠폰 배열 합치기
+        setCoupons([...wonCoupons, ...welcomeCoupons]);
       } catch (error) {
-        console.log(error);
+        console.error("쿠폰 데이터 불러오기 실패:", error);
       }
     };
-    fetchWonCoupons();
-  }, [userProfile]);
 
-  console.log(coupons);
+    fetchCoupons();
+  }, [userProfile]);
 
   useEffect(() => {
     if (!userProfile) {
@@ -431,7 +440,7 @@ const Mypage = () => {
 
   return (
     <Container>
-      {isLoading ? (
+      {authStore().isLoading ? (
         <SlideLoaderWrapper>
           <SvgSpinner viewBox="0 0 50 50">
             <circle
@@ -475,12 +484,12 @@ const Mypage = () => {
               </div>
               <span />
               <ProfileUnder>
-                <Icon onClick={myCouponOpen}>
+                <Icon onClick={() => setModalState(true)}>
                   <img src={coupon} alt="coupon" />
                   <p>내 쿠폰</p>
-                  <span>{coupons.length + 1}</span>
+                  <span>{coupons.length}</span>
                 </Icon>
-                <Icon onClick={goVideo}>
+                <Icon onClick={() => navigate("/mypage/myvideo")}>
                   <img src={thumbs_up} alt="thumbs_up" />
                   <p>좋아요</p>
                   <span>132</span>
@@ -517,4 +526,5 @@ const Mypage = () => {
     </Container>
   );
 };
+
 export default Mypage;
