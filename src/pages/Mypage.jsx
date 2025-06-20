@@ -5,11 +5,11 @@ import { Outlet } from "react-router-dom";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 import authStore from "../stores/AuthStore";
+import { getTeamColor, getEmblem } from ".././util";
 import MyCoupon from "../components/Mypage/MyCouponModal";
 import coupon from ".././images/icons/coupon.svg";
 import partnerLogo from ".././images/logos/Partner_Logo.svg";
 import thumbs_up from ".././images/icons/thumbs-up.svg";
-import { getTeamColor, getEmblem } from ".././util";
 
 const Container = styled.div`
   display: flex;
@@ -357,6 +357,7 @@ const Mypage = () => {
   const { userProfile } = authStore();
   const [modalState, setModalState] = useState(false);
   const [coupons, setCoupons] = useState([]);
+  console.log(coupons);
   const navigate = useNavigate();
   const location = useLocation();
   const TeamEmblem = ({ emblemId }) => {
@@ -403,8 +404,6 @@ const Mypage = () => {
     };
     fetchWonCoupons();
   }, [userProfile]);
-
-  console.log(coupons);
 
   useEffect(() => {
     if (!userProfile) {

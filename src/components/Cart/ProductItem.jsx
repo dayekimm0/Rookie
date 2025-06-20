@@ -256,7 +256,6 @@ const MultiPrice = styled.li`
 const ProductItem = ({ item, isChecked, onToggle }) => {
   const { id, thumbnail, team, name, option, quantity, price } = item;
   const { pathname } = useLocation();
-  console.log(pathname);
 
   return (
     <Item key={id}>
