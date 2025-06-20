@@ -187,16 +187,35 @@ const Cart = () => {
         return;
       }
       try {
-        const snapshot = await getDocs(
-          collection(db, "users", userUid, "wonCoupons")
+        // wonCoupons 와 welcomeCoupons 두 컬렉션 불러오기
+        const wonCouponsRef = collection(db, "users", userUid, "wonCoupons");
+        const welcomeCouponsRef = collection(
+          db,
+          "users",
+          userUid,
+          "welcomeCoupons"
         );
 
-        const couponList = snapshot.docs.map((doc) => ({
+        // 병렬로 두 컬렉션 문서 가져오기
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        // 각각 문서 배열로 변환
+        const wonCouponList = wonSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const welcomeCouponList = welcomeSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        setCoupons(couponList);
+        // 두 배열 합치기
+        const allCoupons = [...wonCouponList, ...welcomeCouponList];
+
+        setCoupons(allCoupons);
       } catch (error) {
         console.error("쿠폰 불러오기 실패", error);
         setCoupons([]);

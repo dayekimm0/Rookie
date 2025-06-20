@@ -211,7 +211,7 @@ const Payment = () => {
 
   const clearCart = useCartStore((state) => state.clearCart);
 
-  // Firestore에서 유저 쿠폰 불러오기
+  // Firestore에서 유저 쿠폰 불러오기 (wonCoupons, welcomeCoupons 모두)
   useEffect(() => {
     const fetchCoupons = async () => {
       if (!userUid) {
@@ -220,17 +220,36 @@ const Payment = () => {
       }
 
       try {
-        const snapshot = await getDocs(
-          collection(db, "users", userUid, "wonCoupons")
+        const wonCouponsRef = collection(db, "users", userUid, "wonCoupons");
+        const welcomeCouponsRef = collection(
+          db,
+          "users",
+          userUid,
+          "welcomeCoupons"
         );
-        const coupons = snapshot.docs.map((doc) => ({
+
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        const wonCoupons = wonSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
+          collectionType: "wonCoupons", // 컬렉션 구분용
         }));
-        setAvailableCoupons(coupons);
+
+        const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          collectionType: "welcomeCoupons", // 컬렉션 구분용
+        }));
+
+        const allCoupons = [...wonCoupons, ...welcomeCoupons];
+        setAvailableCoupons(allCoupons);
 
         if (couponFromCart) {
-          const matched = coupons.find((c) => c.id === couponFromCart.id);
+          const matched = allCoupons.find((c) => c.id === couponFromCart.id);
           setSelectedCoupon(matched || null);
         }
       } catch (err) {
@@ -258,6 +277,7 @@ const Payment = () => {
       case "DOUBLE !":
         return 30;
       case "SINGLE !":
+        return 10;
       case "WELCOME!":
         return 10;
       default:
@@ -282,15 +302,18 @@ const Payment = () => {
 
   const handlePaymentSubmit = async () => {
     try {
-      // 쿠폰 사용 시 Firestore에서 삭제
       if (selectedCoupon && userUid) {
+        // selectedCoupon의 컬렉션 타입에 따라 삭제
+        const collectionType = selectedCoupon.collectionType || "wonCoupons";
+
         await deleteDoc(
-          doc(db, "users", userUid, "wonCoupons", selectedCoupon.id)
+          doc(db, "users", userUid, collectionType, selectedCoupon.id)
         );
+
         console.log("사용된 쿠폰 삭제 완료");
       }
 
-      // 주문 내역 저장
+      // 주문 내역 저장 (localStorage)
       const purchasedOrder = {
         orderItems,
         coupon: selectedCoupon,
