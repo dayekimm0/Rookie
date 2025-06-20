@@ -147,7 +147,7 @@ const HighlightList = ({ type, title }) => {
   const handlePrev = () => swiper?.slidePrev();
   const handleNext = () => swiper?.slideNext();
 
-  const handleMoreClick = () => navigate("/playall");
+  // const handleMoreClick = () => navigate("/playall");
 
   const handleOpenModal = (id) => {
     setSelectedVideoId(id);

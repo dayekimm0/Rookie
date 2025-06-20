@@ -43,13 +43,13 @@ const CommentList = ({ videoId, onCountChange }) => {
       orderBy("createdAt", "desc")
     );
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const newComments = [];
-      querySnapshot.forEach((doc) => {
-        newComments.push({ id: doc.id, ...doc.data() });
-      });
-      setComments(newComments);
-      onCountChange?.(newComments.length);
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const comments = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setComments(comments);
+      onCountChange?.(comments.length);
     });
 
     return () => unsubscribe();

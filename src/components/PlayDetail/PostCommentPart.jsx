@@ -1,7 +1,13 @@
 import styled from "styled-components";
 import { useState } from "react";
 import authStore from "../../stores/authStore";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 
 const PostComment = styled.form`
@@ -68,14 +74,16 @@ const SubmitBtn = styled.input`
 
 const PostCommentPart = ({ videoId, onCommentAdded }) => {
   const [value, setValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, userProfile } = authStore();
   const userName = userProfile?.nickname || "사용자";
-  const isDisabled = value.trim() === "";
+  const isDisabled = value.trim() === "" || isSubmitting;
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // form 제출 막기
+    e.preventDefault();
     if (!user) return alert("로그인이 필요합니다.");
     if (isDisabled) return;
+    setIsSubmitting(true);
 
     const newComment = {
       text: value.trim(),
@@ -87,12 +95,19 @@ const PostCommentPart = ({ videoId, onCommentAdded }) => {
     };
 
     try {
-      await addDoc(collection(db, "comments"), newComment);
+      const docRef = await addDoc(collection(db, "comments"), newComment);
+
+      // ✅ 저장 직후 실제 createdAt까지 포함된 문서를 가져옴
+      const savedDoc = await getDoc(docRef);
+      if (savedDoc.exists()) {
+        console.log("✅ 댓글 저장 후 확인:", savedDoc.data());
+      }
+
       setValue("");
-      console.log("✅ 댓글 저장 완료");
-      onCommentAdded?.();
     } catch (error) {
       console.error("❌ 댓글 저장 실패:", error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

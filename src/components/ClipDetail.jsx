@@ -3,6 +3,12 @@ import ReactDOM from "react-dom";
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import mockupProduct from "../images/mockup/lgtwins_uniform.png";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import SwiperCore from "swiper";
+import { Mousewheel } from "swiper/modules";
+
+SwiperCore.use([Mousewheel]);
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -18,9 +24,10 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  aspect-ratio: 9 / 16;
-  width: 700px;
-  height: 800px;
+  width: 32%;
+  height: 79%;
+  left: 34%;
+  top: 8%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,21 +42,6 @@ const ModalPlay = styled.div`
   align-items: center;
   border-radius: 10px;
   overflow: hidden;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 2.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--light);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
 `;
 
 const ModalProducts = styled.div`
@@ -97,7 +89,8 @@ const ProductInfo = styled.div`
   }
 `;
 
-const ClipDetail = ({ videoId, onClose }) => {
+const ClipDetail = ({ videoId, videoList = [], onClose }) => {
+  const initialIndex = videoList.findIndex((v) => v.id === videoId);
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -116,36 +109,42 @@ const ClipDetail = ({ videoId, onClose }) => {
   };
 
   return ReactDOM.createPortal(
-    <ModalWrapper>
-      <ModalContent>
-        <CloseButton onClick={onClose}>X</CloseButton>
-        <ModalPlay>
-          <YouTube
-            videoId={videoId}
-            opts={opts}
-            style={{ width: "100%", height: "100%" }}
-          />
-        </ModalPlay>
-        <ModalProducts>
-          <h1>추천하는 ROOK</h1>
-          <ModalProduct>
-            <ProductThumbnail>
-              <img src={mockupProduct} alt="mockup" />
-            </ProductThumbnail>
-            <ProductInfo>
-              <p>최고심 콜라보 캐릭터 유니폼(PINK)</p>
-            </ProductInfo>
-          </ModalProduct>
-          <ModalProduct>
-            <ProductThumbnail>
-              <img src={mockupProduct} alt="mockup" />
-            </ProductThumbnail>
-            <ProductInfo>
-              <p>최고심 콜라보 캐릭터 유니폼(PINK)</p>
-            </ProductInfo>
-          </ModalProduct>
-        </ModalProducts>
-      </ModalContent>
+    <ModalWrapper onClick={onClose}>
+      <Swiper
+        direction="vertical"
+        spaceBetween={50}
+        slidesPerView={1}
+        mousewheel={true}
+        initialSlide={initialIndex >= 0 ? initialIndex : 0}
+        style={{ width: "100%", height: "100%" }}
+      >
+        {videoList.map((video, index) => (
+          <SwiperSlide key={video.id || index}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <ModalPlay>
+                <YouTube
+                  videoId={video.id}
+                  opts={opts}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </ModalPlay>
+              <ModalProducts>
+                <h1>추천하는 ROOK</h1>
+                {[1, 2].map((_, i) => (
+                  <ModalProduct key={i}>
+                    <ProductThumbnail>
+                      <img src={mockupProduct} alt="mockup" />
+                    </ProductThumbnail>
+                    <ProductInfo>
+                      <p>최고심 콜라보 유니폼(PINK)</p>
+                    </ProductInfo>
+                  </ModalProduct>
+                ))}
+              </ModalProducts>
+            </ModalContent>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </ModalWrapper>,
     document.body // 모달을 body 최상단에 렌더링
   );

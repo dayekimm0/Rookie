@@ -149,7 +149,11 @@ const PlayDetail = () => {
                 댓글 <span>{commentCount}</span>
               </CommentTitle>
             </CommentTop>
-            <CommentList videoId={videoId} onCountChange={setCommentCount} />
+            <CommentList
+              key={videoId}
+              videoId={videoId}
+              onCountChange={setCommentCount}
+            />
             <PostCommentPart videoId={videoId} />
           </CommentWrapper>
         </RightContent>

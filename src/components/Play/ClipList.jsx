@@ -212,7 +212,11 @@ const ClipList = ({ type, title }) => {
           </ClipRightBtn>
         </Container>
       </ContentList>
-      <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+      <ClipDetail
+        videoId={selectedVideoId}
+        onClose={handleCloseModal}
+        videoList={videos}
+      />
     </>
   );
 };

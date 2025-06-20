@@ -127,6 +127,16 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
     swiper?.slideNext();
   }, [swiper]);
 
+  const handleOpenModal = (id) => {
+    setSelectedVideoId(id);
+    swiper?.autoplay?.stop();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    swiper?.autoplay?.start();
+  };
+
   //유튜브 리스트 설정
   const {
     data: shorts = [],
