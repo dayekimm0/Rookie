@@ -23,6 +23,7 @@ const TabletGrid = `
 const Item = styled.div`
   width: 100%;
   display: grid;
+  column-gap: 20px;
   grid-template-columns: ${DeskTopGrid};
   justify-content: space-between;
   align-items: center;
@@ -265,16 +266,20 @@ const ProductItem = ({ item, isChecked, onToggle }) => {
         <TeamName>{getTeamNameKor(team)}</TeamName>
         <ProductName>{name}</ProductName>
       </ItemName>
+
       <ItemOption>
-        <li>
-          <p className="mobile">옵션</p>
-          <p className="option">{option}</p>
-        </li>
+        {option && option.length > 0 && option[0] && (
+          <li>
+            <p className="mobile">옵션</p>
+            <p className="option">{option[0]}</p>
+          </li>
+        )}
         <li>
           <p className="mobile">수량</p>
           <p className="quantity">{quantity}개</p>
         </li>
       </ItemOption>
+
       <SinglePrice>
         <p className="mobile">상품가격</p>
         <p>{price.toLocaleString()}원</p>

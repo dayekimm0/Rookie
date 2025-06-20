@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import authStore from "../../stores/AuthStore";
+import CouponSelector from "./CouponSelector";
 
 const Banner = styled.form`
   position: sticky;
@@ -71,46 +73,6 @@ const SaleInfo = styled.div`
 
   @media screen and (max-width: 375px) {
     gap: 15px;
-  }
-`;
-
-const CouponList = styled.select`
-  width: 100%;
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: "Pretendard";
-  font-size: 1.6rem;
-  padding: 10px;
-  border: 1px solid var(--grayC);
-  border-radius: 4px;
-
-  /* 커스텀 화살표 */
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  background-image: url(../../src/images/icons/select_arrow_down.svg);
-  background-repeat: no-repeat;
-  background-position: right 2% center;
-  background-size: 3.2rem;
-  &:focus {
-    background-image: url(../../src/images/icons/select_arrow_up.svg);
-  }
-
-  @media screen and (max-width: 1024px) {
-    height: 50px;
-    font-size: 1.4rem;
-  }
-
-  @media screen and (max-width: 768px) {
-    font-size: 1.6rem;
-    background-position: right 1% center;
-  }
-
-  @media screen and (max-width: 375px) {
-    font-size: 1.4rem;
   }
 `;
 
@@ -289,8 +251,6 @@ const Button = styled.input`
 const WingBanner = ({
   page,
   productPrice = 0,
-  discount = 0,
-  totalPrice = 0,
   onPaymentSubmit,
   coupons = [],
   selectedCoupon,
@@ -300,40 +260,66 @@ const WingBanner = ({
   disableOrderSelected,
   disableOrderAll,
 }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (onPaymentSubmit) onPaymentSubmit();
-  };
-
   const { userProfile, tempAddress } = authStore();
 
   const addressToCheck = tempAddress || userProfile;
-
   const isAddressValid =
     addressToCheck?.postalCode &&
     addressToCheck?.address &&
     addressToCheck?.detailedAddress;
+
+  const getDiscountPercent = (title) => {
+    switch (title) {
+      case "HOME RUN !":
+        return 80;
+      case "TRIPLE !":
+        return 50;
+      case "DOUBLE !":
+        return 30;
+      case "SINGLE !":
+        return 10;
+      case "WELCOME!":
+        return 10;
+      default:
+        return 0;
+    }
+  };
+
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(productPrice);
+
+  useEffect(() => {
+    if (selectedCoupon?.title) {
+      const discountPercent = getDiscountPercent(selectedCoupon.title);
+      const discountCalculated = Math.floor(
+        (productPrice * discountPercent) / 100
+      );
+      setDiscountAmount(discountCalculated);
+      setFinalPrice(productPrice - discountCalculated);
+    } else {
+      setDiscountAmount(0);
+      setFinalPrice(productPrice);
+    }
+  }, [selectedCoupon, productPrice]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (onPaymentSubmit) onPaymentSubmit();
+  };
 
   return (
     <Banner onSubmit={page === "payment" ? handleSubmit : undefined}>
       <SaleInfo>
         <SubTitle>할인 정보</SubTitle>
         {(page === "payment" || page === "cart") && (
-          <CouponList
-            onChange={onCouponChange}
-            value={selectedCoupon?.id || ""}
-          >
-            <option disabled value="">
-              사용 가능한 쿠폰
-            </option>
-            {coupons.map((coupon) => (
-              <option key={coupon.id} value={coupon.id}>
-                {coupon.label}
-              </option>
-            ))}
-          </CouponList>
+          <CouponSelector
+            coupons={coupons}
+            selectedCoupon={selectedCoupon}
+            onCouponChange={onCouponChange}
+          />
         )}
       </SaleInfo>
+
       <PriceInfo>
         <SubTitle>결제 정보</SubTitle>
         <PriceList>
@@ -343,7 +329,7 @@ const WingBanner = ({
           </ul>
           <ul>
             <li>할인금액</li>
-            <li>{discount.toLocaleString()}원</li>
+            <li>{discountAmount.toLocaleString()}원</li>
           </ul>
           <ul>
             <li>배송비</li>
@@ -353,9 +339,10 @@ const WingBanner = ({
         <span></span>
         <TotalPrice>
           <p>총 결제금액</p>
-          <p>{totalPrice.toLocaleString()}원</p>
+          <p>{finalPrice.toLocaleString()}원</p>
         </TotalPrice>
       </PriceInfo>
+
       {page === "cart" && (
         <Buttons>
           <input
@@ -372,6 +359,7 @@ const WingBanner = ({
           />
         </Buttons>
       )}
+
       {page === "payment" && (
         <Button type="submit" value="결제하기" disabled={!isAddressValid} />
       )}
