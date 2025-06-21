@@ -67,8 +67,6 @@ const TeamplayAll = () => {
 
   const { type, playlistId, max, title, allTab, tabs, teamCode } = state;
 
-  console.log(teamCode);
-
   if (type === "shorts") {
     // 1. playlist 불러오기
     const {

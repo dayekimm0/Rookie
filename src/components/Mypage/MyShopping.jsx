@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import ProductItem from "../Cart/ProductItem";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+
+import authStore from "../../stores/AuthStore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+import ProductItem from "../Cart/ProductItem";
+import useCartStore from "../../stores/cartStore";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import banner_rookie from "../../images/banners/banner_rookie.png";
-import authStore from "../../stores/AuthStore";
 import LogonRookielogo from "../../images/logos/Logon_Rookie_logo.svg";
 
 const Inner = styled.div`
@@ -264,7 +267,9 @@ const Listimg = styled.img`
 
 const MyShopping = () => {
   const { userProfile } = authStore();
+  const { cartItems } = useCartStore();
   const [orders, setOrders] = useState([]);
+  const [coupons, setCoupons] = useState([]);
 
   useEffect(() => {
     const saveOrders = JSON.parse(localStorage.getItem("orderHistory")) || [];
@@ -272,6 +277,52 @@ const MyShopping = () => {
   }, []);
 
   const allOrderItems = orders.flatMap((order) => order.orderItems);
+
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      if (!userProfile?.uid) return;
+
+      const db = getFirestore();
+
+      const wonCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "wonCoupons"
+      );
+      const welcomeCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "welcomeCoupons"
+      );
+
+      try {
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        const wonCoupons = wonSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          collectionType: "wonCoupons", // 필요하면 표시
+        }));
+
+        const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          collectionType: "welcomeCoupons",
+        }));
+
+        setCoupons([...wonCoupons, ...welcomeCoupons]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCoupons();
+  }, [userProfile]);
 
   return (
     <Inner>
@@ -302,13 +353,13 @@ const MyShopping = () => {
 
       <MyShoppingInner>
         <MyShoppingDetail>
-          <b>2</b>
+          <b>{cartItems.length}</b>
           <br />
           장바구니
         </MyShoppingDetail>
         <MyShoppingLine />
         <MyShoppingDetail>
-          <b>1</b>
+          <b>{allOrderItems.length}</b>
           <br />
           구매완료
         </MyShoppingDetail>
@@ -320,7 +371,7 @@ const MyShopping = () => {
         </MyShoppingDetail>
         <MyShoppingLine />
         <MyShoppingDetail>
-          <b>1</b>
+          <b>{coupons.length}</b>
           <br />
           쿠폰
         </MyShoppingDetail>

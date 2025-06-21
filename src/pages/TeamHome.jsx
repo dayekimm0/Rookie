@@ -120,7 +120,6 @@ const TeamHome = () => {
   };
 
   const teamSlideTab = teamSlideTabs[teamCode];
-  console.log("팀슬라이드", teamSlideTabs, teamCode, teamSlideTab);
 
   const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
 

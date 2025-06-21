@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import YouTube from "react-youtube";
-import { getTeamStoreVideo, getYoutubeThumbnail } from "../../utils/teamVideos";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { getTeamStoreVideo, getYoutubeThumbnail } from "../../data/teamVideos";
+import { getTeamVideoProducts } from "../../data/teamVideoProducts";
 
 const Section = styled.div`
   background: var(--dark);
@@ -17,7 +20,9 @@ const Section = styled.div`
   }
 `;
 
-const Container = styled.div``;
+const Container = styled.div`
+  position: relative;
+`;
 
 const SectionTitle = styled.h2`
   font-size: 32px;
@@ -36,8 +41,17 @@ const ContentWrapper = styled.div`
   gap: 20px;
 
   @media screen and (max-width: 1024px) {
+    gap: 11px;
+  }
+
+  @media screen and (max-width: 768px) {
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
+  }
+
+  @media screen and (max-width: 375px) {
+    flex-direction: column;
+    gap: 10px;
   }
 `;
 
@@ -50,13 +64,24 @@ const VideoSection = styled.div`
   position: relative;
   cursor: pointer;
 
+  @media screen and (max-width: 1820px) {
+    width: 807px;
+    height: 340px;
+  }
+
   @media screen and (max-width: 1024px) {
-    width: 100%;
-    height: 400px;
+    width: 607px;
+    height: 340px;
   }
 
   @media screen and (max-width: 768px) {
-    height: 300px;
+    width: 346px;
+    height: 194px;
+  }
+
+  @media screen and (max-width: 375px) {
+    width: 346px;
+    height: 194px;
   }
 `;
 
@@ -178,24 +203,106 @@ const ProductSection = styled.div`
   flex: 1;
   max-height: 608px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: auto;
+  scroll-behavior: smooth;
 
   /* 스크롤바 스타일링 */
+  scrollbar-gutter: stable;
   &::-webkit-scrollbar {
-    width: 16px;
+    width: 12px;
   }
 
   &::-webkit-scrollbar-track {
     background: var(--grayD);
-    border-radius: 3px;
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
     background: var(--gray8);
-    border-radius: 10px;
+    border-radius: 4px;
+    border: 3px solid var(--grayD);
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: var(--gray8);
+    background: var(--gray6);
+    border: 3px solid var(--grayD);
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  @media screen and (max-width: 1024px) {
+    max-height: 340px;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-height: none;
+    overflow-y: visible;
+    overflow-x: auto;
+    display: flex;
+    gap: 10px;
+    padding-bottom: 10px;
+    width: 330px;
+
+    /* 모바일 가로 스크롤바 */
+    &::-webkit-scrollbar {
+      height: 8px;
+      width: auto;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--grayD);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--gray8);
+      border-radius: 4px;
+      border: 2px solid var(--grayD);
+      background-clip: content-box;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--gray6);
+      border: 2px solid var(--grayD);
+      background-clip: content-box;
+    }
+  }
+
+  @media screen and (max-width: 375px) {
+    max-height: none;
+    overflow-y: visible;
+    overflow-x: auto;
+    display: flex;
+    gap: 10px;
+    padding-bottom: 10px;
+    width: 330px;
+
+    /* 모바일 가로 스크롤바 */
+    &::-webkit-scrollbar {
+      height: 8px;
+      width: auto;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--grayD);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--gray8);
+      border-radius: 4px;
+      border: 2px solid var(--grayD);
+      background-clip: content-box;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--gray6);
+      border: 2px solid var(--grayD);
+      background-clip: content-box;
+    }
   }
 `;
 
@@ -207,6 +314,26 @@ const ProductItem = styled.div`
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 1024px) {
+    gap: 11px;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    width: 100px;
+  }
+
+  @media screen and (max-width: 375px) {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    width: 100px;
   }
 `;
 
@@ -223,6 +350,21 @@ const ProductImage = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 126px;
+    height: 126px;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
+
+  @media screen and (max-width: 375px) {
+    width: 100px;
+    height: 100px;
   }
 `;
 
@@ -243,11 +385,26 @@ const ProductInfo = styled.div`
   height: 224px;
   display: flex;
   flex-direction: column;
-  padding: 16px 0;
+  padding: 16px 16px;
 
   @media screen and (max-width: 1024px) {
-    width: auto;
-    flex: 1;
+    width: 344px;
+    height: 126px;
+    padding: 12px;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100px;
+    height: 154px;
+    padding: 8px 0;
+    flex-shrink: 0;
+  }
+
+  @media screen and (max-width: 375px) {
+    width: 100px;
+    height: 154px;
+    padding: 8px 0;
+    flex-shrink: 0;
   }
 `;
 
@@ -255,6 +412,20 @@ const InfluencerName = styled.div`
   font-size: 14px;
   color: var(--grayC);
   margin-bottom: 8px;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+
+  @media screen and (max-width: 375px) {
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
 `;
 
 const ProductName = styled.div`
@@ -264,8 +435,21 @@ const ProductName = styled.div`
   line-height: 1.4;
   margin-bottom: 16px;
 
+  @media screen and (max-width: 1024px) {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
   @media screen and (max-width: 768px) {
-    font-size: 16px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  @media screen and (max-width: 375px) {
+    font-size: 12px;
+    margin-bottom: 8px;
+    line-height: 1.3;
   }
 `;
 
@@ -274,50 +458,60 @@ const ProductPrice = styled.div`
   font-weight: semibold;
   color: var(--light);
 
+  @media screen and (max-width: 1024px) {
+    font-size: 26px;
+  }
+
   @media screen and (max-width: 768px) {
-    font-size: 18px;
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: 375px) {
+    font-size: 12px;
   }
 `;
 
 const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const navigate = useNavigate();
 
   // TEAM STORE인 경우에만 구단별 영상 데이터 가져오기
   const videoData =
     sectionType === "TEAM_STORE" ? getTeamStoreVideo(teamCode) : null;
 
-  // Mock 데이터 - 추후 JSON으로 교체
-  const mockProducts = [
-    {
-      id: 1,
-      image: "/api/placeholder/224/224",
-      influencerName: "인플루언서명",
-      productName: "상품명",
-      price: "33,000원",
+  // 구단별 상품 데이터 fetch (ProductList.jsx와 동일한 방식)
+  const {
+    data: allTeamProducts = [],
+    isLoading: isProductsLoading,
+    error: productsError,
+  } = useQuery({
+    queryKey: ["teamProducts", teamCode],
+    queryFn: async () => {
+      if (!teamCode) return [];
+      const res = await fetch(
+        `https://rookiejson.netlify.app/teamJson/${teamCode}.json`
+      );
+      if (!res.ok) throw new Error("팀 상품 로딩 실패");
+      return res.json();
     },
-    {
-      id: 2,
-      image: "/api/placeholder/224/224",
-      influencerName: "인플루언서명",
-      productName: "상품명",
-      price: "45,000원",
-    },
-    {
-      id: 3,
-      image: "/api/placeholder/224/224",
-      influencerName: "인플루언서명",
-      productName: "상품명(절반만 보임)",
-      price: "29,000원",
-    },
-    {
-      id: 4,
-      image: "/api/placeholder/224/224",
-      influencerName: "인플루언서명",
-      productName: "상품명(절반만 보임)",
-      price: "29,000원",
-    },
-  ];
+    staleTime: 1000 * 60 * 10, // 10분 캐싱
+    enabled: !!teamCode && sectionType === "TEAM_STORE", // TEAM_STORE일 때만 실행
+  });
+
+  // 표시할 상품들 필터링
+  const displayProducts = useMemo(() => {
+    if (sectionType !== "TEAM_STORE" || !teamCode || !allTeamProducts.length) {
+      return [];
+    }
+
+    const selectedProductIds = getTeamVideoProducts(teamCode);
+
+    // ID 순서대로 상품 정렬하여 반환
+    return selectedProductIds
+      .map((id) => allTeamProducts.find((product) => product.id === id))
+      .filter(Boolean); // undefined 제거
+  }, [allTeamProducts, teamCode, sectionType]);
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -330,6 +524,12 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
   const handleError = () => {
     console.warn("YouTube player error 발생");
     setIsReady(false);
+  };
+
+  const handleProductClick = (product) => {
+    // 내부 ProductDetail 페이지로 이동
+    // 경로: /store/{teamCode}/{productId}
+    navigate(`/store/${teamCode}/${product.id}`);
   };
 
   return (
@@ -396,36 +596,77 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
                 </VideoThumbnail>
               )
             ) : (
-              // ROOKie 파트너존 - 기존 플레이스홀더
-              <VideoPlaceholder>
-                {/* 기존 주석 처리된 내용 그대로 유지 */}
-              </VideoPlaceholder>
+              // ROOKie 파트너존 플레이스홀더
+              <VideoPlaceholder>영상 준비 중...</VideoPlaceholder>
             )}
           </VideoSection>
 
           {/* 우측 제품 리스트 영역 */}
-          <ProductSection>
-            {mockProducts.map((product) => (
-              <ProductItem key={product.id}>
-                <ProductImage>
-                  {product.image ? (
-                    <img src={product.image} alt={product.productName} />
-                  ) : (
-                    <ProductImagePlaceholder>
-                      상품 이미지
-                    </ProductImagePlaceholder>
-                  )}
-                </ProductImage>
+          <ProductSection data-lenis-prevent>
+            {isProductsLoading ? (
+              <div
+                style={{
+                  display: "flex",
+                  justify: "center",
+                  alignItems: "center",
+                  height: "200px",
+                  color: "var(--gray4)",
+                }}
+              >
+                상품 로딩 중...
+              </div>
+            ) : productsError ? (
+              <div
+                style={{
+                  display: "flex",
+                  justify: "center",
+                  alignItems: "center",
+                  height: "200px",
+                  color: "var(--gray4)",
+                }}
+              >
+                상품 로딩 실패
+              </div>
+            ) : displayProducts.length > 0 ? (
+              displayProducts.map((product) => (
+                <ProductItem
+                  key={product.id}
+                  onClick={() => handleProductClick(product)}
+                >
+                  <ProductImage>
+                    {product.thumbnail ? (
+                      <img src={product.thumbnail} alt={product.name} />
+                    ) : (
+                      <ProductImagePlaceholder>
+                        상품 이미지
+                      </ProductImagePlaceholder>
+                    )}
+                  </ProductImage>
 
-                <ProductInfo>
-                  <div>
-                    <InfluencerName>{product.influencerName}</InfluencerName>
-                    <ProductName>{product.productName}</ProductName>
-                  </div>
-                  <ProductPrice>{product.price}</ProductPrice>
-                </ProductInfo>
-              </ProductItem>
-            ))}
+                  <ProductInfo>
+                    <div>
+                      <InfluencerName>
+                        {product.collaboration || "구단 상품"}
+                      </InfluencerName>
+                      <ProductName>{product.name}</ProductName>
+                    </div>
+                    <ProductPrice>{product.price}</ProductPrice>
+                  </ProductInfo>
+                </ProductItem>
+              ))
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justify: "center",
+                  alignItems: "center",
+                  height: "200px",
+                  color: "var(--gray4)",
+                }}
+              >
+                표시할 상품이 없습니다.
+              </div>
+            )}
           </ProductSection>
         </ContentWrapper>
       </Container>

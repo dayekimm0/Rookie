@@ -156,20 +156,16 @@ const MoreTeamPlayAllList = ({ allTab, tabs, teamCode }) => {
           return details.filter((video) => {
             const isHighlight =
               video.playlistType?.toLowerCase() === "highlight";
-            console.log(video.playlistType);
             if (isHighlight) {
-              // 하이라이트는 팀 필터 필요
               return video.title
                 .toLowerCase()
                 .includes(teamKeyword.toLowerCase());
             }
 
-            // 나머지는 필터 없이 다 포함
             return true;
           });
         }
 
-        // 3. 필터링 없이 전체 리턴
         return details;
       })();
 

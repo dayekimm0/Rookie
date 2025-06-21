@@ -64,66 +64,6 @@ const TEAM_JSON_URLS = {
 // 카트 이동 주스턴트
 import useCartStore from "../stores/cartStore";
 
-// 임시 데이터 (실제 구현 시 API 응답으로 대체)
-// const mockRelatedProducts = [
-//   {
-//     id: "2",
-//     name: "LG트윈스 클래식 핑크 유니폼",
-//     price: 99000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-//   {
-//     id: "3",
-//     name: "LG트윈스 클래식 그린 유니폼",
-//     price: 99000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-//   {
-//     id: "4",
-//     name: "LG트윈스 빈티지 이지 티셔츠",
-//     price: 33000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-//   {
-//     id: "5",
-//     name: "LG트윈스 애플캐릭터 티셔츠",
-//     price: 33000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-//   {
-//     id: "6",
-//     name: "LG트윈스 클래식 원정 유니폼",
-//     price: 99000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-//   {
-//     id: "7",
-//     name: "LG트윈스 스페셜 에디션 유니폼",
-//     price: 129000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-//   {
-//     id: "8",
-//     name: "LG트윈스 팬 응원 티셔츠",
-//     price: 29000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-//   {
-//     id: "9",
-//     name: "LG트윈스 2025 시즌 유니폼",
-//     price: 109000,
-//     image: null,
-//     team: "LG Twins",
-//   },
-// ];
-
 // 전체 페이지 컨테이너
 const Container = styled.div`
   width: 100%;
@@ -238,7 +178,7 @@ const ImageContainer = styled.div`
   }
 `;
 
-// 임시 이미지 플레이스홀더
+// 이미지 플레이스홀더
 const ImagePlaceholder = styled.div`
   width: 100%;
   height: 100%;
@@ -948,7 +888,7 @@ const QuantityInput = styled.input`
   }
 `;
 
-// 선택된 제품 가격f
+// 선택된 제품 가격
 const SelectedProductPrice = styled.span`
   font-size: 22px;
   font-weight: bold;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
@@ -88,6 +88,14 @@ const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상", teamCode }) =
       state: { allTab, tabs, title, type: "teamplay", teamCode },
     });
   };
+
+  useEffect(() => {
+    setIsAll(true);
+    setSelectedTab(tabs[0]);
+    setTimeout(() => {
+      swiperRef.current?.slideTo?.(0, 0);
+    }, 0);
+  }, [teamCode]);
 
   return (
     <>

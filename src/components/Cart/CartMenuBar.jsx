@@ -25,6 +25,7 @@ const MenuBar = styled.div`
   ul {
     width: 100%;
     display: grid;
+    column-gap: 20px;
     grid-template-columns: ${DeskTopGrid};
     justify-content: space-between;
     align-items: center;
@@ -56,6 +57,7 @@ const MenuBar = styled.div`
   @media screen and (max-width: 1024px) {
     ul {
       grid-template-columns: ${TabletGrid};
+      column-gap: 20px;
       font-size: 1.6rem;
     }
   }
