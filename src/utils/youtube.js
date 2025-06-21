@@ -1,4 +1,8 @@
 import { teamPlaylists } from "../data/teamPlaylists";
+import {
+  fetchYoutubePlaylist,
+  fetchVideoDetails,
+} from "../hook/useYoutubePlayList";
 
 export const getPlaylistVideos = async (playlistId, max = 4) => {
   const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
@@ -85,4 +89,47 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
   );
 
   return matchedGames;
+};
+
+export const fetchAllTeamVideos = async (playlists) => {
+  const allItems = await Promise.all(
+    playlists.map(async ({ playlistId, max, type }) => {
+      const items = await fetchYoutubePlaylist({
+        queryKey: ["youtubePlaylist", playlistId, max],
+      });
+
+      return items.map((item) => ({
+        ...item,
+        playlistType: type || null,
+      }));
+    })
+  );
+
+  const flatItems = allItems.flat();
+
+  const videoIds = flatItems
+    .map((item) => item.snippet.resourceId?.videoId || item.id?.videoId)
+    .filter(Boolean)
+    .join(",");
+
+  const details = await fetchVideoDetails({
+    queryKey: ["youtubeVideoDetails", videoIds],
+  });
+
+  return details.map((video) => {
+    const matched = flatItems.find(
+      (item) =>
+        item.snippet.resourceId?.videoId === video.id ||
+        item.id?.videoId === video.id
+    );
+
+    return {
+      id: video.id,
+      title: video.snippet.title,
+      thumbnail: video.snippet.thumbnails?.high?.url || "",
+      channelTitle: video.snippet.channelTitle || "",
+      playlistType: matched?.playlistType || null,
+      publishedAt: video.snippet.publishedAt,
+    };
+  });
 };

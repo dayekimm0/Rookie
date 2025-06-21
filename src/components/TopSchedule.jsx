@@ -52,7 +52,9 @@ const List = styled.div`
 
 const TopSchedule = () => {
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
+  const isScrollLocked = useHeaderStore((state) => state.isScrollLocked);
   const disableTransition = useHeaderStore((state) => state.disableTransition);
+  const shouldFold = isFolded || isScrollLocked;
 
   const today = new Date().toISOString().split("T")[0];
   const baseIndex = scheduleData.findIndex((item) => item.date >= today);
@@ -65,7 +67,7 @@ const TopSchedule = () => {
   ].filter(Boolean);
 
   return (
-    <Container $folded={isFolded} $disableTransition={disableTransition}>
+    <Container $folded={shouldFold} $disableTransition={disableTransition}>
       <List>
         {threeDaySlice.map((day, index) => (
           <ScheduleBox key={index} schedule={day} />

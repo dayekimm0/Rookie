@@ -6,12 +6,13 @@ import TeamStat from "../components/TeamHome/TeamStat";
 import TeamVideoProduct from "../components/TeamHome/TeamVideoProduct";
 import ShortsSlide from "../components/Slides/ShortsSlide";
 import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
-import { homeSlideTab } from "../data/playTabs";
+import { homeSlideTab, teamSlideTabs } from "../data/playTabs";
 import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 import InfluencerZone from "../components/TeamHome/InfluencerZone";
 import HomeProducts from "../components/Home/HomeProducts"; // 추가
 import useAllProductsQuery from "../hook/useAllProductsQuery"; // 추가
 import HomeList from "../components/Home/HomeList";
+import influencerData from "../data/influencer_playlist.json";
 
 const Container = styled.div`
   color: var(--light);
@@ -118,6 +119,8 @@ const TeamHome = () => {
     kt_wiz: "kt",
   };
 
+  const teamSlideTab = teamSlideTabs[teamCode];
+
   const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
 
   // Home.jsx와 동일한 상품 분류 로직 (팀별 필터링 추가)
@@ -148,6 +151,10 @@ const TeamHome = () => {
     return { newest, popular, teamStoreProducts };
   }, [allProducts, teamCode]);
 
+  // 인플루언서 존 데이터
+  const teamData = influencerData.teams.find((team) => team.team === teamCode);
+  const influencers = teamData?.influencers || [];
+
   return (
     <Container>
       <BannerWrapper>
@@ -164,8 +171,8 @@ const TeamHome = () => {
       {/* 영상 모아보기 */}
       <PlaySlidewithTabs
         teamCode={teamCode}
-        allTab={homeSlideTab.allTab}
-        tabs={homeSlideTab.tabs}
+        allTab={teamSlideTab.allTab}
+        tabs={teamSlideTab.tabs}
         title={"영상 모아보기"}
       />
 
@@ -175,7 +182,7 @@ const TeamHome = () => {
       {/* 클립 */}
       <ShortsSlide
         teamCode={teamCode}
-        playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
+        playlistId={teamSlideTab.clip.playlistId}
         title={"TEAM CLIP"}
         max={21}
       />
@@ -218,7 +225,9 @@ const TeamHome = () => {
       />
 
       {/* 인플루언서 영역 */}
-      <InfluencerZone />
+      {influencers.map((inf, i) => (
+        <InfluencerZone key={i} influencer={inf} teamCode={teamCode} />
+      ))}
       <HomeList title={"타 구단 바로가기"} />
     </Container>
   );

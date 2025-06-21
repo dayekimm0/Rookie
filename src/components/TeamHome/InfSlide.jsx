@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -9,6 +10,7 @@ import {
   useYoutubePlaylist,
   useYoutubeVideoDetails,
 } from "../../hook/useYoutubePlayList";
+import Spinner from "../Spinner";
 
 const Container = styled.div`
   position: relative;
@@ -46,10 +48,18 @@ const SlideContainer = styled.div`
   }
 `;
 
+const SpinnerWrap = styled.div`
+  padding: 80px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const InfSlide = ({ playlistId, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const navigate = useNavigate();
 
   const {
     data: plays = [],
@@ -63,6 +73,10 @@ const InfSlide = ({ playlistId, max }) => {
       .filter(Boolean)
       .join(",");
   }, [plays]);
+
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
+  };
 
   const { data: details = [] } = useYoutubeVideoDetails(videoIds, !!videoIds);
 
@@ -80,7 +94,7 @@ const InfSlide = ({ playlistId, max }) => {
             channelTitle={snippet.channelTitle}
             views={statistics.viewCount}
             likes={statistics.likeCount}
-            onClick={() => console.log("Clicked:", id)}
+            onClick={() => handleDetailClick(id)}
           />
         </SwiperSlide>
       );
@@ -102,8 +116,13 @@ const InfSlide = ({ playlistId, max }) => {
     }
   }, [swiper, details]);
 
-  if (isLoading) return <div>불러오는 중...</div>;
-  if (isError) return <div>문제가 발생했어요.</div>;
+  if (isLoading)
+    return (
+      <SpinnerWrap>
+        <Spinner />
+      </SpinnerWrap>
+    );
+  if (isError) return <div>문제가 발생하였습니다.</div>;
 
   return (
     <Container>

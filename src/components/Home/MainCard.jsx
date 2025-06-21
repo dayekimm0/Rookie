@@ -310,10 +310,12 @@ const MainCard = React.memo(
 
     //다음 영상 재생
     useEffect(() => {
-      if (videoId && nextVideos?.length) {
+      if (videoId || nextVideos?.length > 0) {
         const fullQueue = [
-          { videoId, from: "highlight", title: "하이라이트", thumbnail },
-          ...nextVideos,
+          ...(videoId
+            ? [{ videoId, from: "highlight", title: "하이라이트", thumbnail }]
+            : []),
+          ...(nextVideos || []),
         ];
         setVideoQueue(fullQueue);
         setCurrentIndex(0);
@@ -418,22 +420,37 @@ const MainCard = React.memo(
               onClick={() => setTryPlay(true)}
             />
           ) : (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "#000",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-                color: "#fff",
-                fontSize: "1.4rem",
-              }}
-              onClick={() => setTryPlay(true)}
-            >
-              영상 시작하기
-            </div>
+            // <div
+            //   style={{
+            //     width: "100%",
+            //     height: "100%",
+            //     backgroundColor: "#000",
+            //     display: "flex",
+            //     justifyContent: "center",
+            //     alignItems: "center",
+            //     cursor: "pointer",
+            //     color: "#fff",
+            //     fontSize: "1.4rem",
+            //   }}
+            //   onClick={() => setTryPlay(true)}
+            // >
+            //   영상 시작하기
+            // </div>
+            <VideoInner $bg={awayColor}>
+              <HomeBg $bg={homeColor}>
+                <svg
+                  preserveAspectRatio="none"
+                  width="277"
+                  height="289"
+                  viewBox="0 0 277 289"
+                  fill="none"
+                >
+                  <path d="M0.5 0H276.5L195.35 289H0.5V0Z" />
+                </svg>
+                <img className="homeEmblem" src={homeEmblem} alt="emblem" />
+              </HomeBg>
+              <img className="awayEmblem" src={awayEmblem} alt="emblem" />
+            </VideoInner>
           )}
         </div>
 

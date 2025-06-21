@@ -7,6 +7,7 @@ const ContentCard = styled.div`
   flex-direction: column;
   gap: 10px;
   color: var(--light);
+  cursor: pointer;
 `;
 
 const Thumbnail = styled.img`

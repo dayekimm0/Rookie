@@ -16,6 +16,7 @@ import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { useNavigate } from "react-router-dom";
 
 import ClipDetail from "../ClipDetail";
+import useHeaderStore from "../../stores/headerHeightStore";
 
 const ContentList = styled.div`
   height: 100%;
@@ -159,6 +160,41 @@ const HighlightList = ({ type, title }) => {
     swiper?.autoplay?.start();
   };
 
+  //클립 모달 스크롤 막기
+  useEffect(() => {
+    if (selectedVideoId) {
+      const y = window.scrollY;
+      lenis.stop();
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${y}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.dataset.scrollY = y;
+    } else {
+      const y = parseFloat(document.body.dataset.scrollY || "0");
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+
+      window.scrollTo(0, y);
+      lenis.start();
+    }
+  }, [selectedVideoId]);
+
+  const { setScrollLocked } = useHeaderStore.getState();
+
+  useEffect(() => {
+    if (selectedVideoId) {
+      setScrollLocked(true);
+    } else {
+      setScrollLocked(false);
+    }
+  }, [selectedVideoId]);
+
   return (
     <>
       <ContentList>
@@ -223,7 +259,9 @@ const HighlightList = ({ type, title }) => {
           </HighlightRightBtn>
         </Container>
       </ContentList>
-      <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+      {selectedVideoId && (
+        <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+      )}
     </>
   );
 };

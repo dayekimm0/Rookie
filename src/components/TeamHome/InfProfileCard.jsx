@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import lookMark from "../../images/icons/lookie_inf_mark.svg";
+import { useTotalPlaylistVideoCount } from "../../hook/useYoutubePlayList";
 
 const Container = styled.div`
   width: 30.5%;
@@ -123,6 +125,7 @@ const Desc = styled.p`
   width: 70%;
   word-break: keep-all;
   text-align: center;
+  white-space: pre-line;
   @media screen and (max-width: 1440px) {
     width: 90%;
     margin: 30px 0;
@@ -181,28 +184,36 @@ const BtnGroup = styled.div`
   }
 `;
 
-const InfProfileCard = () => {
+const InfProfileCard = ({
+  teamCode,
+  name,
+  profile,
+  description,
+  playId,
+  clipId,
+  products,
+}) => {
+  const { totalCount, isLoading } = useTotalPlaylistVideoCount(clipId, playId);
   return (
     <Container>
       <div className="topProfile">
         <ProfileImg>
-          <img src="./" alt="Profile" />
+          <img src={profile} alt={`${name} 프로필`} />
         </ProfileImg>
         <Name>
-          <h4>이름름</h4>
+          <h4>{name}</h4>
           <img className="lookieMark" src={lookMark} alt="lookiemark" />
         </Name>
         <ItemsCount>
-          PLAY {}개 · STORE {}개
+          {isLoading ? "Loading..." : `PLAY ${totalCount}개`}
         </ItemsCount>
       </div>
-      <Desc>
-        3대째 이어지는 모태 두산팬이 야구장에서 사는 삶인데요..🐻 루키에서도
-        함께 두산베어스를 응원합니다!많이 부족해도 이쁘게 봐주세요💙
-      </Desc>
+      <Desc>{description}</Desc>
       <BtnGroup>
-        <button>PLAY</button>
-        <button>STORE</button>
+        <Link to={`/influencer/${teamCode}/${name}`}>
+          <button>PLAY</button>
+        </Link>
+        {products && <button>STORE</button>}
       </BtnGroup>
     </Container>
   );
