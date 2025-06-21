@@ -13,6 +13,7 @@ import {
   fetchRelatedVideosByChannelId,
   fetchPlaylistVideos,
 } from "../hook/useYoutubeContentList";
+import { playContents } from "../data/playcontents";
 
 const Container = styled.div`
   width: 100%;
@@ -96,6 +97,45 @@ const PlayDetail = () => {
   const [channelThumbnail, setChannelThumbnail] = useState(null);
   const [playlistVideos, setPlaylistVideos] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
+  const [highlightVideos, setHighlightVideos] = useState([]);
+  const [highlightVideosFromPlayContents, setHighlightVideosFromPlayContents] =
+    useState([]);
+  const [
+    highlightVideosFromShortsPlaylist,
+    setHighlightVideosFromShortsPlaylist,
+  ] = useState([]);
+
+  useEffect(() => {
+    const loadHighlightFromPlayContents = async () => {
+      if (!playContents.highlight?.playlistId) return;
+      const videos = await fetchPlaylistVideos(
+        playContents.highlight.playlistId
+      );
+      setHighlightVideosFromPlayContents(videos);
+    };
+    loadHighlightFromPlayContents();
+  }, []);
+
+  useEffect(() => {
+    const loadHighlightFromShorts = async () => {
+      const shortsPlaylistId = "PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W";
+      const videos = await fetchPlaylistVideos(shortsPlaylistId, 21);
+      setHighlightVideosFromShortsPlaylist(videos);
+    };
+    loadHighlightFromShorts();
+  }, []);
+
+  // 두 리스트 합치고 중복 제거 + 섞기
+  const mergedHighlightVideos = React.useMemo(() => {
+    const combined = [
+      ...highlightVideosFromPlayContents,
+      ...highlightVideosFromShortsPlaylist,
+    ];
+    const uniqueMap = new Map();
+    combined.forEach((video) => uniqueMap.set(video.id, video));
+    const uniqueVideos = Array.from(uniqueMap.values());
+    return uniqueVideos.sort(() => 0.5 - Math.random());
+  }, [highlightVideosFromPlayContents, highlightVideosFromShortsPlaylist]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -113,7 +153,7 @@ const PlayDetail = () => {
             (video) =>
               video.id !== videoId &&
               !video.title.toLowerCase().includes("#shorts") &&
-              video.duration > 60
+              video.duration > 120
           )
         );
       } else {
@@ -128,8 +168,22 @@ const PlayDetail = () => {
     if (videoId) loadData();
   }, [videoId]);
 
-  if (!videoInfo) return <div>로딩 중...</div>;
+  useEffect(() => {
+    const loadHighlight = async () => {
+      const highlightConfig = playContents.highlight;
+      if (!highlightConfig) return;
+      const videos = await fetchPlaylistVideos(
+        highlightConfig.playlistId,
+        highlightConfig.max
+      );
+      setHighlightVideos(videos);
+    };
 
+    loadHighlight();
+  }, []);
+
+  // 모든 훅 호출 완료 후 조건 검사
+  if (!videoInfo) return <div>로딩 중...</div>;
   return (
     <Container>
       <PlayContent>
@@ -142,18 +196,24 @@ const PlayDetail = () => {
             teamLogo={channelThumbnail}
           />
           <Divider />
-          <RecoProductPart />
+          <RecoProductPart
+            videoTitle={videoInfo.title}
+            channelTitle={videoInfo.channelTitle}
+          />
+
           <CommentWrapper>
             <CommentTop>
               <CommentTitle>
                 댓글 <span>{commentCount}</span>
               </CommentTitle>
             </CommentTop>
+
             <CommentList
               key={videoId}
               videoId={videoId}
               onCountChange={setCommentCount}
             />
+
             <PostCommentPart videoId={videoId} />
           </CommentWrapper>
         </RightContent>
@@ -169,7 +229,9 @@ const PlayDetail = () => {
               />
             ))}
           </RecoPlayWrapper>
-          <RecoClip />
+          {mergedHighlightVideos.length > 0 && (
+            <RecoClip videoList={mergedHighlightVideos} />
+          )}
         </LeftContent>
       </PlayContent>
     </Container>

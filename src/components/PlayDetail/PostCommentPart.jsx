@@ -1,13 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import authStore from "../../stores/authStore";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  getDoc,
-  doc,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 
 const PostComment = styled.form`
@@ -51,10 +45,12 @@ const TextArea = styled.textarea`
   font-size: 1.5rem;
   overflow: hidden;
   transition: all 0.3s;
+
   &:focus {
     outline: none;
     color: var(--light);
   }
+
   &::placeholder {
     opacity: 1;
     transition: opacity 0.3s;
@@ -72,7 +68,7 @@ const SubmitBtn = styled.input`
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;
 
-const PostCommentPart = ({ videoId, onCommentAdded }) => {
+const PostCommentPart = ({ videoId }) => {
   const [value, setValue] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, userProfile } = authStore();
@@ -83,8 +79,8 @@ const PostCommentPart = ({ videoId, onCommentAdded }) => {
     e.preventDefault();
     if (!user) return alert("로그인이 필요합니다.");
     if (isDisabled) return;
-    setIsSubmitting(true);
 
+    setIsSubmitting(true);
     const newComment = {
       text: value.trim(),
       author: userName,
@@ -95,17 +91,10 @@ const PostCommentPart = ({ videoId, onCommentAdded }) => {
     };
 
     try {
-      const docRef = await addDoc(collection(db, "comments"), newComment);
-
-      // ✅ 저장 직후 실제 createdAt까지 포함된 문서를 가져옴
-      const savedDoc = await getDoc(docRef);
-      if (savedDoc.exists()) {
-        console.log("✅ 댓글 저장 후 확인:", savedDoc.data());
-      }
-
+      await addDoc(collection(db, "comments"), newComment);
       setValue("");
-    } catch (error) {
-      console.error("❌ 댓글 저장 실패:", error.message);
+    } catch (err) {
+      console.error("댓글 저장 실패:", err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -115,9 +104,9 @@ const PostCommentPart = ({ videoId, onCommentAdded }) => {
     <PostComment onSubmit={handleSubmit}>
       <UserInfo>
         <UserTeam>
-          {userProfile?.profileImage ? (
+          {userProfile?.profileImage && (
             <img src={userProfile.profileImage} alt="profile" />
-          ) : null}
+          )}
         </UserTeam>
         <UserName>{userName}</UserName>
       </UserInfo>

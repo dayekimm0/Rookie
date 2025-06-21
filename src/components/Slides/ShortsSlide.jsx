@@ -11,6 +11,7 @@ import {
 } from "../../hook/useYoutubePlayList";
 import Shortscard from "./Shortscard";
 import Spinner from "../Spinner";
+import ClipDetail from "../ClipDetail";
 
 const Title = styled.div`
   margin-top: 120px;
@@ -118,6 +119,7 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -127,14 +129,16 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
     swiper?.slideNext();
   }, [swiper]);
 
+  // 클릭 시 모달 오픈
   const handleOpenModal = (id) => {
     setSelectedVideoId(id);
-    swiper?.autoplay?.stop();
+    swiper?.autoplay?.stop && swiper.autoplay.stop();
   };
 
+  // 모달 닫기
   const handleCloseModal = () => {
     setSelectedVideoId(null);
-    swiper?.autoplay?.start();
+    swiper?.autoplay?.start && swiper.autoplay.start();
   };
 
   //유튜브 리스트 설정
@@ -167,12 +171,12 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
             channelTitle={snippet.channelTitle}
             views={statistics.viewCount}
             likes={statistics.likeCount}
-            onClick={() => console.log("Clicked:", id)}
+            onClick={() => handleOpenModal(id)}
           />
         </SwiperSlide>
       );
     });
-  }, [details]);
+  }, [details, handleOpenModal]);
 
   if (isLoading)
     return (
@@ -256,6 +260,16 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
           <img src={Arrow} alt="button" />
         </NaviRightBtn>
       </Container>
+      {selectedVideoId && (
+        <ClipDetail
+          videoId={selectedVideoId}
+          videoList={details.map((video) => ({
+            id: video.id,
+            ...video.snippet,
+          }))}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
   );
 });
