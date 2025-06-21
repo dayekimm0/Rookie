@@ -625,7 +625,9 @@ const Header = ({ mode }) => {
       authStore.getState().clearUser();
       alert("로그아웃 되었습니다.");
       resetForm();
-      resetForm();
+      useToggleStore.getState().setTeamMode(false);
+      localStorage.removeItem("toggle-mode");
+      navigate("/");
     } catch (e) {
       alert("로그아웃 실패", e);
     }

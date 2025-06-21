@@ -4,6 +4,7 @@ import MyTabSlideRenderer from "../MypageSlides/MyTabSlideRandered";
 import { useYoutubePlaylist } from "../../hook/useYoutubePlayList";
 import styled from "styled-components";
 import Spinner from "../Spinner";
+import { getTeamNameShortEng } from "../../util";
 
 const SlideLoaderWrapper = styled.div`
   height: 250px;
@@ -35,6 +36,22 @@ const SingleTabSlide = ({ selectedTab, onSwiperReady }) => {
     !!selectedTab?.playlistId
   );
   const location = useLocation();
+  const teamCode = location.pathname.split("/")[2];
+  const teamKeyword = getTeamNameShortEng(teamCode);
+  const isTeamPage = location.pathname.toLowerCase().includes("/teamhome/");
+
+  const validItems = data.filter(
+    (item) =>
+      item.snippet.title?.toLowerCase() !== "private video" &&
+      item.snippet.thumbnails?.default
+  );
+
+  const filteredItems =
+    selectedTab.name === "하이라이트" && isTeamPage && teamKeyword !== "Unknown"
+      ? validItems.filter((item) =>
+          item.snippet.title.toLowerCase().includes(teamKeyword.toLowerCase())
+        )
+      : validItems;
 
   if (isLoading)
     return (
@@ -52,9 +69,12 @@ const SingleTabSlide = ({ selectedTab, onSwiperReady }) => {
   return (
     <>
       {location.pathname === "/mypage/myvideo" ? (
-        <MyTabSlideRenderer items={data} onSwiperReady={onSwiperReady} />
+        <MyTabSlideRenderer
+          items={filteredItems}
+          onSwiperReady={onSwiperReady}
+        />
       ) : (
-        <TabSlideRenderer items={data} onSwiperReady={onSwiperReady} />
+        <TabSlideRenderer items={filteredItems} onSwiperReady={onSwiperReady} />
       )}
     </>
   );

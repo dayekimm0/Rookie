@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import authStore from "../../stores/AuthStore";
 
 const Banner = styled.form`
   position: sticky;
@@ -65,11 +65,11 @@ const SaleInfo = styled.div`
     gap: 15px;
   }
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     gap: 20px;
   }
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 375px) {
     gap: 15px;
   }
 `;
@@ -265,6 +265,13 @@ const Button = styled.input`
   font-weight: 500;
   cursor: pointer;
 
+  &:disabled {
+    background-color: var(--grayC);
+    color: var(--light);
+    cursor: not-allowed;
+    font-weight: 400;
+  }
+
   @media screen and (max-width: 1024px) {
     height: 50px;
     font-size: 1.6rem;
@@ -297,6 +304,15 @@ const WingBanner = ({
     e.preventDefault();
     if (onPaymentSubmit) onPaymentSubmit();
   };
+
+  const { userProfile, tempAddress } = authStore();
+
+  const addressToCheck = tempAddress || userProfile;
+
+  const isAddressValid =
+    addressToCheck?.postalCode &&
+    addressToCheck?.address &&
+    addressToCheck?.detailedAddress;
 
   return (
     <Banner onSubmit={page === "payment" ? handleSubmit : undefined}>
@@ -356,7 +372,9 @@ const WingBanner = ({
           />
         </Buttons>
       )}
-      {page === "payment" && <Button type="submit" value="결제하기" />}
+      {page === "payment" && (
+        <Button type="submit" value="결제하기" disabled={!isAddressValid} />
+      )}
     </Banner>
   );
 };

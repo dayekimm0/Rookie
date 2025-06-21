@@ -65,7 +65,9 @@ const TeamplayAll = () => {
 
   if (!state) return <div>잘못된 접근입니다.</div>;
 
-  const { type, playlistId, max, title, allTab, tabs } = state;
+  const { type, playlistId, max, title, allTab, tabs, teamCode } = state;
+
+  console.log(teamCode);
 
   if (type === "shorts") {
     // 1. playlist 불러오기
@@ -125,7 +127,7 @@ const TeamplayAll = () => {
           <FontAwesomeIcon icon={faArrowLeft} onClick={goToBack} />
           {title}
         </SectionTitle>
-        <MoreTeamPlayAllList allTab={allTab} tabs={tabs} />
+        <MoreTeamPlayAllList allTab={allTab} tabs={tabs} teamCode={teamCode} />
       </Container>
     );
   }

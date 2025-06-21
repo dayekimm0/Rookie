@@ -6,6 +6,7 @@ import Spinner from "../Spinner";
 import lenis from "../../lenisInstance";
 import PlayContent from "../Play/PlayContent";
 import { fetchAllTeamVideos } from "../../utils/youtube";
+import { getTeamNameShortEng } from "../../util";
 
 const Tabs = styled.div`
   display: flex;
@@ -108,13 +109,16 @@ const SpinnerWrap = styled.div`
   justify-content: center;
 `;
 
-const MoreTeamPlayAllList = ({ allTab, tabs }) => {
+const MoreTeamPlayAllList = ({ allTab, tabs, teamCode }) => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("all");
   const [videos, setVideos] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 30;
+
+  const isTeamMode = !!teamCode;
+  const teamKeyword = getTeamNameShortEng(teamCode);
 
   const selectedPlaylists = useMemo(() => {
     if (currentTab === "all") return allTab.playlists || [];
@@ -125,17 +129,62 @@ const MoreTeamPlayAllList = ({ allTab, tabs }) => {
   }, [currentTab, tabs, allTab]);
 
   const fetchAllVideos = async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    // allTab 또는 선택된 tab의 playlist 정보 추출
-    const playlists = selectedPlaylists.map((pl) => ({
-      playlistId: pl.playlistId || pl.id,
-      max: pl.max,
-    }));
+      const playlists = selectedPlaylists.map((pl) => ({
+        playlistId: pl.playlistId || pl.id,
+        max: pl.max,
+        type: pl.type,
+      }));
 
-    const details = await fetchAllTeamVideos(playlists);
-    setVideos(details);
-    setLoading(false);
+      const details = await fetchAllTeamVideos(playlists);
+
+      const filtered = (() => {
+        const isHighlightTab =
+          currentTab === "하이라이트" ||
+          tabs.find((tab) => tab.name === currentTab)?.type === "highlight";
+
+        // 1. 팀페이지에서 '하이라이트' 탭 → 전체 필터링
+        if (isTeamMode && teamKeyword !== "Unknown" && isHighlightTab) {
+          return details.filter((video) =>
+            video.title.toLowerCase().includes(teamKeyword.toLowerCase())
+          );
+        }
+
+        if (isTeamMode && currentTab === "all") {
+          return details.filter((video) => {
+            const isHighlight =
+              video.playlistType?.toLowerCase() === "highlight";
+            console.log(video.playlistType);
+            if (isHighlight) {
+              // 하이라이트는 팀 필터 필요
+              return video.title
+                .toLowerCase()
+                .includes(teamKeyword.toLowerCase());
+            }
+
+            // 나머지는 필터 없이 다 포함
+            return true;
+          });
+        }
+
+        // 3. 필터링 없이 전체 리턴
+        return details;
+      })();
+
+      const sorted = filtered.sort((a, b) => {
+        const dateA = new Date(a.publishedAt || a.snippet?.publishedAt);
+        const dateB = new Date(b.publishedAt || b.snippet?.publishedAt);
+        return dateB - dateA; // 최신순
+      });
+
+      setVideos(sorted);
+    } catch (err) {
+      console.error("❌ fetchAllVideos 에러:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

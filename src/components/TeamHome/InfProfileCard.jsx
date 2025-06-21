@@ -191,7 +191,7 @@ const InfProfileCard = ({
   description,
   playId,
   clipId,
-  storeCount,
+  products,
 }) => {
   const { totalCount, isLoading } = useTotalPlaylistVideoCount(clipId, playId);
   return (
@@ -205,9 +205,7 @@ const InfProfileCard = ({
           <img className="lookieMark" src={lookMark} alt="lookiemark" />
         </Name>
         <ItemsCount>
-          {isLoading
-            ? "Loading..."
-            : `PLAY ${totalCount}개 · STORE ${storeCount}개`}
+          {isLoading ? "Loading..." : `PLAY ${totalCount}개`}
         </ItemsCount>
       </div>
       <Desc>{description}</Desc>
@@ -215,7 +213,7 @@ const InfProfileCard = ({
         <Link to={`/influencer/${teamCode}/${name}`}>
           <button>PLAY</button>
         </Link>
-        <button>STORE</button>
+        {products && <button>STORE</button>}
       </BtnGroup>
     </Container>
   );

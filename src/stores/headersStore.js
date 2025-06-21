@@ -8,7 +8,14 @@ export const useToggleStore = create(
       setTeamMode: (val) => set({ isTeamMode: val }),
     }),
     {
-      name: "toggle-mode", // localStorage 키 이름
+      name: "toggle-mode",
+      onRehydrateStorage: () => (state) => {
+        const { user } = authStore.getState();
+        if (!user) {
+          // 유저 없으면 초기화
+          state?.setTeamMode(false);
+        }
+      },
     }
   )
 );

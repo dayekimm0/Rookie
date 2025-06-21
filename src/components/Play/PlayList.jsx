@@ -213,15 +213,6 @@ const PlayList = ({ type, title, id }) => {
               />
             </SwiperSlide>
           ))}
-          {/* {videos.map((video) => (
-            <SwiperSlide key={video.id}>
-              <PlayContent
-                type={type}
-                {...video}
-                onClick={() => handleDetailClick(video.id)}
-              />
-            </SwiperSlide>
-          ))} */}
         </Swiper>
 
         <PlayLeftBtn onClick={handlePrev} disabled={isBeginning}>

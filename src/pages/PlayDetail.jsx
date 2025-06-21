@@ -11,6 +11,7 @@ import {
   fetchVideoDetailById,
   fetchChannelThumbnail,
   fetchRelatedVideosByChannelId,
+  fetchPlaylistVideos,
 } from "../hook/useYoutubeContentList";
 
 const Container = styled.div`
@@ -93,24 +94,38 @@ const PlayDetail = () => {
   const { videoId } = useParams();
   const [videoInfo, setVideoInfo] = useState(null);
   const [channelThumbnail, setChannelThumbnail] = useState(null);
-  const [relatedVideos, setRelatedVideos] = useState([]);
+  const [playlistVideos, setPlaylistVideos] = useState([]);
+  const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
-    const loadVideoAndChannel = async () => {
+    const loadData = async () => {
       const videoData = await fetchVideoDetailById(videoId);
       setVideoInfo(videoData);
 
       const thumbnail = await fetchChannelThumbnail(videoData.channelId);
       setChannelThumbnail(thumbnail);
 
-      const related = await fetchRelatedVideosByChannelId(
-        videoData.channelId,
-        videoId
-      );
-      setRelatedVideos(related);
+      const playlistId = videoData.playlistId;
+      if (playlistId) {
+        const videos = await fetchPlaylistVideos(playlistId);
+        setPlaylistVideos(
+          videos.filter(
+            (video) =>
+              video.id !== videoId &&
+              !video.title.toLowerCase().includes("#shorts") &&
+              video.duration > 60
+          )
+        );
+      } else {
+        const related = await fetchRelatedVideosByChannelId(
+          videoData.channelId,
+          videoId
+        );
+        setPlaylistVideos(related);
+      }
     };
 
-    if (videoId) loadVideoAndChannel();
+    if (videoId) loadData();
   }, [videoId]);
 
   if (!videoInfo) return <div>로딩 중...</div>;
@@ -131,16 +146,16 @@ const PlayDetail = () => {
           <CommentWrapper>
             <CommentTop>
               <CommentTitle>
-                댓글 <span>294</span>
+                댓글 <span>{commentCount}</span>
               </CommentTitle>
             </CommentTop>
-            <CommentList />
-            <PostCommentPart />
+            <CommentList videoId={videoId} onCountChange={setCommentCount} />
+            <PostCommentPart videoId={videoId} />
           </CommentWrapper>
         </RightContent>
         <LeftContent>
           <RecoPlayWrapper>
-            {relatedVideos.map((video) => (
+            {playlistVideos.slice(0, 4).map((video) => (
               <RecoPlay
                 key={video.id}
                 videoId={video.id}

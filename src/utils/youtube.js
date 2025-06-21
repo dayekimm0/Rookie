@@ -93,10 +93,18 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
 
 export const fetchAllTeamVideos = async (playlists) => {
   const allItems = await Promise.all(
-    playlists.map(({ playlistId, max }) =>
-      fetchYoutubePlaylist({ queryKey: ["youtubePlaylist", playlistId, max] })
-    )
+    playlists.map(async ({ playlistId, max, type }) => {
+      const items = await fetchYoutubePlaylist({
+        queryKey: ["youtubePlaylist", playlistId, max],
+      });
+
+      return items.map((item) => ({
+        ...item,
+        playlistType: type || null,
+      }));
+    })
   );
+
   const flatItems = allItems.flat();
 
   const videoIds = flatItems
@@ -108,10 +116,20 @@ export const fetchAllTeamVideos = async (playlists) => {
     queryKey: ["youtubeVideoDetails", videoIds],
   });
 
-  return details.map((video) => ({
-    id: video.id,
-    title: video.snippet.title,
-    thumbnail: video.snippet.thumbnails?.high?.url || "", // 혹시 없을 경우를 대비
-    channelTitle: video.snippet.channelTitle || "",
-  }));
+  return details.map((video) => {
+    const matched = flatItems.find(
+      (item) =>
+        item.snippet.resourceId?.videoId === video.id ||
+        item.id?.videoId === video.id
+    );
+
+    return {
+      id: video.id,
+      title: video.snippet.title,
+      thumbnail: video.snippet.thumbnails?.high?.url || "",
+      channelTitle: video.snippet.channelTitle || "",
+      playlistType: matched?.playlistType || null,
+      publishedAt: video.snippet.publishedAt,
+    };
+  });
 };

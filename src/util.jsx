@@ -114,8 +114,8 @@ export function getTodayMatches() {
   };
 }
 
-export function getPreviousMatchDay() {
-  const today = new Date().toISOString().split("T")[0];
+export function getPreviousMatchDay(baseDate) {
+  const today = baseDate || new Date().toISOString().split("T")[0];
   const pastGames = games.filter((d) => d.date < today);
   const gameDay = pastGames.length > 0 ? pastGames[pastGames.length - 1] : null;
 

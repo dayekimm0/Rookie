@@ -12,6 +12,8 @@ const authStore = create(
       isLoading: true,
       gamePlayed: false,
       comments: [], //playdetail 댓글 추가
+      likes: [], // 좋아요 리스트 추가
+      tempAddress: null, //임시 배송 주소
       setUser: (user, profile, gamePlayed) => {
         console.log(
           "🟢 setUser 호출, user:",
@@ -23,6 +25,15 @@ const authStore = create(
         );
         set({ user, userProfile: profile, isLoading: false, gamePlayed });
       },
+      // 좋아요 부분 코드
+      setLikes: (likes) => set({ likes }),
+      addLike: (videoId) =>
+        set((state) => ({ likes: [...state.likes, videoId] })),
+      removeLike: (videoId) =>
+        set((state) => ({
+          likes: state.likes.filter((id) => id !== videoId),
+        })),
+
       setGamePlayed: (played) => set({ gamePlayed: played }),
       clearUser: () => {
         console.log("🟢 clearUser 호출");
@@ -30,26 +41,52 @@ const authStore = create(
           user: null,
           userProfile: null,
           isLoading: false,
+          tempAddress: null,
         });
+        try {
+          localStorage.removeItem("auth-storage");
+        } catch (e) {
+          console.warn("persist 제거 실패", e);
+        }
       },
-      // 주소 수정
+
+      // 주소 수정 (실제 userProfile 주소 변경) - 안전하게 null 체크 추가
       updateUserAddress: (newAddress) =>
-        set((state) => ({
-          userProfile: {
+        set((state) => {
+          const updatedProfile = {
             ...state.userProfile,
             ...newAddress,
-          },
-        })),
+          };
+          return { userProfile: { ...updatedProfile } };
+        }),
+
+      updateTempAddress: (newAddress) =>
+        set((state) => {
+          const current = state.tempAddress || {};
+          const isDifferent =
+            current.zonecode !== newAddress.zonecode ||
+            current.address !== newAddress.address ||
+            current.detail !== newAddress.detail ||
+            current.username !== newAddress.username ||
+            current.phoneNumber !== newAddress.phoneNumber;
+
+          if (!isDifferent) return {};
+
+          return {
+            tempAddress: {
+              ...current,
+              ...newAddress,
+            },
+          };
+        }),
+
+      clearTempAddress: () => set(() => ({ tempAddress: null })),
+
       //댓글 추가
+      setComments: (comments) => set({ comments }),
       addComment: (comment) =>
         set((state) => ({
-          comments: [
-            ...state.comments,
-            {
-              ...comment,
-              author: state.userProfile?.nickname,
-            },
-          ],
+          comments: [...state.comments, comment],
         })),
     }),
 
@@ -58,8 +95,10 @@ const authStore = create(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
+        userProfile: state.userProfile, // userProfile 꼭 포함
         gamePlayed: state.gamePlayed,
         comments: state.comments,
+        likes: state.likes,
       }),
     }
   )
@@ -85,6 +124,10 @@ onAuthStateChanged(auth, async (user) => {
       const gameSnap = await getDoc(gameUserRef);
       const gamePlayed = gameSnap.exists() ? gameSnap.data().gamePlayed : false;
 
+      // 좋아요 정보
+      const likesSnap = await getDoc(doc(db, "userLikes", user.uid));
+      const likesData = likesSnap.exists() ? likesSnap.data().likes || [] : [];
+
       const currentState = authStore.getState();
 
       // 상태가 모두 변경되었을 때만 setUser 호출
@@ -96,6 +139,7 @@ onAuthStateChanged(auth, async (user) => {
       ) {
         console.log("🟢 상태가 변경되어 setUser 호출");
         authStore.getState().setUser(userData, profile, gamePlayed);
+        authStore.getState().setLikes(likesData);
       } else {
         console.log("🔴 상태 변경 없음");
       }

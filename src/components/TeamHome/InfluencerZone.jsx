@@ -107,17 +107,9 @@ const ContentTitle = styled.h4`
 `;
 
 const InfluencerZone = ({ influencer, teamCode }) => {
-  const { name, profile, description, play, clip } = influencer;
-  const { data: allProducts = [], isLoading: isProductLoading } =
-    useAllProductsQuery();
-
-  const { newest } = useMemo(() => {
-    const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
-
-    const newest = shuffled.slice(0, 9);
-
-    return { newest };
-  }, [allProducts]);
+  const { name, profile, description, play, clip, products } = influencer;
+  // const { data: allProducts = [], isLoading: isProductLoading } =
+  //   useAllProductsQuery();
 
   return (
     <Inner className="inner">
@@ -137,11 +129,15 @@ const InfluencerZone = ({ influencer, teamCode }) => {
               </div>
             )}
           </div>
-          <hr className="line" />
-          <div className="storeWrap">
-            <ContentTitle>ROOKie STORE</ContentTitle>
-            {isProductLoading ? "Loading" : <InfProducts products={newest} />}
-          </div>
+          {products && (
+            <>
+              <hr className="line" />
+              <div className="storeWrap">
+                <ContentTitle>ROOKie STORE</ContentTitle>
+                <InfProducts products={products} name={name} />
+              </div>
+            </>
+          )}
         </ContentsArea>
         <InfProfileCard
           name={name}
@@ -149,8 +145,8 @@ const InfluencerZone = ({ influencer, teamCode }) => {
           description={description}
           clipId={clip}
           playId={play}
-          storeCount={newest.length}
           teamCode={teamCode}
+          products={products}
         />
       </Container>
     </Inner>

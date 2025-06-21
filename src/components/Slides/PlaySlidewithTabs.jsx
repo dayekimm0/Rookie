@@ -69,7 +69,7 @@ const Title = styled.div`
   }
 `;
 
-const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상" }) => {
+const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상", teamCode }) => {
   const navigate = useNavigate();
   const [isAll, setIsAll] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
@@ -85,7 +85,7 @@ const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상" }) => {
 
   const handleMoreClick = () => {
     navigate("/teamplayall", {
-      state: { allTab, tabs, title, type: "teamplay" },
+      state: { allTab, tabs, title, type: "teamplay", teamCode },
     });
   };
 

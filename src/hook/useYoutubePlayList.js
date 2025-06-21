@@ -89,6 +89,19 @@ export const useHighlightVideos = (maxResults = 30) => {
   });
 };
 
+//메인홈2
+export const getHighlightVideos = async (maxResults = 15) => {
+  try {
+    const videos = await fetchYoutubePlaylist({
+      queryKey: ["youtubePlaylist", HIGHLIGHT_PLAYLIST_ID, maxResults],
+    });
+    return videos;
+  } catch (err) {
+    console.error("❗ getHighlightVideos 에러 발생", err);
+    return [];
+  }
+};
+
 // 메인홈 최상단 하이라이트 -> 구단 컨텐츠 영상
 export const useMatchedGameVideos = () => {
   const matchDay = getPreviousMatchDay();
@@ -126,7 +139,6 @@ export const useMatchedGameVideos = () => {
   };
 };
 
-//플레이리스트 영상 개수만 가져오는 훅
 export const usePlaylistCount = (playlistId, enabled = true) => {
   return useQuery({
     queryKey: ["playlistCount", playlistId],
