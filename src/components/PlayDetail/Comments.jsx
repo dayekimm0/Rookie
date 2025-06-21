@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import authStore from "../../stores/authStore";
 
 const CommentWrapper = styled.div`
   display: flex;
@@ -14,6 +13,7 @@ const UserImg = styled.div`
   height: 42px;
   background: var(--grayF5);
   border-radius: 50%;
+
   img {
     width: 100%;
     height: 100%;
@@ -38,6 +38,7 @@ const UserName = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   p {
     font-size: 1.4rem;
     font-weight: 500;
@@ -52,9 +53,13 @@ const Comment = styled.div`
 `;
 
 const Comments = ({ comments }) => {
-  const timeAgo = (date) => {
+  const timeAgo = (raw) => {
+    const date = raw?.toDate?.() || raw;
+    if (!(date instanceof Date)) return "방금 전";
+
     const now = new Date();
-    const diff = (now - new Date(date)) / 1000;
+    const diff = (now - date) / 1000;
+
     if (diff < 60) return `${Math.floor(diff)}초 전`;
     if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
     if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
@@ -65,18 +70,17 @@ const Comments = ({ comments }) => {
   return (
     <>
       {comments.length === 0 && <p>댓글이 없습니다.</p>}
-      {comments.map((comment, index) => (
-        <CommentWrapper key={comment.id || index}>
+      {comments.map((comment) => (
+        <CommentWrapper key={comment.id}>
           <UserImg>
-            {comment.userProfileImage ? (
+            {comment.userProfileImage && (
               <img src={comment.userProfileImage} alt="profile" />
-            ) : null}
+            )}
           </UserImg>
           <CommentItem>
             <UserInfo>
               <UserName>
-                {comment.author || "user"}
-                <p>{timeAgo(comment.createdAt?.toDate?.() || new Date())}</p>
+                {comment.author || "user"} <p>{timeAgo(comment.createdAt)}</p>
               </UserName>
             </UserInfo>
             <Comment>{comment.text}</Comment>

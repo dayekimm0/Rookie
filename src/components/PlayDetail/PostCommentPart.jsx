@@ -45,10 +45,12 @@ const TextArea = styled.textarea`
   font-size: 1.5rem;
   overflow: hidden;
   transition: all 0.3s;
+
   &:focus {
     outline: none;
     color: var(--light);
   }
+
   &::placeholder {
     opacity: 1;
     transition: opacity 0.3s;
@@ -66,17 +68,19 @@ const SubmitBtn = styled.input`
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;
 
-const PostCommentPart = ({ videoId, onCommentAdded }) => {
+const PostCommentPart = ({ videoId }) => {
   const [value, setValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, userProfile } = authStore();
   const userName = userProfile?.nickname || "사용자";
-  const isDisabled = value.trim() === "";
+  const isDisabled = value.trim() === "" || isSubmitting;
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // form 제출 막기
+    e.preventDefault();
     if (!user) return alert("로그인이 필요합니다.");
     if (isDisabled) return;
 
+    setIsSubmitting(true);
     const newComment = {
       text: value.trim(),
       author: userName,
@@ -89,10 +93,10 @@ const PostCommentPart = ({ videoId, onCommentAdded }) => {
     try {
       await addDoc(collection(db, "comments"), newComment);
       setValue("");
-      console.log("✅ 댓글 저장 완료");
-      onCommentAdded?.();
-    } catch (error) {
-      console.error("❌ 댓글 저장 실패:", error.message);
+    } catch (err) {
+      console.error("댓글 저장 실패:", err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -100,9 +104,9 @@ const PostCommentPart = ({ videoId, onCommentAdded }) => {
     <PostComment onSubmit={handleSubmit}>
       <UserInfo>
         <UserTeam>
-          {userProfile?.profileImage ? (
+          {userProfile?.profileImage && (
             <img src={userProfile.profileImage} alt="profile" />
-          ) : null}
+          )}
         </UserTeam>
         <UserName>{userName}</UserName>
       </UserInfo>
