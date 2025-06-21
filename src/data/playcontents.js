@@ -193,7 +193,7 @@ export const playContents = {
         team: "ds_bas",
       },
       {
-        name: "@reallyyelly_lg",
+        name: "@reallyelly_lg",
         playlistId: "PLPuT2QymG4qXmiV8VQCMbeEii_iChPbNo",
         max: 10,
         team: "lg_twins",

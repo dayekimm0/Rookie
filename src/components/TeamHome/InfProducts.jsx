@@ -5,6 +5,7 @@ import ProductCard from "../ProductCard";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import BArrow from "../../images/icons/arrow_small_w.svg";
 import { useCallback, useEffect, useState } from "react";
+import InfProductCard from "./InfProductCard";
 
 const SlideContainer = styled.div`
   width: 100%;
@@ -118,7 +119,7 @@ const Cardwrap = styled.div`
   }
 `;
 
-const InfProducts = ({ products }) => {
+const InfProducts = ({ products, name }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -202,7 +203,7 @@ const InfProducts = ({ products }) => {
         {products.map((item) => (
           <SwiperSlide key={`${item.team}-${item.id}`}>
             <Cardwrap className="cardwrap">
-              <ProductCard data={item} />
+              <InfProductCard data={item} infname={name} />
             </Cardwrap>
           </SwiperSlide>
         ))}

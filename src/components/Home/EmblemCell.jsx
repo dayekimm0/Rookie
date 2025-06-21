@@ -5,7 +5,7 @@ const Rank = styled.div`
   display: flex;
   align-items: center;
   color: var(--light);
-  background: var(--dark);
+  background: #1a1a1a;
   padding-left: 20px;
   width: 100%;
   height: 100%;

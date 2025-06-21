@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "swiper/css";
@@ -69,7 +69,8 @@ const Title = styled.div`
   }
 `;
 
-const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상" }) => {
+const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상", teamCode }) => {
+  const navigate = useNavigate();
   const [isAll, setIsAll] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const swiperRef = useRef(null);
@@ -82,11 +83,25 @@ const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상" }) => {
     }, 0);
   };
 
+  const handleMoreClick = () => {
+    navigate("/teamplayall", {
+      state: { allTab, tabs, title, type: "teamplay", teamCode },
+    });
+  };
+
+  useEffect(() => {
+    setIsAll(true);
+    setSelectedTab(tabs[0]);
+    setTimeout(() => {
+      swiperRef.current?.slideTo?.(0, 0);
+    }, 0);
+  }, [teamCode]);
+
   return (
     <>
       <Title className="inner">
         <h3>{title}</h3>
-        <div className="more">
+        <div className="more" onClick={handleMoreClick}>
           <span>더보기</span>
           <img src={PlusIcon} alt="icon" />
         </div>

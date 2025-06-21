@@ -29,12 +29,12 @@ const SlideContainer = styled.div`
 `;
 
 const TabSlideRenderer = ({ items, onSwiperReady }) => {
+  const navigate = useNavigate();
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  const navigate = useNavigate();
 
-  const handleCardClick = (videoId) => {
+  const handleDetailClick = (videoId) => {
     navigate(`/play/${videoId}`);
   };
 
@@ -62,7 +62,7 @@ const TabSlideRenderer = ({ items, onSwiperReady }) => {
           <PlayCard
             thumbnail={thumbnails?.maxres?.url || thumbnails?.medium?.url}
             title={title}
-            onClick={() => handleCardClick(videoId)}
+            onClick={() => handleDetailClick(videoId)}
           />
         </SwiperSlide>
       );

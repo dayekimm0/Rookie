@@ -9,6 +9,9 @@ import {
   useYoutubeVideoDetails,
 } from "../../hook/useYoutubePlayList";
 import Shortscard from "../Slides/Shortscard";
+import ClipDetail from "../ClipDetail";
+import useHeaderStore from "../../stores/headerHeightStore";
+import Spinner from "../Spinner";
 
 const Container = styled.div`
   position: relative;
@@ -45,10 +48,28 @@ const SlideContainer = styled.div`
   }
 `;
 
+const SpinnerWrap = styled.div`
+  padding: 100px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const InfClipSlide = React.memo(({ playlistId, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+
+  const handleOpenModal = (id) => {
+    setSelectedVideoId(id);
+    swiper?.autoplay?.stop();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    swiper?.autoplay?.start();
+  };
 
   //유튜브 리스트 설정
   const {
@@ -66,27 +87,6 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
 
   const { data: details = [] } = useYoutubeVideoDetails(videoIds, !!videoIds);
 
-  const slides = useMemo(() => {
-    return details.map((video) => {
-      const { id, snippet, statistics } = video;
-
-      return (
-        <SwiperSlide key={id}>
-          <Shortscard
-            thumbnail={
-              snippet.thumbnails?.maxres?.url || snippet.thumbnails?.medium?.url
-            }
-            title={snippet.title}
-            channelTitle={snippet.channelTitle}
-            views={statistics.viewCount}
-            likes={statistics.likeCount}
-            onClick={() => console.log("Clicked:", id)}
-          />
-        </SwiperSlide>
-      );
-    });
-  }, [details]);
-
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
   }, [swiper]);
@@ -102,10 +102,55 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
     }
   }, [swiper, details]);
 
-  if (isLoading) return <div>불러오는 중...</div>;
-  if (isError) return <div>문제가 발생했어요.</div>;
-
   // console.log("shorts", shorts);
+
+  // //클립 모달 스크롤 막기
+  useEffect(() => {
+    if (selectedVideoId) {
+      const y = window.scrollY;
+      lenis.stop();
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${y}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.dataset.scrollY = y;
+    } else {
+      const y = parseFloat(document.body.dataset.scrollY || "0");
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+
+      window.scrollTo(0, y);
+      lenis.start();
+    }
+  }, [selectedVideoId]);
+
+  const { setScrollLocked } = useHeaderStore.getState();
+
+  useEffect(() => {
+    if (selectedVideoId) {
+      setScrollLocked(true);
+    } else {
+      setScrollLocked(false);
+    }
+  }, [selectedVideoId]);
+
+  if (isLoading)
+    return (
+      <SpinnerWrap>
+        <Spinner />
+      </SpinnerWrap>
+    );
+  if (isError)
+    return (
+      <SpinnerWrap>
+        <div>문제가 발생하였습니다.</div>
+      </SpinnerWrap>
+    );
 
   return (
     <>
@@ -170,10 +215,28 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
               },
             }}
           >
-            {slides}
+            {details.map((video) => (
+              <SwiperSlide key={video.id}>
+                <Shortscard
+                  thumbnail={
+                    video.snippet.thumbnails?.maxres?.url ||
+                    video.snippet.thumbnails?.medium?.url
+                  }
+                  title={video.snippet.title}
+                  channelTitle={video.snippet.channelTitle}
+                  views={video.statistics.viewCount}
+                  likes={video.statistics.likeCount}
+                  onOpenModal={handleOpenModal}
+                  id={video.id}
+                />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </SlideContainer>
       </Container>
+      {selectedVideoId && (
+        <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+      )}
     </>
   );
 });

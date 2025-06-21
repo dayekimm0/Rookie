@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { getTeamNameKor } from "../util";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CardContainer = styled.div`
   width: 290px;
@@ -145,8 +144,10 @@ const ProductInfo = styled.div`
   }
 `;
 
-const ProductCard = ({ data }) => {
+const InfProductCard = ({ data, infname }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isTeamhome = pathname.startsWith("/teamhome");
 
   if (!data) return null;
 
@@ -154,31 +155,36 @@ const ProductCard = ({ data }) => {
     navigate(`/store/${team}/${id}`);
   };
 
-  const { thumbnail, name, price, team, id } = data;
+  if (isTeamhome) {
+    const { product_thumbnail, product_name, product_price, product_detail } =
+      data;
 
-  return (
-    <CardContainer onClick={handleClick}>
-      <ProductImg>
-        <img src={thumbnail} alt={name} />
-      </ProductImg>
-      <ProductInfo>
-        <div className="brandGo">
-          <div className="brand">{getTeamNameKor(team)}</div>
-          <svg viewBox="0 0 8 15" fill="none">
-            <path
-              d="M1.48926 1.98944L6.99982 7.5L1.48926 13.0106"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <div className="name">
-          <div>{name}</div>
-        </div>
-        <div className="price">{price}</div>
-      </ProductInfo>
-    </CardContainer>
-  );
+    if (!product_name || !product_thumbnail) return null;
+
+    return (
+      <CardContainer onClick={handleClick}>
+        <ProductImg>
+          <img src={product_thumbnail} alt={product_name} />
+        </ProductImg>
+        <ProductInfo>
+          <div className="brandGo">
+            <div className="brand">{infname}</div>
+            <svg viewBox="0 0 8 15" fill="none">
+              <path
+                d="M1.48926 1.98944L6.99982 7.5L1.48926 13.0106"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          <div className="name">
+            <div>{product_name}</div>
+          </div>
+          <div className="price">{product_price}</div>
+        </ProductInfo>
+      </CardContainer>
+    );
+  }
 };
 
-export default ProductCard;
+export default InfProductCard;
