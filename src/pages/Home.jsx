@@ -12,7 +12,7 @@ import ShortsSlide from "../components/Slides/ShortsSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
 import HomeProducts from "../components/Home/HomeProducts";
-import authStore from "../stores/authStore";
+import authStore from "../stores/AuthStore";
 import useAllProductsQuery from "../hook/useAllProductsQuery";
 import { homeSlideTab } from "../data/playTabs";
 import Spinner from "../components/Spinner";

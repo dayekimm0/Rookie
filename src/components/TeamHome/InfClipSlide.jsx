@@ -235,7 +235,11 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
         </SlideContainer>
       </Container>
       {selectedVideoId && (
-        <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+        <ClipDetail
+          videoId={selectedVideoId}
+          videoList={details}
+          onClose={handleCloseModal}
+        />
       )}
     </>
   );

@@ -200,15 +200,15 @@ const Buttons = styled.div`
 
     @media screen and (max-width: 1024px) {
       height: 50px;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
     }
 
     @media screen and (max-width: 768px) {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
 
     @media screen and (max-width: 375px) {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
     }
   }
 `;
@@ -223,7 +223,7 @@ const Button = styled.input`
   color: var(--dark);
   border: none;
   border-radius: 4px;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 500;
   cursor: pointer;
 
@@ -236,15 +236,15 @@ const Button = styled.input`
 
   @media screen and (max-width: 1024px) {
     height: 50px;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
 
   @media screen and (max-width: 768px) {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
 
   @media screen and (max-width: 375px) {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
 `;
 
