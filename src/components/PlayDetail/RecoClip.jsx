@@ -16,18 +16,25 @@ const ClipWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+    width: 314px;
+    height: 558px;
+  }
+  @media screen and (max-width: 768px) {
+  }
+  @media screen and (max-width: 500px) {
+  }
 `;
 
-const RecoClip = ({ videoList = [] }) => {
+const RecoClip = ({ videoList = [], allProducts = [] }) => {
   const [selectedVideoId, setSelectedVideoId] = useState(null);
 
   if (videoList.length === 0) return null;
 
-  // 썸네일 한 개만 사용 (첫 번째 영상)
-  const video = videoList[0];
-
   const handleClick = () => {
-    setSelectedVideoId(video.id);
+    setSelectedVideoId(videoList[0].id);
   };
 
   const handleClose = () => {
@@ -36,13 +43,27 @@ const RecoClip = ({ videoList = [] }) => {
 
   return (
     <>
-      <ClipWrapper onClick={handleClick}>
-        <img src={video.thumbnail} alt={video.title || "clip_thumbnail"} />
+      <ClipWrapper
+        onClick={handleClick}
+        style={{ width: 480, height: 860, cursor: "pointer" }}
+      >
+        <img
+          src={videoList[0].thumbnail}
+          alt={videoList[0].title || "clip_thumbnail"}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: 12,
+          }}
+        />
       </ClipWrapper>
+
       {selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
           videoList={videoList}
+          allProducts={allProducts}
           onClose={handleClose}
         />
       )}

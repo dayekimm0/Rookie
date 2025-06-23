@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
 import TabSlideRenderer from "./TabSlideRenderer";
-import MyTabSlideRenderer from "../MypageSlides/MyTabSlideRandered";
 import { useYoutubePlaylist } from "../../hook/useYoutubePlayList";
 import styled from "styled-components";
 import Spinner from "../Spinner";
@@ -67,16 +66,7 @@ const SingleTabSlide = ({ selectedTab, onSwiperReady }) => {
     );
 
   return (
-    <>
-      {location.pathname === "/mypage/myvideo" ? (
-        <MyTabSlideRenderer
-          items={filteredItems}
-          onSwiperReady={onSwiperReady}
-        />
-      ) : (
-        <TabSlideRenderer items={filteredItems} onSwiperReady={onSwiperReady} />
-      )}
-    </>
+    <TabSlideRenderer items={filteredItems} onSwiperReady={onSwiperReady} />
   );
 };
 

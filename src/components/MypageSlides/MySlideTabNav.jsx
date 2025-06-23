@@ -1,11 +1,12 @@
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const TabNav = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
 
   button {
     padding: 8px 18px;
@@ -25,32 +26,33 @@ const TabNav = styled.div`
   }
 `;
 
-const MySlideTabNav = ({
-  allTabName = "전체",
-  mypageTabs,
-  selectedTab,
-  isAllTab,
-  onSelectTab,
-}) => {
+const MySlideTabNav = ({}) => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  let activeTab = "allvideo";
+  if (pathname.includes("/myplay")) activeTab = "myplay";
+  if (pathname.includes("/myclip")) activeTab = "myclip";
+
   return (
     <TabNav>
       <button
-        className={isAllTab ? "active" : ""}
-        onClick={() => onSelectTab("all", null)}
+        className={activeTab === "allvideo" ? "active" : ""}
+        onClick={() => navigate("/mypage/myvideo")}
       >
-        {allTabName}
+        전체
       </button>
-      {mypageTabs.map((tab) => (
-        <button
-          key={tab.name}
-          className={
-            !isAllTab && selectedTab?.name === tab.name ? "active" : ""
-          }
-          onClick={() => onSelectTab("single", tab)}
-        >
-          {tab.name}
-        </button>
-      ))}
+      <button
+        className={activeTab === "myplay" ? "active" : ""}
+        onClick={() => navigate("myplay")}
+      >
+        PLAY
+      </button>
+      <button
+        className={activeTab === "myclip" ? "active" : ""}
+        onClick={() => navigate("myclip")}
+      >
+        CLIP
+      </button>
     </TabNav>
   );
 };
