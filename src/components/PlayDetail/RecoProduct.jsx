@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import itemMockup from "/src/images/mockup/lgtwins_uniform.png";
+import { useNavigate } from "react-router-dom";
+import { getTeamNameKor } from "../../util";
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 `;
 
 const RecoProductImg = styled.div`
@@ -12,7 +14,6 @@ const RecoProductImg = styled.div`
   height: 120px;
   border-radius: 8px;
   overflow: hidden;
-  cursor: pointer;
   img {
     width: 100%;
     height: 100%;
@@ -43,7 +44,6 @@ const RecoProductInfo = styled.div`
   }
   .name {
     margin-bottom: 18px;
-    cursor: pointer;
     font-size: 1.6rem;
     color: var(--light);
     line-height: 1.3;
@@ -51,19 +51,26 @@ const RecoProductInfo = styled.div`
   .price {
     color: var(--light);
     font-size: 1.8rem;
-    cursor: pointer;
   }
 `;
 
-const RecoProduct = () => {
+const RecoProduct = ({ thumbnail, name, price, team, id }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (team && id) {
+      navigate(`/store/${team}/${id}`);
+    }
+  };
+
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <RecoProductImg>
-        <img src={itemMockup} alt="lgtwins" />
+        <img src={thumbnail} alt={name} />
       </RecoProductImg>
       <RecoProductInfo>
         <div className="brandGo">
-          <div className="brand">LG트윈스</div>
+          <div className="brand">{getTeamNameKor(team)}</div>
           <svg viewBox="0 0 8 15" fill="none">
             <path
               d="M1.48926 1.98944L6.99982 7.5L1.48926 13.0106"
@@ -72,8 +79,8 @@ const RecoProduct = () => {
             />
           </svg>
         </div>
-        <div className="name">최고심 콜라보 캐릭터 유니폼(PINK)</div>
-        <div className="price">99,000원</div>
+        <div className="name">{name}</div>
+        <div className="price">{price}</div>
       </RecoProductInfo>
     </Container>
   );

@@ -148,7 +148,7 @@ const HighlightList = ({ type, title }) => {
   const handlePrev = () => swiper?.slidePrev();
   const handleNext = () => swiper?.slideNext();
 
-  const handleMoreClick = () => navigate("/playall");
+  // const handleMoreClick = () => navigate("/playall");
 
   const handleOpenModal = (id) => {
     setSelectedVideoId(id);
@@ -260,7 +260,11 @@ const HighlightList = ({ type, title }) => {
         </Container>
       </ContentList>
       {selectedVideoId && (
-        <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+        <ClipDetail
+          videoId={selectedVideoId}
+          videoList={videos} // 전체 영상 리스트 넘기기
+          onClose={handleCloseModal}
+        />
       )}
     </>
   );

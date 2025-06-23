@@ -256,7 +256,11 @@ const ClipList = ({ type, title, externalVideos }) => {
         </Container>
       </ContentList>
       {selectedVideoId && (
-        <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+        <ClipDetail
+          videoId={selectedVideoId}
+          onClose={handleCloseModal}
+          videoList={videos}
+        />
       )}
     </>
   );

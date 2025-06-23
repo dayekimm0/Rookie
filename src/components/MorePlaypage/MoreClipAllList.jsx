@@ -133,6 +133,7 @@ const MoreClipAllList = ({
       {modalEnabled && selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
+          videoList={currentItems}
           onClose={() => setSelectedVideoId(null)}
         />
       )}

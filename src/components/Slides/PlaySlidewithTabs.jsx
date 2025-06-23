@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
 import SlideTabNav from "./slideTabNav";
 import AllTabSlide from "./AllTabSlide";
 import SingleTabSlide from "./SingleTabSlide";
-import { useNavigate } from "react-router-dom";
 
 const Title = styled.div`
   margin-top: 120px;

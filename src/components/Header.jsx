@@ -706,18 +706,12 @@ const Header = ({ mode }) => {
 
           <Item ref={(el) => (itemRefs.current[2] = el)}>
             <StoreWrapper>
-              <Link to="/store/kbo">STORE</Link>
+              <Link onClick={(e) => e.preventDefault()}>STORE</Link>
               <StoreContainer className="store-dropdown">
                 <Stores>
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      alert("ROOKie 준비 중입니다.");
-                    }}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <Link to="/store">
                     <RookieEmblem src={rookieemblem} alt="rookieemblem" />
-                  </div>
+                  </Link>
                   {teams.map((id) => {
                     const teamCode = getTeamJsonCode(id);
                     return (

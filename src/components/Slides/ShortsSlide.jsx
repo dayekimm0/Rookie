@@ -136,6 +136,7 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
   };
 
   const handleOpenModal = (id) => {
+    console.log("open modal for videoId:", id);
     setSelectedVideoId(id);
     swiper?.autoplay?.stop();
   };
@@ -301,7 +302,11 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
         </NaviRightBtn>
       </Container>
       {selectedVideoId && (
-        <ClipDetail videoId={selectedVideoId} onClose={handleCloseModal} />
+        <ClipDetail
+          videoId={selectedVideoId}
+          videoList={details}
+          onClose={handleCloseModal}
+        />
       )}
     </>
   );

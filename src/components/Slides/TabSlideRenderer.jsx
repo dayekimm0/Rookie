@@ -1,11 +1,11 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
 import PlayCard from "./PlayCard";
-import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
