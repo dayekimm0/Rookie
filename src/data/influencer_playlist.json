@@ -98,14 +98,77 @@
           "profile": "https://yt3.googleusercontent.com/k-cPZSCNJbMeZvGoqn68V93V5AbBckH_e8_I3FlRHZ7BWijM_XSitHcyC6ZgwWdbd3i1u9HUVA=s160-c-k-c0x00ffffff-no-rj",
           "description": "아무고토 멀쩡한 게 없는 굥이의 브이로그 \n✉️비즈니스 문의✉️ rbdud3471@naver.com",
           "play": "PLPuT2QymG4qVSd23EgDfTJRglCGb6dG-8",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250326/4947305/4947305_17440115244661_big.jpg?w=1200",
+              "product_name": "[SSG랜더스]무신사 x SSG랜더스 25 저지",
+              "product_price": "99,000원",
+              "product_detail": {
+                "option": ["S", "M", "L", "XL", "2XL"],
+                "product_detailImg": "https://image.msscdn.net/thumbnails/images/prd_img/202504071607591265244802667f379cf1ee44.jpg?w=1200"
+              }
+            },
+            {
+              "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250326/4947307/4947307_17434021510829_big.jpg?w=1200",
+              "product_name": "[SSG랜더스]무신사 x SSG랜더스 25 피스테",
+              "product_price": "99,000원",
+              "product_detail": {
+                "option": ["S", "M", "L", "XL", "2XL"],
+                "product_detailImg": "https://image.msscdn.net/thumbnails/images/prd_img/202504071611181292558137667f37a961f8ef.jpg?w=1200"
+              }
+            },
+            {
+              "product_thumbnail": "https://overthepitch.com/web/product/big/202310/f9497ec7f44073271e1ccbf742a4e45b.jpg",
+              "product_name": "P X SUPER SSG LANDERS 1983 BASEBALL JERSEY",
+              "product_price": "99,000원",
+              "product_detail": {
+                "option": ["S", "M", "L", "XL", "2XL"],
+                "product_detailImg": [
+                  "https://overthepitch.com/web/product/extra/small/202310/5d0e316182975859ace75024ed8a3399.jpg",
+                  "https://overthepitch.com/web/product/extra/small/202310/b57e1646595b63d7a37ee432bcf2c5b3.jpg",
+                  "https://overthepitch.com/web/product/extra/small/202310/f2fa81f408c1f4205ec5d86d3f44e126.jpeg",
+                  "https://overthepitch.com/web/product/extra/big/202310/e527416858b1a15aab015d2409eb4cce.jpeg"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "@271_one",
           "profile": "https://phinf.pstatic.net/memo/20250621_72/1750510504878PKxB9_JPEG/ssg%B7%A3%B4%F5%BD%BA_271%BF%F8.jpg?type=w740",
           "description": "디지털 크리에이터 \n⚾️• 19년차 ssg랜더스 팬 \n👖 • 남자의 클래식•밀리터리•캐주얼룩 \n🐍 • 옷과 야구와 락과 커피 사랑",
           "play": null,
-          "clip": "PLPuT2QymG4qVw950AXM3ID6Si1krju9C6"
+          "clip": "PLPuT2QymG4qVw950AXM3ID6Si1krju9C6",
+          "products": [
+            {
+              "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250326/4949263/4949263_17434690845648_big.jpg?w=1200",
+              "product_name": "MSS x KBO 볼파크 반소매 티셔츠 차콜그레이 [인천 SSG 랜더스]",
+              "product_price": "28,050원",
+              "product_detail": {
+                "option": ["XS", "S", "M", "L", "XL"],
+                "product_detailImg": "https://image.msscdn.net/thumbnails/images/prd_img/202504111337205355837367767f89c8082c27.jpg?w=1200"
+              }
+            },
+            {
+              "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250306/4864099/4864099_17412287028648_big.jpg?w=1200",
+              "product_name": "[SSG랜더스]무신사 x SSG랜더스 25 블랙 데님저지",
+              "product_price": "119,000원",
+              "product_detail": {
+                "option": ["S", "M", "L", "XL", "2XL"],
+                "product_detailImg": "https://image.msscdn.net/thumbnails/images/prd_img/202504071607006745499867967f37994a4aff.jpg?w=1200"
+              }
+            },
+            {
+              "product_thumbnail": "https://edkshop.com/web/product/extra/big/202504/225d2ce4669f23a5f1bd4599ce514cae.jpg",
+              "product_name": "마데카 쿨링패치 KBO에디션(SSG) 4매 x 10개입",
+              "product_price": "30,000원",
+              "product_detail": {
+                "option": ["쿨링패치 4매X10개입"],
+                "product_detailImg": "https://bluepanda.diskn.com/data/goods_dv/DKD00502-511_dv_all.jpg"
+              }
+            }
+          ]
         }
       ]
     },
@@ -172,39 +235,34 @@
           "clip": null,
           "products": [
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://ncdinospodshop.cafe24.com/web/product/big/202502/2361d107f10a268320e2a231e5978557.png",
+              "product_name": "휘친자 선언문 반팔 티셔츠(Black)",
+              "product_price": "26,000원",
               "product_detail": {
-                "option": [],
-                "product_detailImg": []
+                "option": ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
+                "product_detailImg": "https://ncdinospodshop.cafe24.com/web/upload/NNEditor/20250218/_DSC0334.jpg"
               }
             },
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://ncdinospodshop.cafe24.com/web/product/big/202405/fddca26060fbc00ab6c2619899c1b1a8.png",
+              "product_name": "A5 스티커 The Game Day",
+              "product_price": "4,000원",
               "product_detail": {
-                "option": [],
-                "product_detailImg": []
+                "option": ["A5"],
+                "product_detailImg": [
+                  "https://ncdinospodshop.cafe24.com/web/upload/NNEditor/20240905/copy-1725507091-EC8AA4ED8BB0ECBBA4EC9EACECA7881.png"
+                ]
               }
             },
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://ncdinospodshop.cafe24.com/web/product/big/202502/456077a43b77603429b561d328881c79.png",
+              "product_name": "조자까 컬래버레이션 박민우 숄더 에코백",
+              "product_price": "25,000원",
               "product_detail": {
-                "option": [],
-                "product_detailImg": []
-              }
-            },
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": []
+                "option": ["베이지"],
+                "product_detailImg": [
+                  "https://cdn-admin.pod.shop/public/34/channel-product/660/56_%EC%96%B4%ED%8C%A8%EB%9F%B4_%EB%8D%B0%EC%9D%BC%EB%A6%AC%20%EC%88%84%EB%8D%94%20%EC%97%90%EC%BD%94%EB%B0%B1-1715675404576.png"
+                ]
               }
             }
           ]
@@ -276,7 +334,46 @@
           "profile": "https://yt3.googleusercontent.com/t3gQ3bkqf42IzXcnHeoq3YyQNMIdNCXrdHJ6GiwFtPWegxq3XSYTsToW3D8IURHJ1WfzH4QC=s160-c-k-c0x00ffffff-no-rj",
           "description": "💌 비즈니스 문의 : @sxpc._.sh 또는 jmshee0511@naver.com",
           "play": "PLPuT2QymG4qVMIUZl9s0diFv8qLA9z44B",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://image.idus.com/image/files/1bc038568ad345c69c286a6c0670944a_1440.jpg",
+              "product_name": "야구 직관 승요 홈런 안타 응원 토퍼",
+              "product_price": "14,500원",
+              "product_detail": {
+                "option": ["류현진", "노시환"],
+                "product_detailImg": [
+                  "https://image.idus.com/image/files/5e3ee1c166c1447e9fe8cc0f389909ad_720.jpg",
+                  "https://image.idus.com/image/files/444cba841ab7483783f26e914c5b77b7_720.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://image.idus.com/image/files/6419d9c00914481289bac4c3352ac4ed_1440.jpg",
+              "product_name": "[야구장 인싸템]한화이글스 수리 키링👍",
+              "product_price": "15,000원",
+              "product_detail": {
+                "option": ["오렌지", "블랙", "핑크"],
+                "product_detailImg": [
+                  "https://image.idus.com/image/files/72e013e7a9014e7dbe87940a73d1e769_720.jpg",
+                  "https://image.idus.com/image/files/c492b30facda4b0db6987374752e279d_720.jpg",
+                  "https://image.idus.com/image/files/2af2fb815bf4485ea8305dd6748e4697_720.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://image.idus.com/image/files/c8c6d992f66442c782aef89b0bd59712_1440.jpg",
+              "product_name": "❣️인기최고❣️한화 야구 하트야구공 응원머리띠",
+              "product_price": "15,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://image.idus.com/image/files/5eb87eb5b9684aea86c0514129adbffc_720.jpg",
+                  "https://image.idus.com/image/files/a4e028c489884ae39a7ed842bb49132c_720.jpg"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -302,7 +399,56 @@
           "profile": "https://yt3.googleusercontent.com/MjvgFPa3_aWTBJG6DKdaBk4usNXXLZA8Dq7o2sKrURTJ9UAmrn3CKDcEP950oHxY4xkLCQT5=s160-c-k-c0x00ffffff-no-rj",
           "description": "엘지트윈스 관중석직캠 프로야구 직관영상 \n야구장 좌석정보 야구장 먹거리와 도시 맛집정보 \n원정경기 직관, 숙소정보 \nAICOMPANY@EAMTG6",
           "play": "PLPuT2QymG4qXzmDgK3oyT7tcADWG-7wXZ",
-          "clip": "PLPuT2QymG4qUMu9DIJji7DDxbBaxOylmo"
+          "clip": "PLPuT2QymG4qUMu9DIJji7DDxbBaxOylmo",
+          "products": [
+            {
+              "product_thumbnail": "https://kbomarket.com/web/product/big/202505/324bb75bd4063b56a34099e6133ce759.jpg",
+              "product_name": "2025 KBO 오피셜 컬렉션 카드 (1박스)",
+              "product_price": "30,000원",
+              "product_detail": {
+                "option": ["단일상품"],
+                "product_detailImg": [
+                  "https://keienserver.negagea.kr/LE255UPOGD068.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://image.idus.com/image/files/1edb3b78ebdb4ae68b8fcb74792adb71_1440.jpg",
+              "product_name": "[2+1]야구 키링 스포츠 아크릴 굿즈 가방꾸미기",
+              "product_price": "6,300원",
+              "product_detail": {
+                "option": [
+                  "야구보러가고싶당~",
+                  "나는야구가짱조아",
+                  "오늘의직관할일목록"
+                ],
+                "product_detailImg": [
+                  "https://image.idus.com/image/files/e8d00742e81e4af387cfc4cfb448728b_720.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://image.idus.com/image/files/e23da8092a6145b0a1836f6b057d42f6_1440.jpg",
+              "product_name": "역전하면 깨워줘~~ 야구키링⚾️",
+              "product_price": "18,000원",
+              "product_detail": {
+                "option": ["빨강", "파랑"],
+                "product_detailImg": [
+                  "https://image.idus.com/image/files/06e3e5606f7d47748df4788e6b835a4f_1440.jpg",
+                  "https://image.idus.com/image/files/bd9fbc4acb334b6fb4397909fb1140da_1440.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "",
+              "product_name": "",
+              "product_price": "",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": []
+              }
+            }
+          ]
         }
       ]
     },
