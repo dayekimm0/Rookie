@@ -16,6 +16,7 @@ const RecoProductTitle = styled.h1`
   margin-bottom: 26px;
 `;
 
+// 팀별 키워드 (검색에 사용)
 const teamMap = {
   LG: ["lg", "엘지", "엘지트윈스"],
   두산: ["doosan", "두산", "두산베어스"],
@@ -27,9 +28,9 @@ const teamMap = {
   롯데: ["lotte", "롯데", "롯데자이언츠"],
   키움: ["kiwoom", "키움", "키움히어로즈"],
   삼성: ["samsung", "삼성", "삼성라이온즈"],
-  KBO: ["kbo"], // 기본용 (키워드 필요 없지만 구조 위해 넣음)
 };
 
+// 팀명(키) → JSON 파일명 매핑
 const teamCodeMap = {
   LG: "lg_twins",
   두산: "ds_bas",
@@ -41,7 +42,6 @@ const teamCodeMap = {
   롯데: "lt_gnt",
   키움: "kw_hrs",
   삼성: "ss_lns",
-  KBO: "kbo", // 기본 상품 JSON
 };
 
 const shuffle = (array) => {
@@ -65,8 +65,8 @@ const RecoProductPart = ({ videoTitle = "", channelTitle = "" }) => {
     const lowerVideoTitle = videoTitle.toLowerCase();
     const lowerChannelTitle = channelTitle.toLowerCase();
 
-    // 키워드 매칭
-    let matchedTeams = Object.entries(teamMap)
+    // videoTitle 또는 channelTitle에 팀 키워드가 포함된 팀만 필터링
+    const matchedTeams = Object.entries(teamMap)
       .filter(([team, keywords]) =>
         keywords.some(
           (keyword) =>
@@ -76,9 +76,9 @@ const RecoProductPart = ({ videoTitle = "", channelTitle = "" }) => {
       )
       .map(([team]) => team);
 
-    // 매칭 없으면 KBO 기본 넣기
     if (matchedTeams.length === 0) {
-      matchedTeams = ["KBO"];
+      setProducts([]);
+      return;
     }
 
     const fetchTeamProducts = async () => {

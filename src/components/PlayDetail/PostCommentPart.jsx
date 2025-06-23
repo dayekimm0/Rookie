@@ -86,6 +86,7 @@ const PostCommentPart = ({ videoId }) => {
       author: userName,
       userId: user.uid,
       userProfileImage: userProfile?.profileImage || "",
+      favoriteTeam: userProfile?.favoriteTeam || "",
       videoId,
       createdAt: serverTimestamp(),
     };

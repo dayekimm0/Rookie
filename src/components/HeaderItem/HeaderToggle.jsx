@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import toggleBtn from "../../images/icons/header_toggle_btn.svg";
 import { useToggleStore } from "../../stores/headersStore";
-import authStore from "../../stores/AuthStore";
+import authStore from "../../stores/authStore";
 import { getTeamCodeEng } from "../../util";
 
 const ToggleWrapper = styled.div`
