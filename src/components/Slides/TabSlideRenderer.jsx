@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -28,9 +29,14 @@ const SlideContainer = styled.div`
 `;
 
 const TabSlideRenderer = ({ items, onSwiperReady }) => {
+  const navigate = useNavigate();
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
+  };
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -56,7 +62,7 @@ const TabSlideRenderer = ({ items, onSwiperReady }) => {
           <PlayCard
             thumbnail={thumbnails?.maxres?.url || thumbnails?.medium?.url}
             title={title}
-            onClick={() => console.log("Clicked:", videoId)}
+            onClick={() => handleDetailClick(videoId)}
           />
         </SwiperSlide>
       );

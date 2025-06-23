@@ -18,7 +18,9 @@ import Play from "./pages/Play";
 import PlayAll from "./pages/PlayAll";
 import PlayDetail from "./pages/PlayDetail";
 import SearchResultPage from "./pages/SearchResultPage";
-import TeamHome from "./pages/TeamHome"; // TeamHome 컴포넌트 추가
+import TeamHome from "./pages/TeamHome";
+import InfluencerPlayContent from "./pages/InfluencerPlayContent";
+import TeamplayAll from "./pages/TeamplayAll";
 
 const router = createBrowserRouter([
   {
@@ -58,12 +60,20 @@ const router = createBrowserRouter([
         element: <ProductDetail />,
       },
       {
-        path: "teamhome", // TeamHome 접근용 수정 완료
+        path: "teamhome",
         element: <TeamHome />,
       },
       {
-        path: "teamhome/:teamCode", // 구단별 접근용 수정 완료
+        path: "teamhome/:teamCode",
         element: <TeamHome />,
+      },
+      {
+        path: "teamplayall",
+        element: <TeamplayAll />,
+      },
+      {
+        path: "influencer/:teamCode/:name",
+        element: <InfluencerPlayContent />,
       },
       {
         path: "event",

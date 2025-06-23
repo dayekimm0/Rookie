@@ -342,11 +342,14 @@ const MyhomeCard = React.memo(
       return d.toLocaleDateString("ko-KR", { month: "long", day: "numeric" });
     }, [date]);
 
+    //다음 영상 재생
     useEffect(() => {
-      if (videoId && nextVideos?.length) {
+      if (videoId || nextVideos?.length > 0) {
         const fullQueue = [
-          { videoId, from: "highlight", title: "하이라이트", thumbnail },
-          ...nextVideos,
+          ...(videoId
+            ? [{ videoId, from: "highlight", title: "하이라이트", thumbnail }]
+            : []),
+          ...(nextVideos || []),
         ];
         setVideoQueue(fullQueue);
         setCurrentIndex(0);
@@ -448,7 +451,10 @@ const MyhomeCard = React.memo(
             </>
           ) : currentIndex === 0 && currentVideo?.thumbnail ? (
             <img
-              src={currentVideo.thumbnail}
+              src={`https://i.ytimg.com/vi/${currentVideo.videoId}/maxresdefault.jpg`}
+              onError={(e) => {
+                e.currentTarget.src = `https://i.ytimg.com/vi/${currentVideo.videoId}/hqdefault.jpg`;
+              }}
               alt="thumbnail"
               style={{
                 width: "100%",

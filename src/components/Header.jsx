@@ -14,7 +14,7 @@ import {
   getScrollbarWidth,
   getTeamCodeEng,
 } from "../util";
-import authStore from "../stores/AuthStore";
+import authStore from "../stores/authStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import styled from "styled-components";
@@ -625,7 +625,9 @@ const Header = ({ mode }) => {
       authStore.getState().clearUser();
       alert("로그아웃 되었습니다.");
       resetForm();
-      resetForm();
+      useToggleStore.getState().setTeamMode(false);
+      localStorage.removeItem("toggle-mode");
+      navigate("/");
     } catch (e) {
       alert("로그아웃 실패", e);
     }
@@ -704,18 +706,12 @@ const Header = ({ mode }) => {
 
           <Item ref={(el) => (itemRefs.current[2] = el)}>
             <StoreWrapper>
-              <Link to="/store/kbo">STORE</Link>
+              <Link onClick={(e) => e.preventDefault()}>STORE</Link>
               <StoreContainer className="store-dropdown">
                 <Stores>
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      alert("ROOKie 준비 중입니다.");
-                    }}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <Link to="/store">
                     <RookieEmblem src={rookieemblem} alt="rookieemblem" />
-                  </div>
+                  </Link>
                   {teams.map((id) => {
                     const teamCode = getTeamJsonCode(id);
                     return (

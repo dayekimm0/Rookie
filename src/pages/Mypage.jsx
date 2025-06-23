@@ -357,9 +357,9 @@ const Mypage = () => {
   const { userProfile } = authStore();
   const [modalState, setModalState] = useState(false);
   const [coupons, setCoupons] = useState([]);
-  console.log(coupons);
   const navigate = useNavigate();
   const location = useLocation();
+
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
@@ -371,38 +371,48 @@ const Mypage = () => {
     { path: "/mypage/mysetting", label: "프로필 설정" },
   ];
 
-  const myCouponOpen = () => {
-    setModalState((prev) => !prev);
-  };
-
-  const goVideo = () => navigate("/mypage/myvideo");
-
-  const { isLoading } = authStore();
-
   useEffect(() => {
-    const fetchWonCoupons = async () => {
+    const fetchCoupons = async () => {
       if (!userProfile?.uid) return;
 
       const db = getFirestore();
-      const WonCouponsRef = collection(
+      const wonCouponsRef = collection(
         db,
         "users",
         userProfile.uid,
         "wonCoupons"
       );
+      const welcomeCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "welcomeCoupons"
+      );
 
       try {
-        const snapshot = await getDocs(WonCouponsRef);
-        const result = snapshot.docs.map((doc) => ({
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        const wonCoupons = wonSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setCoupons(result);
+
+        const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // 두 쿠폰 배열 합치기
+        setCoupons([...wonCoupons, ...welcomeCoupons]);
       } catch (error) {
-        console.log(error);
+        console.error("쿠폰 데이터 불러오기 실패:", error);
       }
     };
-    fetchWonCoupons();
+
+    fetchCoupons();
   }, [userProfile]);
 
   useEffect(() => {
@@ -430,7 +440,7 @@ const Mypage = () => {
 
   return (
     <Container>
-      {isLoading ? (
+      {authStore().isLoading ? (
         <SlideLoaderWrapper>
           <SvgSpinner viewBox="0 0 50 50">
             <circle
@@ -474,12 +484,12 @@ const Mypage = () => {
               </div>
               <span />
               <ProfileUnder>
-                <Icon onClick={myCouponOpen}>
+                <Icon onClick={() => setModalState(true)}>
                   <img src={coupon} alt="coupon" />
                   <p>내 쿠폰</p>
-                  <span>{coupons.length + 1}</span>
+                  <span>{coupons.length}</span>
                 </Icon>
-                <Icon onClick={goVideo}>
+                <Icon onClick={() => navigate("/mypage/myvideo")}>
                   <img src={thumbs_up} alt="thumbs_up" />
                   <p>좋아요</p>
                   <span>132</span>
@@ -516,4 +526,5 @@ const Mypage = () => {
     </Container>
   );
 };
+
 export default Mypage;

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ClipDetail from "../ClipDetail";
 import styled from "styled-components";
 
 const SlideBox = styled.div`

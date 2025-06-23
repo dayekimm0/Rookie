@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -11,6 +12,8 @@ import {
 } from "../../hook/useYoutubePlayList";
 import Shortscard from "./Shortscard";
 import Spinner from "../Spinner";
+import ClipDetail from "../ClipDetail";
+import useHeaderStore from "../../stores/headerHeightStore";
 
 const Title = styled.div`
   margin-top: 120px;
@@ -118,6 +121,30 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const navigate = useNavigate();
+
+  const handleMoreClick = () => {
+    navigate("/teamplayall", {
+      state: {
+        type: "shorts",
+        playlistId,
+        title,
+        max,
+      },
+    });
+  };
+
+  const handleOpenModal = (id) => {
+    console.log("open modal for videoId:", id);
+    setSelectedVideoId(id);
+    swiper?.autoplay?.stop();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    swiper?.autoplay?.start();
+  };
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -143,26 +170,39 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
 
   const { data: details = [] } = useYoutubeVideoDetails(videoIds, !!videoIds);
 
-  const slides = useMemo(() => {
-    return details.map((video) => {
-      const { id, snippet, statistics } = video;
+  useEffect(() => {
+    if (selectedVideoId) {
+      const y = window.scrollY;
+      lenis.stop();
 
-      return (
-        <SwiperSlide key={id}>
-          <Shortscard
-            thumbnail={
-              snippet.thumbnails?.maxres?.url || snippet.thumbnails?.medium?.url
-            }
-            title={snippet.title}
-            channelTitle={snippet.channelTitle}
-            views={statistics.viewCount}
-            likes={statistics.likeCount}
-            onClick={() => console.log("Clicked:", id)}
-          />
-        </SwiperSlide>
-      );
-    });
-  }, [details]);
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${y}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.dataset.scrollY = y;
+    } else {
+      const y = parseFloat(document.body.dataset.scrollY || "0");
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+
+      window.scrollTo(0, y);
+      lenis.start();
+    }
+  }, [selectedVideoId]);
+
+  const { setScrollLocked } = useHeaderStore.getState();
+
+  useEffect(() => {
+    if (selectedVideoId) {
+      setScrollLocked(true);
+    } else {
+      setScrollLocked(false);
+    }
+  }, [selectedVideoId]);
 
   if (isLoading)
     return (
@@ -183,7 +223,7 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
     <>
       <Title className="inner">
         <h3>{title}</h3>
-        <div className="more">
+        <div className="more" onClick={handleMoreClick}>
           <span>더보기</span>
           <img src={PlusIcon} alt="icon" />
         </div>
@@ -236,7 +276,22 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
               },
             }}
           >
-            {slides}
+            {details.map((video) => (
+              <SwiperSlide key={video.id}>
+                <Shortscard
+                  thumbnail={
+                    video.snippet.thumbnails?.maxres?.url ||
+                    video.snippet.thumbnails?.medium?.url
+                  }
+                  title={video.snippet.title}
+                  channelTitle={video.snippet.channelTitle}
+                  views={video.statistics.viewCount}
+                  likes={video.statistics.likeCount}
+                  onOpenModal={handleOpenModal}
+                  id={video.id}
+                />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </SlideContainer>
         <NaviLeftBtn onClick={handlePrev} disabled={isBeginning}>
@@ -246,6 +301,13 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
           <img src={Arrow} alt="button" />
         </NaviRightBtn>
       </Container>
+      {selectedVideoId && (
+        <ClipDetail
+          videoId={selectedVideoId}
+          videoList={details}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
   );
 });
