@@ -193,8 +193,8 @@ const Buttons = styled.div`
 
     &:disabled {
       background-color: var(--grayC);
+      cursor: default;
       color: var(--light);
-      cursor: not-allowed;
       font-weight: 400;
     }
 
@@ -229,8 +229,8 @@ const Button = styled.input`
 
   &:disabled {
     background-color: var(--grayC);
+    cursor: default;
     color: var(--light);
-    cursor: not-allowed;
     font-weight: 400;
   }
 

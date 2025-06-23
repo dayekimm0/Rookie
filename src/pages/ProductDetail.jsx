@@ -6,6 +6,7 @@ import styled from "styled-components";
 import ImageSlider from "../components/ProductDetail/ImageSlider.jsx";
 import CartModal from "../components/ProductDetail/CartModal.jsx";
 import BuyNowModal from "../components/ProductDetail/BuyNowModal.jsx";
+import OptionModal from "../components/ProductDetail/OptionModal.jsx";
 import ReviewModal from "../components/ProductDetail/ReviewModal.jsx";
 import InquiryModal from "../components/ProductDetail/InquiryModal.jsx";
 import RelatedProducts from "../components/ProductDetail/RelatedProducts.jsx";
@@ -1538,6 +1539,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [showCartModal, setShowCartModal] = useState(false);
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const [showOptionModal, setShowOptionModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -1548,9 +1550,17 @@ const ProductDetail = () => {
   const navigate = useNavigate();
 
   // 카트페이지 이동
+
+  const hasOptions = product?.options?.length > 0;
+  const isOptionValid = !hasOptions || (hasOptions && !!selectedOption);
+
   const addToCart = useCartStore((state) => state.addToCart);
 
   const handleAddToCart = () => {
+    if (!isOptionValid) {
+      setShowOptionModal(true);
+      return;
+    }
     addToCart({
       id: product.id,
       name: product.name,
@@ -1563,18 +1573,18 @@ const ProductDetail = () => {
       quantity,
     });
 
-    // 장바구니 모달 표시
     setShowCartModal(true);
 
-    console.log("장바구니:", product); // 여기선 바로 안 보일 수 있음
     setTimeout(() => {
       console.log("업데이트된 장바구니:", useCartStore.getState().product);
     }, 100);
   };
-
   // 바로 구매 처리 함수 추가
   const handleBuyNow = () => {
-    // 원하는 경우 장바구니에 상품 추가 로직도 포함 가능
+    if (!isOptionValid) {
+      setShowOptionModal(true);
+      return;
+    }
     const orderItem = {
       id: product.id,
       name: product.name,
@@ -1586,7 +1596,7 @@ const ProductDetail = () => {
       thumbnail: product.thumbnail,
       quantity,
     };
-    // 1초 뒤에 결제 페이지로 이동
+
     setTimeout(() => {
       navigate("/payment", {
         state: {
@@ -1596,7 +1606,6 @@ const ProductDetail = () => {
       });
     }, 1000);
 
-    // 구매 모달 표시
     setShowBuyModal(true);
   };
 
@@ -2587,7 +2596,13 @@ const ProductDetail = () => {
         isOpen={showBuyModal}
         onClose={() => setShowBuyModal(false)}
         message="잠시 후 결제 페이지로 이동합니다!"
-        // buttonText="바로 이동"
+      />
+
+      {/* 옵션 경고 모달 */}
+      <OptionModal
+        isOpen={showOptionModal}
+        onClose={() => setShowOptionModal(false)}
+        message="옵션을 선택해주세요."
       />
     </Container>
   );

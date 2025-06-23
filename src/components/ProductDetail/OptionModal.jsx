@@ -1,6 +1,4 @@
-import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import RookieLogo from "../../images/logos/Rookie_logo.svg";
 
 // 모달 오버레이 - 반투명 배경
@@ -56,42 +54,13 @@ const ConfirmationText = styled.p`
   }
 `;
 
-// 버튼
-
-const Buttons = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-// 장바구니 버튼
-const CartButton = styled.button`
-  background: var(--main);
-  color: var(--dark);
-  border: none;
-  border-radius: 4px;
-  padding: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  /* transition: background-color 0.2s;
-
-  &:hover {
-    background-color: var(--gray3);
-  } */
-
-  @media (max-width: 480px) {
-    padding: 10px;
-    font-size: 12px;
-  }
-`;
-
-// 쇼핑하기 버튼
-const ShoppingButton = styled.button`
+// 확인 버튼
+const OptionButton = styled.button`
   background-color: var(--gray1);
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 12px;
+  padding: 12px 30px;
   font-size: 14px;
   font-weight: 300;
   cursor: pointer;
@@ -103,25 +72,17 @@ const ShoppingButton = styled.button`
 
   @media (max-width: 480px) {
     padding: 10px 25px;
-    font-size: 15px;
+    font-size: 12px;
   }
 `;
 
-const CartModal = ({
+const OptionModal = ({
   isOpen,
   onClose,
-  message = "상품이 장바구니에 담겼습니다!",
-  buttonText = "장바구니로 이동",
-  shoppingText = "계속 쇼핑하기",
+  message = "옵션을 선택해주세요.",
+  buttonText = "확인",
 }) => {
-  const navigate = useNavigate();
-
   if (!isOpen) return null;
-
-  const handleGoToCart = () => {
-    navigate("/cart");
-    onClose();
-  };
 
   return (
     <ModalOverlay onClick={onClose}>
@@ -130,13 +91,10 @@ const CartModal = ({
           <img src={RookieLogo} alt="루키 로고" />
         </LogoContainer>
         <ConfirmationText>{message}</ConfirmationText>
-        <Buttons>
-          <ShoppingButton onClick={onClose}>{shoppingText}</ShoppingButton>
-          <CartButton onClick={handleGoToCart}>{buttonText}</CartButton>
-        </Buttons>
+        <OptionButton onClick={onClose}>{buttonText}</OptionButton>
       </ModalContainer>
     </ModalOverlay>
   );
 };
 
-export default CartModal;
+export default OptionModal;

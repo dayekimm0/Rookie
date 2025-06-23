@@ -8,7 +8,14 @@ import AddressModal from "../components/Payment/AddressModal";
 import LogonRookielogo from "../images/logos/Logon_Rookie_logo.svg";
 import authStore from "../stores/AuthStore";
 import useCartStore from "../stores/cartStore";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 const Container = styled.div`
@@ -202,8 +209,9 @@ const Payment = () => {
   const orderItems = location.state?.orderItems || [];
   const couponFromCart = location.state?.coupon || null;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const { user } = authStore();
+  const { user, userProfile, tempAddress } = authStore();
   const userUid = user?.uid || null;
 
   const [availableCoupons, setAvailableCoupons] = useState([]);
@@ -211,7 +219,7 @@ const Payment = () => {
 
   const clearCart = useCartStore((state) => state.clearCart);
 
-  // Firestore에서 유저 쿠폰 불러오기 (wonCoupons, welcomeCoupons 모두)
+  // Firestore에서 유저 쿠폰 불러오기
   useEffect(() => {
     const fetchCoupons = async () => {
       if (!userUid) {
@@ -236,13 +244,13 @@ const Payment = () => {
         const wonCoupons = wonSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          collectionType: "wonCoupons", // 컬렉션 구분용
+          collectionType: "wonCoupons",
         }));
 
         const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          collectionType: "welcomeCoupons", // 컬렉션 구분용
+          collectionType: "welcomeCoupons",
         }));
 
         const allCoupons = [...wonCoupons, ...welcomeCoupons];
@@ -301,32 +309,72 @@ const Payment = () => {
   };
 
   const handlePaymentSubmit = async () => {
-    try {
-      if (selectedCoupon && userUid) {
-        // selectedCoupon의 컬렉션 타입에 따라 삭제
-        const collectionType = selectedCoupon.collectionType || "wonCoupons";
+    if (isProcessing) return; // 중복 클릭 방지
+    if (!userUid) {
+      alert("로그인 후 결제 가능합니다.");
+      return;
+    }
+    if (orderItems.length === 0) {
+      alert("주문할 상품이 없습니다.");
+      return;
+    }
+    // 배송지 필수 정보 확인 (임시주소가 있으면 우선 사용)
+    const addressInfo = tempAddress || userProfile;
+    if (
+      !addressInfo ||
+      !addressInfo.postalCode ||
+      !addressInfo.address ||
+      !addressInfo.detailedAddress ||
+      !addressInfo.username
+    ) {
+      alert("배송지 정보를 정확히 입력해주세요.");
+      return;
+    }
 
+    setIsProcessing(true);
+
+    try {
+      // 쿠폰이 선택되어 있으면 Firestore에서 삭제
+      if (selectedCoupon && userUid) {
+        const collectionType = selectedCoupon.collectionType || "wonCoupons";
         await deleteDoc(
           doc(db, "users", userUid, collectionType, selectedCoupon.id)
         );
-
         console.log("사용된 쿠폰 삭제 완료");
       }
 
-      // 주문 내역 저장 (localStorage)
+      // 주문내역 객체 생성 (최상위 컬렉션 'orderItems'에 저장)
       const purchasedOrder = {
-        orderItems,
-        coupon: selectedCoupon,
+        userId: userUid,
+        orderItems: orderItems.map((item) => ({
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          option: item.option || [],
+          thumbnail: item.thumbnail || null,
+        })),
+        coupon: selectedCoupon
+          ? { id: selectedCoupon.id, title: selectedCoupon.title }
+          : null,
+        productPrice,
+        discount,
         totalPrice,
-        purchasedAt: new Date().toISOString(),
+        address: {
+          postalCode: addressInfo.postalCode,
+          address: addressInfo.address,
+          detailedAddress: addressInfo.detailedAddress,
+          recipientName: addressInfo.username,
+          phoneNumber: addressInfo.phoneNumber || null,
+        },
+        status: "pending", // 주문 상태 초기값
+        purchasedAt: serverTimestamp(),
       };
 
-      const prevHistory =
-        JSON.parse(localStorage.getItem("orderHistory")) || [];
-      prevHistory.push(purchasedOrder);
-      localStorage.setItem("orderHistory", JSON.stringify(prevHistory));
+      await addDoc(collection(db, "orderItems"), purchasedOrder);
+      console.log("주문 내역 Firestore 저장 완료 (orderItems)");
 
-      // 장바구니 비우기
+      // 결제 완료 후 상태 초기화
       clearCart();
       localStorage.removeItem("cartItems");
       localStorage.removeItem("appliedCoupon");
@@ -336,6 +384,8 @@ const Payment = () => {
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
       alert("결제 중 문제가 발생했습니다. 다시 시도해 주세요.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -386,6 +436,7 @@ const Payment = () => {
         onCouponChange={handleCouponChange}
         coupons={availableCoupons}
         onPaymentSubmit={handlePaymentSubmit}
+        isProcessing={isProcessing}
       />
 
       {isModalOpen && (

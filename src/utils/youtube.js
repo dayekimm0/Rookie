@@ -133,3 +133,20 @@ export const fetchAllTeamVideos = async (playlists) => {
     };
   });
 };
+
+// ISO 8601 형식의 YouTube duration 파싱 함수
+export const parseISO8601Duration = (duration) => {
+  if (!duration || typeof duration !== "string") return 0;
+
+  const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
+  const match = duration.match(regex);
+  if (!match) return 0;
+
+  const [, hours, minutes, seconds] = match;
+
+  return (
+    parseInt(hours || "0", 10) * 3600 +
+    parseInt(minutes || "0", 10) * 60 +
+    parseInt(seconds || "0", 10)
+  );
+};
