@@ -8,7 +8,6 @@ import LikeButton from "./PlayDetail/LikeButton";
 import { useNavigate } from "react-router-dom";
 import ClipPlayer from "./PlayDetail/ClipPlayer";
 import ClipProduct from "./PlayDetail/ClipProduct";
-import { fetchClipProducts } from "../utils/fetchClipProducts";
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -52,9 +51,7 @@ const ClipDetail = memo(({ videoId, videoList = [], onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(
     videoList.findIndex((v) => v.id === videoId)
   );
-  const [products, setProducts] = useState([]);
   const playersRef = useRef({});
-  const productCache = useRef({});
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -71,30 +68,6 @@ const ClipDetail = memo(({ videoId, videoList = [], onClose }) => {
       }
     });
   }, [currentIndex]);
-
-  useEffect(() => {
-    const fetchAndSet = async () => {
-      const currentVideo = videoList[currentIndex];
-      if (!currentVideo?.title || !currentVideo?.id) {
-        setProducts([]);
-        return;
-      }
-
-      const videoKey = currentVideo.id;
-
-      if (productCache.current[videoKey]) {
-        setProducts(productCache.current[videoKey]); // 캐시된 데이터 사용
-      } else {
-        const result = await fetchClipProducts(currentVideo.title);
-        productCache.current[videoKey] = result; // 캐싱
-        setProducts(result);
-      }
-    };
-
-    if (currentIndex >= 0 && currentIndex < videoList.length) {
-      fetchAndSet();
-    }
-  }, [currentIndex, videoList]);
 
   const onPlayerReady = useCallback(
     (index) => (event) => {
@@ -146,7 +119,7 @@ const ClipDetail = memo(({ videoId, videoList = [], onClose }) => {
                   <LikeButton videoId={video.id} />
                 </Btn>
                 <ClipProduct
-                  products={products}
+                  products={video.products || []}
                   onProductClick={handleProductClick}
                 />
               </WingCon>

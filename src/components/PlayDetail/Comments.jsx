@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { getEmblem } from "../../util";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase";
-import authStore from "../../stores/authStore";
+import authStore from "../../stores/AuthStore";
 
 const CommentWrapper = styled.div`
   display: flex;
