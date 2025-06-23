@@ -11,6 +11,7 @@ import PlusIcon from "../../images/icons/plusIcon.svg";
 
 import HighlightContent from "./HighlightContent";
 
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
 import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { useNavigate } from "react-router-dom";
@@ -134,12 +135,18 @@ const HighlightList = ({ type, title }) => {
 
       const fetched = await fetchPlaylistVideos(config.playlistId, config.max);
 
-      // 최신순 정렬
       const sorted = fetched.sort(
         (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
       );
 
-      setVideos(sorted);
+      const videosWithProducts = await Promise.all(
+        sorted.map(async (video) => {
+          const products = await fetchClipProducts(video.title);
+          return { ...video, products };
+        })
+      );
+
+      setVideos(videosWithProducts);
     };
 
     loadVideos();
@@ -147,8 +154,6 @@ const HighlightList = ({ type, title }) => {
 
   const handlePrev = () => swiper?.slidePrev();
   const handleNext = () => swiper?.slideNext();
-
-  // const handleMoreClick = () => navigate("/playall");
 
   const handleOpenModal = (id) => {
     setSelectedVideoId(id);

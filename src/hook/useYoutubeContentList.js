@@ -33,7 +33,11 @@ export const fetchPlaylistVideos = async (
     const videoRes = await axios.get(
       "https://www.googleapis.com/youtube/v3/videos",
       {
-        params: { part: "snippet,contentDetails", id: videoIds, key: API_KEY },
+        params: {
+          part: "snippet,contentDetails,statistics",
+          id: videoIds,
+          key: API_KEY,
+        },
       }
     );
 
@@ -63,6 +67,7 @@ export const fetchPlaylistVideos = async (
         thumbnail,
         description: original?.snippet?.description || item.snippet.description,
         publishedAt: original?.snippet?.publishedAt,
+        viewCount: original?.statistics?.viewCount || 0,
       };
     });
 
@@ -116,7 +121,7 @@ export const fetchVideoDetailById = async (videoId) => {
       "https://www.googleapis.com/youtube/v3/videos",
       {
         params: {
-          part: "snippet",
+          part: "snippet,statistics",
           id: videoId,
           key: API_KEY,
         },
@@ -146,6 +151,7 @@ export const fetchVideoDetailById = async (videoId) => {
       description: video.snippet.description,
       channelTitle: video.snippet.channelTitle,
       publishedAt: video.snippet.publishedAt,
+      viewCount: video.statistics?.viewCount || 0,
       thumbnail,
       subscriberCount,
       channelId: video.snippet.channelId,
@@ -221,7 +227,7 @@ export const fetchRelatedVideosByChannelId = async (
       "https://www.googleapis.com/youtube/v3/videos",
       {
         params: {
-          part: "contentDetails,snippet",
+          part: "contentDetails,snippet,statistics",
           id: videoIds,
           key: API_KEY,
         },
@@ -255,6 +261,7 @@ export const fetchRelatedVideosByChannelId = async (
           "",
         channelTitle: decodeHTML(video.snippet.channelTitle),
         publishedAt: video.snippet.publishedAt,
+        viewCount: video.statistics?.viewCount || 0,
       }));
 
     return filtered;

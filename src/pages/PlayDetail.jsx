@@ -20,6 +20,18 @@ const Container = styled.div`
   background: var(--gray1);
   padding: 0 5%;
   overflow: hidden;
+  @media screen and (max-width: 1440px) {
+    padding: 0 3%;
+  }
+  @media screen and (max-width: 1024px) {
+    padding: 0 3%;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 0 3%;
+  }
+  @media screen and (max-width: 500px) {
+    padding: 0 2%;
+  }
 `;
 
 const PlayContent = styled.div`
@@ -29,14 +41,43 @@ const PlayContent = styled.div`
   justify-content: center;
   align-items: start;
   gap: 30px;
+
+  @media screen and (max-width: 1024px) {
+    gap: 20px;
+  }
+
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 30px;
+  }
 `;
 
 const RightContent = styled.div`
   width: 1200px;
+  @media screen and (max-width: 1440px) {
+    width: 900px;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 640px;
+  }
+
+  @media screen and (max-width: 500px) {
+    max-width: 100%;
+  }
 `;
 
 const LeftContent = styled.div`
   width: 498px;
+
+  @media screen and (max-width: 1024px) {
+    width: 320px;
+  }
+
+  @media screen and (max-width: 900px) {
+    max-width: 100%;
+  }
 `;
 
 const RecoPlayWrapper = styled.div`
@@ -46,6 +87,10 @@ const RecoPlayWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 30px;
+  @media screen and (max-width: 1024px) {
+    height: 480px;
+    margin-bottom: 20px;
+  }
 `;
 
 const Divider = styled.div`
@@ -53,6 +98,14 @@ const Divider = styled.div`
   height: 2px;
   background: var(--gray6);
   margin-top: 18px;
+  @media screen and (max-width: 1300px) {
+    width: 100%;
+    max-width: 900px;
+  }
+
+  @media screen and (max-width: 900px) {
+    max-width: 100%;
+  }
 `;
 
 const CommentWrapper = styled.div`
@@ -63,6 +116,14 @@ const CommentWrapper = styled.div`
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
+  @media screen and (max-width: 900px) {
+    height: auto;
+    min-height: 400px;
+  }
+
+  @media screen and (max-width: 500px) {
+    padding: 15px 12px;
+  }
 `;
 
 const CommentTop = styled.div`
@@ -90,6 +151,13 @@ const CommentTitle = styled.h2`
     color: var(--light);
   }
 `;
+
+function parseISODuration(iso) {
+  const match = iso.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
+  const minutes = parseInt(match?.[1] || "0", 10);
+  const seconds = parseInt(match?.[2] || "0", 10);
+  return minutes * 60 + seconds;
+}
 
 const PlayDetail = () => {
   const { videoId } = useParams();
@@ -148,13 +216,22 @@ const PlayDetail = () => {
       const playlistId = videoData.playlistId;
       if (playlistId) {
         const videos = await fetchPlaylistVideos(playlistId);
+
         setPlaylistVideos(
-          videos.filter(
-            (video) =>
+          videos.filter((video) => {
+            const title = video.title?.toLowerCase() || "";
+            const durationInSeconds =
+              typeof video.duration === "string"
+                ? parseISODuration(video.duration)
+                : video.duration;
+            return (
               video.id !== videoId &&
-              !video.title.toLowerCase().includes("#shorts") &&
-              video.duration > 120
-          )
+              !title.includes("shorts") &&
+              !title.includes("쇼츠") &&
+              Number.isFinite(durationInSeconds) &&
+              durationInSeconds > 180
+            );
+          })
         );
       } else {
         const related = await fetchRelatedVideosByChannelId(
@@ -226,6 +303,8 @@ const PlayDetail = () => {
                 title={video.title}
                 thumbnail={video.thumbnail}
                 channelTitle={video.channelTitle}
+                viewCount={video.viewCount}
+                publishedAt={video.publishedAt}
               />
             ))}
           </RecoPlayWrapper>
