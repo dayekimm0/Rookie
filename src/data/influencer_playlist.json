@@ -262,39 +262,37 @@
           "clip": "PLPuT2QymG4qUhyBWLY0zVyKjW9VfQG2dL",
           "products": [
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDEwMjJfNDcg%2FMDAxNzI5NTkxOTU4Njkw.LWVatloOtri0SZO08a8FlznD1LKPY11jkCQNnS4-obgg.YOiQanzCdGYcocXCYO2le0bfjK1-ZhgJrL2-p_PAoGsg.JPEG%2FKakaoTalk_20241022_185026934_01.jpg&type=sc960_832",
+              "product_name": "슈야토야 키링",
+              "product_price": "18,000원",
               "product_detail": {
-                "option": [],
-                "product_detailImg": []
+                "option": ["화이트", "네이비"],
+                "product_detailImg": [
+                  "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDExMDRfMjcx%2FMDAxNzMwNzAzMzk1NDEw.4COhAMcC9vPGdaTr0IPoUSO2qflDZhpnSfPW18hMESwg.MXqPvz6-N6IughYswVLUzZdQecvuXw5o148dapLS7r0g.PNG%2Fimage.png&type=sc960_832",
+                  "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA4MjhfODAg%2FMDAxNzI0ODA4NjcyNzE0.mQnFgoc9FO0P_X4pyjUafKb_s41Nxvx2n70-tcf8WdAg.ihjB4uDSOxR_RhkYvMjK4STUGP8Oz403P83SCfrNl8kg.JPEG%2FIMG_0712.jpg&type=sc960_832"
+                ]
               }
             },
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://search.pstatic.net/common/?src=http%3A%2F%2Fshopping.phinf.naver.net%2Fmain_5465047%2F54650470150.20250508195446.jpg&type=sc960_832",
+              "product_name": "신문지 응원봉",
+              "product_price": "5,000원",
               "product_detail": {
                 "option": [],
-                "product_detailImg": []
+                "product_detailImg": [
+                  "https://shop-phinf.pstatic.net/20250507_87/1746595112624Vin8j_PNG/KakaoTalk_20250507_122648680_01.png?type=w860"
+                ]
               }
             },
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://contents.lotteon.com/itemimage/20250604205912/LO/24/95/14/94/99/_2/49/51/49/50/0/LO2495149499_2495149500_1.jpg/dims/resizef/554X554",
+              "product_name": "네이비 누리 망토 담요",
+              "product_price": "29,000원",
               "product_detail": {
                 "option": [],
-                "product_detailImg": []
-              }
-            },
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": []
+                "product_detailImg": [
+                  "https://doc-pub.lotteon.com/ec/public/PF4EC0F215D75440C5B1935BA4084D073F05F50AB00BDB62A97F9A00E3181AE83/file"
+                ]
               }
             }
           ]
@@ -304,7 +302,42 @@
           "profile": "https://yt3.googleusercontent.com/SFj0lJosXRSF6Sa4c9jqkODia11ZSNgTc-ZtaBg18V2ZkxdxNJVkQCKHUDPsM8ulpzsFPwwAVZI=s160-c-k-c0x00ffffff-no-rj",
           "description": "나의 덕질 라이프를 소개하도록 할게",
           "play": "PLPuT2QymG4qVPh5sP5z-J6Zr01Ze-tnZ2",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://shop-phinf.pstatic.net/20250612_212/1749712199849jKzfq_JPEG/25212432831454261_1446546558.jpg?type=m510",
+              "product_name": "롯데 자이언츠 x 춘식이 인형 키링 v3",
+              "product_price": "45,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://shop-phinf.pstatic.net/20250612_289/1749712217104FDhfB_JPEG/a_1955bd8c7f7b4cefaa012122c0dd91ac-Photoroom.jpg?type=w860"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://contents.lotteon.com/itemimage/20250508085738/LO/24/66/96/17/72/_2/46/69/61/77/3/LO2466961772_2466961773_1.png/dims/resizef/554X554",
+              "product_name": "동백 미니 짝짝이 키링",
+              "product_price": "8,900원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://doc-pub.lotteon.com/ec/public/P81045EF0EEA6E033CFA26A90EA3810B68E9AC6F32016776E7CB290C5C438F846/file"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://contents.lotteon.com/itemimage/20250529163834/LO/24/91/86/97/08/_2/49/18/69/70/9/LO2491869708_2491869709_1.png/dims/resizef/554X554",
+              "product_name": "네이비 스크런치",
+              "product_price": "29,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://doc-pub.lotteon.com/ec/public/P9A09F1D2CC30B5036FD94D13EF522E6318B734C142F3879A72AD6E9F21A07428/file"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
