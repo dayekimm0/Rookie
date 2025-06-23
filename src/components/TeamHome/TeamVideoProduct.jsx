@@ -57,31 +57,46 @@ const ContentWrapper = styled.div`
 
 // 좌측 영상 영역 (1086*608)
 const VideoSection = styled.div`
-  width: 1086px;
-  height: 608px;
+  width: 60%;
   border-radius: 8px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
 
-  @media screen and (max-width: 1820px) {
-    width: 807px;
-    height: 340px;
+  /* @media screen and (max-width: 1980px) {
+    width: 62%;
+  } */
+
+  @media screen and (max-width: 1880px) {
+    max-height: 570px;
+  }
+
+  @media screen and (max-width: 1780px) {
+    max-height: 480px;
+  }
+
+  @media screen and (max-width: 1420px) {
+    max-height: 420px;
+  }
+
+  @media screen and (max-width: 1240px) {
+    max-height: 360px;
   }
 
   @media screen and (max-width: 1024px) {
-    width: 607px;
-    height: 340px;
+    max-height: 340px;
+  }
+
+  @media screen and (max-width: 960px) {
+    height: 280px;
   }
 
   @media screen and (max-width: 768px) {
-    width: 346px;
-    height: 194px;
+    width: 100%;
   }
 
   @media screen and (max-width: 375px) {
-    width: 346px;
-    height: 194px;
+    width: 100%;
   }
 `;
 
@@ -166,38 +181,6 @@ const PlayButton = styled.div`
   }
 `;
 
-const VideoInfo = styled.div`
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  z-index: 2;
-  color: white;
-
-  h3 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  p {
-    font-size: 14px;
-    opacity: 0.9;
-  }
-
-  @media screen and (max-width: 768px) {
-    bottom: 15px;
-    left: 15px;
-
-    h3 {
-      font-size: 18px;
-    }
-
-    p {
-      font-size: 12px;
-    }
-  }
-`;
-
 // 우측 제품 리스트 영역
 const ProductSection = styled.div`
   flex: 1;
@@ -233,8 +216,32 @@ const ProductSection = styled.div`
     display: none;
   }
 
+  /* @media screen and (max-width: 1980px) {
+    width: 38%;
+  } */
+
+  @media screen and (max-width: 1880px) {
+    max-height: 570px;
+  }
+
+  @media screen and (max-width: 1780px) {
+    max-height: 480px;
+  }
+
+  @media screen and (max-width: 1420px) {
+    max-height: 420px;
+  }
+
+  @media screen and (max-width: 1240px) {
+    max-height: 360px;
+  }
+
   @media screen and (max-width: 1024px) {
     max-height: 340px;
+  }
+
+  @media screen and (max-width: 960px) {
+    max-height: 280px;
   }
 
   @media screen and (max-width: 768px) {
@@ -244,7 +251,7 @@ const ProductSection = styled.div`
     display: flex;
     gap: 10px;
     padding-bottom: 10px;
-    width: 330px;
+    width: 100%;
 
     /* 모바일 가로 스크롤바 */
     &::-webkit-scrollbar {
@@ -278,7 +285,7 @@ const ProductSection = styled.div`
     display: flex;
     gap: 10px;
     padding-bottom: 10px;
-    width: 330px;
+    width: 100%;
 
     /* 모바일 가로 스크롤바 */
     &::-webkit-scrollbar {
@@ -314,6 +321,10 @@ const ProductItem = styled.div`
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 1880px) {
+    gap: 11px;
   }
 
   @media screen and (max-width: 1024px) {
@@ -352,9 +363,29 @@ const ProductImage = styled.div`
     object-fit: cover;
   }
 
+  @media screen and (max-width: 1880px) {
+    width: 220px;
+    height: 220px;
+  }
+
+  @media screen and (max-width: 1780px) {
+    width: 180px;
+    height: 180px;
+  }
+
+  @media screen and (max-width: 1420px) {
+    width: 150px;
+    height: 150px;
+  }
+
   @media screen and (max-width: 1024px) {
     width: 126px;
     height: 126px;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 100px;
+    height: 100px;
   }
 
   @media screen and (max-width: 768px) {
@@ -387,12 +418,31 @@ const ProductInfo = styled.div`
   flex-direction: column;
   padding: 16px 16px;
 
+  @media screen and (max-width: 1880px) {
+    height: 220px;
+  }
+
+  @media screen and (max-width: 1780px) {
+    height: 180px;
+  }
+
+  @media screen and (max-width: 1420px) {
+    width: 344px;
+    height: 150px;
+    padding: 12px;
+  }
   @media screen and (max-width: 1024px) {
     width: 344px;
     height: 126px;
     padding: 12px;
   }
 
+  @media screen and (max-width: 960px) {
+    width: 100px;
+    height: 100px;
+    padding: 8px 0;
+    flex-shrink: 0;
+  }
   @media screen and (max-width: 768px) {
     width: 100px;
     height: 154px;
@@ -589,10 +639,6 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
                   onClick={handlePlay}
                 >
                   <PlayButton />
-                  <VideoInfo>
-                    <h3>{videoData.title}</h3>
-                    <p>{videoData.description}</p>
-                  </VideoInfo>
                 </VideoThumbnail>
               )
             ) : (
