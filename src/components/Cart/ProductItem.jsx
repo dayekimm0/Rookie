@@ -123,8 +123,8 @@ const Thumbnail = styled.div`
   overflow: hidden;
   input {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 4px;
+    left: 4px;
   }
 `;
 

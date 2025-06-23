@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import authStore from "../../stores/AuthStore";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import ProductItem from "../Cart/ProductItem";
 import useCartStore from "../../stores/cartStore";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -271,29 +275,45 @@ const MyShopping = () => {
   const [orders, setOrders] = useState([]);
   const [coupons, setCoupons] = useState([]);
 
-  useEffect(() => {
-    const saveOrders = JSON.parse(localStorage.getItem("orderHistory")) || [];
-    setOrders(saveOrders);
-  }, []);
+  const userUid = userProfile?.uid || null;
 
-  const allOrderItems = orders.flatMap((order) => order.orderItems);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!userUid) return;
+      try {
+        const db = getFirestore();
+        const orderItemsRef = collection(db, "orderItems");
+        const q = query(orderItemsRef, where("userId", "==", userUid));
+        const snapshot = await getDocs(q);
+        const fetchedOrders = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        fetchedOrders.sort((a, b) => {
+          if (!a.purchasedAt) return 1;
+          if (!b.purchasedAt) return -1;
+          return new Date(b.purchasedAt) - new Date(a.purchasedAt);
+        });
+
+        setOrders(fetchedOrders);
+      } catch (error) {
+        console.error("주문 내역 불러오기 실패:", error);
+      }
+    };
+    fetchOrders();
+  }, [userUid]);
 
   useEffect(() => {
     const fetchCoupons = async () => {
-      if (!userProfile?.uid) return;
+      if (!userUid) return;
 
       const db = getFirestore();
-
-      const wonCouponsRef = collection(
-        db,
-        "users",
-        userProfile.uid,
-        "wonCoupons"
-      );
+      const wonCouponsRef = collection(db, "users", userUid, "wonCoupons");
       const welcomeCouponsRef = collection(
         db,
         "users",
-        userProfile.uid,
+        userUid,
         "welcomeCoupons"
       );
 
@@ -306,13 +326,11 @@ const MyShopping = () => {
         const wonCoupons = wonSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          collectionType: "wonCoupons", // 필요하면 표시
         }));
 
         const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          collectionType: "welcomeCoupons",
         }));
 
         setCoupons([...wonCoupons, ...welcomeCoupons]);
@@ -322,7 +340,9 @@ const MyShopping = () => {
     };
 
     fetchCoupons();
-  }, [userProfile]);
+  }, [userUid]);
+
+  const allOrderItems = orders.flatMap((order) => order.orderItems);
 
   return (
     <Inner>
@@ -376,6 +396,7 @@ const MyShopping = () => {
           쿠폰
         </MyShoppingDetail>
       </MyShoppingInner>
+
       <List>
         <InfoTitle>
           <li>
