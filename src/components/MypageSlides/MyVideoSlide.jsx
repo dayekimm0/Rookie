@@ -37,7 +37,7 @@ const SlideContainer = styled.div`
   }
 `;
 
-const MyTabSlideRenderer = ({ items, onSwiperReady }) => {
+const MyVideoSlide = ({ onSwiperReady }) => {
   const [videoIds, setVideoIds] = useState([]);
   const [likesLoading, setLikesLoading] = useState(true);
   const [swiper, setSwiper] = useState();
@@ -59,8 +59,12 @@ const MyTabSlideRenderer = ({ items, onSwiperReady }) => {
     fetchLikes();
   }, []);
 
+  const idsParam = useMemo(() => {
+    return videoIds.length ? videoIds.join(",") : null;
+  }, [videoIds]);
+
   const { data: videos = [], isLoading: videosLoading } =
-    useYoutubeVideoDetails(videoIds, !likesLoading && videoIds.length > 0);
+    useYoutubeVideoDetails(idsParam, !likesLoading && !!idsParam > 0);
 
   // swiper
 
@@ -93,6 +97,10 @@ const MyTabSlideRenderer = ({ items, onSwiperReady }) => {
 
   if (likesLoading || videosLoading) {
     return <p>로딩 중...</p>;
+  }
+
+  if (slides.length === 0) {
+    return <></>;
   }
 
   return (
@@ -154,4 +162,4 @@ const MyTabSlideRenderer = ({ items, onSwiperReady }) => {
   );
 };
 
-export default MyTabSlideRenderer;
+export default MyVideoSlide;
