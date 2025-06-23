@@ -75,3 +75,9 @@ export const getTeamStoreVideo = (teamCode) => {
 export const getYoutubeThumbnail = (videoId, quality = "maxresdefault") => {
   return `https://img.youtube.com/vi/${videoId}/${quality}.jpg`;
 };
+
+// ROOKie 파트너존용 영상 가져오기
+export const getTeamRookieVideo = (teamCode) => {
+  const result = TEAM_ROOKIE_STORE_VIDEOS[teamCode] || null;
+  return result;
+};

@@ -3,8 +3,13 @@ import styled from "styled-components";
 import YouTube from "react-youtube";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { getTeamStoreVideo, getYoutubeThumbnail } from "../../data/teamVideos";
+import {
+  getTeamStoreVideo,
+  getTeamRookieVideo,
+  getYoutubeThumbnail,
+} from "../../data/teamVideos";
 import { getTeamVideoProducts } from "../../data/teamVideoProducts";
+import { getTeamRookieProducts } from "../../data/teamRookieProducts";
 
 const Section = styled.div`
   background: var(--dark);
@@ -540,41 +545,69 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
 
-  // TEAM STORE인 경우에만 구단별 영상 데이터 가져오기
-  const videoData =
-    sectionType === "TEAM_STORE" ? getTeamStoreVideo(teamCode) : null;
+  // 영상 데이터 가져오기
+  const videoData = useMemo(() => {
+    if (sectionType === "TEAM_STORE") {
+      return getTeamStoreVideo(teamCode);
+    } else if (sectionType === "ROOKIE_PARTNER") {
+      return getTeamRookieVideo(teamCode);
+    }
+    return null;
+  }, [teamCode, sectionType]);
 
-  // 구단별 상품 데이터 fetch (ProductList.jsx와 동일한 방식)
+  // 구단별 상품 데이터 fetch
   const {
     data: allTeamProducts = [],
     isLoading: isProductsLoading,
     error: productsError,
   } = useQuery({
-    queryKey: ["teamProducts", teamCode],
+    queryKey: ["teamProducts", teamCode, sectionType],
     queryFn: async () => {
       if (!teamCode) return [];
-      const res = await fetch(
-        `https://rookiejson.netlify.app/teamJson/${teamCode}.json`
-      );
-      if (!res.ok) throw new Error("팀 상품 로딩 실패");
-      return res.json();
+
+      if (sectionType === "TEAM_STORE") {
+        const res = await fetch(
+          `https://rookiejson.netlify.app/teamJson/${teamCode}.json`
+        );
+        if (!res.ok) throw new Error("팀 상품 로딩 실패");
+        return res.json();
+      } else if (sectionType === "ROOKIE_PARTNER") {
+        const res = await fetch(
+          "https://rookiejson.netlify.app/teamJson/rookie.json"
+        );
+        if (!res.ok) throw new Error("루키 상품 로딩 실패");
+        return res.json();
+      }
+
+      return [];
     },
-    staleTime: 1000 * 60 * 10, // 10분 캐싱
-    enabled: !!teamCode && sectionType === "TEAM_STORE", // TEAM_STORE일 때만 실행
+    staleTime: 1000 * 60 * 10,
+    enabled:
+      !!teamCode &&
+      (sectionType === "TEAM_STORE" || sectionType === "ROOKIE_PARTNER"),
   });
 
   // 표시할 상품들 필터링
   const displayProducts = useMemo(() => {
-    if (sectionType !== "TEAM_STORE" || !teamCode || !allTeamProducts.length) {
+    if (!teamCode || !allTeamProducts.length) {
       return [];
     }
 
-    const selectedProductIds = getTeamVideoProducts(teamCode);
+    let selectedProductIds = [];
 
-    // ID 순서대로 상품 정렬하여 반환
-    return selectedProductIds
-      .map((id) => allTeamProducts.find((product) => product.id === id))
-      .filter(Boolean); // undefined 제거
+    if (sectionType === "TEAM_STORE") {
+      selectedProductIds = getTeamVideoProducts(teamCode);
+      return selectedProductIds
+        .map((id) => allTeamProducts.find((product) => product.id === id))
+        .filter(Boolean);
+    } else if (sectionType === "ROOKIE_PARTNER") {
+      selectedProductIds = getTeamRookieProducts(teamCode);
+      return selectedProductIds
+        .map((id) => allTeamProducts.find((product) => product.id === id))
+        .filter(Boolean);
+    }
+
+    return [];
   }, [allTeamProducts, teamCode, sectionType]);
 
   const handlePlay = () => {
@@ -591,9 +624,14 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
   };
 
   const handleProductClick = (product) => {
-    // 내부 ProductDetail 페이지로 이동
-    // 경로: /store/{teamCode}/{productId}
-    navigate(`/store/${teamCode}/${product.id}`);
+    if (sectionType === "TEAM_STORE") {
+      navigate(`/store/${teamCode}/${product.id}`);
+    } else if (sectionType === "ROOKIE_PARTNER") {
+      // ROOKie 상품은 외부 링크로 이동 (detail_link가 있는 경우)
+      if (product.detail_link) {
+        window.open(product.detail_link, "_blank");
+      }
+    }
   };
 
   return (
@@ -604,8 +642,7 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
         <ContentWrapper>
           {/* 좌측 영상 영역 */}
           <VideoSection>
-            {sectionType === "TEAM_STORE" && videoData ? (
-              // TEAM STORE - 구단별 고정 영상
+            {videoData ? (
               isPlaying ? (
                 <>
                   {!isReady && (
@@ -656,7 +693,6 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
                 </VideoThumbnail>
               )
             ) : (
-              // ROOKie 파트너존 플레이스홀더
               <VideoPlaceholder>영상 준비 중...</VideoPlaceholder>
             )}
           </VideoSection>
@@ -706,11 +742,17 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
                   <ProductInfo>
                     <div>
                       <InfluencerName>
-                        {product.collaboration || "구단 상품"}
+                        {sectionType === "ROOKIE_PARTNER"
+                          ? product.influencer || "ROOKie"
+                          : product.collaboration || "구단 상품"}
                       </InfluencerName>
                       <ProductName>{product.name}</ProductName>
                     </div>
-                    <ProductPrice>{product.price}</ProductPrice>
+                    <ProductPrice>
+                      {sectionType === "ROOKIE_PARTNER"
+                        ? product.product_price || product.price
+                        : product.price}
+                    </ProductPrice>
                   </ProductInfo>
                 </ProductItem>
               ))
