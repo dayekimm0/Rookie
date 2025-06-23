@@ -26,3 +26,14 @@ export const useSearchStore = create((set) => ({
   closeSearch: () => set({ searchOpen: false }),
   setSearchOpen: (val) => set({ searchOpen: val }),
 }));
+
+export const getFoldState = (
+  scrollY,
+  isFolded,
+  isScrollLocked,
+  isManuallyClosed
+) => {
+  if (isManuallyClosed) return "manual"; // 수동으로 닫은 경우
+  if (isFolded || (isScrollLocked && scrollY > 2)) return "auto"; // 자동 접힘
+  return "open"; // 열려 있는 상태
+};

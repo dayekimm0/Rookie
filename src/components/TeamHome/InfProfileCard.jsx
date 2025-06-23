@@ -9,7 +9,7 @@ const Container = styled.div`
   top: 100px;
   background: #191919;
   border-radius: 20px;
-  padding: 68px 20px;
+  padding: 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,7 +49,7 @@ const ProfileImg = styled.div`
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
-  background: #fff;
+  /* background: #fff; */
   img {
     width: 100%;
     height: 100%;
