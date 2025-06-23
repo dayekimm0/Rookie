@@ -331,6 +331,10 @@ const ProductItem = styled.div`
     gap: 11px;
   }
 
+  @media screen and (max-width: 960px) {
+    gap: 10px;
+  }
+
   @media screen and (max-width: 768px) {
     flex-direction: column;
     gap: 10px;
@@ -438,7 +442,7 @@ const ProductInfo = styled.div`
   }
 
   @media screen and (max-width: 960px) {
-    width: 100px;
+    width: 200px;
     height: 100px;
     padding: 8px 0;
     flex-shrink: 0;
@@ -490,6 +494,12 @@ const ProductName = styled.div`
     margin-bottom: 12px;
   }
 
+  @media screen and (max-width: 960px) {
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
   @media screen and (max-width: 768px) {
     font-size: 12px;
     margin-bottom: 8px;
@@ -510,6 +520,10 @@ const ProductPrice = styled.div`
 
   @media screen and (max-width: 1024px) {
     font-size: 26px;
+  }
+
+  @media screen and (max-width: 960px) {
+    font-size: 20px;
   }
 
   @media screen and (max-width: 768px) {
