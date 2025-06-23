@@ -35,6 +35,7 @@ const MenuBar = styled.div`
     :nth-child(1) {
       display: flex;
       align-items: center;
+      padding-left: 4px;
       gap: 5%;
     }
     :nth-child(2) {
