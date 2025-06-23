@@ -86,7 +86,6 @@ const Items = styled.div`
   overscroll-behavior: contain;
   touch-action: auto;
   scroll-behavior: auto;
-
   scrollbar-gutter: stable;
   &::-webkit-scrollbar {
     width: 5px;
