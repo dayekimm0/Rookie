@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import ScrollToTop from "./ScrollToTop";
 import useHeaderStore from "./stores/headerHeightStore";
-import authStore from "./stores/AuthStore";
+import authStore from "./stores/authStore";
 
 const ContentWrapper = styled.div`
   position: relative;

@@ -6,6 +6,7 @@ import Logon from "./pages/Logon";
 import Mypage from "./pages/Mypage";
 import MyShopping from "./components/Mypage/MyShopping";
 import MyVideo from "./components/Mypage/MyVideo";
+import MyAllVideo from "./components/Mypage/MyAllVideo";
 import MyPlay from "./components/Mypage/MyPlay";
 import MyClip from "./components/Mypage/MyClip";
 import MySetting from "./components/Mypage/MySetting";
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
             path: "myvideo",
             element: <MyVideo />,
             children: [
+              {
+                index: true,
+                element: <MyAllVideo />,
+              },
               {
                 path: "myplay",
                 element: <MyPlay />,

@@ -1,5 +1,4 @@
 import TabSlideRenderer from "./TabSlideRenderer";
-import MyTabSlideRenderer from "../MypageSlides/MyTabSlideRandered";
 import { useQueries } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
@@ -91,15 +90,7 @@ const AllTabSlide = ({ allTab }) => {
       </SlideLoaderWrapper>
     );
 
-  return (
-    <>
-      {location.pathname === "/mypage/myvideo" ? (
-        <MyTabSlideRenderer items={items} />
-      ) : (
-        <TabSlideRenderer items={items} />
-      )}
-    </>
-  );
+  return <TabSlideRenderer items={items} />;
 };
 
 export default AllTabSlide;
