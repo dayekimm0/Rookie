@@ -73,7 +73,7 @@ const Information = styled.p`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 375px) {
     font-size: 1.4rem;
   }
 `;
@@ -130,10 +130,40 @@ const Request = styled.select`
   font-weight: 400;
   margin: 0;
   padding: 0;
+  transform: translateX(-4px);
   &:focus {
     outline: none;
   }
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1.4rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 375px) {
+    font-size: 1.4rem;
+  }
+`;
+
+const RequestInput = styled.input`
+  width: 100%;
+  max-width: 800px;
+  color: ${({ isRequestPlaceholder }) =>
+    isRequestPlaceholder ? "var(--grayC)" : "var(--dark)"};
+  border: 1px solid var(--grayC);
+  border: none;
+  font-family: "Pretendard";
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 2px;
+  padding-top: 1px;
   transform: translateX(-4px);
+  &:focus {
+    outline: none;
+  }
 
   @media screen and (max-width: 1024px) {
     font-size: 1.4rem;
@@ -149,9 +179,38 @@ const Request = styled.select`
 `;
 
 const MyAddress = () => {
-  const [request, setRequest] = useState("배송 요청사항을 선택해주세요.");
-  const handleRequestChange = (e) => {
-    setRequest(e.target.value);
+  const [selectValue, setSelectValue] = useState("");
+  const [customOptionText, setCustomOptionText] = useState("직접 입력할게요.");
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  const handleSelectChange = (e) => {
+    const value = e.target.value;
+    if (value === "custom") {
+      setShowCustomInput(true);
+      setSelectValue("custom");
+      setCustomOptionText("직접 입력할게요.");
+    } else {
+      setShowCustomInput(false);
+      setSelectValue(value);
+    }
+  };
+
+  const handleCustomInputChange = (e) => {
+    setCustomOptionText(e.target.value);
+  };
+
+  const handleCustomInputKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (customOptionText.trim() !== "") {
+        setSelectValue("custom");
+        setShowCustomInput(false);
+      }
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
   };
 
   const { userProfile, tempAddress, isLoading } = authStore();
@@ -179,11 +238,12 @@ const MyAddress = () => {
     userProfile.detailedAddress?.trim() !== "";
 
   return (
-    <AddressInfo>
+    <AddressInfo onSubmit={handleFormSubmit}>
       <AddressDetail>
         <AddressTitle>수령인</AddressTitle>
         <Information>{username}</Information>
       </AddressDetail>
+
       <AddressDetail>
         <AddressTitle>배송주소</AddressTitle>
         <AddressPlace>
@@ -198,23 +258,43 @@ const MyAddress = () => {
           )}
         </AddressPlace>
       </AddressDetail>
+
       <AddressDetail>
         <AddressTitle>연락처</AddressTitle>
         <Information>{phoneNumber}</Information>
       </AddressDetail>
+
       <AddressDetail>
         <AddressTitle>요청사항</AddressTitle>
-        <Request
-          value={request}
-          onChange={handleRequestChange}
-          isRequestPlaceholder={request === "배송 요청사항을 선택해주세요."}
-        >
-          <option disabled>배송 요청사항을 선택해주세요.</option>
-          <option value="guard">경비실에 맡겨주세요.</option>
-          <option value="door">문 앞에 놔주세요.</option>
-          <option value="call">배송 전에 연락 주세요.</option>
-          <option value="box">택배함에 넣어주세요.</option>
-        </Request>
+        {!showCustomInput && (
+          <Request
+            value={selectValue}
+            onChange={handleSelectChange}
+            isRequestPlaceholder={selectValue === ""}
+          >
+            <option value="" disabled>
+              배송 요청사항을 선택해주세요.
+            </option>
+            <option value="경비실에 맡겨주세요.">경비실에 맡겨주세요.</option>
+            <option value="문 앞에 놔주세요.">문 앞에 놔주세요.</option>
+            <option value="배송 전에 연락 주세요.">
+              배송 전에 연락 주세요.
+            </option>
+            <option value="택배함에 넣어주세요.">택배함에 넣어주세요.</option>
+            <option value="custom">{customOptionText}</option>
+          </Request>
+        )}
+
+        {showCustomInput && (
+          <RequestInput
+            type="text"
+            placeholder="요청사항을 입력하세요"
+            value={customOptionText}
+            onChange={handleCustomInputChange}
+            onKeyDown={handleCustomInputKeyDown}
+            autoFocus
+          />
+        )}
       </AddressDetail>
     </AddressInfo>
   );
