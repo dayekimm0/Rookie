@@ -1,19 +1,24 @@
 import styled from "styled-components";
+import { getEmblem } from "../../util";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../../firebase";
+import authStore from "../../stores/AuthStore";
 
 const CommentWrapper = styled.div`
   display: flex;
   justify-content: start;
-  align-items: center;
+  align-items: start;
   gap: 8px;
   margin-bottom: 24px;
 `;
 
-const UserImg = styled.div`
+const UserTeam = styled.div`
   width: 42px;
   height: 42px;
+  min-width: 42px;
+  max-height: 42px;
   background: var(--grayF5);
   border-radius: 50%;
-
   img {
     width: 100%;
     height: 100%;
@@ -30,7 +35,9 @@ const CommentItem = styled.div`
 `;
 
 const UserInfo = styled.div`
+  width: 1100px;
   display: flex;
+  justify-content: space-between;
   gap: 10px;
 `;
 
@@ -38,7 +45,6 @@ const UserName = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
   p {
     font-size: 1.4rem;
     font-weight: 500;
@@ -47,16 +53,25 @@ const UserName = styled.div`
   }
 `;
 
+const DeleteComment = styled.button`
+  border: none;
+  background: none;
+  color: var(--grayC);
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
 const Comment = styled.div`
   color: var(--light);
   font-size: 1.4rem;
+  width: 90%;
 `;
-
 const Comments = ({ comments }) => {
+  const { user } = authStore();
+
   const timeAgo = (raw) => {
     const date = raw?.toDate?.() || raw;
     if (!(date instanceof Date)) return "방금 전";
-
     const now = new Date();
     const diff = (now - date) / 1000;
 
@@ -67,21 +82,54 @@ const Comments = ({ comments }) => {
     return `${Math.floor(diff / 604800)}주 전`;
   };
 
+  const teamToEmblemId = {
+    "기아 타이거즈": "1",
+    "삼성 라이온즈": "2",
+    "LG 트윈스": "3",
+    "두산 베어스": "4",
+    "KT 위즈": "5",
+    "SSG 랜더스": "6",
+    "롯데 자이언츠": "7",
+    "한화 이글스": "8",
+    "NC 다이노스": "9",
+    "키움 히어로즈": "10",
+  };
+
+  const handleDelete = async (commentId) => {
+    if (window.confirm("댓글을 삭제하시겠습니까?")) {
+      try {
+        await deleteDoc(doc(db, "comments", commentId));
+        // 삭제 성공 후 부모에게 알려 UI 업데이트 유도
+        onDeleteLocal && onDeleteLocal(commentId);
+      } catch (err) {
+        console.error("댓글 삭제 실패:", err.message);
+      }
+    }
+  };
+
   return (
     <>
       {comments.length === 0 && <p>댓글이 없습니다.</p>}
       {comments.map((comment) => (
         <CommentWrapper key={comment.id}>
-          <UserImg>
-            {comment.userProfileImage && (
-              <img src={comment.userProfileImage} alt="profile" />
+          <UserTeam>
+            {comment.favoriteTeam && (
+              <img
+                src={getEmblem(teamToEmblemId[comment.favoriteTeam] || "1")}
+                alt="teamEmblem"
+              />
             )}
-          </UserImg>
+          </UserTeam>
           <CommentItem>
             <UserInfo>
               <UserName>
                 {comment.author || "user"} <p>{timeAgo(comment.createdAt)}</p>
               </UserName>
+              {user?.uid === comment.userId && (
+                <DeleteComment onClick={() => handleDelete(comment.id)}>
+                  삭제
+                </DeleteComment>
+              )}
             </UserInfo>
             <Comment>{comment.text}</Comment>
           </CommentItem>

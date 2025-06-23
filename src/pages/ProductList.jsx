@@ -177,6 +177,7 @@ const ProductList = () => {
         if (!res.ok) throw new Error("팀 상품 로딩 실패");
         return res.json();
       } else {
+        // 전체 팀 상품 요청
         const requests = teamCodes.map((code) =>
           fetch(`https://rookiejson.netlify.app/teamJson/${code}.json`).then(
             (res) => {
