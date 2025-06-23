@@ -13,9 +13,9 @@ const DeskTopGrid = `
 const TabletGrid = `
   100px
   minmax(100px, 250px) 
-  minmax(70px, 80px) 
-  minmax(80px, 90px)
-  minmax(90px, 100px)
+  minmax(50px, 80px) 
+  minmax(60px, 90px)
+  minmax(70px, 100px)
 `;
 
 const MenuBar = styled.div`
