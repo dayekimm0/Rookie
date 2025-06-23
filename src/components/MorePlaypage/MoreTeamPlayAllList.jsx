@@ -232,7 +232,7 @@ const MoreTeamPlayAllList = ({ allTab, tabs, teamCode }) => {
           <PlayListWrap>
             {currentItems.map((video, idx) => (
               <PlayContent
-                key={video.id || idx}
+                key={`${video.id}_${idx}`}
                 {...video}
                 type="influencer"
                 onClick={() => handleClick(video.id)}

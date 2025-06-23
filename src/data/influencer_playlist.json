@@ -59,7 +59,8 @@
           "profile": "https://phinf.pstatic.net/memo/20250621_137/1750508959795prkQP_JPEG/%B5%CE%BB%EA_%B9%CE_%C7%C1%B7%CE%C7%CA.jpg?type=w740",
           "description": "릴스 찍는 평범한 야구팬 🐻‍❄️ \n⚾️ | @doosanbears.1982 Hustle V⁷ \n👩‍💻 | chaeh.min@gmail.com",
           "play": null,
-          "clip": "PLPuT2QymG4qVEbsjuXQligURfnt9jSPaA"
+          "clip": "PLPuT2QymG4qVEbsjuXQligURfnt9jSPaA",
+          "products": null
         },
         {
           "name": "셀레나",
@@ -67,26 +68,7 @@
           "description": "세상을 더 재밌게!! \n📨 selenanvrd@gmail.com",
           "play": "PLPuT2QymG4qUyr_tSwQcdIBcMc29zZzpd",
           "clip": "PLPuT2QymG4qUp6Ia4VOPjzdeUXNx4Ix4z",
-          "products": [
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": ""
-              }
-            },
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": ""
-              }
-            }
-          ]
+          "products": null
         }
       ]
     },
@@ -418,7 +400,36 @@
           "profile": "https://yt3.googleusercontent.com/ustaikwPtfTVN3xFAorhR9CSj9b7IJQVzOoiy6nxkE4JzComlDEafCpakIUHx4C2egm8Kyaq=s160-c-k-c0x00ffffff-no-rj",
           "description": "변방의 감성일상계..조용히 눈에 띄고 싶어요🙏🏻 \n📩 lovejournal@naver.com \n🌠 www.instagram.com/aararazel",
           "play": "PLPuT2QymG4qU9l3G6Be6ogukhnKoi502-",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://img.soldout.co.kr/external_image/2024/08/19/85a05f7d-7b42-4fcb-b053-fd68f3e88749.jpg/soldout/resize/1000/optimize",
+              "product_name": "COKE 레드 스페셜 유니폼",
+              "product_price": "129,000원",
+              "product_detail": {
+                "option": ["95", "100", "105"],
+                "product_detailImg": [
+                  "https://img.soldout.co.kr/external_image/2024/08/19/85a05f7d-7b42-4fcb-b053-fd68f3e88749.jpg/soldout/resize/1000/optimize",
+                  "https://img.soldout.co.kr/external_image/2024/08/19/e6c03fe2-106b-46a3-a266-98c54362a63f.jpg/soldout/resize/1000/optimize",
+                  "https://img.soldout.co.kr/external_image/2024/08/19/1448faeb-dfd3-4146-843d-32946ecd5a4f.jpg/soldout/resize/1000/optimize",
+                  "https://img.soldout.co.kr/external_image/2024/08/19/be7ecb84-783b-460f-96d1-e9f8df882428.jpg/soldout/resize/1000/optimize",
+                  "https://img.soldout.co.kr/external_image/2024/08/19/5876cdf2-0e83-4097-ae90-9d667b6cdb0c.jpg/soldout/resize/1000/optimize"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://img.soldout.co.kr/item_thumb/2025/04/15/3a6e4843-4a1e-44b1-99be-0c9ba78f0652.png/soldout/resize/1000/optimize",
+              "product_name": "KBO x MSS 볼파크 숏슬리브 티셔츠 서울 LG 트윈스 차콜 그레이",
+              "product_price": "33,000원",
+              "product_detail": {
+                "option": ["M", "L", "XL"],
+                "product_detailImg": [
+                  "https://img.soldout.co.kr/item_thumb/2025/04/15/3a6e4843-4a1e-44b1-99be-0c9ba78f0652.png/soldout/resize/1000/optimize",
+                  "https://img.soldout.co.kr/item_detail/2025/04/15/e35b6097-8def-40e5-ae73-77cd92f47c88.png/soldout/resize/1000/optimize"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "@reallyelly_lg",
@@ -471,15 +482,6 @@
                   "https://image.idus.com/image/files/bd9fbc4acb334b6fb4397909fb1140da_1440.jpg"
                 ]
               }
-            },
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": []
-              }
             }
           ]
         }
@@ -493,7 +495,53 @@
           "profile": "https://yt3.googleusercontent.com/-93vJn0JdfU86QpQdBMsvU6dd5LQ2S2OmyBu7t-Vu49fgVNqVlMNsnXdeACzFMvFD9FY-0Q8-Q=s160-c-k-c0x00ffffff-no-rj",
           "description": "삼성라이온즈를 응원하는 팬",
           "play": "PL6mQCkgkh2Rc0KPcez3zAh3I2zjtfolOe",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://phinf.pstatic.net/memo/20250623_18/1750662498461OFjJj_JPEG/%B6%F3%C0%CC%BF%C2%C1%EE%B8%D3%B8%AE%B6%EC.jpg?type=w740",
+              "product_name": "[야박 특가]삼성라이온즈 블레오 머리띠",
+              "product_price": "12,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://phinf.pstatic.net/memo/20250623_97/17506627241813rDMw_JPEG/%B8%D3%B8%AE%B6%EC2.jpg?type=w740"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://img.danawa.com/prod_img/500000/158/817/img/20817158_1.jpg?shrink=330:*&_v=20230705103019",
+              "product_name": "[야박 특가]삼성라이온즈 응원봉",
+              "product_price": "11,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://img.danawa.com/prod_img/500000/158/817/img/20817158_1.jpg?shrink=330:*&_v=20230705103019"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://samsunglionsmall.com/web/product/big/202502/a94c018294f6d8431642008fc8afa636.jpg",
+              "product_name": "[야박 특가]삼성라이온즈 프로페셔널 홈 유니폼",
+              "product_price": "99,000원",
+              "product_detail": {
+                "option": ["90", "95", "100", "105", "110", "120"],
+                "product_detailImg": [
+                  "https://samsunglionsmall.com/web/product/big/202502/a94c018294f6d8431642008fc8afa636.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://image.idus.com/image/files/2d74cf175fd74758ae1d57cf3229b2d4_720.jpg",
+              "product_name": "[야뱍 픽] 유니폼모자 뜨개 키링",
+              "product_price": "12,500원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://image.idus.com/image/files/2d74cf175fd74758ae1d57cf3229b2d4_720.jpg"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "해써윱",
@@ -512,7 +560,54 @@
           "profile": "https://yt3.googleusercontent.com/yzuyqZHIaLexY30fO4l2RjFd0fD4eE7CsWz1bae_2CIsNVcVY0Duawcu5UEYMSwR4VoGp1yLtw=s160-c-k-c0x00ffffff-no-rj",
           "description": "하고싶은 것 다 하는 알록달록 공간˚₊·—̳͟͞͞♡",
           "play": "PLPuT2QymG4qWu4i2SQeBVYtYAVRcTfFr7",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20230810/PARTNER_94559/20230810101521c032d364138546a0bcf256e540a80d51/7bc77ca082a07d7ebf54.jpg",
+              "product_name": "[코코예 특가] 호걸이 인형 가방",
+              "product_price": "20,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://image.ssgsellpick.com/image/prod/TIGERS/2308/LG20230810002840/0c2f7d333a7698fac007f7ad485c708d.jpg"
+                ]
+              }
+            },
+
+            {
+              "product_thumbnail": "https://tigers.cdn-nhncommerce.com/20230719/134253.373220000/%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88-%ED%98%B8%EA%B1%B8%EC%9D%B4%EC%9D%B8%ED%98%95%EB%A8%B8%EB%A6%AC%EB%9D%A0(G)-%EB%A9%94%EC%9D%B8.jpg",
+              "product_name": "[코코예 특가]기아타이거즈 호걸이 머리띠",
+              "product_price": "13,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://tigers.cdn-nhncommerce.com/20230719/133527.796663000/%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88-%ED%98%B8%EA%B1%B8%EC%9D%B4%EC%9D%B8%ED%98%95%EB%A8%B8%EB%A6%AC%EB%9D%A0(G)-%EC%83%81%EC%84%B8.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20230330/PARTNER_94559/20230330095028f796b732cb314c7e8b85ba644ff68c36/30b6a4b59cb97a697678.jpg",
+              "product_name": "[코코예 특가]기아타이거즈 페이퍼 스틱스",
+              "product_price": "5,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/20250512/094432.123609543/%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88-%ED%8E%98%EC%9D%B4%ED%8D%BC%EC%8A%A4%ED%8B%B1%EC%8A%A4-%EC%83%81%EC%84%B8%20(1).jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/vendor_inventory/6707/e86aa7bb0fbc752dd44a4359d8bbc20750a7a53a31338e26d99f55e83e8f.jpg",
+              "product_name": "[코코예X루키] 야구 직관 가방",
+              "product_price": "10,900원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://thumbnail6.coupangcdn.com/thumbnails/remote/q89/image/vendor_inventory/506c/e1af9aff9e023d09b35170fa04dac433705a291e04b278a400b9436482cb.png"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -527,39 +622,25 @@
           "clip": "PLPuT2QymG4qVl01fdniTL_Du8R3IkOKBR",
           "products": [
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/KT0110510012034/4.JPG",
+              "product_name": "[채소픽]케이티위즈 핑크 클라우드 유니폼",
+              "product_price": "94,000원",
               "product_detail": {
-                "option": [],
-                "product_detailImg": []
+                "option": ["75", "85", "95", "100", "105", "110", "120"],
+                "product_detailImg": [
+                  "https://fs.arumnet.com/image/N3810KTSPO/item/38100000000366/contents/24EC8AA4ED9484EBA781EAB7B8EBA6B0EC9CA0EB8B88ED8FBCEC8381EC84B8.jpg"
+                ]
               }
             },
             {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
+              "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/38100000008808/4.jpg",
+              "product_name": "[채소픽]케이티위즈 2025 어센틱 어웨이 유니폼",
+              "product_price": "139,000원",
               "product_detail": {
-                "option": [],
-                "product_detailImg": []
-              }
-            },
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": []
-              }
-            },
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": []
+                "option": ["75", "85", "95", "100", "105", "110", "120"],
+                "product_detailImg": [
+                  "http://fs.arumnet.com/image/N3810KTSPO/item/38100000008808/contents/25%EC%9B%90%EC%A0%95%EC%96%B4%EC%84%BC%ED%8B%B1%EC%9C%A0%EB%8B%88%ED%8F%BC%EC%83%81%EC%84%B8_1.jpg"
+                ]
               }
             }
           ]
@@ -576,7 +657,31 @@
           "profile": "https://yt3.googleusercontent.com/xV6G9W0qD5K-6hcYYqOr-Av4m2_UcnmGsSNgoRj2IwSHkSjsxcPvsKzsWc_Vli1_QF8uuFI1=s160-c-k-c0x00ffffff-no-rj",
           "description": "KT 위즈 휀걸 자매의 얼레벌레 직관 일기",
           "play": "PLPuT2QymG4qXS1h0XpVQmy146_J0O1KiI",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/38100000002071/4.jpg",
+              "product_name": "[규자매 특가]케이티위즈 비트배트",
+              "product_price": "30,000원",
+              "product_detail": {
+                "option": ["OS"],
+                "product_detailImg": [
+                  "http://fs.arumnet.com/image/N3810KTSPO/item/38100000002071/contents/2025-%EB%B9%84%ED%8A%B8%EB%B0%B0%ED%8A%B8%EC%83%81%EC%84%B8.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/KT0110110012480/4.jpg",
+              "product_name": "케이티위즈 2024 어센틱 피너츠 유니폼",
+              "product_price": "99,000원",
+              "product_detail": {
+                "option": ["95", "100", "105", "110"],
+                "product_detailImg": [
+                  "http://fs.arumnet.com/image/N3810KTSPO/item/KT0110110012480/contents/KT0110110012480.jpg"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -588,7 +693,31 @@
           "profile": "https://yt3.googleusercontent.com/TS4C_AIVyOJAEQb7GjPapWb_nBYTLGWzOzZ2sx8xOMYLArmNq2uHC89y6PTWKXBgSSR_Av_F=s160-c-k-c0x00ffffff-no-rj",
           "description": "얼렁뚱땅 흘러가는 이나린의 인생 기록장••🙂‍↕️\nnahlynn99@gmail.com \nIG by.2nl",
           "play": "PLjFwk7vX_Ve3RVv4onzb5oQOkkWWhc0LS",
-          "clip": null
+          "clip": null,
+          "products": [
+            {
+              "product_thumbnail": "https://cafe24img.poxo.com/ticketmdshop/web/product/big/20240708/ff8734fad3b9ab0b05959225ce6919b1.png",
+              "product_name": "[이나린 픽]키움히어로즈 응원배트(핑크)",
+              "product_price": "9,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://ticketimage.interpark.com/TicketImage/mdshop/item_detail/Kiwoom/kiwoomDetail_264.jpg"
+                ]
+              }
+            },
+            {
+              "product_thumbnail": "https://phinf.pstatic.net/memo/20250623_28/1750667975430e2XqI_JPEG/259256371_1_1712397521_w%7Bres%7D.jpg?type=w740",
+              "product_name": "[이나린 픽]키움히어로즈 뚱이 콜라보 유니폼",
+              "product_price": "80,000원",
+              "product_detail": {
+                "option": ["90", "95", "100", "105", "110"],
+                "product_detailImg": [
+                  "https://phinf.pstatic.net/memo/20250623_28/1750667975430e2XqI_JPEG/259256371_1_1712397521_w%7Bres%7D.jpg?type=w740"
+                ]
+              }
+            }
+          ]
         }
       ]
     }

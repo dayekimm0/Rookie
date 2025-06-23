@@ -3,29 +3,43 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import lenis from "./lenisInstance";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import ScrollToTop from "./ScrollToTop";
 import useHeaderStore from "./stores/headerHeightStore";
 import authStore from "./stores/AuthStore";
+import { getFoldState } from "./stores/headersStore";
 
 const ContentWrapper = styled.div`
   position: relative;
   /* padding-top: 177px; */
-  padding-top: ${({ $folded }) => ($folded ? "calc(177px - 30px)" : "177px")};
+  padding-top: ${({ $foldState, $headerHeight }) =>
+    $foldState === "open"
+      ? "177px"
+      : $foldState === "auto"
+      ? "calc(177px - 30px)"
+      : `${$headerHeight}px`};
   transition: padding 0.2s;
   background: ${({ $mode }) =>
     $mode === "light" ? "var(--light)" : "var(--bg)"};
 
   @media screen and (max-width: 1024px) {
     /* padding-top: 138.67px; */
-    padding-top: ${({ $folded }) =>
-      $folded ? "calc(138.67px - 10px)" : "138.67px"};
+    padding-top: ${({ $foldState, $headerHeight }) =>
+      $foldState === "open"
+        ? "138.67px"
+        : $foldState === "auto"
+        ? "calc(138.67px - 10px)"
+        : `${$headerHeight}px`};
   }
   @media screen and (max-width: 500px) {
     /* padding-top: 120.78px; */
-    padding-top: ${({ $folded }) =>
-      $folded ? "calc(120.78px - 10px)" : "120.78px"};
+    padding-top: ${({ $foldState, $headerHeight }) =>
+      $foldState === "open"
+        ? "120.78px"
+        : $foldState === "auto"
+        ? "calc(120.78px - 10px)"
+        : `${$headerHeight}px`};
   }
 `;
 
@@ -48,8 +62,22 @@ function Root() {
   const unfold = useHeaderStore((state) => state.unfold);
   const resetTransition = useHeaderStore((state) => state.resetTransition);
   const enableTransition = useHeaderStore((state) => state.enableTransition);
-  const location = useLocation();
   const headerHeight = useHeaderStore((state) => state.headerHeight);
+  const isScrollLocked = useHeaderStore((s) => s.isScrollLocked);
+  const isManuallyClosed = useHeaderStore((s) => s.isManuallyClosed);
+  const [scrollY, setScrollY] = useState(0);
+  const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = ({ scroll }) => setScrollY(scroll);
+    lenis.on("scroll", onScroll);
+    return () => lenis.off("scroll", onScroll);
+  }, []);
+
+  const foldState = useMemo(
+    () => getFoldState(scrollY, isFolded, isScrollLocked, isManuallyClosed),
+    [scrollY, isFolded, isScrollLocked, isManuallyClosed]
+  );
 
   const hideHeaderPath = ["/login", "/logon"];
   const isVisible = !hideHeaderPath.includes(location.pathname);
@@ -96,11 +124,11 @@ function Root() {
       <ScrollToTop />
       {isVisible && (
         <>
-          <Header mode={mode} $folded={isFolded} />
+          <Header mode={mode} />
           <ContentWrapper
             $mode={mode}
             $headerHeight={headerHeight}
-            $folded={isFolded}
+            $foldState={foldState}
           >
             <Outlet />
           </ContentWrapper>

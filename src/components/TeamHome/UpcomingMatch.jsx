@@ -24,7 +24,7 @@ const Container = styled.div`
       margin-bottom: 20px;
     }
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 500px) {
     margin-top: 60px;
     .title {
       font-size: 1.6rem;

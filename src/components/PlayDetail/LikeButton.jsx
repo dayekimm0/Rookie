@@ -9,7 +9,7 @@ import {
   faThumbsDown as fasThumbsDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import authStore from "../../stores/authStore";
+import authStore from "../../stores/AuthStore";
 import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
 import { db } from "../../firebase";
 

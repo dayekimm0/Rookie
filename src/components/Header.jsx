@@ -14,7 +14,7 @@ import {
   getScrollbarWidth,
   getTeamCodeEng,
 } from "../util";
-import authStore from "../stores/authStore";
+import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import styled from "styled-components";
