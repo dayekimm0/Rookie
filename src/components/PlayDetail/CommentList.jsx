@@ -12,6 +12,7 @@ const CommentListWrapper = styled.div`
   border-bottom: 1px solid var(--gray6);
   padding-top: 14px;
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
@@ -22,6 +23,15 @@ const CommentListWrapper = styled.div`
     background: var(--grayC);
     border-radius: 4px;
     cursor: pointer;
+  }
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+    width: inherit;
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
   }
 `;
 

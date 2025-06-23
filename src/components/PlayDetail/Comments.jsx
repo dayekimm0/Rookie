@@ -5,11 +5,20 @@ import { db } from "../../firebase";
 import authStore from "../../stores/AuthStore";
 
 const CommentWrapper = styled.div`
+  width: 100%;
   display: flex;
   justify-content: start;
   align-items: start;
   gap: 8px;
   margin-bottom: 24px;
+  @media screen and (max-width: 1440px) {
+    width: 90%;
+  }
+  @media screen and (max-width: 1024px) {
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const UserTeam = styled.div`
@@ -39,6 +48,14 @@ const UserInfo = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+    width: 540px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const UserName = styled.div`
@@ -66,7 +83,7 @@ const Comment = styled.div`
   font-size: 1.4rem;
   width: 90%;
 `;
-const Comments = ({ comments }) => {
+const Comments = ({ comments, onDeleteLocal }) => {
   const { user } = authStore();
 
   const timeAgo = (raw) => {
@@ -99,7 +116,6 @@ const Comments = ({ comments }) => {
     if (window.confirm("댓글을 삭제하시겠습니까?")) {
       try {
         await deleteDoc(doc(db, "comments", commentId));
-        // 삭제 성공 후 부모에게 알려 UI 업데이트 유도
         onDeleteLocal && onDeleteLocal(commentId);
       } catch (err) {
         console.error("댓글 삭제 실패:", err.message);
