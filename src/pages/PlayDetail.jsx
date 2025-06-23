@@ -71,6 +71,9 @@ const RightContent = styled.div`
 const LeftContent = styled.div`
   width: 498px;
 
+  @media screen and (max-width: 1440px) {
+    width: 400px;
+  }
   @media screen and (max-width: 1024px) {
     width: 320px;
   }
@@ -98,13 +101,11 @@ const Divider = styled.div`
   height: 2px;
   background: var(--gray6);
   margin-top: 18px;
-  @media screen and (max-width: 1300px) {
+  @media screen and (max-width: 1440px) {
     width: 100%;
-    max-width: 900px;
   }
 
-  @media screen and (max-width: 900px) {
-    max-width: 100%;
+  @media screen and (max-width: 1024px) {
   }
 `;
 
@@ -116,13 +117,12 @@ const CommentWrapper = styled.div`
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1024px) {
     height: auto;
     min-height: 400px;
   }
 
   @media screen and (max-width: 500px) {
-    padding: 15px 12px;
   }
 `;
 

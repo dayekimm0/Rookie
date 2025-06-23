@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PlayContent from "../components/Play/PlayContent";
 import { playContents } from "../data/playcontents";
 import { fetchPlaylistVideos } from "../hook/useYoutubeContentList";
@@ -95,6 +95,7 @@ const StyledPaginate = styled(ReactPaginate)`
 
 const PlayAll = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   // const type = location.state?.type;
   // const title = location.state?.title;
   const { type = "", title = "" } = location.state || {};
@@ -153,7 +154,12 @@ const PlayAll = () => {
       )}
       <ContentList>
         {currentItems.map((item, idx) => (
-          <PlayContent key={item.id || idx} {...item} type={type} />
+          <PlayContent
+            key={item.id || idx}
+            {...item}
+            type={type}
+            onClick={() => navigate(`/play/${item.id}`)}
+          />
         ))}
         {/* {filteredVideos.map((item, idx) => (
           <PlayContent key={item.id || idx} {...item} type={type} />

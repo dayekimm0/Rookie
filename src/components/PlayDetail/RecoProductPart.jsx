@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Scrollbar } from "swiper/modules";
 import "swiper/css";
+import "swiper/css/scrollbar";
 import RecoProduct from "./RecoProduct";
 
 const RecoProductWrapper = styled.div`
@@ -14,6 +16,31 @@ const RecoProductTitle = styled.h1`
   color: var(--light);
   font-weight: 600;
   margin-bottom: 26px;
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
+`;
+
+const StyledSwiper = styled(Swiper)`
+  .swiper-scrollbar {
+    background: var(--gray3);
+    height: 4px;
+    border-radius: 4px;
+    bottom: 0 !important;
+  }
+
+  /* 스크롤바 드래그하는 부분 */
+  .swiper-scrollbar-drag {
+    background: var(--grayF5);
+    border-radius: 4px;
+    cursor: pointer;
+  }
 `;
 
 // 팀별 키워드 (검색에 사용)
@@ -76,28 +103,38 @@ const RecoProductPart = ({ videoTitle = "", channelTitle = "" }) => {
       )
       .map(([team]) => team);
 
-    if (matchedTeams.length === 0) {
-      setProducts([]);
-      return;
-    }
-
     const fetchTeamProducts = async () => {
       try {
-        const fetches = matchedTeams.map((team) => {
-          const jsonFileName = teamCodeMap[team];
-          if (!jsonFileName)
-            throw new Error("No JSON file mapping for " + team);
-          return fetch(
-            `https://rookiejson.netlify.app/teamJson/${jsonFileName}.json`
-          ).then((res) => {
-            if (!res.ok) throw new Error("Failed to load " + jsonFileName);
-            return res.json();
+        let results = [];
+
+        if (matchedTeams.length > 0) {
+          // 팀별 상품 불러오기
+          const fetches = matchedTeams.map((team) => {
+            const jsonFileName = teamCodeMap[team];
+            if (!jsonFileName)
+              throw new Error("No JSON file mapping for " + team);
+            return fetch(
+              `https://rookiejson.netlify.app/teamJson/${jsonFileName}.json`
+            ).then((res) => {
+              if (!res.ok) throw new Error("Failed to load " + jsonFileName);
+              return res.json();
+            });
           });
-        });
 
-        const results = await Promise.all(fetches);
+          results = await Promise.all(fetches);
+        }
+
+        if (matchedTeams.length === 0 || results.flat().length === 0) {
+          // 매칭 팀 없거나 결과가 빈 배열이면 KBO 전체 상품 불러오기
+          const res = await fetch(
+            `https://rookiejson.netlify.app/teamJson/kbo.json`
+          );
+          if (!res.ok) throw new Error("Failed to load KBO all products");
+          const allProducts = await res.json();
+          results = [allProducts];
+        }
+
         const merged = results.flat();
-
         setProducts(shuffle(merged));
       } catch (error) {
         console.error(error);
@@ -108,24 +145,28 @@ const RecoProductPart = ({ videoTitle = "", channelTitle = "" }) => {
     fetchTeamProducts();
   }, [videoTitle, channelTitle]);
 
+  const displayProducts = products.slice(0, 6);
+
   return (
     <RecoProductWrapper>
       <RecoProductTitle>여기서 추천하는 ROOK</RecoProductTitle>
-      <Swiper
+      <StyledSwiper
         slidesPerView={3}
-        slidesPerGroup={2}
         spaceBetween={20}
+        freeMode={true}
+        scrollbar={{ draggable: true }}
+        modules={[Scrollbar]}
         breakpoints={{
-          0: { slidesPerView: 1, slidesPerGroup: 2, spaceBetween: 6 },
-          400: { slidesPerView: 1, slidesPerGroup: 3, spaceBetween: 6 },
-          500: { slidesPerView: 1, slidesPerGroup: 3, spaceBetween: 14 },
-          768: { slidesPerView: 2, slidesPerGroup: 4, spaceBetween: 14 },
-          1024: { slidesPerView: 2, slidesPerGroup: 5, spaceBetween: 20 },
-          1440: { slidesPerView: 3, slidesPerGroup: 7, spaceBetween: 20 },
+          0: { slidesPerView: 1, spaceBetween: 6 },
+          400: { slidesPerView: 1, spaceBetween: 6 },
+          500: { slidesPerView: 1, spaceBetween: 14 },
+          768: { slidesPerView: 2, spaceBetween: 14 },
+          1024: { slidesPerView: 2, spaceBetween: 20 },
+          1440: { slidesPerView: 3, spaceBetween: 20 },
         }}
       >
-        {products.map((product, idx) => (
-          <SwiperSlide key={product.id || idx}>
+        {displayProducts.map((product, idx) => (
+          <SwiperSlide key={`product-${product.id ?? idx}-${idx}`}>
             <RecoProduct
               thumbnail={product.thumbnail}
               brand={product.brand}
@@ -136,7 +177,7 @@ const RecoProductPart = ({ videoTitle = "", channelTitle = "" }) => {
             />
           </SwiperSlide>
         ))}
-      </Swiper>
+      </StyledSwiper>
     </RecoProductWrapper>
   );
 };

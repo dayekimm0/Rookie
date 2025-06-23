@@ -19,6 +19,13 @@ const RecoProductImg = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media screen and (max-width: 1024px) {
+    width: 100px;
+    height: 100px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const RecoProductInfo = styled.div`
@@ -51,6 +58,22 @@ const RecoProductInfo = styled.div`
   .price {
     color: var(--light);
     font-size: 1.8rem;
+  }
+  @media screen and (max-width: 1024px) {
+    .brandGo {
+      .brand {
+        font-size: 1.2rem;
+      }
+    }
+    .name {
+      font-size: 1.4rem;
+    }
+    .price {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
   }
 `;
 
