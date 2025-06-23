@@ -42,6 +42,10 @@ const PlayTitle = styled.h1`
   font-size: 2.4rem;
   color: var(--light);
   font-weight: 600;
+  @media screen and (max-width: 1440px) {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
   @media screen and (max-width: 1024px) {
     font-size: 2rem;
   }

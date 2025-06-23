@@ -31,6 +31,20 @@ const ModalContent = styled.div`
   display: flex;
   align-items: flex-end;
   position: relative;
+  @media screen and (max-width: 1440px) {
+    width: 48%;
+    left: 28%;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 66%;
+    left: 18%;
+  }
+  @media screen and (max-width: 768px) {
+    width: 84%;
+    left: 10%;
+  }
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const WingCon = styled.div`
@@ -48,15 +62,13 @@ const stopScrollPropagation = (e) => e.stopPropagation();
 
 const ClipDetail = memo(({ videoId, videoList = [], onClose }) => {
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(
-    videoList.findIndex((v) => v.id === videoId)
-  );
   const playersRef = useRef({});
+  const initialIndex = videoList.findIndex((v) => v.id === videoId);
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => (document.body.style.overflow = "auto");
-  }, []);
+    setCurrentIndex(initialIndex);
+  }, [initialIndex]);
 
   useEffect(() => {
     Object.entries(playersRef.current).forEach(([index, player]) => {
@@ -88,7 +100,7 @@ const ClipDetail = memo(({ videoId, videoList = [], onClose }) => {
     [navigate]
   );
 
-  if (currentIndex === -1 || !videoId) return null;
+  if (initialIndex === -1 || !videoId) return null;
 
   return ReactDOM.createPortal(
     <ModalWrapper onClick={onClose}>
@@ -97,13 +109,13 @@ const ClipDetail = memo(({ videoId, videoList = [], onClose }) => {
         spaceBetween={50}
         slidesPerView={1}
         mousewheel
-        initialSlide={currentIndex}
+        initialSlide={initialIndex}
         modules={[Mousewheel]}
         onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
         style={{ width: "100%", height: "100%" }}
       >
         {videoList.map((video, index) => (
-          <SwiperSlide key={video.id}>
+          <SwiperSlide key={`${video.id ?? "no-id"}-${index}`}>
             <ModalContent
               onClick={(e) => e.stopPropagation()}
               onWheel={stopScrollPropagation}
