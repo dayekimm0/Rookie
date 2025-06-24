@@ -8,7 +8,6 @@ const SortWrapper = styled.div`
   }
   @media screen and (max-width: 1024px) {
     position: static;
-    right: auto;
   }
   @media screen and (max-width: 500px) {
     width: 100%;
@@ -21,7 +20,6 @@ const Sort = styled.select`
   padding-right: 20px;
   appearance: none;
   border: none;
-  background: transparent;
   font-size: 1.4rem;
   color: var(--dark);
   font-weight: 500;
@@ -32,8 +30,16 @@ const Sort = styled.select`
   background-size: 16px auto;
   z-index: 3;
 
+  @media screen and (max-width: 1024px) {
+    padding: 10px 15px 10px 0;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 10px 15px 10px 0;
+  }
   @media screen and (max-width: 375px) {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    padding: 0 10px 0 0;
+    background-size: 12px auto;
   }
 `;
 

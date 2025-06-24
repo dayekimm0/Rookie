@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function useDragScroll(ref) {
+const useDragScroll = (ref) => {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
@@ -67,4 +67,6 @@ export default function useDragScroll(ref) {
       document.removeEventListener("touchend", onTouchEnd);
     };
   }, [ref]);
-}
+};
+
+export default useDragScroll;

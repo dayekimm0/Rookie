@@ -30,18 +30,28 @@ const TeamName = styled.h2`
 
   @media screen and (max-width: 768px) {
     font-size: 24px;
+    margin-bottom: 14px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 20px;
     margin-bottom: 10px;
   }
 `;
 
 const TeamRecord = styled.div`
-  font-size: 20px;
+  font-size: 2rem;
   display: flex;
   align-items: center;
   gap: 0;
 
+  @media screen and (max-width: 1024px) {
+    font-size: 1.8rem;
+  }
   @media screen and (max-width: 768px) {
-    font-size: 16px;
+    font-size: 1.6rem;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 1.4rem;
   }
 `;
 
@@ -64,7 +74,10 @@ const Separator = styled.span`
   margin: 0 20px;
 
   @media screen and (max-width: 768px) {
-    margin: 0 15px;
+    margin: 0 12px;
+  }
+  @media screen and (max-width: 500px) {
+    margin: 0 8px;
   }
 `;
 
@@ -79,7 +92,7 @@ const StatsSection = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    padding: 20px 0;
+    padding: 10px 0;
   }
 `;
 
@@ -112,7 +125,7 @@ const GradientOverlay = styled.div`
 `;
 
 const StatsContainer = styled.div`
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
   position: relative;
   z-index: 10;
 
@@ -148,12 +161,12 @@ const StatBox = styled.div`
 
   /* 간단한 세로 테두리 처리 */
   + div {
-    border-left: 1px solid var(--gray6);
+    border-left: 1px solid var(--gray3);
   }
 
   /* 두 번째 행부터 상단 테두리 (데스크톱: 9번째부터) */
   &:nth-child(n + 9) {
-    border-top: 1px solid var(--gray6);
+    border-top: 1px solid var(--gray3);
   }
 
   @media screen and (max-width: 768px) {
@@ -164,7 +177,7 @@ const StatBox = styled.div`
     }
     /* 태블릿: 5번째부터 두 번째 행 */
     &:nth-child(n + 5) {
-      border-top: 1px solid var(--gray6);
+      border-top: 1px solid var(--gray3);
     }
   }
 
@@ -187,12 +200,16 @@ const StatLabel = styled.div`
   opacity: 0.7;
   margin-bottom: 15px;
 
+  @media screen and (max-width: 1024px) {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
   @media screen and (max-width: 768px) {
     font-size: 14px;
   }
-
   @media screen and (max-width: 500px) {
     font-size: 12px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -200,13 +217,14 @@ const StatValue = styled.div`
   font-size: 20px;
   font-weight: bold;
   color: var(--light);
-
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1024px) {
     font-size: 18px;
   }
-
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 768px) {
     font-size: 16px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 14px;
   }
 `;
 
