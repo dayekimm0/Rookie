@@ -9,7 +9,7 @@ const Container = styled.div`
   top: 100px;
   background: #191919;
   border-radius: 20px;
-  padding: 68px 20px;
+  padding: 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,9 +20,6 @@ const Container = styled.div`
     align-items: center;
   }
 
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-  }
   @media screen and (max-width: 1280px) {
     width: 31.5%;
     padding: 50px 20px;
@@ -33,11 +30,9 @@ const Container = styled.div`
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-    padding: 50px;
-  }
-  @media screen and (max-width: 1024px) {
     padding: 40px;
   }
+
   @media screen and (max-width: 600px) {
     padding: 30px;
     flex-direction: column;
@@ -49,7 +44,7 @@ const ProfileImg = styled.div`
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
-  background: #fff;
+  /* background: #fff; */
   img {
     width: 100%;
     height: 100%;
@@ -86,7 +81,7 @@ const Name = styled.div`
   @media screen and (max-width: 1024px) {
     margin: 15px 0 8px;
     h4 {
-      font-size: 2rem;
+      font-size: 1.8rem;
     }
     .lookieMark {
       width: 14px;
@@ -168,7 +163,7 @@ const BtnGroup = styled.div`
       width: 120px;
     }
   }
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1024px) {
     button {
       width: 110px;
       font-size: 1.4rem;

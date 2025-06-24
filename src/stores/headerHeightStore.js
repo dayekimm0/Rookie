@@ -5,9 +5,7 @@ const useHeaderStore = create((set, get) => ({
   setFolded: (value) => set({ isHeaderFolded: value }),
   foldIfScrolled: (scrollY) => {
     const { isScrollLocked } = get();
-
-    if (isScrollLocked && scrollY <= 2) return;
-    if (isScrollLocked) return;
+    if (isScrollLocked) return; // 🔒 잠긴 상태면 아무 동작도 하지 않음
 
     set({ isHeaderFolded: scrollY > 50 });
   },
@@ -22,6 +20,9 @@ const useHeaderStore = create((set, get) => ({
 
   isScrollLocked: false,
   setScrollLocked: (value) => set({ isScrollLocked: value }),
+
+  isManuallyClosed: false,
+  setManuallyClosed: (value) => set({ isManuallyClosed: value }),
 }));
 
 export default useHeaderStore;
