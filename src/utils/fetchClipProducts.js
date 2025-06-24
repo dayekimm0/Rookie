@@ -25,7 +25,6 @@ const pickRandom = (arr, n) => {
 };
 
 export async function fetchClipProducts(title) {
-  console.log(title);
   const teamCodes = extractTeamCodes(title);
 
   try {

@@ -21,6 +21,9 @@ const CategoryContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 1440px) {
+    gap: 10px;
+  }
   @media screen and (max-width: 1024px) {
     display: none;
   }
@@ -31,6 +34,9 @@ const Category = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
+  @media screen and (max-width: 1440px) {
+    gap: 4px;
+  }
 `;
 
 const CategoryItem = styled.div`
@@ -43,8 +49,9 @@ const CategoryItem = styled.div`
   color: ${({ $active }) => ($active ? "var(--main)" : "var(--gray1)")};
   background: ${({ $active }) => ($active ? "var(--gray1)" : "var(--grayF5)")};
   padding: 10px 16px;
+  transition: all 0.3s;
   cursor: pointer;
-  transition: 0.3s;
+  word-break: keep-all;
 
   @media screen and (max-width: 1440px) {
     font-size: 1.4rem;
@@ -58,6 +65,9 @@ const SearchPart = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+  @media screen and (max-width: 1440px) {
+    gap: 0px;
+  }
 `;
 
 const SearchBar = styled.div`
@@ -152,13 +162,13 @@ const Sidebar = styled.div`
   }
   @media screen and (max-width: 500px) {
     width: 100%;
-    padding-left: 15px;
-    /* padding: 0 3%; */
+    padding: 0 15px;
     flex-direction: row;
     justify-content: start;
     align-items: center;
     flex-wrap: wrap;
-    gap: 3%;
+    gap: 8px;
+
     & > div:first-child {
       display: none;
     }
@@ -192,9 +202,8 @@ const SidebarItem = styled.div`
     font-size: 1.4rem;
   }
   @media screen and (max-width: 500px) {
-    /* width: 100%; */
     font-size: 1.4rem;
-    padding: 10px 0;
+    padding-top: 6px;
   }
 `;
 

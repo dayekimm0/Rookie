@@ -140,7 +140,6 @@ const InfluencerProductList = () => {
     setShuffledProducts,
   } = useProductStore();
 
-  // ✅ rookie.json 비동기 fetch
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -159,12 +158,10 @@ const InfluencerProductList = () => {
     fetchProducts();
   }, []);
 
-  // 초기 카테고리 설정
   useEffect(() => {
     setSelectedCategory("ALL");
   }, [setSelectedCategory]);
 
-  // 최초 한 번만 셔플
   useEffect(() => {
     if (
       sort === "random" &&
@@ -177,18 +174,31 @@ const InfluencerProductList = () => {
     }
   }, [sort, initialShuffleDone, influencerProducts]);
 
-  // 셔플 적용 여부
   const baseProducts =
     sort === "random" && initialShuffleDone
       ? shuffledProducts
       : influencerProducts;
 
   const filteredProducts = useMemo(() => {
-    if (!selectedCategory || selectedCategory === "ALL") return baseProducts;
-    return baseProducts.filter(
-      (p) => p.category && p.category.trim() === selectedCategory.trim()
-    );
-  }, [baseProducts, selectedCategory]);
+    let filtered = baseProducts;
+
+    if (selectedCategory && selectedCategory !== "ALL") {
+      filtered = filtered.filter(
+        (p) => p.category && p.category.trim() === selectedCategory.trim()
+      );
+    }
+
+    if (searchTerm.trim() !== "") {
+      const lower = searchTerm.trim().toLowerCase();
+      filtered = filtered.filter((p) =>
+        [p.name, p.brand, p.influencer, p.team].some((field) =>
+          field?.toLowerCase().includes(lower)
+        )
+      );
+    }
+
+    return filtered;
+  }, [baseProducts, selectedCategory, searchTerm]);
 
   if (loading) {
     return (

@@ -21,6 +21,7 @@ const CardContainer = styled.div`
 
   @media screen and (max-width: 500px) {
     width: 100%;
+    padding: 0px;
   }
 `;
 
