@@ -211,12 +211,33 @@ const InfluencerProductCategory = ({
     useProductStore();
   const [showCategories, setShowCategories] = useState(true);
 
-  // rookie.json에서 실제 category 목록 추출 및 중복 제거 + ALL 추가
   const categories = useMemo(() => {
-    const cats = Array.from(
+    const preferredOrder = [
+      "ALL",
+      "KIA",
+      "삼성",
+      "LG",
+      "두산",
+      "KT",
+      "SSG",
+      "롯데",
+      "한화",
+      "NC",
+      "키움",
+    ];
+    const uniqueCategories = Array.from(
       new Set(products.map((p) => p.category).filter(Boolean))
     );
-    return ["ALL", ...cats];
+
+    const ordered = preferredOrder.filter(
+      (cat) => cat === "ALL" || uniqueCategories.includes(cat)
+    );
+
+    const extras = uniqueCategories.filter(
+      (cat) => !preferredOrder.includes(cat)
+    );
+
+    return [...ordered, ...extras];
   }, [products]);
 
   const handleCategoryClick = (cat) => {

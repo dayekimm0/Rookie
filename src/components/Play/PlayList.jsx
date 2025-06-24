@@ -14,6 +14,7 @@ import WeeklyBanner from "./WeeklyBanner";
 import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
+import Spinner from "../Spinner";
 
 const ContentList = styled.div`
   height: 100%;
@@ -92,6 +93,18 @@ const Container = styled.div`
   position: relative;
 `;
 
+const SlideLoaderWrapper = styled.div`
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 20vh;
+  }
+`;
+
 const PlayList = ({ type, title, id }) => {
   const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
@@ -99,6 +112,7 @@ const PlayList = ({ type, title, id }) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
@@ -149,6 +163,13 @@ const PlayList = ({ type, title, id }) => {
     navigate(`/play/${videoId}`);
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <ContentList>
       <ContentTitle>
@@ -167,54 +188,59 @@ const PlayList = ({ type, title, id }) => {
       )}
 
       <Container>
-        <Swiper
-          onSwiper={setSwiper}
-          onSlideChange={(swiper) => {
-            setIsBeginning(swiper.isBeginning);
-            setIsEnd(swiper.isEnd);
-          }}
-          slidesPerView={5}
-          slidesPerGroup={5}
-          spaceBetween={20}
-          breakpoints={{
-            0: {
-              slidesPerView: 2,
-              slidesPerGroup: 2,
-              spaceBetween: 6,
-            },
-            500: {
-              slidesPerView: 2,
-              slidesPerGroup: 2,
-              spaceBetween: 14,
-            },
-            768: {
-              slidesPerView: 3,
-              slidesPerGroup: 3,
-              spaceBetween: 14,
-            },
-            1024: {
-              slidesPerView: 4,
-              slidesPerGroup: 4,
-              spaceBetween: 20,
-            },
-            1440: {
-              slidesPerView: 5,
-              slidesPerGroup: 5,
-              spaceBetween: 20,
-            },
-          }}
-        >
-          {filteredVideos.map((video) => (
-            <SwiperSlide key={video.id}>
-              <PlayContent
-                type={type}
-                {...video}
-                onClick={() => handleDetailClick(video.id)}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-
+        {isLoading ? (
+          <SlideLoaderWrapper>
+            <Spinner />
+          </SlideLoaderWrapper>
+        ) : (
+          <Swiper
+            onSwiper={setSwiper}
+            onSlideChange={(swiper) => {
+              setIsBeginning(swiper.isBeginning);
+              setIsEnd(swiper.isEnd);
+            }}
+            slidesPerView={5}
+            slidesPerGroup={5}
+            spaceBetween={20}
+            breakpoints={{
+              0: {
+                slidesPerView: 2,
+                slidesPerGroup: 2,
+                spaceBetween: 6,
+              },
+              500: {
+                slidesPerView: 2,
+                slidesPerGroup: 2,
+                spaceBetween: 14,
+              },
+              768: {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 14,
+              },
+              1024: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                spaceBetween: 20,
+              },
+              1440: {
+                slidesPerView: 5,
+                slidesPerGroup: 5,
+                spaceBetween: 20,
+              },
+            }}
+          >
+            {filteredVideos.map((video) => (
+              <SwiperSlide key={video.id}>
+                <PlayContent
+                  type={type}
+                  {...video}
+                  onClick={() => handleDetailClick(video.id)}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
         <PlayLeftBtn onClick={handlePrev} disabled={isBeginning}>
           <img src={Arrow} alt="prev" />
         </PlayLeftBtn>
