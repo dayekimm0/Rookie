@@ -16,7 +16,9 @@
               "product_price": "7,900원",
               "product_detail": {
                 "option": ["OS"],
-                "product_detailImg": ""
+                "product_detailImg": [
+                  "https://shop-phinf.pstatic.net/20250514_146/1747208966490B50Cl_JPEG/55065074-E18F-4B76-85B8-344B1F46FC16.jpg?type=w860"
+                ]
               }
             },
             {
@@ -196,15 +198,6 @@
               "product_detail": {
                 "option": ["OS"],
                 "product_detailImg": "https://d2p3mio45d5mbi.cloudfront.net/erp/shop/ce9ce2ec-b2b5-4980-9566-d04a2d3693ee20250527.jpg"
-              }
-            },
-            {
-              "product_thumbnail": "",
-              "product_name": "",
-              "product_price": "",
-              "product_detail": {
-                "option": [],
-                "product_detailImg": ""
               }
             }
           ]
@@ -436,7 +429,8 @@
           "profile": "https://phinf.pstatic.net/memo/20250621_124/1750508137102l6Tgp_JPEG/%B1%E8%BF%A4%C1%F6_%C7%C1%B7%CE%C7%CA.jpg?type=w740",
           "description": "김엘지 | TWINS 응원아카이브 \n⚾️내갬성으로 기록하는 엘트야구 \n▫️13pro ▶️ 16pro📱 \n▫️열응뒷모습 못참는편💛",
           "play": null,
-          "clip": "PLPuT2QymG4qXmiV8VQCMbeEii_iChPbNo"
+          "clip": "PLPuT2QymG4qXmiV8VQCMbeEii_iChPbNo",
+          "products": null
         },
         {
           "name": "엘트러버",
@@ -548,7 +542,8 @@
           "profile": "https://yt3.googleusercontent.com/3oUhG60LcjsX6v6oSNA5xC7c080TLaHUQXCH0VuMn-6wVcIDK-cth5K6WbO0kRfrkNKAGa8cMg=s160-c-k-c0x00ffffff-no-rj",
           "description": "그때그때 좋아하는 걸 합니다.",
           "play": null,
-          "clip": "PLPuT2QymG4qV2NQOIaaR-H8pDQ1kRlHRf"
+          "clip": "PLPuT2QymG4qV2NQOIaaR-H8pDQ1kRlHRf",
+          "products": null
         }
       ]
     },
@@ -650,7 +645,8 @@
           "profile": "https://yt3.googleusercontent.com/yvu-VWXX9Ov8qI96IBmByC6SwEesWH19awRaRZ88M8nCCiMJSEmaTRVuFwBmccgmIxDUjzKr=s160-c-k-c0x00ffffff-no-rj",
           "description": "기록용 아카이빙 📼 \n💛 insta @dreamforest01 \n📧 dreamforest1122@gmail.com",
           "play": "PLl9PiFCXP1EKMOF7dpn7GEqz5vLTGTxbB",
-          "clip": "PLPuT2QymG4qW7GJH1QTf8hHuZvS7rzQw0"
+          "clip": "PLPuT2QymG4qW7GJH1QTf8hHuZvS7rzQw0",
+          "products": null
         },
         {
           "name": "규자매",
