@@ -100,7 +100,6 @@ const ProductCardWrap = styled.div`
 
 const TeamHome = () => {
   const { teamCode } = useParams();
-  console.log("teamCode:", teamCode);
 
   // useAllProductsQuery로 전체 상품 데이터 로드
   const { data: allProducts = [], isLoading: isProductLoading } =

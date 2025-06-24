@@ -59,7 +59,7 @@ const RecordValues = styled.span`
 
 // 구분자 스타일 추가
 const Separator = styled.span`
-  color: var(--grayD);
+  color: var(--gray8);
   opacity: 0.7;
   margin: 0 20px;
 
@@ -112,7 +112,6 @@ const GradientOverlay = styled.div`
 `;
 
 const StatsContainer = styled.div`
-  margin-bottom: 100px;
   position: relative;
   z-index: 10;
 
@@ -148,12 +147,12 @@ const StatBox = styled.div`
 
   /* 간단한 세로 테두리 처리 */
   + div {
-    border-left: 1px solid var(--gray6);
+    border-left: 1px solid var(--gray3);
   }
 
   /* 두 번째 행부터 상단 테두리 (데스크톱: 9번째부터) */
   &:nth-child(n + 9) {
-    border-top: 1px solid var(--gray6);
+    border-top: 1px solid var(--gray3);
   }
 
   @media screen and (max-width: 768px) {
@@ -164,7 +163,7 @@ const StatBox = styled.div`
     }
     /* 태블릿: 5번째부터 두 번째 행 */
     &:nth-child(n + 5) {
-      border-top: 1px solid var(--gray6);
+      border-top: 1px solid var(--gray3);
     }
   }
 
@@ -176,7 +175,7 @@ const StatBox = styled.div`
     }
     /* 모바일: 3번째부터 두 번째 행 */
     &:nth-child(n + 3) {
-      border-top: 1px solid var(--gray6);
+      border-top: 1px solid var(--gray3);
     }
   }
 `;
@@ -186,6 +185,10 @@ const StatLabel = styled.div`
   color: var(--light);
   opacity: 0.7;
   margin-bottom: 15px;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 17px;
+  }
 
   @media screen and (max-width: 768px) {
     font-size: 14px;
@@ -201,12 +204,16 @@ const StatValue = styled.div`
   font-weight: bold;
   color: var(--light);
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1024px) {
     font-size: 18px;
   }
 
+  @media screen and (max-width: 768px) {
+    font-size: 15px;
+  }
+
   @media screen and (max-width: 500px) {
-    font-size: 16px;
+    font-size: 13px;
   }
 `;
 

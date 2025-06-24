@@ -1651,41 +1651,10 @@ const ProductDetail = () => {
     },
   ]);
 
-  // 팀 이름 → 코드 매핑 함수
-  // const getTeamCode = teamName => {
-  //   if (!teamName) return null;
-
-  //   // URL 디코딩을 적용 (특수문자 처리)
-  //   const decodedTeamName = decodeURIComponent(teamName);
-
-  //   const teamCodeMap = {
-  //     두산베어스: "ds_bas",
-  //     엔씨다이노스: "nc_dns",
-  //     삼성라이온즈: "ss_lns",
-  //     LG트윈스: "lg_twins",
-  //     KIA타이거즈: "kia_tgs",
-  //     롯데자이언츠: "lt_gnt",
-  //     KT위즈: "kt_wiz",
-  //     한화이글스: "hw_egs",
-  //     키움히어로즈: "kw_hrs",
-  //     SSG랜더스: "ssg_lds",
-  //     KBO: "kbo",
-  //   };
-
-  //   return teamCodeMap[teamName] || null;
-  // };
-
   const fetchProductData = async () => {
     setLoading(true);
     try {
       setError(null);
-
-      // 모든 구단의 데이터를 가져와서 해당 ID의 상품 찾기
-      // let selectedProduct = null;
-      // let allProducts = [];
-
-      // 모든 구단 JSON을 순차적으로 검색
-      // for (const [teamName, url] of Object.entries(TEAM_JSON_URLS)) {
 
       const url = TEAM_JSON_URLS[teamCode];
       const response = await axios.get(url);
