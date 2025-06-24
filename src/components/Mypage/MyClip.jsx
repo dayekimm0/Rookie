@@ -2,9 +2,8 @@ import { useMemo, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useYoutubeVideoDetails } from "../../hook/useYoutubePlayList";
 import { parseISO8601Duration } from "../../utils/youtube";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase";
 import { fetchClipProducts } from "../../utils/fetchClipProducts";
+import { useVideoStore } from "../../stores/videoStore";
 
 import NoItem from "./NoItem";
 import Shortscard from "../Slides/Shortscard";
@@ -33,7 +32,7 @@ const Container = styled.div`
       font-size: 1.4rem;
     }
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   @media screen and (max-width: 500px) {
@@ -44,26 +43,14 @@ const Container = styled.div`
 `;
 
 const MyClip = () => {
-  const [videoIds, setVideoIds] = useState([]);
-  const [likesLoading, setLikesLoading] = useState(true);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [videosWithProducts, setVideosWithProducts] = useState([]);
+  const { videoIds, likesLoading, fetchVideoIds } = useVideoStore();
 
-  // 유튜브 리스트 설정
+  // 좋아요 목록 fetch
   useEffect(() => {
-    const fetchLikes = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        setLikesLoading(false);
-        return;
-      }
-
-      const snap = await getDoc(doc(db, "userLikes", user.uid));
-      setVideoIds(snap.data()?.likes || []);
-      setLikesLoading(false);
-    };
-    fetchLikes();
-  }, []);
+    fetchVideoIds();
+  }, [fetchVideoIds]);
 
   const idsParam = useMemo(() => {
     return videoIds.length ? videoIds.join(",") : null;
@@ -80,7 +67,7 @@ const MyClip = () => {
 
   const handleCloseModal = () => {
     setSelectedVideoId(null);
-    window.location.reload();
+    fetchVideoIds();
   };
 
   useEffect(() => {
@@ -108,26 +95,23 @@ const MyClip = () => {
   }, [selectedVideoId]);
 
   useEffect(() => {
-    const fetchAllProducts = async () => {
+    if (!videos.length) return;
+    (async () => {
       const results = await Promise.all(
-        videos.map(async (video) => {
-          const products = await fetchClipProducts(video.snippet.title);
-          return { ...video, products };
-        })
+        videos.map(async (video) => ({
+          ...video,
+          products: await fetchClipProducts(video.snippet.title),
+        }))
       );
       setVideosWithProducts(results);
-    };
-
-    if (videos.length > 0) fetchAllProducts();
+    })();
   }, [videos]);
 
   const slides = useMemo(() => {
     return videos
-      .filter((video) => {
-        const durationStr = video.contentDetails?.duration;
-        const seconds = parseISO8601Duration(durationStr);
-        return seconds <= 99;
-      })
+      .filter(
+        (video) => parseISO8601Duration(video.contentDetails.duration) <= 99
+      )
       .map((video) => {
         const vid = video.id;
         const { title, thumbnails } = video.snippet;

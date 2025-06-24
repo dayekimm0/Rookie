@@ -10,6 +10,7 @@ import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import { useYoutubeVideoDetails } from "../../hook/useYoutubePlayList";
 import { parseISO8601Duration } from "../../utils/youtube";
 import { fetchClipProducts } from "../../utils/fetchClipProducts";
+import { useVideoStore } from "../../stores/videoStore";
 
 import Shortscard from "../Slides/Shortscard";
 import ClipDetail from "../ClipDetail";
@@ -102,29 +103,17 @@ const SvgSpinner = styled.svg`
 `;
 
 const MyShortsSlide = React.memo(({ onSwiperReady }) => {
-  const [videoIds, setVideoIds] = useState([]);
-  const [likesLoading, setLikesLoading] = useState(true);
+  const { videoIds, likesLoading, fetchVideoIds } = useVideoStore();
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [videosWithProducts, setVideosWithProducts] = useState([]);
 
-  // 영상 불러오기
+  // 좋아요 목록 fetch
   useEffect(() => {
-    const fetchLikes = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        setLikesLoading(false);
-        return;
-      }
-
-      const snap = await getDoc(doc(db, "userLikes", user.uid));
-      setVideoIds(snap.data()?.likes || []);
-      setLikesLoading(false);
-    };
-    fetchLikes();
-  }, []);
+    fetchVideoIds();
+  }, [fetchVideoIds]);
 
   const idsParam = useMemo(() => {
     return videoIds.length ? videoIds.join(",") : null;
@@ -157,6 +146,7 @@ const MyShortsSlide = React.memo(({ onSwiperReady }) => {
 
   const handleCloseModal = () => {
     setSelectedVideoId(null);
+    fetchVideoIds();
     swiper?.autoplay?.start();
   };
 
@@ -185,26 +175,23 @@ const MyShortsSlide = React.memo(({ onSwiperReady }) => {
   }, [selectedVideoId]);
 
   useEffect(() => {
-    const fetchAllProducts = async () => {
+    if (!videos.length) return;
+    (async () => {
       const results = await Promise.all(
-        videos.map(async (video) => {
-          const products = await fetchClipProducts(video.snippet.title);
-          return { ...video, products };
-        })
+        videos.map(async (video) => ({
+          ...video,
+          products: await fetchClipProducts(video.snippet.title),
+        }))
       );
       setVideosWithProducts(results);
-    };
-
-    if (videos.length > 0) fetchAllProducts();
+    })();
   }, [videos]);
 
   const slides = useMemo(() => {
     return videos
-      .filter((video) => {
-        const durationStr = video.contentDetails?.duration;
-        const seconds = parseISO8601Duration(durationStr);
-        return seconds <= 99;
-      })
+      .filter(
+        (video) => parseISO8601Duration(video.contentDetails.duration) <= 99
+      )
       .map((video) => {
         const vid = video.id;
         const { title, thumbnails } = video.snippet;

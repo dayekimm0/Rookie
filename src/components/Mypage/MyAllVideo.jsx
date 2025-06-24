@@ -5,32 +5,13 @@ import MyShortsSlide from "../MypageSlides/MyShortsSlide";
 import { useVideoStore } from "../../stores/videoStore";
 import NoItem from "./NoItem";
 
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase";
-
 const MyAllVideo = () => {
-  const [videoIds, setVideoIds] = useState([]);
-  const [likesLoading, setLikesLoading] = useState(true);
-  const { isNoVideo, setNoVideo } = useVideoStore();
+  const { isNoVideo, fetchVideoIds } = useVideoStore();
 
+  // 좋아요 목록 fetch
   useEffect(() => {
-    const fetchLikes = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        setLikesLoading(false);
-        return;
-      }
-
-      const snap = await getDoc(doc(db, "userLikes", user.uid));
-      setVideoIds(snap.data()?.likes || []);
-      setLikesLoading(false);
-    };
-    fetchLikes();
-  }, []);
-
-  useEffect(() => {
-    setNoVideo(videoIds.length === 0);
-  }, [videoIds]);
+    fetchVideoIds();
+  }, [fetchVideoIds]);
 
   if (isNoVideo) {
     return <NoItem />;
