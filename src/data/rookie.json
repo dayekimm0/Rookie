@@ -73,7 +73,9 @@
     "product_price": "99,000원",
     "detail": {
       "options": ["S", "M", "L", "XL", "2XL"],
-      "detail_images": "https://image.msscdn.net/thumbnails/images/prd_img/202504071607591265244802667f379cf1ee44.jpg?w=1200"
+      "detail_images": [
+        "https://image.msscdn.net/thumbnails/images/prd_img/202504071607591265244802667f379cf1ee44.jpg?w=1200"
+      ]
     },
     "detail_link": "",
     "id": 4
@@ -122,7 +124,9 @@
     "product_price": "28,050원",
     "detail": {
       "options": ["XS", "S", "M", "L", "XL"],
-      "detail_images": "https://image.msscdn.net/thumbnails/images/prd_img/202504111337205355837367767f89c8082c27.jpg?w=1200"
+      "detail_images": [
+        "https://image.msscdn.net/thumbnails/images/prd_img/202504111337205355837367767f89c8082c27.jpg?w=1200"
+      ]
     },
     "detail_link": "",
     "id": 7
@@ -136,7 +140,9 @@
     "product_price": "119,000원",
     "detail": {
       "options": ["S", "M", "L", "XL", "2XL"],
-      "detail_images": "https://image.msscdn.net/thumbnails/images/prd_img/202504071607006745499867967f37994a4aff.jpg?w=1200"
+      "detail_images": [
+        "https://image.msscdn.net/thumbnails/images/prd_img/202504071607006745499867967f37994a4aff.jpg?w=1200"
+      ]
     },
     "detail_link": "",
     "id": 8
@@ -150,7 +156,9 @@
     "product_price": "30,000원",
     "detail": {
       "options": ["쿨링패치 4매X10개입"],
-      "detail_images": "https://bluepanda.diskn.com/data/goods_dv/DKD00502-511_dv_all.jpg"
+      "detail_images": [
+        "https://bluepanda.diskn.com/data/goods_dv/DKD00502-511_dv_all.jpg"
+      ]
     },
     "detail_link": "",
     "id": 9
@@ -199,7 +207,9 @@
     "product_price": "32,000원",
     "detail": {
       "options": ["OS"],
-      "detail_images": "https://d2p3mio45d5mbi.cloudfront.net/erp/shop/ce9ce2ec-b2b5-4980-9566-d04a2d3693ee20250527.jpg"
+      "detail_images": [
+        "https://d2p3mio45d5mbi.cloudfront.net/erp/shop/ce9ce2ec-b2b5-4980-9566-d04a2d3693ee20250527.jpg"
+      ]
     },
     "detail_link": "",
     "id": 12
@@ -213,7 +223,9 @@
     "product_price": "26,000원",
     "detail": {
       "options": ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
-      "detail_images": "https://ncdinospodshop.cafe24.com/web/upload/NNEditor/20250218/_DSC0334.jpg"
+      "detail_images": [
+        "https://ncdinospodshop.cafe24.com/web/upload/NNEditor/20250218/_DSC0334.jpg"
+      ]
     },
     "detail_link": "",
     "id": 13

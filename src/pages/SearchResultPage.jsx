@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import PlayContent from "../components/Play/PlayContent";
@@ -105,6 +105,12 @@ const SearchResultPage = () => {
   const offset = currentPage * itemsPerPage;
   const currentItems = videos.slice(offset, offset + itemsPerPage);
   const pageCount = Math.ceil(videos.length / itemsPerPage);
+  const navigate = useNavigate();
+  console.log(currentItems);
+
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
+  };
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -160,7 +166,12 @@ const SearchResultPage = () => {
         <>
           <ContentList>
             {currentItems.map((video, idx) => (
-              <PlayContent key={video.id || idx} {...video} type="search" />
+              <PlayContent
+                key={video.videoId || idx}
+                {...video}
+                type="search"
+                onClick={() => handleDetailClick(video.videoId)}
+              />
             ))}
           </ContentList>
           <PaginationWrapper>

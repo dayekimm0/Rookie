@@ -15,14 +15,6 @@ const authStore = create(
       likes: [], // 좋아요 리스트 추가
       tempAddress: null, //임시 배송 주소
       setUser: (user, profile, gamePlayed) => {
-        console.log(
-          "🟢 setUser 호출, user:",
-          user,
-          "profile:",
-          profile,
-          "gamePlayed:",
-          gamePlayed
-        );
         set({ user, userProfile: profile, isLoading: false, gamePlayed });
       },
       // 좋아요 부분 코드
@@ -36,7 +28,6 @@ const authStore = create(
 
       setGamePlayed: (played) => set({ gamePlayed: played }),
       clearUser: () => {
-        console.log("🟢 clearUser 호출");
         set({
           user: null,
           userProfile: null,
@@ -117,7 +108,6 @@ onAuthStateChanged(auth, async (user) => {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
       const profile = docSnap.exists() ? docSnap.data() : null;
-      console.log("🟢 getDoc 호출, profile:", profile);
 
       // gamePlayed 정보 가져오기
       const gameUserRef = doc(db, "gameUser", user.uid);
@@ -137,7 +127,6 @@ onAuthStateChanged(auth, async (user) => {
         currentState.userProfile !== profile ||
         currentState.gamePlayed !== gamePlayed
       ) {
-        console.log("🟢 상태가 변경되어 setUser 호출");
         authStore.getState().setUser(userData, profile, gamePlayed);
         authStore.getState().setLikes(likesData);
       } else {
