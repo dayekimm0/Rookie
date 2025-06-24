@@ -56,7 +56,7 @@ const Item = styled.div`
     width: 100%;
     max-height: 220px;
     min-height: 100px;
-    grid-template-columns: minmax(100px, 200px) minmax(200px, 400px);
+    grid-template-columns: minmax(0, 200px) minmax(0, 400px);
     grid-auto-rows: min-content;
     justify-content: space-between;
     align-items: center;
@@ -179,7 +179,7 @@ const ProductName = styled.li`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;
@@ -215,7 +215,7 @@ const ItemOption = styled.ul`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;
@@ -232,7 +232,7 @@ const SinglePrice = styled.li`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;
@@ -249,7 +249,7 @@ const MultiPrice = styled.li`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;

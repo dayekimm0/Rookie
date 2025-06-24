@@ -392,7 +392,10 @@ const Login = () => {
                 계정만들기
               </UnderInputBtn>
               <UnderInputLine />
-              <UnderInputBtn type="button">
+              <UnderInputBtn
+                type="button"
+                onClick={() => alert("준비중인 서비스 입니다.")}
+              >
                 이메일 • 비밀번호 찾기
               </UnderInputBtn>
             </UnderInputWrapper>
