@@ -208,7 +208,11 @@ const InfProfileCard = ({
         <Link to={`/influencer/${teamCode}/${name}`}>
           <button>PLAY</button>
         </Link>
-        {products && <button>STORE</button>}
+        {products && (
+          <Link to={`/store/rookie?search=${encodeURIComponent(name)}`}>
+            <button>STORE</button>
+          </Link>
+        )}
       </BtnGroup>
     </Container>
   );

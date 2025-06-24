@@ -188,9 +188,18 @@ const MoreTeamPlayAllList = ({ allTab, tabs, teamCode }) => {
     setCurrentPage(0);
   }, [currentTab]);
 
-  const offset = currentPage * itemsPerPage;
-  const currentItems = videos.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(videos.length / itemsPerPage);
+  const offset = useMemo(
+    () => currentPage * itemsPerPage,
+    [currentPage, itemsPerPage]
+  );
+
+  const currentItems = useMemo(() => {
+    return videos.slice(offset, offset + itemsPerPage);
+  }, [videos, offset, itemsPerPage]);
+
+  const pageCount = useMemo(() => {
+    return Math.ceil(videos.length / itemsPerPage);
+  }, [videos, itemsPerPage]);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);

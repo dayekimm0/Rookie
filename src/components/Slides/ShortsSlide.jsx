@@ -205,6 +205,7 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
       setScrollLocked(false);
     }
   }, [selectedVideoId]);
+
   useEffect(() => {
     const fetchAllProducts = async () => {
       const results = await Promise.all(

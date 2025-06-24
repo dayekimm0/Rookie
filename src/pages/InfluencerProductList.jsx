@@ -5,6 +5,7 @@ import InfluencerProductCategory from "../components/ProductList/InfluencerProdu
 import InfluencerPaginateProduct from "../components/ProductList/InfluencerPaginateProduct";
 import { shuffleArray } from "../productlist_utils/productShuffle";
 import influencerProducts from "../data/rookie.json";
+import { useSearchParams } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -121,7 +122,9 @@ const SvgSpinner = styled.svg`
 `;
 
 const InfluencerProductList = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialSearch = searchParams.get("search") || "";
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [influencerProducts, setInfluencerProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
