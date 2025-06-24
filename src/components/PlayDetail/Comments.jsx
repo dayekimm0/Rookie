@@ -11,14 +11,8 @@ const CommentWrapper = styled.div`
   align-items: start;
   gap: 8px;
   margin-bottom: 24px;
-  @media screen and (max-width: 1440px) {
-    width: 90%;
-  }
-  @media screen and (max-width: 1024px) {
-  }
 
   @media screen and (max-width: 500px) {
-    width: 50%;
     margin-bottom: 20px;
   }
 `;
@@ -56,27 +50,23 @@ const CommentItem = styled.div`
   justify-content: start;
   align-items: start;
   gap: 8px;
+  width: calc(100% - 50px);
+  @media screen and (max-width: 768px) {
+    width: calc(100% - 38px);
+  }
   @media screen and (max-width: 500px) {
-    width: 100%;
+    width: 26px;
+    width: calc(100% - 34px);
+  }
+  @media screen and (max-width: 500px) {
+    width: calc(100% - 34px);
   }
 `;
 
 const UserInfo = styled.div`
-  width: 1100px;
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  @media screen and (max-width: 1440px) {
-  }
-  @media screen and (max-width: 1024px) {
-    width: 540px;
-  }
-  @media screen and (max-width: 768px) {
-  }
-
-  @media screen and (max-width: 500px) {
-    width: 410px;
-  }
 `;
 
 const UserName = styled.div`
@@ -108,7 +98,7 @@ const DeleteComment = styled.button`
 const Comment = styled.div`
   color: var(--light);
   font-size: 1.4rem;
-  width: 90%;
+  word-break: keep-all;
   @media screen and (max-width: 500px) {
     font-size: 1.2rem;
   }

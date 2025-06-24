@@ -12,9 +12,14 @@ const TitleRow = styled.div`
     font-size: 2rem;
   }
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 1280px) {
     h1 {
       font-size: 1.8rem;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 1.6rem;
     }
   }
 `;
@@ -23,21 +28,30 @@ const ModalProducts = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin: 20px;
+  padding: 20px 0 0 20px;
   gap: 10px;
-
+  /* border: 1px solid #0f0; */
+  @media screen and (max-width: 768px) {
+    padding: 20px 0 0 10px;
+  }
   @media screen and (max-width: 500px) {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin: 0;
+    padding: 0;
   }
 `;
 
 const ModalProduct = styled.div`
   width: 160px;
+  width: 100%;
   cursor: pointer;
-
+  @media screen and (max-width: 1440px) {
+    width: 130px;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 120px;
+  }
   @media screen and (max-width: 500px) {
     width: 48%;
   }
@@ -56,10 +70,22 @@ const ProductThumbnail = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media screen and (max-width: 1440px) {
+    height: 130px;
+  }
+  @media screen and (max-width: 1024px) {
+    height: 120px;
+  }
   @media screen and (max-width: 500px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      width: auto;
+      height: 100%;
+    }
   }
   @media screen and (max-width: 375px) {
-    width: 100px;
     height: 100px;
   }
 `;

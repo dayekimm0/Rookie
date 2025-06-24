@@ -23,16 +23,11 @@ const Container = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   min-height: 100vh;
-  @media screen and (max-width: 1440px) {
-    padding: 0 3%;
-  }
+
   @media screen and (max-width: 1024px) {
     padding: 0 3%;
   }
   @media screen and (max-width: 768px) {
-    padding: 0;
-  }
-  @media screen and (max-width: 500px) {
     padding: 0;
   }
 `;
@@ -41,12 +36,11 @@ const PlayContent = styled.div`
   width: 100%;
   padding-top: 36px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 30px;
-
-  @media screen and (max-width: 1024px) {
-    gap: 20px;
+  /* border: 1px solid #f00; */
+  @media screen and (max-width: 1800px) {
+    gap: 0px;
   }
   @media screen and (max-width: 768px) {
     flex-direction: column;
@@ -59,32 +53,37 @@ const PlayContent = styled.div`
 `;
 
 const RightContent = styled.div`
-  width: 1200px;
+  /* width: 1200px; */
+  width: 70%;
+  /* border: 1px solid #00f; */
+
   @media screen and (max-width: 1440px) {
-    width: 900px;
+    width: 66%;
   }
-  @media screen and (max-width: 1024px) {
+
+  /* @media screen and (max-width: 1024px) {
     width: 640px;
-  }
+  } */
   @media screen and (max-width: 768px) {
     width: 100%;
   }
 `;
 
 const LeftContent = styled.div`
-  width: 498px;
+  width: 28%;
+  /* border: 1px solid #0f0; */
   display: flex;
   flex-direction: column;
   gap: 24px;
   @media screen and (max-width: 1440px) {
-    width: 400px;
+    width: 32%;
   }
   @media screen and (max-width: 1024px) {
-    width: 320px;
+    /* width: 320px; */
   }
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding: 0 3%;
+    margin-top: 20px;
   }
 `;
 
@@ -96,7 +95,8 @@ const RecoPlayWrapper = styled.div`
 `;
 
 const Divider = styled.div`
-  width: 1200px;
+  /* width: 1200px; */
+  width: 100%;
   height: 2px;
   background: var(--gray6);
   margin-top: 18px;
@@ -132,8 +132,10 @@ const CommentWrapper = styled.div`
 
 const CommentWrapperMobile = styled.div`
   margin-top: 24px;
+  margin-left: auto;
+  margin-right: auto;
   background: var(--gray2);
-  width: 100%;
+  width: calc(100% - 30px);
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
@@ -173,7 +175,7 @@ const CommentTop = styled.div`
 
 const CommentListBoxMobile = styled.div`
   margin-top: 10px;
-  max-height: ${({ show }) => (show ? "1000px" : "110px")};
+  max-height: ${({ $show }) => ($show ? "1000px" : "110px")};
   overflow: hidden;
   transition: max-height 0.3s ease;
 `;
@@ -285,7 +287,7 @@ const PlayDetail = () => {
                 {showMobileComments ? "접기" : "더보기"}
               </button>
             </CommentTop>
-            <CommentListBoxMobile show={showMobileComments}>
+            <CommentListBoxMobile $show={showMobileComments}>
               <CommentList
                 key={videoId}
                 videoId={videoId}

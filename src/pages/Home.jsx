@@ -176,7 +176,7 @@ const Home = () => {
       ) : (
         <MainSlide />
       )}
-      <HomeList title={"구단홈 바로가기"} />
+      <HomeList title={"TEAMHOME"} />
       <Banner className="inner">
         <Link to={"/event"}>
           <img src={bannerStrike} alt="banner" />
@@ -185,7 +185,7 @@ const Home = () => {
       </Banner>
       <ShortsSlide
         playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
-        title={"하이라이트 CLIP"}
+        title={"HIGHLIGHT"}
         max={21}
       />
 
@@ -199,7 +199,7 @@ const Home = () => {
       <CollaboBanner />
       <div className="home_products">
         <ProductCardWrap>
-          <h3>Season 콜라보</h3>
+          <h3>COLLABORATION</h3>
           {isProductLoading ? (
             "Loading"
           ) : (
@@ -207,11 +207,11 @@ const Home = () => {
           )}
         </ProductCardWrap>
         <ProductCardWrap>
-          <h3>New 신상품</h3>
+          <h3>RELEASE</h3>
           {isProductLoading ? "Loading" : <HomeProducts products={newest} />}
         </ProductCardWrap>
         <ProductCardWrap>
-          <h3>Best 인기상품</h3>
+          <h3>FAVORITE</h3>
           {isProductLoading ? "Loading" : <HomeProducts products={popular} />}
         </ProductCardWrap>
       </div>

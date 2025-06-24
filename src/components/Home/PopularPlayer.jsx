@@ -213,7 +213,7 @@ const PopularPlayer = () => {
   return (
     <Container>
       <div className="inner">
-        <h3>인기 선수</h3>
+        <h3>SUPER ROOKIE</h3>
         <div className="list_wrap" ref={scrollRef}>
           <ul className="popular-list">
             <li>

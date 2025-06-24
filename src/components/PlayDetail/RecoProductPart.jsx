@@ -9,6 +9,14 @@ import RecoProduct from "./RecoProduct";
 const RecoProductWrapper = styled.div`
   width: 100%;
   margin-top: 20px;
+  @media screen and (max-width: 768px) {
+    width: 94%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media screen and (max-width: 500px) {
+    width: calc(100% - 30px);
+  }
 `;
 
 const RecoProductTitle = styled.h1`

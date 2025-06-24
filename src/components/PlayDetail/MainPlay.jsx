@@ -3,23 +3,21 @@ import YouTube from "react-youtube";
 import LikeButton from "./LikeButton";
 
 const Container = styled.div`
-  width: 1200px;
+  /* width: 1200px; */
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  margin-right: 30px;
-  @media screen and (max-width: 1440px) {
+  /* margin-right: 30px; */
+  /* @media screen and (max-width: 1440px) {
     width: 900px;
   }
   @media screen and (max-width: 1024px) {
     width: 640px;
-  }
+  } */
   @media screen and (max-width: 768px) {
-    width: 100vw;
     margin: 0;
     padding: 0;
-  }
-  @media screen and (max-width: 500px) {
   }
 `;
 
@@ -56,6 +54,7 @@ const PlayTitle = styled.h1`
   font-size: 2.4rem;
   color: var(--light);
   font-weight: 600;
+  word-break: keep-all;
   @media screen and (max-width: 1440px) {
     font-size: 2.2rem;
     line-height: 1.2;

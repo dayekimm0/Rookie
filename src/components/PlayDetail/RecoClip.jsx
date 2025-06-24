@@ -1,26 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import ClipDetail from "../ClipDetail";
 import { fetchClipProducts } from "../../utils/fetchClipProducts";
 import useHeaderStore from "../../stores/headerHeightStore";
+import useDragScroll from "../../hook/useDragScroll";
 
 const ClipListWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
-
+  /* border: 1px solid #0ff; */
   @media screen and (max-width: 768px) {
+    padding: 0 3%;
     flex-direction: row;
     overflow-x: auto;
     gap: 12px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    /* scrollbar-width: none;
+    -ms-overflow-style: none; */
+    -webkit-overflow-scrolling: touch;
+    &.dragging {
+      cursor: grabbing;
+      user-select: none;
+    }
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #bbb;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #888;
+    }
+    scrollbar-color: #bbb transparent;
+    scrollbar-width: auto;
   }
 
-  &::-webkit-scrollbar {
-    display: none;
+  @media screen and (max-width: 768px) {
+    padding: 0 15px;
   }
+  /* &::-webkit-scrollbar {
+    display: none;
+  } */
 `;
 
 const ClipWrapper = styled.div`
@@ -42,18 +65,21 @@ const ClipWrapper = styled.div`
 
   @media screen and (max-width: 1440px) {
     width: 100%;
-    height: 710px;
+    /* height: 710px; */
   }
 
   @media screen and (max-width: 1024px) {
-    width: 314px;
-    height: 558px;
+    /* width: 314px;
+    height: 558px; */
   }
 
   @media screen and (max-width: 768px) {
-    width: 240px;
+    width: 200px;
     height: auto;
     aspect-ratio: 9 / 16;
+  }
+  @media screen and (max-width: 500px) {
+    width: 180px;
   }
 `;
 
@@ -118,10 +144,13 @@ const RecoClip = ({ videoList = [] }) => {
     setScrollLocked(!!selectedVideoId);
   }, [selectedVideoId, setScrollLocked]);
 
+  const scrollRef = useRef();
+  useDragScroll(scrollRef);
+
   return (
     <>
       {videosWithProducts.length > 0 && (
-        <ClipListWrapper>
+        <ClipListWrapper ref={scrollRef}>
           {(isMobile ? videosWithProducts : [videosWithProducts[0]]).map(
             (video) => (
               <ClipWrapper
