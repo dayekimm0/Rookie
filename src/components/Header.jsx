@@ -18,7 +18,7 @@ import authStore from "../stores/AuthStore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import styled from "styled-components";
-import rookieemblem from "../images/logos/emblem_rookie.png";
+import rookieemblem from "../images/logos/emblem_rookie.svg";
 import logo from "../images/logos/Rookie_logo.svg";
 import kbologo2 from "../images/emblem/emblem_kbo2.svg";
 import TopSchedule from "./TopSchedule";
@@ -86,6 +86,9 @@ const Items = styled.div`
   justify-content: center;
   height: 100%;
   gap: 50px;
+  @media screen and (max-width: 1250px) {
+    gap: 35px;
+  }
   @media screen and (max-width: 1024px) {
     display: none;
   }
