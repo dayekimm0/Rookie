@@ -47,6 +47,16 @@ const ModalContent = styled.div`
   }
 `;
 
+const WingWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const WingConup = styled.div`
+  flex: 1;
+`;
+
 const WingCon = styled.div`
   display: flex;
   flex-direction: column;
@@ -126,15 +136,18 @@ const ClipDetail = memo(({ videoId, videoList = [], onClose }) => {
                 onReady={onPlayerReady(index)}
                 isActive={index === currentIndex}
               />
-              <WingCon>
-                <Btn>
-                  <LikeButton videoId={video.id} />
-                </Btn>
-                <ClipProduct
-                  products={video.products || []}
-                  onProductClick={handleProductClick}
-                />
-              </WingCon>
+              <WingWrapper>
+                <WingConup onClick={onClose} />
+                <WingCon>
+                  <Btn>
+                    <LikeButton videoId={video.id} />
+                  </Btn>
+                  <ClipProduct
+                    products={video.products || []}
+                    onProductClick={handleProductClick}
+                  />
+                </WingCon>
+              </WingWrapper>
             </ModalContent>
           </SwiperSlide>
         ))}
