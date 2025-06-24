@@ -6,7 +6,6 @@ const ModalProducts = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: end;
   align-items: center;
   margin: 20px;
   gap: 10px;
