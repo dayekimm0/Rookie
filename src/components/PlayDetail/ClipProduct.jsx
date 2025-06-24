@@ -31,7 +31,7 @@ const ModalProducts = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 10px 4%;
+    margin: 0;
   }
 `;
 
@@ -57,6 +57,12 @@ const ProductThumbnail = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media screen and (max-width: 500px) {
+  }
+  @media screen and (max-width: 375px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ProductInfo = styled.p`
@@ -73,6 +79,9 @@ const ProductInfo = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const ProductItem = memo(({ product, onClick }) => (
@@ -88,8 +97,7 @@ const ClipProduct = memo(({ products, onProductClick, likeButton }) => {
   return (
     <ModalProducts>
       <TitleRow>
-        <h1>추천하는 ROOK</h1>
-        {likeButton}
+        <h1>추천하는 ROOK{likeButton}</h1>
       </TitleRow>
       {products.length > 0 ? (
         products.map((product) => (

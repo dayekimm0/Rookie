@@ -75,7 +75,7 @@ const UserInfo = styled.div`
   }
 
   @media screen and (max-width: 500px) {
-    width: 368px;
+    width: 410px;
   }
 `;
 
@@ -122,13 +122,13 @@ const Comments = ({ comments, onDeleteLocal }) => {
     const now = new Date();
     const diff = (now - date) / 1000;
 
+    if (diff < 5) return "방금 전";
     if (diff < 60) return `${Math.floor(diff)}초 전`;
     if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
     if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
     if (diff < 604800) return `${Math.floor(diff / 86400)}일 전`;
     return `${Math.floor(diff / 604800)}주 전`;
   };
-
   const teamToEmblemId = {
     "기아 타이거즈": "1",
     "삼성 라이온즈": "2",

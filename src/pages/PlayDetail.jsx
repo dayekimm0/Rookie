@@ -129,20 +129,13 @@ const CommentWrapper = styled.div`
   }
 `;
 
-const CommentWrapperMobile = styled(CommentWrapper)`
-  display: ${({ show }) => (show ? "block" : "none")};
-  @media screen and (max-width: 500px) {
-    display: ${({ show }) => (show ? "block" : "none")};
-  }
-`;
-
-const ToggleButton = styled.button`
-  background: none;
+const CommentWrapperMobile = styled.div`
+  margin-top: 24px;
+  background: var(--gray2);
+  width: 100%;
+  border-radius: 14px;
   color: var(--light);
-  border: none;
-  font-size: 1.6rem;
-  margin: 8px 0;
-  cursor: pointer;
+  padding: 18px 20px;
   @media screen and (min-width: 501px) {
     display: none;
   }
@@ -151,27 +144,37 @@ const ToggleButton = styled.button`
 const CommentTop = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--light);
+    display: flex;
+    align-items: center;
+
+    span {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+  }
+
+  button {
+    background: none;
+    color: var(--light);
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
 `;
 
-const CommentTitle = styled.h2`
-  gap: 6px;
-  font-size: 2rem;
-  font-weight: 300;
-  color: var(--light);
-  width: 100%;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-
-  span {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--light);
-  }
+const CommentListBoxMobile = styled.div`
+  margin-top: 10px;
+  max-height: ${({ show }) => (show ? "1000px" : "110px")};
+  overflow: hidden;
+  transition: max-height 0.3s ease;
 `;
 
 function parseISODuration(iso) {
@@ -244,7 +247,7 @@ const PlayDetail = () => {
             return (
               video.id !== videoId &&
               !title.includes("shorts") &&
-              !title.includes("쇼츠") &&
+              !title.includes("\uC1FC\uCE20") &&
               Number.isFinite(durationInSeconds) &&
               durationInSeconds > 180
             );
@@ -276,22 +279,23 @@ const PlayDetail = () => {
             teamLogo={channelThumbnail}
           />
 
-          <ToggleButton onClick={() => setShowMobileComments((prev) => !prev)}>
-            {showMobileComments ? "접기" : `댓글 ${commentCount}개 더보기`}
-          </ToggleButton>
-
-          <CommentWrapperMobile show={showMobileComments}>
+          <CommentWrapperMobile>
             <CommentTop>
-              <CommentTitle>
+              <h2>
                 댓글 <span>{commentCount}</span>
-              </CommentTitle>
+              </h2>
+              <button onClick={() => setShowMobileComments((prev) => !prev)}>
+                {showMobileComments ? "접기" : "더보기"}
+              </button>
             </CommentTop>
-            <CommentList
-              key={videoId}
-              videoId={videoId}
-              onCountChange={setCommentCount}
-              limit={1} // 최신 댓글 1개만 표시
-            />
+            <CommentListBoxMobile show={showMobileComments}>
+              <CommentList
+                key={videoId}
+                videoId={videoId}
+                onCountChange={setCommentCount}
+              />
+              {showMobileComments && <PostCommentPart videoId={videoId} />}
+            </CommentListBoxMobile>
           </CommentWrapperMobile>
 
           <Divider />
@@ -303,9 +307,9 @@ const PlayDetail = () => {
 
           <CommentWrapper>
             <CommentTop>
-              <CommentTitle>
+              <h2>
                 댓글 <span>{commentCount}</span>
-              </CommentTitle>
+              </h2>
             </CommentTop>
             <CommentList
               key={videoId}
