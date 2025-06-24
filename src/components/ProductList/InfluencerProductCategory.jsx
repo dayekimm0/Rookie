@@ -94,7 +94,7 @@ const SearchBar = styled.div`
         font-size: 1.4rem;
         color: var(--gray1);
         &::placeholder {
-          font-size: 1.6rem;
+          font-size: 1.4rem;
           font-family: "pretendard";
           transition: all 0.3s;
           color: var(--grayC);
@@ -281,7 +281,7 @@ const InfluencerProductCategory = ({
                 <input
                   className="search_txt"
                   type="text"
-                  placeholder="상품을 검색해주세요."
+                  placeholder="상품을 검색해주세요"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -308,7 +308,7 @@ const InfluencerProductCategory = ({
               <input
                 className="search_txt"
                 type="text"
-                placeholder="search"
+                placeholder="상품을 검색해주세요"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
