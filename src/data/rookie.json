@@ -87,7 +87,9 @@
     "product_price": "99,000원",
     "detail": {
       "options": ["S", "M", "L", "XL", "2XL"],
-      "detail_images": "https://image.msscdn.net/thumbnails/images/prd_img/202504071611181292558137667f37a961f8ef.jpg?w=1200"
+      "detail_images": [
+        "https://image.msscdn.net/thumbnails/images/prd_img/202504071611181292558137667f37a961f8ef.jpg?w=1200"
+      ]
     },
     "detail_link": "",
     "id": 5
