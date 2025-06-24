@@ -65,7 +65,7 @@ const SlideBox = styled.div`
 
 const HighlightContent = ({ thumbnail, title, className, id, onOpenModal }) => {
   const handleCardClick = () => {
-    onOpenModal(id); // 상위에서 모달 열기
+    onOpenModal(id);
   };
 
   return (

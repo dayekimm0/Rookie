@@ -21,6 +21,7 @@ const PostComment = styled.form`
   }
 
   @media screen and (max-width: 500px) {
+    height: 32px;
   }
 `;
 
@@ -64,6 +65,8 @@ const UserName = styled.p`
   }
 
   @media screen and (max-width: 500px) {
+    font-size: 1.3rem;
+    min-width: 48px;
   }
 `;
 
@@ -80,12 +83,19 @@ const TextArea = styled.textarea`
   &:focus {
     outline: none;
     color: var(--light);
+    font-family: "Figtree", "Pretendard", sans-serif;
   }
 
   &::placeholder {
     opacity: 1;
     transition: opacity 0.3s;
     font-family: "Figtree", "Pretendard", sans-serif;
+  }
+  @media screen and (max-width: 500px) {
+    min-height: 30px;
+    &::placeholder {
+      font-size: 1.3rem;
+    }
   }
 `;
 
@@ -97,6 +107,8 @@ const SubmitBtn = styled.input`
   background: ${({ disabled }) => (disabled ? "var(--grayD)" : "var(--main)")};
   font-weight: ${({ disabled }) => (disabled ? "400" : "500")};
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const PostCommentPart = ({ videoId }) => {

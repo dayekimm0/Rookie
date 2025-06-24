@@ -18,6 +18,11 @@ const ModalPlay = styled.div`
   @media screen and (max-width: 768px) {
   }
   @media screen and (max-width: 500px) {
+    height: 2580%;
+    iframe {
+      width: 100% !important;
+      aspect-ratio: 9 / 16;
+    }
   }
 `;
 

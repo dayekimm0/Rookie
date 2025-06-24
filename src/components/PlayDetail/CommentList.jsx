@@ -36,6 +36,11 @@ const CommentListWrapper = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 100%;
+    &::-webkit-scrollbar {
+      width: 4px;
+      cursor: pointer;
+    }
   }
 `;
 

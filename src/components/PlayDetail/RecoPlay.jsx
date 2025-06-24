@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import thumbnail2 from "/src/images/mockup/play_thumbnail2.png";
 
 const Container = styled.div`
   width: 100%;
@@ -11,7 +10,17 @@ const Container = styled.div`
     height: 106px;
   }
 
+  @media screen and (max-width: 768px) {
+    width: 720px;
+    height: auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
   @media screen and (max-width: 500px) {
+    width: 456px;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -30,8 +39,13 @@ const RecoPlayThumbnail = styled.div`
     width: 190px;
     height: 100%;
   }
+  @media screen and (max-width: 768px) {
+    width: 60%;
+    aspect-ratio: 16 / 9;
+  }
 
   @media screen and (max-width: 500px) {
+    width: 100%;
   }
 `;
 
@@ -46,7 +60,12 @@ const RecoPlayInfo = styled.div`
     height: 100%;
   }
 
+  @media screen and (max-width: 768px) {
+    width: 50%;
+    margin-left: 10px;
+  }
   @media screen and (max-width: 500px) {
+    width: 100%;
   }
 `;
 
@@ -63,6 +82,11 @@ const RecoPlayTitle = styled.h2`
     font-size: 1.2rem;
   }
 
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
   @media screen and (max-width: 500px) {
   }
 `;
@@ -73,6 +97,9 @@ const RecoPlayTeam = styled.div`
     font-size: 1.1rem;
   }
 
+  @media screen and (max-width: 768px) {
+    font-size: 1.6rem;
+  }
   @media screen and (max-width: 500px) {
   }
 `;
@@ -86,6 +113,9 @@ const PlayDesc = styled.div`
   }
   @media screen and (max-width: 1024px) {
     font-size: 1.1rem;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
   }
 
   @media screen and (max-width: 500px) {

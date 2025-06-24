@@ -44,6 +44,15 @@ const ModalContent = styled.div`
     left: 10%;
   }
   @media screen and (max-width: 500px) {
+    width: 78%;
+    height: 90%;
+    top: 6%;
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+  }
+  @media screen and (max-width: 375px) {
+    width: 76%;
   }
 `;
 
@@ -51,6 +60,8 @@ const WingWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const WingConup = styled.div`
@@ -62,10 +73,18 @@ const WingCon = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: start;
+  @media screen and (max-width: 500px) {
+    position: relative;
+  }
 `;
 
 const Btn = styled.div`
   margin-left: 20px;
+  @media screen and (max-width: 500px) {
+    position: absolute;
+    right: 0;
+    top: -20px;
+  }
 `;
 
 const stopScrollPropagation = (e) => e.stopPropagation();

@@ -9,7 +9,6 @@ import RecoProduct from "./RecoProduct";
 const RecoProductWrapper = styled.div`
   width: 100%;
   margin-top: 20px;
-  padding: 0 3%;
 `;
 
 const RecoProductTitle = styled.h1`
@@ -25,10 +24,13 @@ const RecoProductTitle = styled.h1`
   }
 
   @media screen and (max-width: 500px) {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
   }
 `;
 
 const StyledSwiper = styled(Swiper)`
+  height: 140px;
   .swiper-scrollbar {
     width: 100%;
     background: var(--gray3);
@@ -42,6 +44,9 @@ const StyledSwiper = styled(Swiper)`
     background: var(--grayF5);
     border-radius: 4px;
     cursor: pointer;
+  }
+  @media screen and (max-width: 500px) {
+    height: 140px;
   }
 `;
 
