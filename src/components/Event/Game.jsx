@@ -356,7 +356,7 @@ const Game = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const played = docSnap.data().gamePlayed;
-          console.log("Firebase에서 가져온 gamePlayed:", played);
+          // console.log("Firebase에서 가져온 gamePlayed:", played);
 
           setGamePlayedFlag(played);
           setGamePlayed(played);
@@ -367,7 +367,7 @@ const Game = () => {
     };
 
     if (user?.uid) {
-      console.log("유저 로그인됨:", user.uid);
+      // console.log("유저 로그인됨:", user.uid);
       fetchGameStatus();
     } else {
       console.log("유저 없음: 로그인 필요");
@@ -376,7 +376,7 @@ const Game = () => {
 
   useEffect(() => {
     if (!result) {
-      console.log("게임 시작: result 데이터 생성");
+      // console.log("게임 시작: result 데이터 생성");
       const board = generateBoardData();
       setResult(board);
       console.log("생성된 result:", board);
