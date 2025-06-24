@@ -28,6 +28,11 @@ const PlayLike = styled.div`
   padding: 12px 20px;
   border-radius: 50px;
   gap: 16px;
+  @media screen and (max-width: 500px) {
+    padding: 10px 16px;
+    gap: 10px;
+    margin-right: 3%;
+  }
 `;
 
 const StyledLabel = styled.label`

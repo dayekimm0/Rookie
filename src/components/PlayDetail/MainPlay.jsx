@@ -20,7 +20,6 @@ const Container = styled.div`
     padding: 0;
   }
   @media screen and (max-width: 500px) {
-    max-width: 100%;
   }
 `;
 
@@ -50,7 +49,6 @@ const PlayThumbnail = styled.div`
     transform: translateX(-50%);
   }
   @media screen and (max-width: 500px) {
-    max-width: 100%;
   }
 `;
 
@@ -70,6 +68,7 @@ const PlayTitle = styled.h1`
     padding: 0 3%;
   }
   @media screen and (max-width: 500px) {
+    font-size: 1.6rem;
   }
 `;
 
@@ -108,6 +107,8 @@ const TeamLogo = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 40px;
+    height: 40px;
   }
 `;
 
@@ -125,6 +126,7 @@ const TeamName = styled.h2`
   }
 
   @media screen and (max-width: 500px) {
+    font-size: 1.4rem;
   }
 `;
 

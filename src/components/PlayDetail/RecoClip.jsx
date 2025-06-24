@@ -4,31 +4,56 @@ import ClipDetail from "../ClipDetail";
 import { fetchClipProducts } from "../../utils/fetchClipProducts";
 import useHeaderStore from "../../stores/headerHeightStore";
 
-const ClipWrapper = styled.div`
-  width: 480px;
-  height: 860px;
+const ClipListWrapper = styled.div`
+  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 12px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const ClipWrapper = styled.div`
+  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 9 / 16;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+
   @media screen and (max-width: 1440px) {
     width: 100%;
     height: 710px;
   }
+
   @media screen and (max-width: 1024px) {
     width: 314px;
     height: 558px;
   }
+
   @media screen and (max-width: 768px) {
-  }
-  @media screen and (max-width: 500px) {
+    width: 240px;
+    height: auto;
+    aspect-ratio: 9 / 16;
   }
 `;
 
@@ -53,17 +78,7 @@ const RecoClip = ({ videoList = [] }) => {
     }
   }, [videoList]);
 
-  // if (videosWithProducts.length === 0) return null;
-
-  // const handleClick = () => {
-  //   setSelectedVideoId(videosWithProducts[0].id);
-  // };
-
-  // const handleClose = () => {
-  //   setSelectedVideoId(null);
-  // };
-
-  //클립 모달 스크롤 막기
+  // 클립 모달 스크롤 막기
   useEffect(() => {
     if (selectedVideoId) {
       const y = window.scrollY;
@@ -95,14 +110,19 @@ const RecoClip = ({ videoList = [] }) => {
   return (
     <>
       {videosWithProducts.length > 0 && (
-        <ClipWrapper
-          onClick={() => setSelectedVideoId(videosWithProducts[0]?.id || null)}
-        >
-          <img
-            src={videosWithProducts[0]?.thumbnail}
-            alt={videosWithProducts[0]?.title || "clip_thumbnail"}
-          />
-        </ClipWrapper>
+        <ClipListWrapper>
+          {videosWithProducts.map((video) => (
+            <ClipWrapper
+              key={video.id}
+              onClick={() => setSelectedVideoId(video.id)}
+            >
+              <img
+                src={video.thumbnail}
+                alt={video.title || "clip_thumbnail"}
+              />
+            </ClipWrapper>
+          ))}
+        </ClipListWrapper>
       )}
 
       {selectedVideoId && (

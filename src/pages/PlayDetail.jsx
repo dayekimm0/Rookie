@@ -29,9 +29,6 @@ const Container = styled.div`
   @media screen and (max-width: 768px) {
     padding: 0;
   }
-  @media screen and (max-width: 500px) {
-    padding: 0 1%;
-  }
 `;
 
 const PlayContent = styled.div`
@@ -41,22 +38,13 @@ const PlayContent = styled.div`
   justify-content: center;
   align-items: start;
   gap: 30px;
-
   @media screen and (max-width: 1024px) {
     gap: 20px;
   }
-
   @media screen and (max-width: 768px) {
-    width: 100%;
     flex-direction: column;
     align-items: center;
     padding-top: 0;
-  }
-  @media screen and (max-width: 500px) {
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    gap: 30px;
   }
 `;
 
@@ -68,27 +56,22 @@ const RightContent = styled.div`
   @media screen and (max-width: 1024px) {
     width: 640px;
   }
-
   @media screen and (max-width: 768px) {
     width: 100%;
-  }
-  @media screen and (max-width: 500px) {
-    max-width: 100%;
   }
 `;
 
 const LeftContent = styled.div`
   width: 498px;
-
   @media screen and (max-width: 1440px) {
     width: 400px;
   }
   @media screen and (max-width: 1024px) {
     width: 320px;
   }
-
-  @media screen and (max-width: 900px) {
-    max-width: 100%;
+  @media screen and (max-width: 768px) {
+    width: 768px;
+    padding: 0 3%;
   }
 `;
 
@@ -103,6 +86,10 @@ const RecoPlayWrapper = styled.div`
     height: 480px;
     margin-bottom: 20px;
   }
+  @media screen and (max-width: 768px) {
+    height: 1000px;
+    margin-bottom: 20px;
+  }
 `;
 
 const Divider = styled.div`
@@ -113,10 +100,8 @@ const Divider = styled.div`
   @media screen and (max-width: 1440px) {
     width: 100%;
   }
-
-  @media screen and (max-width: 1024px) {
-  }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 500px) {
+    display: none;
   }
 `;
 
@@ -124,20 +109,16 @@ const CommentWrapper = styled.div`
   margin-top: 24px;
   background: var(--gray2);
   width: 100%;
-  height: 540px;
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
+  overflow: hidden;
   @media screen and (max-width: 1024px) {
-    height: auto;
-    min-height: 400px;
+    min-height: 100px;
   }
-
   @media screen and (max-width: 768px) {
     width: 94%;
     margin: 24px 3% 0 3%;
-  }
-  @media screen and (max-width: 500px) {
   }
 `;
 
@@ -159,7 +140,6 @@ const CommentTitle = styled.h2`
   display: flex;
   justify-content: start;
   align-items: center;
-
   span {
     font-size: 1.8rem;
     font-weight: 600;
@@ -180,7 +160,6 @@ const PlayDetail = () => {
   const [channelThumbnail, setChannelThumbnail] = useState(null);
   const [playlistVideos, setPlaylistVideos] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
-  const [highlightVideos, setHighlightVideos] = useState([]);
   const [highlightVideosFromPlayContents, setHighlightVideosFromPlayContents] =
     useState([]);
   const [
@@ -208,7 +187,6 @@ const PlayDetail = () => {
     loadHighlightFromShorts();
   }, []);
 
-  // 두 리스트 합치고 중복 제거 + 섞기
   const mergedHighlightVideos = React.useMemo(() => {
     const combined = [
       ...highlightVideosFromPlayContents,
@@ -216,22 +194,18 @@ const PlayDetail = () => {
     ];
     const uniqueMap = new Map();
     combined.forEach((video) => uniqueMap.set(video.id, video));
-    const uniqueVideos = Array.from(uniqueMap.values());
-    return uniqueVideos.sort(() => 0.5 - Math.random());
+    return Array.from(uniqueMap.values()).sort(() => 0.5 - Math.random());
   }, [highlightVideosFromPlayContents, highlightVideosFromShortsPlaylist]);
 
   useEffect(() => {
     const loadData = async () => {
       const videoData = await fetchVideoDetailById(videoId);
       setVideoInfo(videoData);
-
       const thumbnail = await fetchChannelThumbnail(videoData.channelId);
       setChannelThumbnail(thumbnail);
-
       const playlistId = videoData.playlistId;
       if (playlistId) {
         const videos = await fetchPlaylistVideos(playlistId);
-
         setPlaylistVideos(
           videos.filter((video) => {
             const title = video.title?.toLowerCase() || "";
@@ -244,7 +218,7 @@ const PlayDetail = () => {
               !title.includes("shorts") &&
               !title.includes("쇼츠") &&
               Number.isFinite(durationInSeconds) &&
-              durationInSeconds > 180
+              durationInSeconds >= 180
             );
           })
         );
@@ -260,22 +234,8 @@ const PlayDetail = () => {
     if (videoId) loadData();
   }, [videoId]);
 
-  useEffect(() => {
-    const loadHighlight = async () => {
-      const highlightConfig = playContents.highlight;
-      if (!highlightConfig) return;
-      const videos = await fetchPlaylistVideos(
-        highlightConfig.playlistId,
-        highlightConfig.max
-      );
-      setHighlightVideos(videos);
-    };
-
-    loadHighlight();
-  }, []);
-
-  // 모든 훅 호출 완료 후 조건 검사
   if (!videoInfo) return <div>로딩 중...</div>;
+
   return (
     <Container>
       <PlayContent>
@@ -287,11 +247,8 @@ const PlayDetail = () => {
             subscriberCount={videoInfo.subscriberCount}
             teamLogo={channelThumbnail}
           />
+
           <Divider />
-          <RecoProductPart
-            videoTitle={videoInfo.title}
-            channelTitle={videoInfo.channelTitle}
-          />
 
           <CommentWrapper>
             <CommentTop>
@@ -299,16 +256,21 @@ const PlayDetail = () => {
                 댓글 <span>{commentCount}</span>
               </CommentTitle>
             </CommentTop>
-
             <CommentList
               key={videoId}
               videoId={videoId}
               onCountChange={setCommentCount}
+              limit={1}
             />
-
             <PostCommentPart videoId={videoId} />
           </CommentWrapper>
+
+          <RecoProductPart
+            videoTitle={videoInfo.title}
+            channelTitle={videoInfo.channelTitle}
+          />
         </RightContent>
+
         <LeftContent>
           <RecoPlayWrapper>
             {playlistVideos.slice(0, 4).map((video) => (

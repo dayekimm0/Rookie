@@ -18,6 +18,8 @@ const CommentWrapper = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 50%;
+    margin-bottom: 20px;
   }
 `;
 
@@ -41,6 +43,10 @@ const UserTeam = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    max-height: 26px;
   }
 `;
 
@@ -50,6 +56,9 @@ const CommentItem = styled.div`
   justify-content: start;
   align-items: start;
   gap: 8px;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -66,6 +75,7 @@ const UserInfo = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 368px;
   }
 `;
 
@@ -79,6 +89,9 @@ const UserName = styled.div`
     color: var(--gray6);
     margin-left: 8px;
   }
+  @media screen and (max-width: 500px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const DeleteComment = styled.button`
@@ -87,12 +100,18 @@ const DeleteComment = styled.button`
   color: var(--grayC);
   text-decoration: underline;
   cursor: pointer;
+  @media screen and (max-width: 500px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const Comment = styled.div`
   color: var(--light);
   font-size: 1.4rem;
   width: 90%;
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
 const Comments = ({ comments, onDeleteLocal }) => {
   const { user } = authStore();
