@@ -160,10 +160,6 @@ const InfluencerProductCard = ({ data }) => {
     navigate(`/store/${team}/${id}`);
   };
 
-  {
-    console.log("influencer:", influencer);
-  }
-
   const displayPrice = price || product_price || "가격 정보 없음";
 
   return (

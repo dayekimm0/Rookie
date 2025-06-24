@@ -49,8 +49,8 @@ const Products = styled.div`
   @media screen and (max-width: 500px) {
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
-    gap: 12px;
-    row-gap: 20px;
+    gap: 15px;
+    row-gap: 25px;
   }
   @media screen and (max-width: 375px) {
     grid-template-columns: repeat(1, 1fr);
