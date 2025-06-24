@@ -122,6 +122,9 @@ const SvgSpinner = styled.svg`
 
 const InfluencerProductList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [influencerProducts, setInfluencerProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const {
     selectedCategory,
@@ -134,12 +137,31 @@ const InfluencerProductList = () => {
     setShuffledProducts,
   } = useProductStore();
 
-  // 최초 카테고리 초기화 (ALL)
+  // ✅ rookie.json 비동기 fetch
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          "https://rookiejson.netlify.app/teamJson/rookie.json"
+        );
+        if (!res.ok) throw new Error("데이터 로딩 실패");
+        const data = await res.json();
+        setInfluencerProducts(data || []);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // 초기 카테고리 설정
   useEffect(() => {
     setSelectedCategory("ALL");
   }, [setSelectedCategory]);
 
-  // 정렬이 'random'이고 최초 셔플이 안 된 경우 셔플
+  // 최초 한 번만 셔플
   useEffect(() => {
     if (
       sort === "random" &&
@@ -150,9 +172,9 @@ const InfluencerProductList = () => {
       setShuffledProducts(shuffled);
       setInitialShuffleDone();
     }
-  }, [sort, initialShuffleDone, setShuffledProducts, setInitialShuffleDone]);
+  }, [sort, initialShuffleDone, influencerProducts]);
 
-  // 필터링된 상품 목록
+  // 셔플 적용 여부
   const baseProducts =
     sort === "random" && initialShuffleDone
       ? shuffledProducts
@@ -160,11 +182,37 @@ const InfluencerProductList = () => {
 
   const filteredProducts = useMemo(() => {
     if (!selectedCategory || selectedCategory === "ALL") return baseProducts;
-    // 대소문자, 공백 주의하여 필터링
     return baseProducts.filter(
       (p) => p.category && p.category.trim() === selectedCategory.trim()
     );
   }, [baseProducts, selectedCategory]);
+
+  if (loading) {
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <Contents>
+          <p style={{ color: "red" }}>데이터 로딩 실패: {error}</p>
+        </Contents>
+      </Container>
+    );
+  }
 
   return (
     <Container>
