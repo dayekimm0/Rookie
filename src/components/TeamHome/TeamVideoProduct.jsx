@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import { useQuery } from "@tanstack/react-query";
@@ -10,18 +10,25 @@ import {
 } from "../../data/teamVideos";
 import { getTeamVideoProducts } from "../../data/teamVideoProducts";
 import { getTeamRookieProducts } from "../../data/teamRookieProducts";
+import useDragScroll from "../../hook/useDragScroll";
 
 const Section = styled.div`
   background: var(--dark);
   color: var(--light);
-  padding: 120px 0;
+  padding: 120px 0 50px;
 
   @media screen and (max-width: 1024px) {
-    padding: 40px 0;
+    padding: 90px 0 40px;
   }
 
   @media screen and (max-width: 768px) {
-    padding: 30px 0;
+    padding: 80px 0 40px;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 80px 0 40px;
+  }
+  @media screen and (max-width: 500px) {
+    padding: 60px 0 30px;
   }
 `;
 
@@ -30,14 +37,22 @@ const Container = styled.div`
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 32px;
+  font-size: 3rem;
   font-weight: bold;
   margin-bottom: 40px;
   color: var(--light);
 
-  @media screen and (max-width: 768px) {
-    font-size: 24px;
+  @media screen and (max-width: 1024px) {
+    font-size: 2.5rem;
     margin-bottom: 30px;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
   }
 `;
 
@@ -98,6 +113,8 @@ const VideoSection = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
   }
 
   @media screen and (max-width: 375px) {
@@ -187,7 +204,9 @@ const PlayButton = styled.div`
 `;
 
 // 우측 제품 리스트 영역
-const ProductSection = styled.div`
+const ProductSection = styled.div.attrs((props) => ({
+  "data-lenis-prevent": props.preventScroll ? "" : undefined,
+}))`
   flex: 1;
   max-height: 608px;
   overflow-y: auto;
@@ -331,13 +350,12 @@ const ProductItem = styled.div`
   @media screen and (max-width: 1880px) {
     gap: 11px;
   }
-
-  @media screen and (max-width: 1024px) {
-    gap: 11px;
+  @media screen and (max-width: 1440px) {
+    gap: 6px;
   }
 
-  @media screen and (max-width: 960px) {
-    gap: 10px;
+  @media screen and (max-width: 1024px) {
+    margin-bottom: 11px;
   }
 
   @media screen and (max-width: 768px) {
@@ -386,6 +404,10 @@ const ProductImage = styled.div`
     width: 150px;
     height: 150px;
   }
+  @media screen and (max-width: 1280px) {
+    width: 130px;
+    height: 130px;
+  }
 
   @media screen and (max-width: 1024px) {
     width: 126px;
@@ -393,8 +415,8 @@ const ProductImage = styled.div`
   }
 
   @media screen and (max-width: 960px) {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
   }
 
   @media screen and (max-width: 768px) {
@@ -421,49 +443,35 @@ const ProductImagePlaceholder = styled.div`
 
 // 제품 정보 컨테이너 (615*224)
 const ProductInfo = styled.div`
-  width: 615px;
-  height: 224px;
+  /* width: 615px; */
   display: flex;
   flex-direction: column;
   padding: 16px 16px;
 
-  @media screen and (max-width: 1880px) {
-    height: 220px;
-  }
-
-  @media screen and (max-width: 1780px) {
-    height: 180px;
-  }
-
   @media screen and (max-width: 1420px) {
-    width: 344px;
-    height: 150px;
+    /* width: 344px; */
     padding: 12px;
   }
   @media screen and (max-width: 1024px) {
-    width: 344px;
-    height: 126px;
+    /* width: 344px; */
     padding: 12px;
   }
 
   @media screen and (max-width: 960px) {
-    width: 200px;
-    height: 100px;
+    /* width: 200px; */
     padding: 8px 0;
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
   }
   @media screen and (max-width: 768px) {
     width: 100px;
-    height: 154px;
     padding: 8px 0;
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
   }
 
   @media screen and (max-width: 375px) {
     width: 100px;
-    height: 154px;
     padding: 8px 0;
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
   }
 `;
 
@@ -494,14 +502,18 @@ const ProductName = styled.div`
   line-height: 1.4;
   margin-bottom: 16px;
 
+  @media screen and (max-width: 1440px) {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
   @media screen and (max-width: 1024px) {
-    font-size: 18px;
+    font-size: 15px;
     margin-bottom: 12px;
   }
 
   @media screen and (max-width: 960px) {
-    font-size: 14px;
-    margin-bottom: 10px;
+    font-size: 13px;
+    margin-bottom: 9px;
     line-height: 1.3;
   }
 
@@ -520,15 +532,21 @@ const ProductName = styled.div`
 
 const ProductPrice = styled.div`
   font-size: 26px;
-  font-weight: semibold;
+  font-weight: 500;
   color: var(--light);
 
+  @media screen and (max-width: 1440px) {
+    font-size: 24px;
+  }
+  @media screen and (max-width: 1280px) {
+    font-size: 22px;
+  }
   @media screen and (max-width: 1024px) {
-    font-size: 26px;
+    font-size: 20px;
   }
 
   @media screen and (max-width: 960px) {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   @media screen and (max-width: 768px) {
@@ -544,6 +562,7 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
+  const [preventScroll, setPreventScroll] = useState(true);
 
   // 영상 데이터 가져오기
   const videoData = useMemo(() => {
@@ -634,6 +653,22 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
     }
   };
 
+  //data-lenis-prevent 모바일 해제
+  useEffect(() => {
+    const updateScrollState = () => {
+      const isMobile = window.innerWidth <= 768;
+      setPreventScroll(!isMobile);
+    };
+
+    updateScrollState(); // 최초 실행
+    window.addEventListener("resize", updateScrollState);
+    return () => window.removeEventListener("resize", updateScrollState);
+  }, []);
+
+  //상품 가로스크롤 드래그
+  const scrollRef = useRef();
+  useDragScroll(scrollRef);
+
   return (
     <Section>
       <Container className="inner">
@@ -698,7 +733,7 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
           </VideoSection>
 
           {/* 우측 제품 리스트 영역 */}
-          <ProductSection data-lenis-prevent>
+          <ProductSection preventScroll={preventScroll} ref={scrollRef}>
             {isProductsLoading ? (
               <div
                 style={{

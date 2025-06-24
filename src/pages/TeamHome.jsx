@@ -26,14 +26,14 @@ const BannerWrapper = styled.div`
 // 신상품/인기상품
 const ProductSection = styled.div`
   background: var(--dark);
-  padding: 60px 0;
+  padding-top: 60px;
 
   @media screen and (max-width: 1024px) {
-    padding: 40px 0;
+    padding-top: 40px;
   }
 
   @media screen and (max-width: 768px) {
-    padding: 30px 0;
+    padding-top: 30px;
   }
 `;
 
@@ -74,7 +74,9 @@ const ProductCardWrap = styled.div`
   &:first-child {
     margin-top: 0;
   }
-
+  @media screen and (max-width: 1440px) {
+    margin-top: 100px;
+  }
   @media screen and (max-width: 1024px) {
     margin-top: 90px;
     h3 {
