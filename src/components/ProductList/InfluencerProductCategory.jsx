@@ -267,7 +267,7 @@ const InfluencerProductCategory = ({
                 <input
                   className="search_txt"
                   type="text"
-                  placeholder="search"
+                  placeholder="상품을 검색해주세요."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
