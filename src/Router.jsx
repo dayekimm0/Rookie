@@ -21,6 +21,7 @@ import PlayDetail from "./pages/PlayDetail";
 import SearchResultPage from "./pages/SearchResultPage";
 import TeamHome from "./pages/TeamHome";
 import InfluencerPlayContent from "./pages/InfluencerPlayContent";
+import InfluencerProductList from "./pages/InfluencerProductList";
 import TeamplayAll from "./pages/TeamplayAll";
 
 const router = createBrowserRouter([
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "store",
         element: <ProductList />,
+      },
+      {
+        path: "store/rookie",
+        element: <InfluencerProductList />,
       },
       {
         path: "store/:teamCode",

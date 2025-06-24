@@ -130,6 +130,7 @@ const AddressChangeButton = styled.button`
   color: var(--light);
   border: none;
   border-radius: 4px;
+  cursor: pointer;
 `;
 
 const Items = styled.div`

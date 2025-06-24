@@ -29,10 +29,10 @@ const SlideContainer = styled.div`
 `;
 
 const TabSlideRenderer = ({ items, onSwiperReady }) => {
-  const navigate = useNavigate();
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const navigate = useNavigate();
 
   const handleDetailClick = (videoId) => {
     navigate(`/play/${videoId}`);

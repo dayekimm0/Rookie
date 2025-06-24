@@ -6,7 +6,6 @@ import { matchHighlightToGames } from "../utils/youtube";
 import { useEffect, useState } from "react";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
-console.log("API_KEY", API_KEY);
 
 export const fetchYoutubePlaylist = async ({ queryKey }) => {
   const [_key, playlistId, maxResults] = queryKey;
