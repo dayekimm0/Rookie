@@ -30,6 +30,10 @@ const TeamName = styled.h2`
 
   @media screen and (max-width: 768px) {
     font-size: 24px;
+    margin-bottom: 14px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 20px;
     margin-bottom: 10px;
   }
 `;
