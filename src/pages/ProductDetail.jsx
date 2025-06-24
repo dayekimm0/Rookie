@@ -1921,7 +1921,7 @@ const ProductDetail = () => {
       </Container>
     );
   }
-  console.log("product", product);
+  // console.log("product", product);
   return (
     <Container>
       <ContentWrapper>
