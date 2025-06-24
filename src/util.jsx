@@ -9,6 +9,7 @@ import emblem_lotteG from "./images/emblem/emblem_lotteG.svg";
 import emblem_hanwhaE from "./images/emblem/emblem_hanwhaE.svg";
 import emblem_ncD from "./images/emblem/emblem_ncD.svg";
 import emblem_kiwoomH from "./images/emblem/emblem_kiwoomH.svg";
+import lookie_inf_mark from "./images/icons/lookie_inf_mark.svg";
 import games from "./data/gameList_final.json";
 
 export const getEmblem = (code) => {
@@ -37,6 +38,8 @@ export const getEmblem = (code) => {
       return emblem_ncD;
     case "10":
       return emblem_kiwoomH;
+    case "11":
+      return lookie_inf_mark; // ROOKie 엠블럼 추가
     default:
       return null;
   }
