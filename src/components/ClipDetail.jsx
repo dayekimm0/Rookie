@@ -44,6 +44,9 @@ const ModalContent = styled.div`
     left: 10%;
   }
   @media screen and (max-width: 500px) {
+    border: 1px solid #f00;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -51,6 +54,8 @@ const WingWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const WingConup = styled.div`
@@ -62,6 +67,9 @@ const WingCon = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: start;
+  @media screen and (max-width: 500px) {
+    border: 1px solid #f00;
+  }
 `;
 
 const Btn = styled.div`

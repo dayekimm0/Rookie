@@ -1,27 +1,47 @@
-// ProductList.jsx
 import React, { memo } from "react";
 import styled from "styled-components";
 
+// 제목과 Like 버튼을 한 줄에 배치하는 래퍼
+const TitleRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    color: var(--light);
+    font-size: 2rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+`;
+
 const ModalProducts = styled.div`
-  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin: 20px;
   gap: 10px;
 
-  h1 {
-    width: 100%;
-    color: var(--light);
-    display: flex;
-    justify-content: start;
-    align-items: center;
+  @media screen and (max-width: 500px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px 4%;
   }
 `;
 
 const ModalProduct = styled.div`
   width: 160px;
   cursor: pointer;
+
+  @media screen and (max-width: 500px) {
+    width: 48%;
+  }
 `;
 
 const ProductThumbnail = styled.div`
@@ -31,6 +51,7 @@ const ProductThumbnail = styled.div`
   overflow: hidden;
   margin-bottom: 4px;
   background: var(--light);
+
   img {
     width: 100%;
     height: 100%;
@@ -63,10 +84,13 @@ const ProductItem = memo(({ product, onClick }) => (
   </ModalProduct>
 ));
 
-const ClipProduct = memo(({ products, onProductClick }) => {
+const ClipProduct = memo(({ products, onProductClick, likeButton }) => {
   return (
     <ModalProducts>
-      <h1>추천하는 ROOK</h1>
+      <TitleRow>
+        <h1>추천하는 ROOK</h1>
+        {likeButton}
+      </TitleRow>
       {products.length > 0 ? (
         products.map((product) => (
           <ProductItem
