@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import styled from "styled-components";
+import { Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import "swiper/css/virtual";
 import BArrow from "../../images/icons/arrow_small_w.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import {
@@ -139,6 +141,25 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
     }
   }, [selectedVideoId]);
 
+  const renderedSlides = useMemo(() => {
+    return details.map((video, index) => (
+      <SwiperSlide key={video.id} virtualIndex={index}>
+        <Shortscard
+          thumbnail={
+            video.snippet.thumbnails?.maxres?.url ||
+            video.snippet.thumbnails?.medium?.url
+          }
+          title={video.snippet.title}
+          channelTitle={video.snippet.channelTitle}
+          views={video.statistics.viewCount}
+          likes={video.statistics.likeCount}
+          onOpenModal={handleOpenModal}
+          id={video.id}
+        />
+      </SwiperSlide>
+    ));
+  }, [details, handleOpenModal]);
+
   if (isLoading)
     return (
       <SpinnerWrap>
@@ -165,6 +186,8 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
         </div>
         <SlideContainer>
           <Swiper
+            modules={[Virtual]}
+            virtual
             slidesPerView={4}
             slidesPerGroup={4}
             spaceBetween={20}
@@ -215,22 +238,7 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
               },
             }}
           >
-            {details.map((video) => (
-              <SwiperSlide key={video.id}>
-                <Shortscard
-                  thumbnail={
-                    video.snippet.thumbnails?.maxres?.url ||
-                    video.snippet.thumbnails?.medium?.url
-                  }
-                  title={video.snippet.title}
-                  channelTitle={video.snippet.channelTitle}
-                  views={video.statistics.viewCount}
-                  likes={video.statistics.likeCount}
-                  onOpenModal={handleOpenModal}
-                  id={video.id}
-                />
-              </SwiperSlide>
-            ))}
+            {renderedSlides}
           </Swiper>
         </SlideContainer>
       </Container>

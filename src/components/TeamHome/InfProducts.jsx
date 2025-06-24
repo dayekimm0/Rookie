@@ -139,6 +139,14 @@ const InfProducts = ({ products, name }) => {
     }
   }, [swiper]);
 
+  useEffect(() => {
+    if (swiper) {
+      swiper.slideTo(0);
+      setIsBeginning(true);
+      setIsEnd(swiper.slides.length <= swiper.params.slidesPerView);
+    }
+  }, [products, swiper]);
+
   return (
     <SlideContainer>
       <div className="btns">
