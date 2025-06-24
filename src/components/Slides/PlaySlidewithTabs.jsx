@@ -69,7 +69,7 @@ const Title = styled.div`
   }
 `;
 
-const PlaySlidewithTabs = ({ allTab, tabs, title = "추천영상", teamCode }) => {
+const PlaySlidewithTabs = ({ allTab, tabs, title = "TODAY KBO", teamCode }) => {
   const navigate = useNavigate();
   const [isAll, setIsAll] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
