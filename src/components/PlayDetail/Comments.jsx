@@ -33,6 +33,15 @@ const UserTeam = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media screen and (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    max-height: 30px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const CommentItem = styled.div`
@@ -52,6 +61,8 @@ const UserInfo = styled.div`
   }
   @media screen and (max-width: 1024px) {
     width: 540px;
+  }
+  @media screen and (max-width: 768px) {
   }
 
   @media screen and (max-width: 500px) {

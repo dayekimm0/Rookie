@@ -16,7 +16,8 @@ const CardContainer = styled.div`
     width: 270px;
   }
   @media screen and (max-width: 1024px) {
-    width: 250px;
+    /* width: 250px; */
+    width: 100%;
   }
 
   @media screen and (max-width: 500px) {
@@ -49,16 +50,17 @@ const ProductImg = styled.div`
   }
   @media screen and (max-width: 1024px) {
     width: 100%;
-    height: 270px;
+    /* height: 250px; */
+    height: auto;
+    aspect-ratio: 4/5;
   }
 
   @media screen and (max-width: 500px) {
     width: 100%;
-    height: 290px;
+    height: auto;
   }
   @media screen and (max-width: 450px) {
     width: 100%;
-    height: calc(230px + 25vw);
   }
 `;
 
@@ -124,6 +126,7 @@ const ProductInfo = styled.div`
     }
     .name {
       font-size: 1.4rem;
+      height: 35px;
     }
     .price {
       font-size: 1.5rem;

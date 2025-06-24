@@ -6,7 +6,7 @@ import TeamStat from "../components/TeamHome/TeamStat";
 import TeamVideoProduct from "../components/TeamHome/TeamVideoProduct";
 import ShortsSlide from "../components/Slides/ShortsSlide";
 import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
-import { homeSlideTab, teamSlideTabs } from "../data/playTabs";
+import { teamSlideTabs } from "../data/playTabs";
 import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 import InfluencerZone from "../components/TeamHome/InfluencerZone";
 import HomeProducts from "../components/Home/HomeProducts"; // 추가
@@ -26,14 +26,14 @@ const BannerWrapper = styled.div`
 // 신상품/인기상품
 const ProductSection = styled.div`
   background: var(--dark);
-  padding: 60px 0;
+  padding-top: 60px;
 
   @media screen and (max-width: 1024px) {
-    padding: 40px 0;
+    padding-top: 40px;
   }
 
   @media screen and (max-width: 768px) {
-    padding: 30px 0;
+    padding-top: 30px;
   }
 `;
 
@@ -74,7 +74,9 @@ const ProductCardWrap = styled.div`
   &:first-child {
     margin-top: 0;
   }
-
+  @media screen and (max-width: 1440px) {
+    margin-top: 100px;
+  }
   @media screen and (max-width: 1024px) {
     margin-top: 90px;
     h3 {

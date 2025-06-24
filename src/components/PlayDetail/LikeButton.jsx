@@ -9,7 +9,14 @@ import {
   faThumbsDown as fasThumbsDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import authStore from "../../stores/AuthStore";
 
@@ -33,6 +40,7 @@ const StyledLabel = styled.label`
     font-size: 1.6rem;
     text-align: center;
     width: 20px;
+    margin-left: 4px;
   }
   svg {
     transition: all 0.3s ease;
@@ -41,45 +49,63 @@ const StyledLabel = styled.label`
 `;
 
 const LikeButton = ({ videoId }) => {
-  const [selected, setSelected] = useState("");
   const [likeCount, setLikeCount] = useState(0);
+  const [selected, setSelected] = useState(""); // "like" or "dislike" or ""
   const { user, likes, addLike, removeLike } = authStore();
 
   useEffect(() => {
-    const fetchLikeCount = async () => {
-      const snap = await getDoc(doc(db, "videos", videoId));
+    const videoRef = doc(db, "videos", videoId);
+    const unsubscribe = onSnapshot(videoRef, (snap) => {
       if (snap.exists()) {
         setLikeCount(snap.data().likeCount || 0);
       }
-    };
-    fetchLikeCount();
+    });
+    return () => unsubscribe();
   }, [videoId]);
 
   useEffect(() => {
-    if (likes.includes(videoId)) setSelected("like");
+    if (likes.includes(videoId)) {
+      setSelected("like");
+    } else if (selected === "like") {
+      setSelected("");
+    }
   }, [likes, videoId]);
 
   const handleLike = async () => {
     if (!user) return alert("로그인이 필요합니다.");
-    const userLikesRef = doc(db, "userLikes", user.uid);
+
     const videoRef = doc(db, "videos", videoId);
+    const userLikesRef = doc(db, "userLikes", user.uid);
     const isLiked = selected === "like";
+    const isDisliked = selected === "dislike";
 
     try {
+      const videoSnap = await getDoc(videoRef);
+      if (!videoSnap.exists()) {
+        await setDoc(videoRef, { likeCount: 0 });
+      }
+
       if (isLiked) {
+        // 좋아요 취소
         removeLike(videoId);
         setSelected("");
-        setLikeCount((prev) => Math.max(0, prev - 1));
         await setDoc(userLikesRef, {
           likes: likes.filter((id) => id !== videoId),
         });
         await updateDoc(videoRef, { likeCount: increment(-1) });
       } else {
-        addLike(videoId);
-        setSelected("like");
-        setLikeCount((prev) => prev + 1);
-        await setDoc(userLikesRef, { likes: [...likes, videoId] });
-        await updateDoc(videoRef, { likeCount: increment(1) });
+        // 싫어요 눌린 상태였다면 초기화
+        if (isDisliked) {
+          setSelected("");
+        }
+
+        // 좋아요 등록
+        if (!likes.includes(videoId)) {
+          addLike(videoId);
+          setSelected("like");
+          await setDoc(userLikesRef, { likes: [...likes, videoId] });
+          await updateDoc(videoRef, { likeCount: increment(1) });
+        }
       }
     } catch (e) {
       console.error("❌ 좋아요 처리 오류:", e.message);
@@ -88,19 +114,21 @@ const LikeButton = ({ videoId }) => {
 
   const handleDislike = async () => {
     if (!user) return alert("로그인이 필요합니다.");
+
     const isDisliked = selected === "dislike";
     const isLiked = selected === "like";
-    const userLikesRef = doc(db, "userLikes", user.uid);
     const videoRef = doc(db, "videos", videoId);
+    const userLikesRef = doc(db, "userLikes", user.uid);
 
     try {
       if (isDisliked) {
         setSelected("");
       } else {
         setSelected("dislike");
+
         if (isLiked) {
+          // 좋아요 해제
           removeLike(videoId);
-          setLikeCount((prev) => Math.max(0, prev - 1));
           await setDoc(userLikesRef, {
             likes: likes.filter((id) => id !== videoId),
           });

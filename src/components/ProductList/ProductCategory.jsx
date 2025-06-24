@@ -40,8 +40,8 @@ const CategoryItem = styled.div`
   align-items: center;
   background: var(--grayF5);
   border-radius: 50px;
-  color: ${({ active }) => (active ? "var(--main)" : "var(--gray1)")};
-  background: ${({ active }) => (active ? "var(--gray1)" : "var(--grayF5)")};
+  color: ${({ $active }) => ($active ? "var(--main)" : "var(--gray1)")};
+  background: ${({ $active }) => ($active ? "var(--gray1)" : "var(--grayF5)")};
   padding: 10px 16px;
   cursor: pointer;
   transition: 0.3s;
@@ -108,6 +108,15 @@ const SearchBar = styled.div`
     width: 80%;
     margin-bottom: 20%;
   }
+  @media screen and (max-width: 1024px) {
+    width: 70%;
+    margin-bottom: 10%;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    padding: 0 15px;
+    margin-bottom: 10px;
+  }
 `;
 
 const TabletContainer = styled.div`
@@ -138,14 +147,19 @@ const Sidebar = styled.div`
   flex-direction: column;
   gap: 12px;
 
+  @media screen and (max-width: 768px) {
+    width: 150px;
+  }
   @media screen and (max-width: 500px) {
     width: 100%;
-    padding: 0 3%;
+    padding-left: 15px;
+    /* padding: 0 3%; */
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    gap: 0;
-    span:first-child {
+    flex-wrap: wrap;
+    gap: 3%;
+    & > div:first-child {
       display: none;
     }
     svg {
@@ -159,34 +173,36 @@ const SidebarToggle = styled.div`
   span {
     font-weight: bold;
   }
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const SidebarItem = styled.div`
   font-size: 1.6rem;
-  color: ${({ active }) => (active ? "var(--bg)" : "var(--gray8)")};
-  font-weight: ${({ active }) => (active ? 600 : 400)};
-  cursor: pointer;
+  color: ${({ $active }) => ($active ? "var(--bg)" : "var(--gray8)")};
+  font-weight: ${({ $active }) => ($active ? 600 : 400)};
   transition: all 0.3s;
+  cursor: pointer;
+  word-break: keep-all;
   &:hover {
     color: var(--bg);
   }
-  @media screen and (max-width: 500px) {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  @media screen and (max-width: 768px) {
     font-size: 1.4rem;
-    padding: 12px 0;
+  }
+  @media screen and (max-width: 500px) {
+    /* width: 100%; */
+    font-size: 1.4rem;
+    padding: 10px 0;
   }
 `;
 
 const Sort = styled.div`
   margin-top: 10px;
-  @media screen and (max-width: 1024px) {
-  }
+
   @media screen and (max-width: 500px) {
-    margin-left: 3%;
+    margin-left: 15px;
   }
 `;
 
@@ -261,7 +277,7 @@ const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
           {Categories.map((category) => (
             <CategoryItem
               key={category}
-              active={selectCollabo === category ? "active" : ""}
+              $active={selectCollabo === category ? "active" : ""}
               onClick={() => handleCategoryClick(category)}
             >
               {category}
@@ -329,7 +345,7 @@ const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
             Categories.map((cat) => (
               <SidebarItem
                 key={cat}
-                active={selectCollabo === cat}
+                $active={selectCollabo === cat}
                 onClick={() => {
                   handleCategoryClick(cat); // 통일된 동작
                 }}
