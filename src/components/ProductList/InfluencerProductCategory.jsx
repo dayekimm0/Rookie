@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -48,8 +48,6 @@ const CategoryItem = styled.div`
 
   @media screen and (max-width: 1440px) {
     font-size: 1.4rem;
-  }
-  @media screen and (max-width: 1024px) {
   }
 `;
 
@@ -108,10 +106,6 @@ const SearchBar = styled.div`
     width: 80%;
     margin-bottom: 20%;
   }
-  @media screen and (max-width: 1024px) {
-    width: 70%;
-    margin-bottom: 10%;
-  }
   @media screen and (max-width: 500px) {
     width: 100%;
     padding: 0 15px;
@@ -123,7 +117,6 @@ const TabletContainer = styled.div`
   display: none;
 
   @media screen and (max-width: 1024px) {
-    display: block;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -153,12 +146,12 @@ const Sidebar = styled.div`
   @media screen and (max-width: 500px) {
     width: 100%;
     padding-left: 15px;
-    /* padding: 0 3%; */
     flex-direction: row;
     justify-content: start;
     align-items: center;
     flex-wrap: wrap;
     gap: 3%;
+
     & > div:first-child {
       display: none;
     }
@@ -192,7 +185,6 @@ const SidebarItem = styled.div`
     font-size: 1.4rem;
   }
   @media screen and (max-width: 500px) {
-    /* width: 100%; */
     font-size: 1.4rem;
     padding: 10px 0;
   }
@@ -206,78 +198,36 @@ const Sort = styled.div`
   }
 `;
 
-const Categories = [
-  "ALL",
-  "유니폼",
-  "응원용품",
-  "의류",
-  "잡화",
-  "COLLABORATION",
-];
-
-const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
-  const {
-    selectCollabo,
-    setSelectCollabo,
-    selectedBrand,
-    setSelectedBrand,
-    sort,
-    setSort,
-    setSelectedCategory,
-  } = useProductStore();
-
+const InfluencerProductCategory = ({
+  products = [],
+  searchTerm,
+  setSearchTerm,
+}) => {
+  const { selectedCategory, setSelectedCategory, sort, setSort } =
+    useProductStore();
   const [showCategories, setShowCategories] = useState(true);
-  const brandRefs = useRef({});
 
-  const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
-
-  const collaborationBrands = [
-    ...new Set(
-      products
-        .map((p) => p.collaboration)
-        .filter((c) => typeof c === "string" && c.trim() !== "")
-    ),
-  ];
-
-  // const subBrands =
-  //   selectCollabo === "COLLABORATION" ? collaborationBrands : brands;
+  // rookie.json에서 실제 category 목록 추출 및 중복 제거 + ALL 추가
+  const categories = useMemo(() => {
+    const cats = Array.from(
+      new Set(products.map((p) => p.category).filter(Boolean))
+    );
+    return ["ALL", ...cats];
+  }, [products]);
 
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
-    setSelectCollabo(cat);
-
-    if (cat === "COLLABORATION") {
-      setSelectedBrand(null);
-    }
   };
-
-  useEffect(() => {
-    if (
-      selectCollabo === "COLLABORATION" &&
-      brands.length > 0 &&
-      selectedBrand !== brands[0]
-    ) {
-      setSelectedBrand(brands[0]);
-    }
-  }, [selectCollabo, brands, selectedBrand, setSelectedBrand]);
-
-  useEffect(() => {
-    const el = brandRefs.current[selectedBrand];
-    if (el) {
-      const { offsetLeft, offsetWidth } = el;
-      setBgStyle({ left: offsetLeft, width: offsetWidth });
-    }
-  }, [selectedBrand]);
 
   return (
     <CategoryWrapper>
       {/* PC */}
       <CategoryContainer>
         <Category>
-          {Categories.map((category) => (
+          {categories.map((category) => (
             <CategoryItem
               key={category}
-              $active={selectCollabo === category ? "active" : ""}
+              $active={selectedCategory === category}
               onClick={() => handleCategoryClick(category)}
             >
               {category}
@@ -342,13 +292,11 @@ const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
           </SidebarToggle>
 
           {showCategories &&
-            Categories.map((cat) => (
+            categories.map((cat) => (
               <SidebarItem
                 key={cat}
-                $active={selectCollabo === cat}
-                onClick={() => {
-                  handleCategoryClick(cat); // 통일된 동작
-                }}
+                $active={selectedCategory === cat}
+                onClick={() => handleCategoryClick(cat)}
               >
                 {cat}
               </SidebarItem>
@@ -362,4 +310,4 @@ const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
   );
 };
 
-export default ProductCategory;
+export default InfluencerProductCategory;

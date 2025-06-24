@@ -23,12 +23,14 @@ const Container = styled.div`
   }
   @media screen and (max-width: 1024px) {
     width: 100%;
+    padding: 0 3%;
   }
   @media screen and (max-width: 768px) {
     width: 100%;
   }
   @media screen and (max-width: 500px) {
     width: 100%;
+    padding: 0 15px;
   }
   @media screen and (max-width: 375px) {
     width: 100%;
@@ -51,19 +53,19 @@ const Contents = styled.div`
   }
   @media screen and (max-width: 1024px) {
     width: 100%;
-    min-width: 1024px;
+    min-width: 0px;
   }
   @media screen and (max-width: 768px) {
     width: 100%;
-    min-width: 760px;
+    /* min-width: 760px; */
   }
   @media screen and (max-width: 500px) {
     width: 100%;
-    min-width: 500px;
+    /* min-width: 500px; */
   }
   @media screen and (max-width: 375px) {
     width: 100%;
-    min-width: 375px;
+    /* min-width: 375px; */
   }
 `;
 

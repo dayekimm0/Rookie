@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getTeamNameKor } from "../util";
 
 const CardContainer = styled.div`
   width: 290px;
@@ -149,16 +148,22 @@ const ProductInfo = styled.div`
   }
 `;
 
-const ProductCard = ({ data }) => {
+const InfluencerProductCard = ({ data }) => {
   const navigate = useNavigate();
 
   if (!data) return null;
+
+  const { thumbnail, name, price, product_price, team, id, influencer } = data;
 
   const handleClick = () => {
     navigate(`/store/${team}/${id}`);
   };
 
-  const { thumbnail, name, price, team, id } = data;
+  {
+    console.log("influencer:", influencer);
+  }
+
+  const displayPrice = price || product_price || "가격 정보 없음";
 
   return (
     <CardContainer onClick={handleClick}>
@@ -167,7 +172,7 @@ const ProductCard = ({ data }) => {
       </ProductImg>
       <ProductInfo>
         <div className="brandGo">
-          <div className="brand">{getTeamNameKor(team)}</div>
+          <div className="brand">{influencer}</div>
           <svg viewBox="0 0 8 15" fill="none">
             <path
               d="M1.48926 1.98944L6.99982 7.5L1.48926 13.0106"
@@ -179,10 +184,10 @@ const ProductCard = ({ data }) => {
         <div className="name">
           <div>{name}</div>
         </div>
-        <div className="price">{price}</div>
+        <div className="price">{displayPrice}</div>
       </ProductInfo>
     </CardContainer>
   );
 };
 
-export default ProductCard;
+export default InfluencerProductCard;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
-import ProductCard from "../ProductCard";
+import InfluencerProductCard from "../InfluencerProductCard";
 
 const ProductsList = styled.div`
   width: 100%;
@@ -11,7 +11,6 @@ const ProductsList = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding: 0 3%; */
 
   @media screen and (max-width: 1024px) {
     width: 100%;
@@ -85,7 +84,7 @@ const StyledPaginate = styled(ReactPaginate)`
   }
 `;
 
-const PaginateProduct = ({ items }) => {
+const InfluencerPaginateProduct = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(16);
 
@@ -99,18 +98,16 @@ const PaginateProduct = ({ items }) => {
     else if (width <= 1024) columns = 3;
     else if (width <= 1440) columns = 3;
 
-    // 화면 세로 방향 기준으로 2줄 고정 (원하면 가변 처리 가능)
-    const rows = 4;
+    const rows = 4; // 고정 4줄
     setItemsPerPage(columns * rows);
   };
 
   useEffect(() => {
-    calculateItemsPerPage(); // 초기 계산
+    calculateItemsPerPage(); // 초기 실행
     window.addEventListener("resize", calculateItemsPerPage);
     return () => window.removeEventListener("resize", calculateItemsPerPage);
   }, []);
 
-  // ✅ 페이지 계산
   const offset = currentPage * itemsPerPage;
   const currentItems = (items || []).slice(offset, offset + itemsPerPage);
   const pageCount = Math.ceil((items?.length || 0) / itemsPerPage);
@@ -124,7 +121,7 @@ const PaginateProduct = ({ items }) => {
       <ProductsList>
         <Products>
           {currentItems.map((item) => (
-            <ProductCard key={item.id} data={item} />
+            <InfluencerProductCard key={item.id} data={item} />
           ))}
         </Products>
       </ProductsList>
@@ -146,4 +143,4 @@ const PaginateProduct = ({ items }) => {
   );
 };
 
-export default PaginateProduct;
+export default InfluencerPaginateProduct;

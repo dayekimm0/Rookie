@@ -3,8 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 import authStore from "../stores/AuthStore";
+import { useVideoStore } from "../stores/videoStore";
 import { getTeamColor, getEmblem } from ".././util";
 import MyCoupon from "../components/Mypage/MyCouponModal";
 import coupon from ".././images/icons/coupon.svg";
@@ -354,9 +357,11 @@ const teamToEmblemId = {
 };
 
 const Mypage = () => {
-  const { userProfile } = authStore();
   const [modalState, setModalState] = useState(false);
   const [coupons, setCoupons] = useState([]);
+  const [likesLoading, setLikesLoading] = useState(true);
+  const { userProfile } = authStore();
+  const { videoIds, setVideoIds } = useVideoStore();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -414,6 +419,24 @@ const Mypage = () => {
 
     fetchCoupons();
   }, [userProfile]);
+
+  // 좋아요 누른 영상 수
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setLikesLoading(false);
+        return;
+      }
+
+      const snap = await getDoc(doc(db, "userLikes", user.uid));
+      setVideoIds(snap.data()?.likes || []);
+      setLikesLoading(false);
+    };
+    fetchLikes();
+  }, []);
+
+  console.log(videoIds);
 
   useEffect(() => {
     if (!userProfile) {
@@ -492,24 +515,31 @@ const Mypage = () => {
                 <Icon onClick={() => navigate("/mypage/myvideo")}>
                   <img src={thumbs_up} alt="thumbs_up" />
                   <p>좋아요</p>
-                  <span>132</span>
+                  <span>{videoIds.length}</span>
                 </Icon>
               </ProfileUnder>
             </Profile>
 
             <Nav>
               <ul>
-                {menuItem.map((item, index) => (
-                  <React.Fragment key={item.path}>
-                    <NavItem
-                      $isActive={location.pathname === item.path}
-                      onClick={() => navigate(item.path)}
-                    >
-                      {item.label}
-                    </NavItem>
-                    {index < menuItem.length - 1 && <span />}
-                  </React.Fragment>
-                ))}
+                {menuItem.map((item, index) => {
+                  const isActive =
+                    item.path === "/mypage/myvideo"
+                      ? location.pathname.startsWith(item.path)
+                      : location.pathname === item.path;
+
+                  return (
+                    <React.Fragment key={item.path}>
+                      <NavItem
+                        $isActive={isActive}
+                        onClick={() => navigate(item.path)}
+                      >
+                        {item.label}
+                      </NavItem>
+                      {index < menuItem.length - 1 && <span />}
+                    </React.Fragment>
+                  );
+                })}
               </ul>
             </Nav>
           </LeftInner>

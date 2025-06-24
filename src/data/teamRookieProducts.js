@@ -9,7 +9,7 @@ export const getTeamRookieProducts = (teamCode) => {
     ss_lns: [30, 31, 32, 33],
     kia_tgs: [34, 35, 36, 37],
     kt_wiz: [38, 39, 40, 41],
-    kw_hrs: [42, 43],
+    kw_hrs: [42, 43, 44],
   };
 
   return teamRookieProductsMap[teamCode] || [];

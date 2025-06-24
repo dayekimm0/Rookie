@@ -14,6 +14,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import banner_rookie from "../../images/banners/banner_rookie.png";
 import LogonRookielogo from "../../images/logos/Logon_Rookie_logo.svg";
+import { useNavigate } from "react-router-dom";
 
 const Inner = styled.div`
   display: flex;
