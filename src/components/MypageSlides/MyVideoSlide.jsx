@@ -10,6 +10,7 @@ import { parseISO8601Duration } from "../../utils/youtube";
 import BArrow from "../../images/icons/Bmain_banner_arr.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import PlayCard from "../Slides/PlayCard";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
@@ -99,13 +100,17 @@ const SvgSpinner = styled.svg`
   }
 `;
 
-
 const MyVideoSlide = ({ onSwiperReady }) => {
   const [videoIds, setVideoIds] = useState([]);
   const [likesLoading, setLikesLoading] = useState(true);
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const navigate = useNavigate();
+
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
+  };
 
   useEffect(() => {
     const fetchLikes = async () => {
@@ -146,22 +151,27 @@ const MyVideoSlide = ({ onSwiperReady }) => {
   }, [swiper]);
 
   const slides = useMemo(() => {
-    return videos.filter((video)=>{
-      const durationStr = video.contentDetails?.duration;
-      const seconds = parseISO8601Duration(durationStr);
-      return seconds > 99;
-    })
-    .map((video) => {
-      const vid = video.id;
-      const { title, thumbnails } = video.snippet;
-      const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
+    return videos
+      .filter((video) => {
+        const durationStr = video.contentDetails?.duration;
+        const seconds = parseISO8601Duration(durationStr);
+        return seconds > 99;
+      })
+      .map((video) => {
+        const vid = video.id;
+        const { title, thumbnails } = video.snippet;
+        const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
 
-      return (
-        <SwiperSlide key={vid}>
-          <PlayCard thumbnail={thumbUrl} title={title}  />
-        </SwiperSlide>
-      );
-    });
+        return (
+          <SwiperSlide key={vid}>
+            <PlayCard
+              thumbnail={thumbUrl}
+              title={title}
+              onClick={() => handleDetailClick(vid)}
+            />
+          </SwiperSlide>
+        );
+      });
   }, [videos]);
 
   if (likesLoading || videosLoading) {
@@ -184,7 +194,6 @@ const MyVideoSlide = ({ onSwiperReady }) => {
   if (slides.length === 0) {
     return <></>;
   }
-
 
   return (
     <Container>
