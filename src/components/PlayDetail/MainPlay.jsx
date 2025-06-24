@@ -3,24 +3,21 @@ import YouTube from "react-youtube";
 import LikeButton from "./LikeButton";
 
 const Container = styled.div`
-  width: 1200px;
+  /* width: 1200px; */
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  margin-right: 30px;
-  @media screen and (max-width: 1440px) {
+  /* margin-right: 30px; */
+  /* @media screen and (max-width: 1440px) {
     width: 900px;
   }
   @media screen and (max-width: 1024px) {
     width: 640px;
-  }
+  } */
   @media screen and (max-width: 768px) {
-    width: 100vw;
     margin: 0;
     padding: 0;
-  }
-  @media screen and (max-width: 500px) {
-    max-width: 100%;
   }
 `;
 
@@ -50,7 +47,6 @@ const PlayThumbnail = styled.div`
     transform: translateX(-50%);
   }
   @media screen and (max-width: 500px) {
-    max-width: 100%;
   }
 `;
 
@@ -58,6 +54,7 @@ const PlayTitle = styled.h1`
   font-size: 2.4rem;
   color: var(--light);
   font-weight: 600;
+  word-break: keep-all;
   @media screen and (max-width: 1440px) {
     font-size: 2.2rem;
     line-height: 1.2;
@@ -70,6 +67,7 @@ const PlayTitle = styled.h1`
     padding: 0 3%;
   }
   @media screen and (max-width: 500px) {
+    font-size: 1.6rem;
   }
 `;
 
@@ -108,6 +106,8 @@ const TeamLogo = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 40px;
+    height: 40px;
   }
 `;
 
@@ -125,6 +125,7 @@ const TeamName = styled.h2`
   }
 
   @media screen and (max-width: 500px) {
+    font-size: 1.4rem;
   }
 `;
 

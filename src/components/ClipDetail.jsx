@@ -24,37 +24,53 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  width: 36%;
-  height: 79%;
-  left: 34%;
-  top: 8%;
+  width: 33%;
+  height: auto;
+  /* border: 1px solid #ff0; */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  align-items: flex-end;
+  /* align-items: flex-end; */
+  justify-content: center;
   position: relative;
-  @media screen and (max-width: 1440px) {
-    width: 48%;
-    left: 28%;
+  @media screen and (max-width: 1600px) {
+    width: 36%;
+    /* left: 28%; */
+  }
+  @media screen and (max-width: 1280px) {
+    width: 45%;
   }
   @media screen and (max-width: 1024px) {
-    width: 66%;
-    left: 18%;
+    width: 50%;
   }
   @media screen and (max-width: 768px) {
-    width: 84%;
-    left: 10%;
+    width: 70%;
   }
   @media screen and (max-width: 500px) {
+    width: 74%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  @media screen and (max-width: 375px) {
+    width: 70%;
   }
 `;
 
 const WingWrapper = styled.div`
-  height: 100%;
+  /* border: 1px solid #f0f; */
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
 `;
 
 const WingConup = styled.div`
   flex: 1;
+  /* border: 1px solid #0f0; */
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const WingCon = styled.div`
@@ -62,10 +78,21 @@ const WingCon = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: start;
+  @media screen and (max-width: 500px) {
+    position: relative;
+  }
 `;
 
 const Btn = styled.div`
   margin-left: 20px;
+  @media screen and (max-width: 768px) {
+    margin-left: 10px;
+  }
+  @media screen and (max-width: 500px) {
+    position: absolute;
+    right: 0;
+    top: -20px;
+  }
 `;
 
 const stopScrollPropagation = (e) => e.stopPropagation();

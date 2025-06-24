@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import RecoPlay from "../components/PlayDetail/RecoPlay";
@@ -14,23 +14,21 @@ import {
   fetchPlaylistVideos,
 } from "../hook/useYoutubeContentList";
 import { playContents } from "../data/playcontents";
+import { parseISO8601Duration } from "../utils/youtube";
 
 const Container = styled.div`
   width: 100%;
   background: var(--gray1);
   padding: 0 5%;
-  overflow: hidden;
-  @media screen and (max-width: 1440px) {
-    padding: 0 3%;
-  }
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+
   @media screen and (max-width: 1024px) {
     padding: 0 3%;
   }
   @media screen and (max-width: 768px) {
     padding: 0;
-  }
-  @media screen and (max-width: 500px) {
-    padding: 0 1%;
   }
 `;
 
@@ -38,85 +36,75 @@ const PlayContent = styled.div`
   width: 100%;
   padding-top: 36px;
   display: flex;
-  justify-content: center;
-  align-items: start;
-  gap: 30px;
-
-  @media screen and (max-width: 1024px) {
-    gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* border: 1px solid #f00; */
+  @media screen and (max-width: 1800px) {
+    gap: 0px;
   }
-
   @media screen and (max-width: 768px) {
-    width: 100%;
     flex-direction: column;
     align-items: center;
     padding-top: 0;
   }
   @media screen and (max-width: 500px) {
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
     gap: 30px;
   }
 `;
 
 const RightContent = styled.div`
-  width: 1200px;
+  /* width: 1200px; */
+  width: 70%;
+  /* border: 1px solid #00f; */
+
   @media screen and (max-width: 1440px) {
-    width: 900px;
-  }
-  @media screen and (max-width: 1024px) {
-    width: 640px;
+    width: 66%;
   }
 
+  /* @media screen and (max-width: 1024px) {
+    width: 640px;
+  } */
   @media screen and (max-width: 768px) {
     width: 100%;
-  }
-  @media screen and (max-width: 500px) {
-    max-width: 100%;
   }
 `;
 
 const LeftContent = styled.div`
-  width: 498px;
-
+  width: 28%;
+  /* border: 1px solid #0f0; */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   @media screen and (max-width: 1440px) {
-    width: 400px;
+    width: 32%;
   }
   @media screen and (max-width: 1024px) {
-    width: 320px;
+    /* width: 320px; */
   }
-
-  @media screen and (max-width: 900px) {
-    max-width: 100%;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    margin-top: 20px;
   }
 `;
 
 const RecoPlayWrapper = styled.div`
   width: 100%;
-  height: 675px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  margin-bottom: 30px;
-  @media screen and (max-width: 1024px) {
-    height: 480px;
-    margin-bottom: 20px;
-  }
+  gap: 16px;
 `;
 
 const Divider = styled.div`
-  width: 1200px;
+  /* width: 1200px; */
+  width: 100%;
   height: 2px;
   background: var(--gray6);
   margin-top: 18px;
   @media screen and (max-width: 1440px) {
     width: 100%;
   }
-
-  @media screen and (max-width: 1024px) {
-  }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 500px) {
+    display: none;
   }
 `;
 
@@ -124,55 +112,73 @@ const CommentWrapper = styled.div`
   margin-top: 24px;
   background: var(--gray2);
   width: 100%;
-  height: 540px;
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
   @media screen and (max-width: 1024px) {
-    height: auto;
     min-height: 400px;
   }
-
   @media screen and (max-width: 768px) {
     width: 94%;
     margin: 24px 3% 0 3%;
   }
+  @media screen and (min-width: 501px) {
+    display: block;
+  }
   @media screen and (max-width: 500px) {
+    display: none;
+  }
+`;
+
+const CommentWrapperMobile = styled.div`
+  margin-top: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--gray2);
+  width: calc(100% - 30px);
+  border-radius: 14px;
+  color: var(--light);
+  padding: 18px 20px;
+  @media screen and (min-width: 501px) {
+    display: none;
   }
 `;
 
 const CommentTop = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-`;
-
-const CommentTitle = styled.h2`
-  gap: 6px;
-  font-size: 2rem;
-  font-weight: 300;
-  color: var(--light);
-  width: 100%;
-  display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
 
-  span {
-    font-size: 1.8rem;
-    font-weight: 600;
+  h2 {
+    font-size: 2rem;
+    font-weight: 300;
     color: var(--light);
+    display: flex;
+    align-items: center;
+
+    span {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+  }
+
+  button {
+    background: none;
+    color: var(--light);
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
   }
 `;
 
-function parseISODuration(iso) {
-  const match = iso.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
-  const minutes = parseInt(match?.[1] || "0", 10);
-  const seconds = parseInt(match?.[2] || "0", 10);
-  return minutes * 60 + seconds;
-}
+const CommentListBoxMobile = styled.div`
+  margin-top: 10px;
+  max-height: ${({ $show }) => ($show ? "1000px" : "110px")};
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+`;
 
 const PlayDetail = () => {
   const { videoId } = useParams();
@@ -180,13 +186,13 @@ const PlayDetail = () => {
   const [channelThumbnail, setChannelThumbnail] = useState(null);
   const [playlistVideos, setPlaylistVideos] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
-  const [highlightVideos, setHighlightVideos] = useState([]);
   const [highlightVideosFromPlayContents, setHighlightVideosFromPlayContents] =
     useState([]);
   const [
     highlightVideosFromShortsPlaylist,
     setHighlightVideosFromShortsPlaylist,
   ] = useState([]);
+  const [showMobileComments, setShowMobileComments] = useState(false);
 
   useEffect(() => {
     const loadHighlightFromPlayContents = async () => {
@@ -208,23 +214,20 @@ const PlayDetail = () => {
     loadHighlightFromShorts();
   }, []);
 
-  // 두 리스트 합치고 중복 제거 + 섞기
-  const mergedHighlightVideos = React.useMemo(() => {
+  const mergedHighlightVideos = useMemo(() => {
     const combined = [
       ...highlightVideosFromPlayContents,
       ...highlightVideosFromShortsPlaylist,
     ];
     const uniqueMap = new Map();
     combined.forEach((video) => uniqueMap.set(video.id, video));
-    const uniqueVideos = Array.from(uniqueMap.values());
-    return uniqueVideos.sort(() => 0.5 - Math.random());
+    return Array.from(uniqueMap.values()).sort(() => 0.5 - Math.random());
   }, [highlightVideosFromPlayContents, highlightVideosFromShortsPlaylist]);
 
   useEffect(() => {
     const loadData = async () => {
       const videoData = await fetchVideoDetailById(videoId);
       setVideoInfo(videoData);
-
       const thumbnail = await fetchChannelThumbnail(videoData.channelId);
       setChannelThumbnail(thumbnail);
 
@@ -237,14 +240,15 @@ const PlayDetail = () => {
             const title = video.title?.toLowerCase() || "";
             const durationInSeconds =
               typeof video.duration === "string"
-                ? parseISODuration(video.duration)
+                ? parseISO8601Duration(video.duration)
                 : video.duration;
+
             return (
               video.id !== videoId &&
               !title.includes("shorts") &&
               !title.includes("쇼츠") &&
               Number.isFinite(durationInSeconds) &&
-              durationInSeconds > 180
+              durationInSeconds <= 99 //
             );
           })
         );
@@ -260,22 +264,8 @@ const PlayDetail = () => {
     if (videoId) loadData();
   }, [videoId]);
 
-  useEffect(() => {
-    const loadHighlight = async () => {
-      const highlightConfig = playContents.highlight;
-      if (!highlightConfig) return;
-      const videos = await fetchPlaylistVideos(
-        highlightConfig.playlistId,
-        highlightConfig.max
-      );
-      setHighlightVideos(videos);
-    };
-
-    loadHighlight();
-  }, []);
-
-  // 모든 훅 호출 완료 후 조건 검사
   if (!videoInfo) return <div>로딩 중...</div>;
+
   return (
     <Container>
       <PlayContent>
@@ -287,7 +277,28 @@ const PlayDetail = () => {
             subscriberCount={videoInfo.subscriberCount}
             teamLogo={channelThumbnail}
           />
+
+          <CommentWrapperMobile>
+            <CommentTop>
+              <h2>
+                댓글 <span>{commentCount}</span>
+              </h2>
+              <button onClick={() => setShowMobileComments((prev) => !prev)}>
+                {showMobileComments ? "접기" : "더보기"}
+              </button>
+            </CommentTop>
+            <CommentListBoxMobile $show={showMobileComments}>
+              <CommentList
+                key={videoId}
+                videoId={videoId}
+                onCountChange={setCommentCount}
+              />
+              {showMobileComments && <PostCommentPart videoId={videoId} />}
+            </CommentListBoxMobile>
+          </CommentWrapperMobile>
+
           <Divider />
+
           <RecoProductPart
             videoTitle={videoInfo.title}
             channelTitle={videoInfo.channelTitle}
@@ -295,20 +306,19 @@ const PlayDetail = () => {
 
           <CommentWrapper>
             <CommentTop>
-              <CommentTitle>
+              <h2>
                 댓글 <span>{commentCount}</span>
-              </CommentTitle>
+              </h2>
             </CommentTop>
-
             <CommentList
               key={videoId}
               videoId={videoId}
               onCountChange={setCommentCount}
             />
-
             <PostCommentPart videoId={videoId} />
           </CommentWrapper>
         </RightContent>
+
         <LeftContent>
           <RecoPlayWrapper>
             {playlistVideos.slice(0, 4).map((video) => (

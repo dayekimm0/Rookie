@@ -1,42 +1,95 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import ClipDetail from "../ClipDetail";
 import { fetchClipProducts } from "../../utils/fetchClipProducts";
 import useHeaderStore from "../../stores/headerHeightStore";
+import useDragScroll from "../../hook/useDragScroll";
+
+const ClipListWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* border: 1px solid #0ff; */
+  @media screen and (max-width: 768px) {
+    padding: 0 3%;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 12px;
+    /* scrollbar-width: none;
+    -ms-overflow-style: none; */
+    -webkit-overflow-scrolling: touch;
+    &.dragging {
+      cursor: grabbing;
+      user-select: none;
+    }
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #bbb;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #888;
+    }
+    scrollbar-color: #bbb transparent;
+    scrollbar-width: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 0 15px;
+  }
+  /* &::-webkit-scrollbar {
+    display: none;
+  } */
+`;
 
 const ClipWrapper = styled.div`
-  width: 480px;
-  height: 860px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 9 / 16;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+
   @media screen and (max-width: 1440px) {
     width: 100%;
-    height: 710px;
+    /* height: 710px; */
   }
+
   @media screen and (max-width: 1024px) {
-    width: 314px;
-    height: 558px;
+    /* width: 314px;
+    height: 558px; */
   }
+
   @media screen and (max-width: 768px) {
+    width: 200px;
+    height: auto;
+    aspect-ratio: 9 / 16;
   }
   @media screen and (max-width: 500px) {
+    width: 180px;
   }
 `;
 
 const RecoClip = ({ videoList = [] }) => {
   const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [videosWithProducts, setVideosWithProducts] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const setScrollLocked = useHeaderStore((state) => state.setScrollLocked);
 
+  // 썸네일별 제품 불러오기
   useEffect(() => {
     const fetchAll = async () => {
       const result = await Promise.all(
@@ -53,17 +106,16 @@ const RecoClip = ({ videoList = [] }) => {
     }
   }, [videoList]);
 
-  // if (videosWithProducts.length === 0) return null;
+  // 화면 크기 감지
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  // const handleClick = () => {
-  //   setSelectedVideoId(videosWithProducts[0].id);
-  // };
-
-  // const handleClose = () => {
-  //   setSelectedVideoId(null);
-  // };
-
-  //클립 모달 스크롤 막기
+  // 스크롤 잠금
   useEffect(() => {
     if (selectedVideoId) {
       const y = window.scrollY;
@@ -92,17 +144,27 @@ const RecoClip = ({ videoList = [] }) => {
     setScrollLocked(!!selectedVideoId);
   }, [selectedVideoId, setScrollLocked]);
 
+  const scrollRef = useRef();
+  useDragScroll(scrollRef);
+
   return (
     <>
       {videosWithProducts.length > 0 && (
-        <ClipWrapper
-          onClick={() => setSelectedVideoId(videosWithProducts[0]?.id || null)}
-        >
-          <img
-            src={videosWithProducts[0]?.thumbnail}
-            alt={videosWithProducts[0]?.title || "clip_thumbnail"}
-          />
-        </ClipWrapper>
+        <ClipListWrapper ref={scrollRef}>
+          {(isMobile ? videosWithProducts : [videosWithProducts[0]]).map(
+            (video) => (
+              <ClipWrapper
+                key={video.id}
+                onClick={() => setSelectedVideoId(video.id)}
+              >
+                <img
+                  src={video.thumbnail}
+                  alt={video.title || "clip_thumbnail"}
+                />
+              </ClipWrapper>
+            )
+          )}
+        </ClipListWrapper>
       )}
 
       {selectedVideoId && (

@@ -11,13 +11,9 @@ const CommentWrapper = styled.div`
   align-items: start;
   gap: 8px;
   margin-bottom: 24px;
-  @media screen and (max-width: 1440px) {
-    width: 90%;
-  }
-  @media screen and (max-width: 1024px) {
-  }
 
   @media screen and (max-width: 500px) {
+    margin-bottom: 20px;
   }
 `;
 
@@ -41,6 +37,10 @@ const UserTeam = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    max-height: 26px;
   }
 `;
 
@@ -50,23 +50,23 @@ const CommentItem = styled.div`
   justify-content: start;
   align-items: start;
   gap: 8px;
+  width: calc(100% - 50px);
+  @media screen and (max-width: 768px) {
+    width: calc(100% - 38px);
+  }
+  @media screen and (max-width: 500px) {
+    width: 26px;
+    width: calc(100% - 34px);
+  }
+  @media screen and (max-width: 500px) {
+    width: calc(100% - 34px);
+  }
 `;
 
 const UserInfo = styled.div`
-  width: 1100px;
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  @media screen and (max-width: 1440px) {
-  }
-  @media screen and (max-width: 1024px) {
-    width: 540px;
-  }
-  @media screen and (max-width: 768px) {
-  }
-
-  @media screen and (max-width: 500px) {
-  }
 `;
 
 const UserName = styled.div`
@@ -79,6 +79,9 @@ const UserName = styled.div`
     color: var(--gray6);
     margin-left: 8px;
   }
+  @media screen and (max-width: 500px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const DeleteComment = styled.button`
@@ -87,12 +90,18 @@ const DeleteComment = styled.button`
   color: var(--grayC);
   text-decoration: underline;
   cursor: pointer;
+  @media screen and (max-width: 500px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const Comment = styled.div`
   color: var(--light);
   font-size: 1.4rem;
-  width: 90%;
+  word-break: keep-all;
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
 const Comments = ({ comments, onDeleteLocal }) => {
   const { user } = authStore();
@@ -103,13 +112,13 @@ const Comments = ({ comments, onDeleteLocal }) => {
     const now = new Date();
     const diff = (now - date) / 1000;
 
+    if (diff < 5) return "방금 전";
     if (diff < 60) return `${Math.floor(diff)}초 전`;
     if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
     if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
     if (diff < 604800) return `${Math.floor(diff / 86400)}일 전`;
     return `${Math.floor(diff / 604800)}주 전`;
   };
-
   const teamToEmblemId = {
     "기아 타이거즈": "1",
     "삼성 라이온즈": "2",

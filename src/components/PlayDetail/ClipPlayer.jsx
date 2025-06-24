@@ -5,25 +5,32 @@ import styled from "styled-components";
 
 const ModalPlay = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border-radius: 10px;
   overflow: hidden;
-  @media screen and (max-width: 1440px) {
+  /* border: 1px solid #0f0; */
+  aspect-ratio: 9 / 16;
+  & > div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+  }
+  iframe {
+    width: 100% !important;
+    height: auto;
+    aspect-ratio: 9 / 16;
   }
   @media screen and (max-width: 1024px) {
     height: 100%;
   }
-  @media screen and (max-width: 768px) {
-  }
-  @media screen and (max-width: 500px) {
-  }
+  /* @media screen and (max-width: 500px) {
+    height: 2580%;
+  } */
 `;
 
 const opts = {
-  width: "480px",
-  height: "780px",
+  // width: "480px",
+  // height: "780px",
   playerVars: { autoplay: 1, controls: 1 },
 };
 
