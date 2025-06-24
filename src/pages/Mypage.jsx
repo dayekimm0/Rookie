@@ -436,8 +436,6 @@ const Mypage = () => {
     fetchLikes();
   }, []);
 
-  console.log(videoIds);
-
   useEffect(() => {
     if (!userProfile) {
       navigate("/", { replace: true });
