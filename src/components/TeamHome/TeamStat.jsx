@@ -86,14 +86,6 @@ const StatsSection = styled.div`
   position: relative;
   background: var(--dark);
   color: var(--light);
-
-  @media screen and (max-width: 1024px) {
-    padding: 30px 0;
-  }
-
-  @media screen and (max-width: 768px) {
-    padding: 10px 0;
-  }
 `;
 
 // Gradient 오버레이 - 배너 하단에서 스탯 테이블 상단까지

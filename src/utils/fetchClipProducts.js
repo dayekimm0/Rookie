@@ -3,9 +3,9 @@ const teamMap = {
   ds_bas: ["doosan", "두산", "두산베어스"],
   ssg_lds: ["ssg", "쓱", "에스에스지"],
   hw_egs: ["hanwha", "한화", "한화이글스"],
-  kia_tgs: ["kia", "기아", "기아타이거즈"],
+  kia_tgs: ["kia", "기아", "기아타이거즈", "타이거즈"],
   kt_wiz: ["kt", "케이티", "kt위즈"],
-  nc_dns: ["nc", "엔씨", "엔씨다이노스"],
+  nc_dns: ["nc", "엔씨", "엔씨다이노스", "ncdinos"],
   lt_gnt: ["lotte", "롯데", "롯데자이언츠"],
   kw_hrs: ["kiwoom", "키움", "키움히어로즈"],
   ss_lns: ["samsung", "삼성", "삼성라이온즈"],
@@ -25,6 +25,7 @@ const pickRandom = (arr, n) => {
 };
 
 export async function fetchClipProducts(title) {
+  console.log(title);
   const teamCodes = extractTeamCodes(title);
 
   try {

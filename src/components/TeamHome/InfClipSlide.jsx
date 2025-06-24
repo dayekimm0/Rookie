@@ -14,6 +14,7 @@ import Shortscard from "../Slides/Shortscard";
 import ClipDetail from "../ClipDetail";
 import useHeaderStore from "../../stores/headerHeightStore";
 import Spinner from "../Spinner";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
 
 const Container = styled.div`
   position: relative;
@@ -62,6 +63,7 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
 
   const handleOpenModal = (id) => {
     setSelectedVideoId(id);
@@ -140,6 +142,20 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
       setScrollLocked(false);
     }
   }, [selectedVideoId]);
+
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      const results = await Promise.all(
+        details.map(async (video) => {
+          const products = await fetchClipProducts(video.snippet.title);
+          return { ...video, products };
+        })
+      );
+      setVideosWithProducts(results);
+    };
+
+    if (details.length > 0) fetchAllProducts();
+  }, [details]);
 
   const renderedSlides = useMemo(() => {
     return details.map((video, index) => (
@@ -245,7 +261,7 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
       {selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
-          videoList={details}
+          videoList={videosWithProducts}
           onClose={handleCloseModal}
         />
       )}
