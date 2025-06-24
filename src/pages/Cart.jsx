@@ -314,7 +314,7 @@ const Cart = () => {
                   key={item.id}
                   item={item}
                   isChecked={item.checked}
-                  onToggle={() => toggleCheckItem(item.id)}
+                  onToggle={() => toggleCheckItem(item.id, item.option)}
                 />
               ))
             ) : (

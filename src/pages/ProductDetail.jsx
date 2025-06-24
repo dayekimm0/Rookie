@@ -32,17 +32,8 @@ import review5 from "../images/review/review5.jpg";
 import review6 from "../images/review/review6.jpg";
 import review7 from "../images/review/review7.jpg";
 
-// mockup 이미지
-// import doosanUniform1 from "../images/mockup/doosan_bears_uniform1.jpg";
-// import doosanUniform2 from "../images/mockup/doosan_bears_uniform2.jpg";
-// import doosanUniform3 from "../images/mockup/doosan_bears_uniform3.jpg";
-// import doosanDetail from "../images/mockup/doosan_bears_uniform_details.jpg";
-
 // 홍보 배너 이미지
 import promotionBanner from "../images/banners/banner-strike_m.png";
-
-// 두산 엠블럼 이미지
-// import doosanEmblem from "../images/emblem/emblem_doosanB.svg";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -60,6 +51,7 @@ const TEAM_JSON_URLS = {
   kw_hrs: "https://rookiejson.netlify.app/teamJson/kw_hrs.json",
   ssg_lds: "https://rookiejson.netlify.app/teamJson/ssg_lds.json",
   kbo: "https://rookiejson.netlify.app/teamJson/kbo.json",
+  rookie: "https://rookiejson.netlify.app/teamJson/rookie.json", // 추가
 };
 
 // 카트 이동 주스턴트
@@ -356,46 +348,6 @@ const DetailContent = styled.div`
 
   @media (max-width: 375px) {
     min-height: 500px;
-  }
-`;
-
-// ImagePlaceholder를 상세정보용으로 별도 생성
-const DetailImagePlaceholder = styled.div`
-  width: 100%;
-  /* 명확한 높이 지정 */
-  height: 500px;
-  background-color: var(--light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed var(--light);
-
-  &::after {
-    content: "";
-    color: var(--light);
-    font-size: 18px;
-    font-weight: 500;
-  }
-
-  @media (max-width: 1200px) {
-    height: 450px;
-    &::after {
-      font-size: 17px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    height: 400px;
-    &::after {
-      font-size: 16px;
-    }
-  }
-
-  @media (max-width: 375px) {
-    height: 300px;
-    &::after {
-      font-size: 14px;
-    }
   }
 `;
 
@@ -1523,6 +1475,8 @@ const getTeamIdFromCode = (teamCode) => {
       return "9";
     case "kw_hrs":
       return "10";
+    case "rookie":
+      return "11"; // ROOKie 팀 코드 추가
     default:
       return "0";
   }
@@ -1564,7 +1518,7 @@ const ProductDetail = () => {
     addToCart({
       id: product.id,
       name: product.name,
-      price: parsePrice(product.price),
+      price: parsePrice(product, teamCode),
       images: product.detail?.detail_images || [],
       team: product.team,
       option: selectedOption ? [selectedOption] : [],
@@ -1588,7 +1542,7 @@ const ProductDetail = () => {
     const orderItem = {
       id: product.id,
       name: product.name,
-      price: parsePrice(product.price),
+      price: parsePrice(product, teamCode),
       images: product.detail?.detail_images || [],
       team: product.team,
       option: selectedOption ? [selectedOption] : [],
@@ -1650,42 +1604,23 @@ const ProductDetail = () => {
       isSecret: true,
     },
   ]);
+  // 가격 문자열을 숫자로 변환하는 헬퍼 함수 - ROOKie 상품 처리 추가
+  const parsePrice = (product, teamCode) => {
+    // ROOKie 상품인 경우 product_price 필드 사용
+    const price =
+      teamCode === "rookie"
+        ? product.product_price || product.price
+        : product.price;
 
-  // 팀 이름 → 코드 매핑 함수
-  // const getTeamCode = teamName => {
-  //   if (!teamName) return null;
-
-  //   // URL 디코딩을 적용 (특수문자 처리)
-  //   const decodedTeamName = decodeURIComponent(teamName);
-
-  //   const teamCodeMap = {
-  //     두산베어스: "ds_bas",
-  //     엔씨다이노스: "nc_dns",
-  //     삼성라이온즈: "ss_lns",
-  //     LG트윈스: "lg_twins",
-  //     KIA타이거즈: "kia_tgs",
-  //     롯데자이언츠: "lt_gnt",
-  //     KT위즈: "kt_wiz",
-  //     한화이글스: "hw_egs",
-  //     키움히어로즈: "kw_hrs",
-  //     SSG랜더스: "ssg_lds",
-  //     KBO: "kbo",
-  //   };
-
-  //   return teamCodeMap[teamName] || null;
-  // };
+    return typeof price === "number"
+      ? price
+      : parseInt(price.toString().replace(/[^\d]/g, ""), 10);
+  };
 
   const fetchProductData = async () => {
     setLoading(true);
     try {
       setError(null);
-
-      // 모든 구단의 데이터를 가져와서 해당 ID의 상품 찾기
-      // let selectedProduct = null;
-      // let allProducts = [];
-
-      // 모든 구단 JSON을 순차적으로 검색
-      // for (const [teamName, url] of Object.entries(TEAM_JSON_URLS)) {
 
       const url = TEAM_JSON_URLS[teamCode];
       const response = await axios.get(url);
@@ -1707,7 +1642,7 @@ const ProductDetail = () => {
       setProduct({
         id: selectedProduct.id,
         name: selectedProduct.name,
-        price: parsePrice(selectedProduct.price),
+        price: parsePrice(selectedProduct, teamCode),
         images: selectedProduct.detail?.detail_images || [],
         team: selectedProduct.team,
         options: selectedProduct.detail?.options || [],
@@ -1736,7 +1671,7 @@ const ProductDetail = () => {
         .map((product) => ({
           id: product.id,
           name: product.name,
-          price: parsePrice(product.price),
+          price: parsePrice(product, teamCode),
           image: product.thumbnail,
           team: product.team,
         }));
@@ -1757,10 +1692,10 @@ const ProductDetail = () => {
   }, [id]);
 
   // 가격 문자열을 숫자로 변환하는 헬퍼 함수
-  const parsePrice = (price) =>
-    typeof price === "number"
-      ? price
-      : parseInt(price.toString().replace(/[^\d]/g, ""), 10);
+  // const parsePrice = (price) =>
+  //   typeof price === "number"
+  //     ? price
+  //     : parseInt(price.toString().replace(/[^\d]/g, ""), 10);
 
   // 토글 시 높이 계산을 위한 useEffect 추가
   useEffect(() => {
@@ -1795,22 +1730,15 @@ const ProductDetail = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOptionDropdownOpen]);
 
   // 리뷰 모달 열기
-  const openReviewModal = () => {
-    setShowReviewModal(true);
-  };
-
+  const openReviewModal = () => setShowReviewModal(true);
   // 리뷰 모달 닫기
-  const closeReviewModal = () => {
-    setShowReviewModal(false);
-  };
-
+  const closeReviewModal = () => setShowReviewModal(false);
   // 리뷰 등록 처리
   const handleReviewSubmit = (reviewData) => {
     // 새 리뷰 객체 생성
@@ -1831,15 +1759,9 @@ const ProductDetail = () => {
   };
 
   // 문의 모달 열기
-  const openInquiryModal = () => {
-    setShowInquiryModal(true);
-  };
-
+  const openInquiryModal = () => setShowInquiryModal(true);
   // 문의 모달 닫기
-  const closeInquiryModal = () => {
-    setShowInquiryModal(false);
-  };
-
+  const closeInquiryModal = () => setShowInquiryModal(false);
   // 문의 등록 처리
   const handleInquirySubmit = (inquiryData) => {
     // 새 문의 객체 생성
@@ -2018,6 +1940,7 @@ const ProductDetail = () => {
               )}
             </ImageContainer>
           </SliderContainer>
+
           <PurchaseSection ref={purchaseSectionRef} isContent>
             <PurchaseSectionContent>
               {/* 제품 구매 정보와 버튼 */}
@@ -2043,7 +1966,12 @@ const ProductDetail = () => {
                     </div>
                   )}
                 </EmblemContainer>
-                <LicenseText>공식 라이선스 제품</LicenseText>
+                <LicenseText>
+                  {" "}
+                  {teamCode === "rookie"
+                    ? "인플루언서 콜라보 제품"
+                    : "공식 라이선스 제품"}
+                </LicenseText>
               </ProductMeta>
 
               <ProductTitle>{product?.name || "제품명"}</ProductTitle>
@@ -2483,7 +2411,11 @@ const ProductDetail = () => {
                   </div>
                 )}
               </EmblemContainer>
-              <LicenseText>공식 라이선스 제품</LicenseText>
+              <LicenseText>
+                {teamCode === "rookie"
+                  ? "인플루언서 콜라보 제품"
+                  : "공식 라이선스 제품"}
+              </LicenseText>
             </ProductMeta>
 
             <ProductTitle>{product?.name || "제품명"}</ProductTitle>
@@ -2560,6 +2492,7 @@ const ProductDetail = () => {
           </PurchaseSectionContent>
         </PurchaseSection>
       </ContentWrapper>
+
       <ContentWrapper>
         {/* 추천 상품 섹션 */}
         <RelatedProductsSection>
