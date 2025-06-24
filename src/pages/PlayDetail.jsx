@@ -27,10 +27,10 @@ const Container = styled.div`
     padding: 0 3%;
   }
   @media screen and (max-width: 768px) {
-    padding: 0 3%;
+    padding: 0;
   }
   @media screen and (max-width: 500px) {
-    padding: 0 2%;
+    padding: 0 1%;
   }
 `;
 
@@ -46,6 +46,12 @@ const PlayContent = styled.div`
     gap: 20px;
   }
 
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;
+  }
   @media screen and (max-width: 500px) {
     flex-direction: column;
     align-items: center;
@@ -63,6 +69,9 @@ const RightContent = styled.div`
     width: 640px;
   }
 
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
   @media screen and (max-width: 500px) {
     max-width: 100%;
   }
@@ -107,6 +116,8 @@ const Divider = styled.div`
 
   @media screen and (max-width: 1024px) {
   }
+  @media screen and (max-width: 768px) {
+  }
 `;
 
 const CommentWrapper = styled.div`
@@ -122,6 +133,10 @@ const CommentWrapper = styled.div`
     min-height: 400px;
   }
 
+  @media screen and (max-width: 768px) {
+    width: 94%;
+    margin: 24px 3% 0 3%;
+  }
   @media screen and (max-width: 500px) {
   }
 `;
