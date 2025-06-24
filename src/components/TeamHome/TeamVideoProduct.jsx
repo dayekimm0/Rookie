@@ -646,10 +646,7 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
     if (sectionType === "TEAM_STORE") {
       navigate(`/store/${teamCode}/${product.id}`);
     } else if (sectionType === "ROOKIE_PARTNER") {
-      // ROOKie 상품은 외부 링크로 이동 (detail_link가 있는 경우)
-      if (product.detail_link) {
-        window.open(product.detail_link, "_blank");
-      }
+      navigate(`/store/rookie/${product.id}`);
     }
   };
 

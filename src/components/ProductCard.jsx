@@ -126,7 +126,7 @@ const ProductInfo = styled.div`
     }
     .name {
       font-size: 1.4rem;
-      height: 35px;
+      height: 38px;
     }
     .price {
       font-size: 1.5rem;
@@ -141,6 +141,7 @@ const ProductInfo = styled.div`
     }
     .name {
       font-size: 1.3rem;
+      height: 35px;
     }
     .price {
       font-size: 1.4rem;
