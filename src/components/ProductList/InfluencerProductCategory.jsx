@@ -21,6 +21,9 @@ const CategoryContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 1440px) {
+    gap: 10px;
+  }
   @media screen and (max-width: 1024px) {
     display: none;
   }
@@ -31,6 +34,9 @@ const Category = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
+  @media screen and (max-width: 1440px) {
+    gap: 4px;
+  }
 `;
 
 const CategoryItem = styled.div`
@@ -43,8 +49,9 @@ const CategoryItem = styled.div`
   color: ${({ $active }) => ($active ? "var(--main)" : "var(--gray1)")};
   background: ${({ $active }) => ($active ? "var(--gray1)" : "var(--grayF5)")};
   padding: 10px 16px;
+  transition: all 0.3s;
   cursor: pointer;
-  transition: 0.3s;
+  word-break: keep-all;
 
   @media screen and (max-width: 1440px) {
     font-size: 1.4rem;
@@ -56,6 +63,9 @@ const SearchPart = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+  @media screen and (max-width: 1440px) {
+    gap: 0px;
+  }
 `;
 
 const SearchBar = styled.div`
@@ -84,7 +94,7 @@ const SearchBar = styled.div`
         font-size: 1.4rem;
         color: var(--gray1);
         &::placeholder {
-          font-size: 1.6rem;
+          font-size: 1.4rem;
           font-family: "pretendard";
           transition: all 0.3s;
           color: var(--grayC);
@@ -105,6 +115,10 @@ const SearchBar = styled.div`
   @media screen and (max-width: 1024px) {
     width: 80%;
     margin-bottom: 20%;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 70%;
+    margin-bottom: 10%;
   }
   @media screen and (max-width: 500px) {
     width: 100%;
@@ -145,12 +159,12 @@ const Sidebar = styled.div`
   }
   @media screen and (max-width: 500px) {
     width: 100%;
-    padding-left: 15px;
+    padding: 0 15px;
     flex-direction: row;
     justify-content: start;
     align-items: center;
     flex-wrap: wrap;
-    gap: 3%;
+    gap: 8px;
 
     & > div:first-child {
       display: none;
@@ -186,7 +200,7 @@ const SidebarItem = styled.div`
   }
   @media screen and (max-width: 500px) {
     font-size: 1.4rem;
-    padding: 10px 0;
+    padding-top: 6px;
   }
 `;
 
@@ -207,12 +221,33 @@ const InfluencerProductCategory = ({
     useProductStore();
   const [showCategories, setShowCategories] = useState(true);
 
-  // rookie.json에서 실제 category 목록 추출 및 중복 제거 + ALL 추가
   const categories = useMemo(() => {
-    const cats = Array.from(
+    const preferredOrder = [
+      "ALL",
+      "KIA",
+      "삼성",
+      "LG",
+      "두산",
+      "KT",
+      "SSG",
+      "롯데",
+      "한화",
+      "NC",
+      "키움",
+    ];
+    const uniqueCategories = Array.from(
       new Set(products.map((p) => p.category).filter(Boolean))
     );
-    return ["ALL", ...cats];
+
+    const ordered = preferredOrder.filter(
+      (cat) => cat === "ALL" || uniqueCategories.includes(cat)
+    );
+
+    const extras = uniqueCategories.filter(
+      (cat) => !preferredOrder.includes(cat)
+    );
+
+    return [...ordered, ...extras];
   }, [products]);
 
   const handleCategoryClick = (cat) => {
@@ -246,7 +281,7 @@ const InfluencerProductCategory = ({
                 <input
                   className="search_txt"
                   type="text"
-                  placeholder="search"
+                  placeholder="상품을 검색해주세요"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -273,7 +308,7 @@ const InfluencerProductCategory = ({
               <input
                 className="search_txt"
                 type="text"
-                placeholder="search"
+                placeholder="상품을 검색해주세요"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -7,7 +7,6 @@ import "swiper/css/navigation";
 
 import { PlayLeftBtn, PlayRightBtn } from "../Slides/NaviBtnStyles";
 import Arrow from "../../images/icons/main_banner_arr.svg";
-import PlusIcon from "../../images/icons/plusIcon.svg";
 
 import HighlightContent from "./HighlightContent";
 
@@ -18,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 
 import ClipDetail from "../ClipDetail";
 import useHeaderStore from "../../stores/headerHeightStore";
+
+import Spinner from "../Spinner";
 
 const ContentList = styled.div`
   height: 100%;
@@ -106,6 +107,18 @@ const HighlightRightBtn = styled(PlayRightBtn)`
   transform: translateY(-50%);
 `;
 
+const SlideLoaderWrapper = styled.div`
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 20vh;
+  }
+`;
+
 const getDiff = (slideIndex, activeIndex, length) => {
   let diff = Math.abs(slideIndex - activeIndex);
   if (diff > length / 2) diff = length - diff;
@@ -125,6 +138,7 @@ const HighlightList = ({ type, title }) => {
   const [swiper, setSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -200,62 +214,70 @@ const HighlightList = ({ type, title }) => {
     }
   }, [selectedVideoId]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <ContentList>
         <ContentTitle>
           <h2>{title}</h2>
-          {/* <div className="more" onClick={handleMoreClick}>
-            <span>더보기</span>
-            <img src={PlusIcon} alt="icon" />
-          </div> */}
         </ContentTitle>
 
         <Container>
-          <Swiper
-            modules={[Navigation, Autoplay]}
-            onSwiper={setSwiper}
-            onSlideChange={(swiper) => {
-              setActiveIndex(swiper.realIndex);
-            }}
-            loop={videos.length > 7}
-            centeredSlides={true}
-            slidesPerView={7}
-            spaceBetween={-50}
-            autoplay={{ delay: 10000, disableOnInteraction: false }}
-            allowTouchMove={false}
-            breakpoints={{
-              0: { slidesPerView: 3 },
-              520: { slidesPerView: 5 },
-              1024: { slidesPerView: 7 },
-            }}
-            style={{ paddingLeft: "50px", paddingRight: "50px" }}
-          >
-            {videos.map((video, idx) => {
-              const diff = getDiff(idx, activeIndex, videos.length);
-              const className = getClassByDiff(diff);
+          {isLoading ? (
+            <SlideLoaderWrapper>
+              <Spinner />
+            </SlideLoaderWrapper>
+          ) : (
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              onSwiper={setSwiper}
+              onSlideChange={(swiper) => {
+                setActiveIndex(swiper.realIndex);
+              }}
+              loop={videos.length > 7}
+              centeredSlides={true}
+              slidesPerView={7}
+              spaceBetween={-50}
+              autoplay={{ delay: 10000, disableOnInteraction: false }}
+              allowTouchMove={false}
+              breakpoints={{
+                0: { slidesPerView: 3 },
+                520: { slidesPerView: 5 },
+                1024: { slidesPerView: 7 },
+              }}
+              style={{ paddingLeft: "50px", paddingRight: "50px" }}
+            >
+              {videos.map((video, idx) => {
+                const diff = getDiff(idx, activeIndex, videos.length);
+                const className = getClassByDiff(diff);
 
-              return (
-                <SwiperSlide
-                  key={video.id}
-                  data-swiper-slide-index={idx}
-                  style={{
-                    position: "relative",
-                    maxWidth: "280px",
-                    aspectRatio: "9/16",
-                  }}
-                >
-                  <HighlightContent
-                    id={video.id}
-                    thumbnail={video.thumbnail}
-                    className={className}
-                    onOpenModal={handleOpenModal}
-                  />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-
+                return (
+                  <SwiperSlide
+                    key={video.id}
+                    data-swiper-slide-index={idx}
+                    style={{
+                      position: "relative",
+                      maxWidth: "280px",
+                      aspectRatio: "9/16",
+                    }}
+                  >
+                    <HighlightContent
+                      id={video.id}
+                      thumbnail={video.thumbnail}
+                      className={className}
+                      onOpenModal={handleOpenModal}
+                    />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          )}
           <HighlightLeftBtn onClick={handlePrev}>
             <img src={Arrow} alt="prev" />
           </HighlightLeftBtn>

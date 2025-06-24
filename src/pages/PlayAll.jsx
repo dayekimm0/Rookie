@@ -96,8 +96,6 @@ const StyledPaginate = styled(ReactPaginate)`
 const PlayAll = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  // const type = location.state?.type;
-  // const title = location.state?.title;
   const { type = "", title = "" } = location.state || {};
 
   const [videos, setVideos] = useState([]);
@@ -118,7 +116,6 @@ const PlayAll = () => {
         items = await fetchPlaylistVideos(config.playlistId, config.max, type);
       }
 
-      // 최신순 정렬
       const sorted = items.sort(
         (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
       );
@@ -130,7 +127,7 @@ const PlayAll = () => {
   }, [type]);
 
   const filteredVideos = selectedTeam
-    ? videos.filter((video) => video.teamName === selectedTeam)
+    ? videos.filter((video) => video.channelTitle === selectedTeam)
     : videos;
 
   const offset = currentPage * itemsPerPage;
@@ -141,7 +138,6 @@ const PlayAll = () => {
     setCurrentPage(selected);
   };
 
-  // 페이지 이동 시 스크롤 맨 위로
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
@@ -161,9 +157,6 @@ const PlayAll = () => {
             onClick={() => navigate(`/play/${item.id}`)}
           />
         ))}
-        {/* {filteredVideos.map((item, idx) => (
-          <PlayContent key={item.id || idx} {...item} type={type} />
-        ))} */}
       </ContentList>
       <PaginationWrapper>
         <StyledPaginate

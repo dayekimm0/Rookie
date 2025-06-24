@@ -12,6 +12,7 @@ import { playContents } from "../../data/playcontents";
 import { fetchPlaylistVideos } from "../../hook/useYoutubeContentList";
 import { fetchTeamPlaylists } from "../../hook/useTeamPlayList";
 import useHeaderStore from "../../stores/headerHeightStore";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
 
 const ContentList = styled.div`
   position: relative;
@@ -99,6 +100,7 @@ const ClipList = ({ type, title, externalVideos }) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
 
   useEffect(() => {
     const load = async () => {
@@ -185,6 +187,20 @@ const ClipList = ({ type, title, externalVideos }) => {
     }
   }, [selectedVideoId]);
 
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      const results = await Promise.all(
+        videos.map(async (video) => {
+          const products = await fetchClipProducts(video.title);
+          return { ...video, products };
+        })
+      );
+      setVideosWithProducts(results);
+    };
+
+    if (videos.length > 0) fetchAllProducts();
+  }, [videos]);
+
   return (
     <>
       <ContentList>
@@ -259,7 +275,7 @@ const ClipList = ({ type, title, externalVideos }) => {
         <ClipDetail
           videoId={selectedVideoId}
           onClose={handleCloseModal}
-          videoList={videos}
+          videoList={videosWithProducts}
         />
       )}
     </>

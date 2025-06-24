@@ -30,6 +30,9 @@ const Sort = styled.select`
   background-size: 16px auto;
   z-index: 3;
 
+  @media screen and (max-width: 1440px) {
+    padding: 10px 15px 10px 5px;
+  }
   @media screen and (max-width: 1024px) {
     padding: 10px 15px 10px 0;
   }
@@ -38,7 +41,7 @@ const Sort = styled.select`
   }
   @media screen and (max-width: 375px) {
     font-size: 1.2rem;
-    padding: 0 10px 0 0;
+    padding: 10px 10px 10px 0;
     background-size: 12px auto;
   }
 `;

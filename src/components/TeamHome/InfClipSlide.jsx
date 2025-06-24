@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import styled from "styled-components";
+import { Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import "swiper/css/virtual";
 import BArrow from "../../images/icons/arrow_small_w.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import {
@@ -12,6 +14,7 @@ import Shortscard from "../Slides/Shortscard";
 import ClipDetail from "../ClipDetail";
 import useHeaderStore from "../../stores/headerHeightStore";
 import Spinner from "../Spinner";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
 
 const Container = styled.div`
   position: relative;
@@ -60,6 +63,7 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
 
   const handleOpenModal = (id) => {
     setSelectedVideoId(id);
@@ -139,6 +143,39 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
     }
   }, [selectedVideoId]);
 
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      const results = await Promise.all(
+        details.map(async (video) => {
+          const products = await fetchClipProducts(video.snippet.title);
+          return { ...video, products };
+        })
+      );
+      setVideosWithProducts(results);
+    };
+
+    if (details.length > 0) fetchAllProducts();
+  }, [details]);
+
+  const renderedSlides = useMemo(() => {
+    return details.map((video, index) => (
+      <SwiperSlide key={video.id} virtualIndex={index}>
+        <Shortscard
+          thumbnail={
+            video.snippet.thumbnails?.maxres?.url ||
+            video.snippet.thumbnails?.medium?.url
+          }
+          title={video.snippet.title}
+          channelTitle={video.snippet.channelTitle}
+          views={video.statistics.viewCount}
+          likes={video.statistics.likeCount}
+          onOpenModal={handleOpenModal}
+          id={video.id}
+        />
+      </SwiperSlide>
+    ));
+  }, [details, handleOpenModal]);
+
   if (isLoading)
     return (
       <SpinnerWrap>
@@ -165,6 +202,8 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
         </div>
         <SlideContainer>
           <Swiper
+            modules={[Virtual]}
+            virtual
             slidesPerView={4}
             slidesPerGroup={4}
             spaceBetween={20}
@@ -215,29 +254,14 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
               },
             }}
           >
-            {details.map((video) => (
-              <SwiperSlide key={video.id}>
-                <Shortscard
-                  thumbnail={
-                    video.snippet.thumbnails?.maxres?.url ||
-                    video.snippet.thumbnails?.medium?.url
-                  }
-                  title={video.snippet.title}
-                  channelTitle={video.snippet.channelTitle}
-                  views={video.statistics.viewCount}
-                  likes={video.statistics.likeCount}
-                  onOpenModal={handleOpenModal}
-                  id={video.id}
-                />
-              </SwiperSlide>
-            ))}
+            {renderedSlides}
           </Swiper>
         </SlideContainer>
       </Container>
       {selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
-          videoList={details}
+          videoList={videosWithProducts}
           onClose={handleCloseModal}
         />
       )}

@@ -31,7 +31,7 @@ const Card = styled.div`
   width: 100%;
   aspect-ratio: 16 /9;
   border-radius: 8px;
-  background: var(--grayC);
+  /* background: var(--grayC); */
   img {
     width: 100%;
     height: 100%;

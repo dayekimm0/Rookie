@@ -272,20 +272,24 @@ const InfAllContent = ({ clipVideos = [], playVideos = [] }) => {
         >
           ALL
         </button>
-        <button
-          className={currentTab === "clip" ? "active" : null}
-          disabled={!clipReady}
-          onClick={() => setCurrentTab("clip")}
-        >
-          CLIP
-        </button>
-        <button
-          className={currentTab === "play" ? "active" : null}
-          disabled={!playReady}
-          onClick={() => setCurrentTab("play")}
-        >
-          PLAY
-        </button>
+
+        {clipVideos.length > 0 && (
+          <button
+            className={currentTab === "clip" ? "active" : null}
+            onClick={() => setCurrentTab("clip")}
+          >
+            CLIP
+          </button>
+        )}
+
+        {playVideos.length > 0 && (
+          <button
+            className={currentTab === "play" ? "active" : null}
+            onClick={() => setCurrentTab("play")}
+          >
+            PLAY
+          </button>
+        )}
       </Tabs>
 
       {currentTab === "all" && (

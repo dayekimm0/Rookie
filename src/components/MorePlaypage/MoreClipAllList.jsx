@@ -4,6 +4,7 @@ import ClipContent from "../Play/ClipContent";
 import useHeaderStore from "../../stores/headerHeightStore";
 import ClipDetail from "../ClipDetail";
 import ReactPaginate from "react-paginate";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
 
 const ClipListWrap = styled.div`
   display: grid;
@@ -62,6 +63,7 @@ const MoreClipAllList = ({
   const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 21;
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
 
   const offset = currentPage * itemsPerPage;
   const currentItems = externalVideos.slice(offset, offset + itemsPerPage);
@@ -105,6 +107,20 @@ const MoreClipAllList = ({
     }
   }, [selectedVideoId]);
 
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      const results = await Promise.all(
+        externalVideos.map(async (video) => {
+          const products = await fetchClipProducts(video.title);
+          return { ...video, products };
+        })
+      );
+      setVideosWithProducts(results);
+    };
+
+    if (externalVideos.length > 0) fetchAllProducts();
+  }, [externalVideos]);
+
   if (externalVideos.length === 0) return null;
 
   return (
@@ -133,7 +149,7 @@ const MoreClipAllList = ({
       {modalEnabled && selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
-          videoList={currentItems}
+          videoList={videosWithProducts.slice(offset, offset + itemsPerPage)}
           onClose={() => setSelectedVideoId(null)}
         />
       )}
