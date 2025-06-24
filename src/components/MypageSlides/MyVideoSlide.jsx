@@ -1,15 +1,16 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase";
 import { useYoutubeVideoDetails } from "../../hook/useYoutubePlayList";
 import { parseISO8601Duration } from "../../utils/youtube";
-import BArrow from "../../images/icons/Bmain_banner_arr.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
+import { useVideoStore } from "../../stores/videoStore";
+
 import PlayCard from "../Slides/PlayCard";
+import BArrow from "../../images/icons/Bmain_banner_arr.svg";
 
 const Container = styled.div`
   position: relative;
@@ -99,28 +100,21 @@ const SvgSpinner = styled.svg`
   }
 `;
 
-
 const MyVideoSlide = ({ onSwiperReady }) => {
-  const [videoIds, setVideoIds] = useState([]);
-  const [likesLoading, setLikesLoading] = useState(true);
+  const { videoIds, likesLoading, fetchVideoIds } = useVideoStore();
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const navigate = useNavigate();
 
+  const handleDetailClick = (videoId) => {
+    navigate(`/play/${videoId}`);
+  };
+
+  // 좋아요 목록 fetch
   useEffect(() => {
-    const fetchLikes = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        setLikesLoading(false);
-        return;
-      }
-
-      const snap = await getDoc(doc(db, "userLikes", user.uid));
-      setVideoIds(snap.data()?.likes || []);
-      setLikesLoading(false);
-    };
-    fetchLikes();
-  }, []);
+    fetchVideoIds();
+  }, [fetchVideoIds]);
 
   const idsParam = useMemo(() => {
     return videoIds.length ? videoIds.join(",") : null;
@@ -129,8 +123,7 @@ const MyVideoSlide = ({ onSwiperReady }) => {
   const { data: videos = [], isLoading: videosLoading } =
     useYoutubeVideoDetails(idsParam, !likesLoading && !!idsParam > 0);
 
-  // swiper
-
+  // 슬라이드
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
   }, [swiper]);
@@ -145,23 +138,27 @@ const MyVideoSlide = ({ onSwiperReady }) => {
     }
   }, [swiper]);
 
+  // 영상 디테일
   const slides = useMemo(() => {
-    return videos.filter((video)=>{
-      const durationStr = video.contentDetails?.duration;
-      const seconds = parseISO8601Duration(durationStr);
-      return seconds > 99;
-    })
-    .map((video) => {
-      const vid = video.id;
-      const { title, thumbnails } = video.snippet;
-      const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
+    return videos
+      .filter(
+        (video) => parseISO8601Duration(video.contentDetails.duration) > 99
+      )
+      .map((video) => {
+        const vid = video.id;
+        const { title, thumbnails } = video.snippet;
+        const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
 
-      return (
-        <SwiperSlide key={vid}>
-          <PlayCard thumbnail={thumbUrl} title={title}  />
-        </SwiperSlide>
-      );
-    });
+        return (
+          <SwiperSlide key={vid}>
+            <PlayCard
+              thumbnail={thumbUrl}
+              title={title}
+              onClick={() => handleDetailClick(vid)}
+            />
+          </SwiperSlide>
+        );
+      });
   }, [videos]);
 
   if (likesLoading || videosLoading) {
@@ -184,7 +181,6 @@ const MyVideoSlide = ({ onSwiperReady }) => {
   if (slides.length === 0) {
     return <></>;
   }
-
 
   return (
     <Container>

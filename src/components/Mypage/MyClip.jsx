@@ -2,78 +2,55 @@ import { useMemo, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useYoutubeVideoDetails } from "../../hook/useYoutubePlayList";
 import { parseISO8601Duration } from "../../utils/youtube";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
+import { useVideoStore } from "../../stores/videoStore";
+
+import NoItem from "./NoItem";
 import Shortscard from "../Slides/Shortscard";
+import ClipDetail from "../ClipDetail";
 
 const Container = styled.div`
-  position: relative;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   color: var(--gray2);
   gap: 10px;
-  .btns {
-    position: absolute;
-    display: flex;
-    gap: 16px 40px;
-    top: -34px;
-    right: 0;
-  }
+  row-gap: 20px;
   p {
     color: var(--gray1);
     word-break: keep-all;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 2;   
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     line-height: 1.3;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
+    font-weight: 300;
   }
-  @media screen and (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
+  @media screen and (max-width: 1024px) {
+    p {
+      font-size: 1.4rem;
+    }
   }
-`;
-
-const Wrapper = styled.div`
-display: flex;
-flex-direction: column;
-gap: 8px;
-`
-
-const CardWrapper = styled.div`
-  aspect-ratio: 9 / 16;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #f1f1f1;
-  display: flex;
-  flex-direction: column;
-`;
-
-const ThumbnailImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @media screen and (max-width: 500px) {
+    p {
+      font-size: 1.2rem;
+    }
+  }
 `;
 
 const MyClip = () => {
-  const [videoIds, setVideoIds] = useState([]);
-  const [likesLoading, setLikesLoading] = useState(true);
-  useEffect(() => {
-    const fetchLikes = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        setLikesLoading(false);
-        return;
-      }
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
+  const { videoIds, likesLoading, fetchVideoIds } = useVideoStore();
 
-      const snap = await getDoc(doc(db, "userLikes", user.uid));
-      setVideoIds(snap.data()?.likes || []);
-      setLikesLoading(false);
-    };
-    fetchLikes();
-  }, []);
+  // 좋아요 목록 fetch
+  useEffect(() => {
+    fetchVideoIds();
+  }, [fetchVideoIds]);
 
   const idsParam = useMemo(() => {
     return videoIds.length ? videoIds.join(",") : null;
@@ -82,29 +59,92 @@ const MyClip = () => {
   const { data: videos = [], isLoading: videosLoading } =
     useYoutubeVideoDetails(idsParam, !likesLoading && !!idsParam > 0);
 
-  const slides = useMemo(() => {
-    return videos.filter((video)=>{
-      const durationStr = video.contentDetails?.duration;
-      const seconds = parseISO8601Duration(durationStr);
-      return seconds <= 99;
-    })
-    .map((video) => {
-      const vid = video.id;
-      const { title, thumbnails } = video.snippet;
-      const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
+  // 영상 디테일
+  const handleOpenModal = (id) => {
+    console.log("open modal for videoId:", id);
+    setSelectedVideoId(id);
+  };
 
-      return (
-      <Wrapper>
-        <CardWrapper key={vid}>
-          <ThumbnailImg src={thumbUrl} alt={title} />
-        </CardWrapper>
-          <p>{title}</p>
-      </Wrapper>
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    fetchVideoIds();
+  };
+
+  useEffect(() => {
+    if (selectedVideoId) {
+      const y = window.scrollY;
+      lenis.stop();
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${y}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.dataset.scrollY = y;
+    } else {
+      const y = parseFloat(document.body.dataset.scrollY || "0");
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+
+      window.scrollTo(0, y);
+      lenis.start();
+    }
+  }, [selectedVideoId]);
+
+  useEffect(() => {
+    if (!videos.length) return;
+    (async () => {
+      const results = await Promise.all(
+        videos.map(async (video) => ({
+          ...video,
+          products: await fetchClipProducts(video.snippet.title),
+        }))
       );
-    });
+      setVideosWithProducts(results);
+    })();
   }, [videos]);
 
-  return <Container>{slides}</Container>;
+  const slides = useMemo(() => {
+    return videos
+      .filter(
+        (video) => parseISO8601Duration(video.contentDetails.duration) <= 99
+      )
+      .map((video) => {
+        const vid = video.id;
+        const { title, thumbnails } = video.snippet;
+        const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
+
+        return (
+          <Shortscard
+            key={vid}
+            thumbnail={thumbUrl}
+            title={title}
+            onOpenModal={handleOpenModal}
+            id={vid}
+          />
+        );
+      });
+  }, [videos]);
+
+  if (slides.length === 0) {
+    return <NoItem />;
+  }
+
+  return (
+    <>
+      <Container>{slides}</Container>
+      {selectedVideoId && (
+        <ClipDetail
+          videoId={selectedVideoId}
+          videoList={videosWithProducts}
+          onClose={handleCloseModal}
+        />
+      )}
+    </>
+  );
 };
 
 export default MyClip;
