@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styled from "styled-components";
 import { playContents } from "../../data/playcontents";
 
@@ -45,35 +45,75 @@ const ContentsName = styled.div`
 `;
 
 const ContentTag = ({ type, onSelect }) => {
-  const [selectedKey, setSelectedKey] = useState(null);
+  const [selectedKey, setSelectedKey] = useState("전체");
 
-  const teamList = playContents.teamplay?.playlists || [];
-  const rookieList = playContents.rookieplay?.playlists || [];
+  const listToRender =
+    type === "teamplay"
+      ? playContents.teamplay.playlists
+      : playContents.rookieplay.playlists;
 
-  const listToRender = type === "teamplay" ? teamList : rookieList;
+  const preferredOrder = [
+    "KIA",
+    "삼성",
+    "LG",
+    "두산",
+    "KT",
+    "SSG",
+    "롯데",
+    "한화",
+    "NC",
+    "키움",
+  ];
+
+  const teamNameToShort = {
+    "기아 타이거즈": "KIA",
+    "삼성 라이온즈": "삼성",
+    "LG 트윈스": "LG",
+    "두산 베어스": "두산",
+    "KT 위즈": "KT",
+    "SSG 랜더스": "SSG",
+    "롯데 자이언츠": "롯데",
+    "한화 이글스": "한화",
+    "NC 다이노스": "NC",
+    "키움 히어로즈": "키움",
+  };
+
+  const sortedList = useMemo(() => {
+    return [...listToRender].sort((a, b) => {
+      const shortA = teamNameToShort[a.name] || "";
+      const shortB = teamNameToShort[b.name] || "";
+      const indexA = preferredOrder.indexOf(shortA);
+      const indexB = preferredOrder.indexOf(shortB);
+      return (
+        (indexA === -1 ? Infinity : indexA) -
+        (indexB === -1 ? Infinity : indexB)
+      );
+    });
+  }, [listToRender]);
 
   const handleClick = (name) => {
     setSelectedKey(name);
-    if (onSelect) onSelect(name === "전체" ? null : name);
+    if (onSelect) onSelect(name === "ALL" ? null : name);
   };
+
   return (
     <ContentList>
       <ContentTitle>
         <ContentsName
-          key="all"
-          active={selectedKey === "전체"}
-          onClick={() => handleClick("전체")}
+          key="ALL"
+          active={selectedKey === "ALL"}
+          onClick={() => handleClick("ALL")}
         >
-          전체
+          ALL
         </ContentsName>
 
-        {listToRender.map((item) => (
+        {sortedList.map((item) => (
           <ContentsName
             key={item.playlistId}
             active={selectedKey === item.name}
             onClick={() => handleClick(item.name)}
           >
-            {item.name}
+            {teamNameToShort[item.name] || item.name}
           </ContentsName>
         ))}
       </ContentTitle>
