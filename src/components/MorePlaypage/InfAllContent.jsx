@@ -13,20 +13,27 @@ import MoreClipAllList from "./MoreClipAllList";
 const BackBtn = styled.div`
   padding-top: 60px;
   color: var(--light);
-  font-size: 2.2rem;
+  font-size: 3rem;
   display: flex;
   align-items: center;
   gap: 14px;
   cursor: pointer;
   p {
-    font-size: 2.2rem;
+    font-size: 3rem;
     font-weight: 600;
   }
   @media screen and (max-width: 1024px) {
     padding-top: 50px;
-    font-size: 1.8rem;
+    font-size: 2.5rem;
     p {
-      font-size: 1.8rem;
+      font-size: 2.5rem;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
+    gap: 10px;
+    p {
+      font-size: 2rem;
     }
   }
   @media screen and (max-width: 500px) {
@@ -182,19 +189,20 @@ const InfAllContent = ({ clipVideos = [], playVideos = [] }) => {
     return 30;
   }, [currentTab]);
 
-  let filtered = [];
-  let pageCount = 0;
+  const filtered = useMemo(() => {
+    if (currentTab === "clip") return clipVideos;
+    if (currentTab === "play") return playVideos;
+    return [];
+  }, [currentTab, clipVideos, playVideos]);
 
-  if (currentTab === "clip") {
-    filtered = clipVideos;
-    pageCount = Math.ceil(clipVideos.length / itemsPerPage);
-  } else if (currentTab === "play") {
-    filtered = playVideos;
-    pageCount = Math.ceil(playVideos.length / itemsPerPage);
-  }
+  const pageCount = useMemo(() => {
+    return Math.ceil(filtered.length / itemsPerPage);
+  }, [filtered, itemsPerPage]);
 
-  const offset = currentPage * itemsPerPage;
-  const currentItems = filtered.slice(offset, offset + itemsPerPage);
+  const currentItems = useMemo(() => {
+    const offset = currentPage * itemsPerPage;
+    return filtered.slice(offset, offset + itemsPerPage);
+  }, [filtered, currentPage, itemsPerPage]);
 
   const handleDetailClick = (videoId) => {
     navigate(`/play/${videoId}`);

@@ -8,6 +8,16 @@ const Container = styled.div`
   flex-direction: column;
   gap: 18px;
   margin-right: 30px;
+  @media screen and (max-width: 1440px) {
+    width: 900px;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 640px;
+  }
+
+  @media screen and (max-width: 500px) {
+    max-width: 100%;
+  }
 `;
 
 const PlayThumbnail = styled.div`
@@ -32,6 +42,16 @@ const PlayTitle = styled.h1`
   font-size: 2.4rem;
   color: var(--light);
   font-weight: 600;
+  @media screen and (max-width: 1440px) {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 2rem;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const PlayInfoWrapper = styled.div`
@@ -62,6 +82,11 @@ const TeamLogo = styled.div`
     border-radius: 50%;
     object-fit: cover;
   }
+  @media screen and (max-width: 1024px) {
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const TeamInfo = styled.div`
@@ -73,41 +98,22 @@ const TeamName = styled.h2`
   font-weight: 500;
   color: var(--light);
   margin-bottom: 6px;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.8rem;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const TeamSubscribe = styled.h3`
   font-size: 1.4rem;
   color: var(--grayC);
-`;
-
-const PlayLike = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--gray3);
-  padding: 12px 20px;
-  border-radius: 50px;
-  gap: 16px;
-`;
-
-const HiddenRadio = styled.input.attrs({ type: "radio" })`
-  display: none;
-`;
-
-const StyledLabel = styled.label`
-  display: flex;
-  align-items: center;
-  color: ${({ $active }) => ($active ? "var(--main)" : "white")};
-  font-size: 2rem;
-  cursor: pointer;
-  span {
-    font-size: 1.6rem;
-    text-align: center;
-    width: 20px;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
   }
-  svg {
-    transition: all 0.3s ease;
-    color: ${({ $active }) => ($active ? "var(--main)" : "white")};
+
+  @media screen and (max-width: 500px) {
   }
 `;
 

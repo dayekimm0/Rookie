@@ -14,6 +14,7 @@ import Shortscard from "./Shortscard";
 import Spinner from "../Spinner";
 import ClipDetail from "../ClipDetail";
 import useHeaderStore from "../../stores/headerHeightStore";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
 
 const Title = styled.div`
   margin-top: 120px;
@@ -122,6 +123,7 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
   const navigate = useNavigate();
 
   const handleMoreClick = () => {
@@ -203,6 +205,19 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
       setScrollLocked(false);
     }
   }, [selectedVideoId]);
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      const results = await Promise.all(
+        details.map(async (video) => {
+          const products = await fetchClipProducts(video.snippet.title);
+          return { ...video, products };
+        })
+      );
+      setVideosWithProducts(results);
+    };
+
+    if (details.length > 0) fetchAllProducts();
+  }, [details]);
 
   if (isLoading)
     return (
@@ -304,7 +319,7 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
       {selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
-          videoList={details}
+          videoList={videosWithProducts}
           onClose={handleCloseModal}
         />
       )}

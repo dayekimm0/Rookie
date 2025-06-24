@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
-import authStore from "../../stores/authStore";
+import authStore from "../../stores/AuthStore";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
+import { getEmblem } from "../../util";
 
 const PostComment = styled.form`
   height: 50px;
@@ -10,6 +11,14 @@ const PostComment = styled.form`
   justify-content: start;
   align-items: center;
   gap: 12px;
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+    height: 40px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const UserInfo = styled.div`
@@ -34,6 +43,14 @@ const UserTeam = styled.div`
 const UserName = styled.p`
   min-width: 80px;
   color: var(--light);
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+    min-width: 50px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -73,7 +90,21 @@ const PostCommentPart = ({ videoId }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, userProfile } = authStore();
   const userName = userProfile?.nickname || "사용자";
+  const favoriteTeam = userProfile?.favoriteTeam || "";
   const isDisabled = value.trim() === "" || isSubmitting;
+
+  const teamToEmblemId = {
+    "기아 타이거즈": "1",
+    "삼성 라이온즈": "2",
+    "LG 트윈스": "3",
+    "두산 베어스": "4",
+    "KT 위즈": "5",
+    "SSG 랜더스": "6",
+    "롯데 자이언츠": "7",
+    "한화 이글스": "8",
+    "NC 다이노스": "9",
+    "키움 히어로즈": "10",
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,6 +117,7 @@ const PostCommentPart = ({ videoId }) => {
       author: userName,
       userId: user.uid,
       userProfileImage: userProfile?.profileImage || "",
+      favoriteTeam,
       videoId,
       createdAt: serverTimestamp(),
     };
@@ -104,8 +136,11 @@ const PostCommentPart = ({ videoId }) => {
     <PostComment onSubmit={handleSubmit}>
       <UserInfo>
         <UserTeam>
-          {userProfile?.profileImage && (
-            <img src={userProfile.profileImage} alt="profile" />
+          {favoriteTeam && (
+            <img
+              src={getEmblem(teamToEmblemId[favoriteTeam] || "1")}
+              alt="teamEmblem"
+            />
           )}
         </UserTeam>
         <UserName>{userName}</UserName>

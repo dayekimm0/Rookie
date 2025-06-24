@@ -6,6 +6,7 @@ import { matchHighlightToGames } from "../utils/youtube";
 import { useEffect, useState } from "react";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
+console.log("API_KEY", API_KEY);
 
 export const fetchYoutubePlaylist = async ({ queryKey }) => {
   const [_key, playlistId, maxResults] = queryKey;
@@ -34,7 +35,7 @@ export const fetchVideoDetails = async ({ queryKey }) => {
 
   const res = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
     params: {
-      part: "snippet,statistics",
+      part: "snippet,statistics,contentDetails",
       id: videoIds,
       key: API_KEY,
     },

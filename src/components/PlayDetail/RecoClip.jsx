@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ClipDetail from "../ClipDetail";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
+import useHeaderStore from "../../stores/headerHeightStore";
 
 const ClipWrapper = styled.div`
   width: 480px;
@@ -16,34 +18,98 @@ const ClipWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media screen and (max-width: 1440px) {
+    width: 100%;
+    height: 710px;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 314px;
+    height: 558px;
+  }
+  @media screen and (max-width: 768px) {
+  }
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const RecoClip = ({ videoList = [] }) => {
   const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
+  const setScrollLocked = useHeaderStore((state) => state.setScrollLocked);
 
-  if (videoList.length === 0) return null;
+  useEffect(() => {
+    const fetchAll = async () => {
+      const result = await Promise.all(
+        videoList.map(async (video) => {
+          const products = await fetchClipProducts(video.title);
+          return { ...video, products };
+        })
+      );
+      setVideosWithProducts(result);
+    };
 
-  // 썸네일 한 개만 사용 (첫 번째 영상)
-  const video = videoList[0];
+    if (videoList.length > 0) {
+      fetchAll();
+    }
+  }, [videoList]);
 
-  const handleClick = () => {
-    setSelectedVideoId(video.id);
-  };
+  // if (videosWithProducts.length === 0) return null;
 
-  const handleClose = () => {
-    setSelectedVideoId(null);
-  };
+  // const handleClick = () => {
+  //   setSelectedVideoId(videosWithProducts[0].id);
+  // };
+
+  // const handleClose = () => {
+  //   setSelectedVideoId(null);
+  // };
+
+  //클립 모달 스크롤 막기
+  useEffect(() => {
+    if (selectedVideoId) {
+      const y = window.scrollY;
+      lenis.stop();
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${y}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.dataset.scrollY = y;
+    } else {
+      const y = parseFloat(document.body.dataset.scrollY || "0");
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+
+      window.scrollTo(0, y);
+      lenis.start();
+    }
+  }, [selectedVideoId]);
+
+  useEffect(() => {
+    setScrollLocked(!!selectedVideoId);
+  }, [selectedVideoId, setScrollLocked]);
 
   return (
     <>
-      <ClipWrapper onClick={handleClick}>
-        <img src={video.thumbnail} alt={video.title || "clip_thumbnail"} />
-      </ClipWrapper>
+      {videosWithProducts.length > 0 && (
+        <ClipWrapper
+          onClick={() => setSelectedVideoId(videosWithProducts[0]?.id || null)}
+        >
+          <img
+            src={videosWithProducts[0]?.thumbnail}
+            alt={videosWithProducts[0]?.title || "clip_thumbnail"}
+          />
+        </ClipWrapper>
+      )}
+
       {selectedVideoId && (
         <ClipDetail
           videoId={selectedVideoId}
-          videoList={videoList}
-          onClose={handleClose}
+          videoList={videosWithProducts}
+          onClose={() => setSelectedVideoId(null)}
         />
       )}
     </>

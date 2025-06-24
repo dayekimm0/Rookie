@@ -12,6 +12,7 @@ const CommentListWrapper = styled.div`
   border-bottom: 1px solid var(--gray6);
   padding-top: 14px;
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
@@ -22,6 +23,15 @@ const CommentListWrapper = styled.div`
     background: var(--grayC);
     border-radius: 4px;
     cursor: pointer;
+  }
+  @media screen and (max-width: 1440px) {
+  }
+  @media screen and (max-width: 1024px) {
+    width: inherit;
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
   }
 `;
 
@@ -37,21 +47,35 @@ const CommentList = ({ videoId, onCountChange }) => {
       where("videoId", "==", videoId)
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+    // Firestore 실시간 구독 시작
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => {
+          const docData = doc.data();
 
-      const sorted = data.sort((a, b) => {
-        const aTime = a.createdAt?.toDate?.() || new Date(0);
-        const bTime = b.createdAt?.toDate?.() || new Date(0);
-        return bTime - aTime;
-      });
+          // createdAt 안전처리
+          const createdAtDate = docData.createdAt?.toDate
+            ? docData.createdAt.toDate()
+            : new Date(0);
 
-      setComments(sorted);
-      onCountChange?.(sorted.length);
-    });
+          return {
+            id: doc.id,
+            ...docData,
+            createdAt: createdAtDate,
+          };
+        });
+
+        // 최신순 정렬 (내림차순)
+        const sorted = data.sort((a, b) => b.createdAt - a.createdAt);
+
+        setComments(sorted);
+        onCountChange?.(sorted.length);
+      },
+      (error) => {
+        console.error("댓글 데이터 로드 실패:", error);
+      }
+    );
 
     return () => unsubscribe();
   }, [videoId, onCountChange]);
@@ -69,16 +93,20 @@ const CommentList = ({ videoId, onCountChange }) => {
         e.preventDefault();
       }
 
-      e.stopPropagation(); // 🛑 레니스 막기
+      e.stopPropagation();
     };
 
     el.addEventListener("wheel", handleWheel, { passive: false });
     return () => el.removeEventListener("wheel", handleWheel);
   }, []);
 
+  const handleDeleteLocal = (deletedId) => {
+    setComments((prev) => prev.filter((c) => c.id !== deletedId));
+  };
+
   return (
     <CommentListWrapper ref={scrollRef}>
-      <Comments comments={comments} />
+      <Comments comments={comments} onDeleteLocal={handleDeleteLocal} />
     </CommentListWrapper>
   );
 };

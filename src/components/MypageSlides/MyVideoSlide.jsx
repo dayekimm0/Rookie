@@ -6,7 +6,7 @@ import "swiper/css";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { useYoutubeVideoDetails } from "../../hook/useYoutubePlayList";
-
+import { parseISO8601Duration } from "../../utils/youtube";
 import BArrow from "../../images/icons/Bmain_banner_arr.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import PlayCard from "../Slides/PlayCard";
@@ -36,6 +36,69 @@ const SlideContainer = styled.div`
     }
   }
 `;
+
+const SlideLoaderWrapper = styled.div`
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
+const SvgSpinner = styled.svg`
+  animation: rotate 2s linear infinite;
+  width: 50px;
+  height: 50px;
+
+  .path {
+    stroke: var(--main);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+`;
+
 
 const MyVideoSlide = ({ onSwiperReady }) => {
   const [videoIds, setVideoIds] = useState([]);
@@ -83,25 +146,45 @@ const MyVideoSlide = ({ onSwiperReady }) => {
   }, [swiper]);
 
   const slides = useMemo(() => {
-    return videos.map((video) => {
+    return videos.filter((video)=>{
+      const durationStr = video.contentDetails?.duration;
+      const seconds = parseISO8601Duration(durationStr);
+      return seconds > 99;
+    })
+    .map((video) => {
       const vid = video.id;
       const { title, thumbnails } = video.snippet;
       const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
+
       return (
         <SwiperSlide key={vid}>
-          <PlayCard thumbnail={thumbUrl} title={title} />
+          <PlayCard thumbnail={thumbUrl} title={title}  />
         </SwiperSlide>
       );
     });
   }, [videos]);
 
   if (likesLoading || videosLoading) {
-    return <p>로딩 중...</p>;
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
   }
 
   if (slides.length === 0) {
     return <></>;
   }
+
 
   return (
     <Container>

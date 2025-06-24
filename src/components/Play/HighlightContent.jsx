@@ -22,6 +22,7 @@ const SlideBox = styled.div`
     z-index: 5;
     transform: translateX(-50%) scale(1);
     bottom: 0;
+    cursor: pointer;
   }
   &.diff-1 {
     z-index: 4;
