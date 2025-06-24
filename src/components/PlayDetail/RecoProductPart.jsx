@@ -9,7 +9,6 @@ import RecoProduct from "./RecoProduct";
 const RecoProductWrapper = styled.div`
   width: 100%;
   margin-top: 20px;
-  padding: 0 3%;
 `;
 
 const RecoProductTitle = styled.h1`
@@ -31,7 +30,7 @@ const RecoProductTitle = styled.h1`
 `;
 
 const StyledSwiper = styled(Swiper)`
-  height: 120px;
+  height: 140px;
   .swiper-scrollbar {
     width: 100%;
     background: var(--gray3);

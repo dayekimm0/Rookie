@@ -1,7 +1,6 @@
 import React, { memo } from "react";
 import styled from "styled-components";
 
-// 제목과 Like 버튼을 한 줄에 배치하는 래퍼
 const TitleRow = styled.div`
   width: 100%;
   display: flex;

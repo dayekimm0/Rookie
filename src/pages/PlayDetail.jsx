@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import RecoPlay from "../components/PlayDetail/RecoPlay";
@@ -14,6 +14,7 @@ import {
   fetchPlaylistVideos,
 } from "../hook/useYoutubeContentList";
 import { playContents } from "../data/playcontents";
+import { parseISO8601Duration } from "../utils/youtube";
 
 const Container = styled.div`
   width: 100%;
@@ -177,13 +178,6 @@ const CommentListBoxMobile = styled.div`
   transition: max-height 0.3s ease;
 `;
 
-function parseISODuration(iso) {
-  const match = iso.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
-  const minutes = parseInt(match?.[1] || "0", 10);
-  const seconds = parseInt(match?.[2] || "0", 10);
-  return minutes * 60 + seconds;
-}
-
 const PlayDetail = () => {
   const { videoId } = useParams();
   const [videoInfo, setVideoInfo] = useState(null);
@@ -218,7 +212,7 @@ const PlayDetail = () => {
     loadHighlightFromShorts();
   }, []);
 
-  const mergedHighlightVideos = React.useMemo(() => {
+  const mergedHighlightVideos = useMemo(() => {
     const combined = [
       ...highlightVideosFromPlayContents,
       ...highlightVideosFromShortsPlaylist,
@@ -234,22 +228,25 @@ const PlayDetail = () => {
       setVideoInfo(videoData);
       const thumbnail = await fetchChannelThumbnail(videoData.channelId);
       setChannelThumbnail(thumbnail);
+
       const playlistId = videoData.playlistId;
       if (playlistId) {
         const videos = await fetchPlaylistVideos(playlistId);
+
         setPlaylistVideos(
           videos.filter((video) => {
             const title = video.title?.toLowerCase() || "";
             const durationInSeconds =
               typeof video.duration === "string"
-                ? parseISODuration(video.duration)
+                ? parseISO8601Duration(video.duration)
                 : video.duration;
+
             return (
               video.id !== videoId &&
               !title.includes("shorts") &&
-              !title.includes("\uC1FC\uCE20") &&
+              !title.includes("쇼츠") &&
               Number.isFinite(durationInSeconds) &&
-              durationInSeconds > 180
+              durationInSeconds <= 99 //
             );
           })
         );
