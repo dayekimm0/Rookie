@@ -11,6 +11,7 @@
           "clip": "PLPuT2QymG4qU0zdn8f9dmEVitcg0VNYuj",
           "products": [
             {
+              "id": 0,
               "product_thumbnail": "https://shop-phinf.pstatic.net/20250514_146/1747208966490B50Cl_JPEG/55065074-E18F-4B76-85B8-344B1F46FC16.jpg?type=w860",
               "product_name": "팡뉴하X루키 야구 응원 리본핀",
               "product_price": "7,900원",
@@ -22,6 +23,7 @@
               }
             },
             {
+              "id": 1,
               "product_thumbnail": "https://cafe24img.poxo.com/spao/web/product/extra/small/202505/752bc760ab1648724d0f75bf4650cb2e.jpg",
               "product_name": "팡뉴하X루키X스파오 데님 유니폼",
               "product_price": "89,900원",
@@ -33,6 +35,7 @@
               }
             },
             {
+              "id": 2,
               "product_thumbnail": "https://cafe24img.poxo.com/ticketmdshop/web/product/small/20250424/18da0bcdf0a1fa5dd2264a6649553b59.jpg",
               "product_name": "[두산베어스] 응원 니트 머플러(홈)",
               "product_price": "25,000원",
@@ -44,6 +47,7 @@
               }
             },
             {
+              "id": 3,
               "product_thumbnail": "https://st.kakaocdn.net/product/gift/editor/20240510154946_1b0c8082b45247a6b4657ec766144221.png",
               "product_name": "두산베어스x망그러진 곰 머리띠",
               "product_price": "15,000원",
@@ -85,6 +89,7 @@
           "clip": null,
           "products": [
             {
+              "id": 4,
               "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250326/4947305/4947305_17440115244661_big.jpg?w=1200",
               "product_name": "[SSG랜더스]무신사 x SSG랜더스 25 저지",
               "product_price": "99,000원",
@@ -94,6 +99,7 @@
               }
             },
             {
+              "id": 5,
               "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250326/4947307/4947307_17434021510829_big.jpg?w=1200",
               "product_name": "[SSG랜더스]무신사 x SSG랜더스 25 피스테",
               "product_price": "99,000원",
@@ -103,6 +109,7 @@
               }
             },
             {
+              "id": 6,
               "product_thumbnail": "https://overthepitch.com/web/product/big/202310/f9497ec7f44073271e1ccbf742a4e45b.jpg",
               "product_name": "P X SUPER SSG LANDERS 1983 BASEBALL JERSEY",
               "product_price": "99,000원",
@@ -126,6 +133,7 @@
           "clip": "PLPuT2QymG4qVw950AXM3ID6Si1krju9C6",
           "products": [
             {
+              "id": 7,
               "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250326/4949263/4949263_17434690845648_big.jpg?w=1200",
               "product_name": "MSS x KBO 볼파크 반소매 티셔츠 차콜그레이 [인천 SSG 랜더스]",
               "product_price": "28,050원",
@@ -135,6 +143,7 @@
               }
             },
             {
+              "id": 8,
               "product_thumbnail": "https://image.msscdn.net/thumbnails/images/goods_img/20250306/4864099/4864099_17412287028648_big.jpg?w=1200",
               "product_name": "[SSG랜더스]무신사 x SSG랜더스 25 블랙 데님저지",
               "product_price": "119,000원",
@@ -144,6 +153,7 @@
               }
             },
             {
+              "id": 9,
               "product_thumbnail": "https://edkshop.com/web/product/extra/big/202504/225d2ce4669f23a5f1bd4599ce514cae.jpg",
               "product_name": "마데카 쿨링패치 KBO에디션(SSG) 4매 x 10개입",
               "product_price": "30,000원",
@@ -167,6 +177,7 @@
           "clip": "PLPuT2QymG4qWF48woB6UkhjMui-Z_q9t4",
           "products": [
             {
+              "id": 10,
               "product_thumbnail": "https://image.idus.com/image/files/703db5b8c5f244cb94d4fb9f69d263bc_720.jpg",
               "product_name": "추신영X루키 승리요정 야구공 키링",
               "product_price": "12,000원",
@@ -180,6 +191,7 @@
               }
             },
             {
+              "id": 11,
               "product_thumbnail": "https://the912.co.kr/web/product/extra/small/202502/f0f0c5e577cfd9ab51bb9fbe4e323b86.png",
               "product_name": "추신영X루키 왓츠인직관가방 속 그 향수",
               "product_price": "30,000원",
@@ -192,6 +204,7 @@
               }
             },
             {
+              "id": 12,
               "product_thumbnail": "https://d2p3mio45d5mbi.cloudfront.net/erp/shop/7148f04e-07f4-44d8-a77c-a193a3e0cf1820250527.jpg",
               "product_name": "추신영X루키 PVC 직관가방",
               "product_price": "32,000원",
@@ -210,6 +223,7 @@
           "clip": null,
           "products": [
             {
+              "id": 13,
               "product_thumbnail": "https://ncdinospodshop.cafe24.com/web/product/big/202502/2361d107f10a268320e2a231e5978557.png",
               "product_name": "휘친자 선언문 반팔 티셔츠(Black)",
               "product_price": "26,000원",
@@ -219,6 +233,7 @@
               }
             },
             {
+              "id": 14,
               "product_thumbnail": "https://ncdinospodshop.cafe24.com/web/product/big/202405/fddca26060fbc00ab6c2619899c1b1a8.png",
               "product_name": "A5 스티커 The Game Day",
               "product_price": "4,000원",
@@ -230,6 +245,7 @@
               }
             },
             {
+              "id": 15,
               "product_thumbnail": "https://ncdinospodshop.cafe24.com/web/product/big/202502/456077a43b77603429b561d328881c79.png",
               "product_name": "조자까 컬래버레이션 박민우 숄더 에코백",
               "product_price": "25,000원",
@@ -255,6 +271,7 @@
           "clip": "PLPuT2QymG4qUhyBWLY0zVyKjW9VfQG2dL",
           "products": [
             {
+              "id": 16,
               "product_thumbnail": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDEwMjJfNDcg%2FMDAxNzI5NTkxOTU4Njkw.LWVatloOtri0SZO08a8FlznD1LKPY11jkCQNnS4-obgg.YOiQanzCdGYcocXCYO2le0bfjK1-ZhgJrL2-p_PAoGsg.JPEG%2FKakaoTalk_20241022_185026934_01.jpg&type=sc960_832",
               "product_name": "슈야토야 키링",
               "product_price": "18,000원",
@@ -267,6 +284,7 @@
               }
             },
             {
+              "id": 17,
               "product_thumbnail": "https://search.pstatic.net/common/?src=http%3A%2F%2Fshopping.phinf.naver.net%2Fmain_5465047%2F54650470150.20250508195446.jpg&type=sc960_832",
               "product_name": "신문지 응원봉",
               "product_price": "5,000원",
@@ -278,6 +296,7 @@
               }
             },
             {
+              "id": 18,
               "product_thumbnail": "https://contents.lotteon.com/itemimage/20250604205912/LO/24/95/14/94/99/_2/49/51/49/50/0/LO2495149499_2495149500_1.jpg/dims/resizef/554X554",
               "product_name": "네이비 누리 망토 담요",
               "product_price": "29,000원",
@@ -298,6 +317,7 @@
           "clip": null,
           "products": [
             {
+              "id": 19,
               "product_thumbnail": "https://shop-phinf.pstatic.net/20250612_212/1749712199849jKzfq_JPEG/25212432831454261_1446546558.jpg?type=m510",
               "product_name": "롯데 자이언츠 x 춘식이 인형 키링 v3",
               "product_price": "45,000원",
@@ -309,6 +329,7 @@
               }
             },
             {
+              "id": 20,
               "product_thumbnail": "https://contents.lotteon.com/itemimage/20250508085738/LO/24/66/96/17/72/_2/46/69/61/77/3/LO2466961772_2466961773_1.png/dims/resizef/554X554",
               "product_name": "동백 미니 짝짝이 키링",
               "product_price": "8,900원",
@@ -320,6 +341,7 @@
               }
             },
             {
+              "id": 21,
               "product_thumbnail": "https://contents.lotteon.com/itemimage/20250529163834/LO/24/91/86/97/08/_2/49/18/69/70/9/LO2491869708_2491869709_1.png/dims/resizef/554X554",
               "product_name": "네이비 스크런치",
               "product_price": "29,000원",
@@ -345,6 +367,7 @@
           "clip": null,
           "products": [
             {
+              "id": 22,
               "product_thumbnail": "https://image.idus.com/image/files/1bc038568ad345c69c286a6c0670944a_1440.jpg",
               "product_name": "야구 직관 승요 홈런 안타 응원 토퍼",
               "product_price": "14,500원",
@@ -357,6 +380,7 @@
               }
             },
             {
+              "id": 23,
               "product_thumbnail": "https://image.idus.com/image/files/6419d9c00914481289bac4c3352ac4ed_1440.jpg",
               "product_name": "[야구장 인싸템]한화이글스 수리 키링👍",
               "product_price": "15,000원",
@@ -370,6 +394,7 @@
               }
             },
             {
+              "id": 24,
               "product_thumbnail": "https://image.idus.com/image/files/c8c6d992f66442c782aef89b0bd59712_1440.jpg",
               "product_name": "❣️인기최고❣️한화 야구 하트야구공 응원머리띠",
               "product_price": "15,000원",
@@ -396,6 +421,7 @@
           "clip": null,
           "products": [
             {
+              "id": 25,
               "product_thumbnail": "https://img.soldout.co.kr/external_image/2024/08/19/85a05f7d-7b42-4fcb-b053-fd68f3e88749.jpg/soldout/resize/1000/optimize",
               "product_name": "COKE 레드 스페셜 유니폼",
               "product_price": "129,000원",
@@ -411,6 +437,7 @@
               }
             },
             {
+              "id": 26,
               "product_thumbnail": "https://img.soldout.co.kr/item_thumb/2025/04/15/3a6e4843-4a1e-44b1-99be-0c9ba78f0652.png/soldout/resize/1000/optimize",
               "product_name": "KBO x MSS 볼파크 숏슬리브 티셔츠 서울 LG 트윈스 차콜 그레이",
               "product_price": "33,000원",
@@ -440,6 +467,7 @@
           "clip": "PLPuT2QymG4qUMu9DIJji7DDxbBaxOylmo",
           "products": [
             {
+              "id": 27,
               "product_thumbnail": "https://kbomarket.com/web/product/big/202505/324bb75bd4063b56a34099e6133ce759.jpg",
               "product_name": "2025 KBO 오피셜 컬렉션 카드 (1박스)",
               "product_price": "30,000원",
@@ -451,6 +479,7 @@
               }
             },
             {
+              "id": 28,
               "product_thumbnail": "https://image.idus.com/image/files/1edb3b78ebdb4ae68b8fcb74792adb71_1440.jpg",
               "product_name": "[2+1]야구 키링 스포츠 아크릴 굿즈 가방꾸미기",
               "product_price": "6,300원",
@@ -466,6 +495,7 @@
               }
             },
             {
+              "id": 29,
               "product_thumbnail": "https://image.idus.com/image/files/e23da8092a6145b0a1836f6b057d42f6_1440.jpg",
               "product_name": "역전하면 깨워줘~~ 야구키링⚾️",
               "product_price": "18,000원",
@@ -492,6 +522,7 @@
           "clip": null,
           "products": [
             {
+              "id": 30,
               "product_thumbnail": "https://phinf.pstatic.net/memo/20250623_18/1750662498461OFjJj_JPEG/%B6%F3%C0%CC%BF%C2%C1%EE%B8%D3%B8%AE%B6%EC.jpg?type=w740",
               "product_name": "[야박 특가]삼성라이온즈 블레오 머리띠",
               "product_price": "12,000원",
@@ -503,6 +534,7 @@
               }
             },
             {
+              "id": 31,
               "product_thumbnail": "https://img.danawa.com/prod_img/500000/158/817/img/20817158_1.jpg?shrink=330:*&_v=20230705103019",
               "product_name": "[야박 특가]삼성라이온즈 응원봉",
               "product_price": "11,000원",
@@ -514,6 +546,7 @@
               }
             },
             {
+              "id": 32,
               "product_thumbnail": "https://samsunglionsmall.com/web/product/big/202502/a94c018294f6d8431642008fc8afa636.jpg",
               "product_name": "[야박 특가]삼성라이온즈 프로페셔널 홈 유니폼",
               "product_price": "99,000원",
@@ -525,6 +558,7 @@
               }
             },
             {
+              "id": 33,
               "product_thumbnail": "https://image.idus.com/image/files/2d74cf175fd74758ae1d57cf3229b2d4_720.jpg",
               "product_name": "[야뱍 픽] 유니폼모자 뜨개 키링",
               "product_price": "12,500원",
@@ -558,6 +592,7 @@
           "clip": null,
           "products": [
             {
+              "id": 34,
               "product_thumbnail": "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20230810/PARTNER_94559/20230810101521c032d364138546a0bcf256e540a80d51/7bc77ca082a07d7ebf54.jpg",
               "product_name": "[코코예 특가] 호걸이 인형 가방",
               "product_price": "20,000원",
@@ -570,6 +605,7 @@
             },
 
             {
+              "id": 35,
               "product_thumbnail": "https://tigers.cdn-nhncommerce.com/20230719/134253.373220000/%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88-%ED%98%B8%EA%B1%B8%EC%9D%B4%EC%9D%B8%ED%98%95%EB%A8%B8%EB%A6%AC%EB%9D%A0(G)-%EB%A9%94%EC%9D%B8.jpg",
               "product_name": "[코코예 특가]기아타이거즈 호걸이 머리띠",
               "product_price": "13,000원",
@@ -581,6 +617,7 @@
               }
             },
             {
+              "id": 36,
               "product_thumbnail": "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20230330/PARTNER_94559/20230330095028f796b732cb314c7e8b85ba644ff68c36/30b6a4b59cb97a697678.jpg",
               "product_name": "[코코예 특가]기아타이거즈 페이퍼 스틱스",
               "product_price": "5,000원",
@@ -592,6 +629,7 @@
               }
             },
             {
+              "id": 37,
               "product_thumbnail": "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/vendor_inventory/6707/e86aa7bb0fbc752dd44a4359d8bbc20750a7a53a31338e26d99f55e83e8f.jpg",
               "product_name": "[코코예X루키] 야구 직관 가방",
               "product_price": "10,900원",
@@ -617,6 +655,7 @@
           "clip": "PLPuT2QymG4qVl01fdniTL_Du8R3IkOKBR",
           "products": [
             {
+              "id": 38,
               "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/KT0110510012034/4.JPG",
               "product_name": "[채소픽]케이티위즈 핑크 클라우드 유니폼",
               "product_price": "94,000원",
@@ -628,6 +667,7 @@
               }
             },
             {
+              "id": 39,
               "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/38100000008808/4.jpg",
               "product_name": "[채소픽]케이티위즈 2025 어센틱 어웨이 유니폼",
               "product_price": "139,000원",
@@ -656,6 +696,7 @@
           "clip": null,
           "products": [
             {
+              "id": 40,
               "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/38100000002071/4.jpg",
               "product_name": "[규자매 특가]케이티위즈 비트배트",
               "product_price": "30,000원",
@@ -667,6 +708,7 @@
               }
             },
             {
+              "id": 41,
               "product_thumbnail": "https://fs.arumnet.com/image/N3810KTSPO//item/KT0110110012480/4.jpg",
               "product_name": "케이티위즈 2024 어센틱 피너츠 유니폼",
               "product_price": "99,000원",
@@ -692,6 +734,7 @@
           "clip": null,
           "products": [
             {
+              "id": 42,
               "product_thumbnail": "https://cafe24img.poxo.com/ticketmdshop/web/product/big/20240708/ff8734fad3b9ab0b05959225ce6919b1.png",
               "product_name": "[이나린 픽]키움히어로즈 응원배트(핑크)",
               "product_price": "9,000원",
@@ -703,6 +746,7 @@
               }
             },
             {
+              "id": 43,
               "product_thumbnail": "https://phinf.pstatic.net/memo/20250623_28/1750667975430e2XqI_JPEG/259256371_1_1712397521_w%7Bres%7D.jpg?type=w740",
               "product_name": "[이나린 픽]키움히어로즈 뚱이 콜라보 유니폼",
               "product_price": "80,000원",
@@ -710,6 +754,18 @@
                 "option": ["90", "95", "100", "105", "110"],
                 "product_detailImg": [
                   "https://phinf.pstatic.net/memo/20250623_28/1750667975430e2XqI_JPEG/259256371_1_1712397521_w%7Bres%7D.jpg?type=w740"
+                ]
+              }
+            },
+            {
+              "id": 44,
+              "product_thumbnail": "https://cafe24img.poxo.com/ticketmdshop/web/product/big/20240708/c6bef080457ba1a1d90b91c2455be8ac.png",
+              "product_name": "[이나린 픽]키움히어로즈 응원타올 (핑크)",
+              "product_price": "6,000원",
+              "product_detail": {
+                "option": [],
+                "product_detailImg": [
+                  "https://ticketimage.interpark.com/TicketImage/mdshop/item_detail/Kiwoom/kiwoomDetail_218.jpg"
                 ]
               }
             }
