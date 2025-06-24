@@ -8,7 +8,8 @@ import RecoProduct from "./RecoProduct";
 
 const RecoProductWrapper = styled.div`
   width: 100%;
-  margin-top: 26px;
+  margin-top: 20px;
+  padding: 0 3%;
 `;
 
 const RecoProductTitle = styled.h1`
@@ -29,6 +30,7 @@ const RecoProductTitle = styled.h1`
 
 const StyledSwiper = styled(Swiper)`
   .swiper-scrollbar {
+    width: 100%;
     background: var(--gray3);
     height: 4px;
     border-radius: 4px;

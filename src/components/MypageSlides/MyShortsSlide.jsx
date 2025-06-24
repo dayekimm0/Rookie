@@ -9,7 +9,11 @@ import BArrow from "../../images/icons/Bmain_banner_arr.svg";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import { useYoutubeVideoDetails } from "../../hook/useYoutubePlayList";
 import { parseISO8601Duration } from "../../utils/youtube";
+import { fetchClipProducts } from "../../utils/fetchClipProducts";
+import { useVideoStore } from "../../stores/videoStore";
+
 import Shortscard from "../Slides/Shortscard";
+import ClipDetail from "../ClipDetail";
 
 const Container = styled.div`
   position: relative;
@@ -99,26 +103,17 @@ const SvgSpinner = styled.svg`
 `;
 
 const MyShortsSlide = React.memo(({ onSwiperReady }) => {
-  const [videoIds, setVideoIds] = useState([]);
-  const [likesLoading, setLikesLoading] = useState(true);
+  const { videoIds, likesLoading, fetchVideoIds } = useVideoStore();
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
 
+  // 좋아요 목록 fetch
   useEffect(() => {
-    const fetchLikes = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        setLikesLoading(false);
-        return;
-      }
-
-      const snap = await getDoc(doc(db, "userLikes", user.uid));
-      setVideoIds(snap.data()?.likes || []);
-      setLikesLoading(false);
-    };
-    fetchLikes();
-  }, []);
+    fetchVideoIds();
+  }, [fetchVideoIds]);
 
   const idsParam = useMemo(() => {
     return videoIds.length ? videoIds.join(",") : null;
@@ -127,6 +122,7 @@ const MyShortsSlide = React.memo(({ onSwiperReady }) => {
   const { data: videos = [], isLoading: videosLoading } =
     useYoutubeVideoDetails(idsParam, !likesLoading && !!idsParam > 0);
 
+  // 슬라이드
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
   }, [swiper]);
@@ -135,36 +131,86 @@ const MyShortsSlide = React.memo(({ onSwiperReady }) => {
     swiper?.slideNext();
   }, [swiper]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (swiper && onSwiperReady) {
       onSwiperReady(swiper);
     }
   }, [swiper]);
 
-  const slides = useMemo(() => {
-return videos.filter((video)=>{
-      const durationStr = video.contentDetails?.duration;
-      const seconds = parseISO8601Duration(durationStr);
-      console.log(video.id, durationStr, seconds);
-      return seconds <= 99;
-    })
-    .map((video) => {
-      const vid = video.id;
-      const { title, thumbnails } = video.snippet;
-      const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
+  // 영상 디테일
+  const handleOpenModal = (id) => {
+    console.log("open modal for videoId:", id);
+    setSelectedVideoId(id);
+    swiper?.autoplay?.stop();
+  };
 
-      return (
-        <SwiperSlide key={vid}>
-          <Shortscard
-            thumbnail={thumbUrl} title={title}
-            onClick={() => console.log("Clicked:", vid)}
-          />
-        </SwiperSlide>
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    fetchVideoIds();
+    swiper?.autoplay?.start();
+  };
+
+  useEffect(() => {
+    if (selectedVideoId) {
+      const y = window.scrollY;
+      lenis.stop();
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${y}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.dataset.scrollY = y;
+    } else {
+      const y = parseFloat(document.body.dataset.scrollY || "0");
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+
+      window.scrollTo(0, y);
+      lenis.start();
+    }
+  }, [selectedVideoId]);
+
+  useEffect(() => {
+    if (!videos.length) return;
+    (async () => {
+      const results = await Promise.all(
+        videos.map(async (video) => ({
+          ...video,
+          products: await fetchClipProducts(video.snippet.title),
+        }))
       );
-    });
+      setVideosWithProducts(results);
+    })();
   }, [videos]);
 
-    if (likesLoading || videosLoading) {
+  const slides = useMemo(() => {
+    return videos
+      .filter(
+        (video) => parseISO8601Duration(video.contentDetails.duration) <= 99
+      )
+      .map((video) => {
+        const vid = video.id;
+        const { title, thumbnails } = video.snippet;
+        const thumbUrl = thumbnails.maxres?.url || thumbnails.medium?.url;
+
+        return (
+          <SwiperSlide key={vid}>
+            <Shortscard
+              thumbnail={thumbUrl}
+              title={title}
+              onOpenModal={handleOpenModal}
+              id={vid}
+            />
+          </SwiperSlide>
+        );
+      });
+  }, [videos]);
+
+  if (likesLoading || videosLoading) {
     return (
       <SlideLoaderWrapper>
         <SvgSpinner viewBox="0 0 50 50">
@@ -184,8 +230,6 @@ return videos.filter((video)=>{
   if (slides.length === 0) {
     return <></>;
   }
-
-  // console.log("shorts", shorts);
 
   return (
     <>
@@ -249,6 +293,13 @@ return videos.filter((video)=>{
           </Swiper>
         </SlideContainer>
       </Container>
+      {selectedVideoId && (
+        <ClipDetail
+          videoId={selectedVideoId}
+          videoList={videosWithProducts}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
   );
 });

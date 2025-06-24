@@ -16,6 +16,9 @@ const PostComment = styled.form`
   @media screen and (max-width: 1024px) {
     height: 40px;
   }
+  @media screen and (max-width: 768px) {
+    height: 40px;
+  }
 
   @media screen and (max-width: 500px) {
   }
@@ -38,6 +41,13 @@ const UserTeam = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media screen and (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const UserName = styled.p`
@@ -47,6 +57,10 @@ const UserName = styled.p`
   }
   @media screen and (max-width: 1024px) {
     min-width: 50px;
+  }
+  @media screen and (max-width: 768px) {
+    min-width: 50px;
+    font-size: 1.4rem;
   }
 
   @media screen and (max-width: 500px) {
