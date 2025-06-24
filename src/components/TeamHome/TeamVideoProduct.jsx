@@ -143,7 +143,7 @@ const VideoPlaceholder = styled.div`
 const VideoThumbnail = styled.div`
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => props.thumbnail});
+  background-image: url(${(props) => props.$thumbnail});
   background-size: cover;
   background-position: center;
   display: flex;
@@ -205,7 +205,7 @@ const PlayButton = styled.div`
 
 // 우측 제품 리스트 영역
 const ProductSection = styled.div.attrs((props) => ({
-  "data-lenis-prevent": props.preventScroll ? "" : undefined,
+  "data-lenis-prevent": props.$preventScroll ? "" : undefined,
 }))`
   flex: 1;
   max-height: 608px;
@@ -721,7 +721,7 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
                 </>
               ) : (
                 <VideoThumbnail
-                  thumbnail={getYoutubeThumbnail(videoData.videoId)}
+                  $thumbnail={getYoutubeThumbnail(videoData.videoId)}
                   onClick={handlePlay}
                 >
                   <PlayButton />
@@ -733,7 +733,7 @@ const TeamVideoProduct = ({ teamCode, sectionType, title }) => {
           </VideoSection>
 
           {/* 우측 제품 리스트 영역 */}
-          <ProductSection preventScroll={preventScroll} ref={scrollRef}>
+          <ProductSection $preventScroll={preventScroll} ref={scrollRef}>
             {isProductsLoading ? (
               <div
                 style={{

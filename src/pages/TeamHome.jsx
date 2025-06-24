@@ -6,7 +6,7 @@ import TeamStat from "../components/TeamHome/TeamStat";
 import TeamVideoProduct from "../components/TeamHome/TeamVideoProduct";
 import ShortsSlide from "../components/Slides/ShortsSlide";
 import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
-import { homeSlideTab, teamSlideTabs } from "../data/playTabs";
+import { teamSlideTabs } from "../data/playTabs";
 import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 import InfluencerZone from "../components/TeamHome/InfluencerZone";
 import HomeProducts from "../components/Home/HomeProducts"; // 추가
@@ -102,7 +102,6 @@ const ProductCardWrap = styled.div`
 
 const TeamHome = () => {
   const { teamCode } = useParams();
-  console.log("teamCode:", teamCode);
 
   // useAllProductsQuery로 전체 상품 데이터 로드
   const { data: allProducts = [], isLoading: isProductLoading } =
