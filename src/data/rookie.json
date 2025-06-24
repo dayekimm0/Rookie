@@ -709,5 +709,21 @@
     },
     "detail_link": "",
     "id": 43
+  },
+  {
+    "team": "rookie",
+    "category": "키움",
+    "influencer": "이나린",
+    "thumbnail": "https://cafe24img.poxo.com/ticketmdshop/web/product/big/20240708/c6bef080457ba1a1d90b91c2455be8ac.png",
+    "name": "[이나린 픽]키움히어로즈 응원타올 (핑크)",
+    "product_price": "6,000원",
+    "detail": {
+      "options": [],
+      "detail_images": [
+        "https://ticketimage.interpark.com/TicketImage/mdshop/item_detail/Kiwoom/kiwoomDetail_218.jpg"
+      ]
+    },
+    "detail_link": "",
+    "id": 44
   }
 ]

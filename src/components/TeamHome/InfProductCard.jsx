@@ -152,15 +152,20 @@ const InfProductCard = ({ data, infname }) => {
 
   if (!data) return null;
 
-  const handleClick = () => {
-    navigate(`/store/${team}/${id}`);
-  };
-
   if (isTeamhome) {
-    const { product_thumbnail, product_name, product_price, product_detail } =
-      data;
+    const {
+      product_thumbnail,
+      product_name,
+      product_price,
+      product_detail,
+      id,
+    } = data;
 
     if (!product_name || !product_thumbnail) return null;
+
+    const handleClick = () => {
+      navigate(`/store/rookie/${id}`);
+    };
 
     return (
       <CardContainer onClick={handleClick}>

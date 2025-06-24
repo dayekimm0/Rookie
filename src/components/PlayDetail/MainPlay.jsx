@@ -14,7 +14,11 @@ const Container = styled.div`
   @media screen and (max-width: 1024px) {
     width: 640px;
   }
-
+  @media screen and (max-width: 768px) {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
   @media screen and (max-width: 500px) {
     max-width: 100%;
   }
@@ -36,6 +40,18 @@ const PlayThumbnail = styled.div`
     width: 100% !important;
     height: 100% !important;
   }
+  @media screen and (max-width: 768px) {
+    width: 100vw;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  @media screen and (max-width: 500px) {
+    max-width: 100%;
+  }
 `;
 
 const PlayTitle = styled.h1`
@@ -50,6 +66,9 @@ const PlayTitle = styled.h1`
     font-size: 2rem;
   }
 
+  @media screen and (max-width: 768px) {
+    padding: 0 3%;
+  }
   @media screen and (max-width: 500px) {
   }
 `;
@@ -59,6 +78,9 @@ const PlayInfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 768px) {
+    padding: 0 3%;
+  }
 `;
 
 const PlayInfo = styled.div`

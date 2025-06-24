@@ -30,6 +30,10 @@ const CommentListWrapper = styled.div`
     width: inherit;
     height: 300px;
   }
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 300px;
+  }
 
   @media screen and (max-width: 500px) {
   }
