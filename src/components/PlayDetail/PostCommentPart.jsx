@@ -83,6 +83,7 @@ const TextArea = styled.textarea`
   &:focus {
     outline: none;
     color: var(--light);
+    font-family: "Figtree", "Pretendard", sans-serif;
   }
 
   &::placeholder {
@@ -107,7 +108,6 @@ const SubmitBtn = styled.input`
   font-weight: ${({ disabled }) => (disabled ? "400" : "500")};
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
   @media screen and (max-width: 500px) {
-    border: 1px solid #f00;
   }
 `;
 

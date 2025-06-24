@@ -60,8 +60,10 @@ const ClipWrapper = styled.div`
 const RecoClip = ({ videoList = [] }) => {
   const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [videosWithProducts, setVideosWithProducts] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const setScrollLocked = useHeaderStore((state) => state.setScrollLocked);
 
+  // 썸네일별 제품 불러오기
   useEffect(() => {
     const fetchAll = async () => {
       const result = await Promise.all(
@@ -78,7 +80,16 @@ const RecoClip = ({ videoList = [] }) => {
     }
   }, [videoList]);
 
-  // 클립 모달 스크롤 막기
+  // 화면 크기 감지
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // 스크롤 잠금
   useEffect(() => {
     if (selectedVideoId) {
       const y = window.scrollY;
@@ -111,17 +122,19 @@ const RecoClip = ({ videoList = [] }) => {
     <>
       {videosWithProducts.length > 0 && (
         <ClipListWrapper>
-          {videosWithProducts.map((video) => (
-            <ClipWrapper
-              key={video.id}
-              onClick={() => setSelectedVideoId(video.id)}
-            >
-              <img
-                src={video.thumbnail}
-                alt={video.title || "clip_thumbnail"}
-              />
-            </ClipWrapper>
-          ))}
+          {(isMobile ? videosWithProducts : [videosWithProducts[0]]).map(
+            (video) => (
+              <ClipWrapper
+                key={video.id}
+                onClick={() => setSelectedVideoId(video.id)}
+              >
+                <img
+                  src={video.thumbnail}
+                  alt={video.title || "clip_thumbnail"}
+                />
+              </ClipWrapper>
+            )
+          )}
         </ClipListWrapper>
       )}
 

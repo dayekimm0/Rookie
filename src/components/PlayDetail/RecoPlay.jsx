@@ -18,6 +18,9 @@ const Container = styled.div`
     align-items: center;
   }
   @media screen and (max-width: 500px) {
+    width: 456px;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -42,6 +45,7 @@ const RecoPlayThumbnail = styled.div`
   }
 
   @media screen and (max-width: 500px) {
+    width: 100%;
   }
 `;
 
@@ -61,6 +65,7 @@ const RecoPlayInfo = styled.div`
     margin-left: 10px;
   }
   @media screen and (max-width: 500px) {
+    width: 100%;
   }
 `;
 

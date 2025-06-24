@@ -19,7 +19,9 @@ const Container = styled.div`
   width: 100%;
   background: var(--gray1);
   padding: 0 5%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
   @media screen and (max-width: 1440px) {
     padding: 0 3%;
   }
@@ -29,6 +31,9 @@ const Container = styled.div`
   @media screen and (max-width: 768px) {
     padding: 0;
   }
+  @media screen and (max-width: 500px) {
+    padding: 0;
+  }
 `;
 
 const PlayContent = styled.div`
@@ -36,8 +41,9 @@ const PlayContent = styled.div`
   padding-top: 36px;
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
   gap: 30px;
+
   @media screen and (max-width: 1024px) {
     gap: 20px;
   }
@@ -45,6 +51,9 @@ const PlayContent = styled.div`
     flex-direction: column;
     align-items: center;
     padding-top: 0;
+  }
+  @media screen and (max-width: 500px) {
+    gap: 30px;
   }
 `;
 
@@ -63,6 +72,9 @@ const RightContent = styled.div`
 
 const LeftContent = styled.div`
   width: 498px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   @media screen and (max-width: 1440px) {
     width: 400px;
   }
@@ -70,26 +82,16 @@ const LeftContent = styled.div`
     width: 320px;
   }
   @media screen and (max-width: 768px) {
-    width: 768px;
+    width: 100%;
     padding: 0 3%;
   }
 `;
 
 const RecoPlayWrapper = styled.div`
   width: 100%;
-  height: 675px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  margin-bottom: 30px;
-  @media screen and (max-width: 1024px) {
-    height: 480px;
-    margin-bottom: 20px;
-  }
-  @media screen and (max-width: 768px) {
-    height: 1000px;
-    margin-bottom: 20px;
-  }
+  gap: 16px;
 `;
 
 const Divider = styled.div`
@@ -112,13 +114,37 @@ const CommentWrapper = styled.div`
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
-  overflow: hidden;
   @media screen and (max-width: 1024px) {
-    min-height: 100px;
+    min-height: 400px;
   }
   @media screen and (max-width: 768px) {
     width: 94%;
     margin: 24px 3% 0 3%;
+  }
+  @media screen and (min-width: 501px) {
+    display: block;
+  }
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
+`;
+
+const CommentWrapperMobile = styled(CommentWrapper)`
+  display: ${({ show }) => (show ? "block" : "none")};
+  @media screen and (max-width: 500px) {
+    display: ${({ show }) => (show ? "block" : "none")};
+  }
+`;
+
+const ToggleButton = styled.button`
+  background: none;
+  color: var(--light);
+  border: none;
+  font-size: 1.6rem;
+  margin: 8px 0;
+  cursor: pointer;
+  @media screen and (min-width: 501px) {
+    display: none;
   }
 `;
 
@@ -140,6 +166,7 @@ const CommentTitle = styled.h2`
   display: flex;
   justify-content: start;
   align-items: center;
+
   span {
     font-size: 1.8rem;
     font-weight: 600;
@@ -166,6 +193,7 @@ const PlayDetail = () => {
     highlightVideosFromShortsPlaylist,
     setHighlightVideosFromShortsPlaylist,
   ] = useState([]);
+  const [showMobileComments, setShowMobileComments] = useState(false);
 
   useEffect(() => {
     const loadHighlightFromPlayContents = async () => {
@@ -218,7 +246,7 @@ const PlayDetail = () => {
               !title.includes("shorts") &&
               !title.includes("쇼츠") &&
               Number.isFinite(durationInSeconds) &&
-              durationInSeconds >= 180
+              durationInSeconds > 180
             );
           })
         );
@@ -248,7 +276,30 @@ const PlayDetail = () => {
             teamLogo={channelThumbnail}
           />
 
+          <ToggleButton onClick={() => setShowMobileComments((prev) => !prev)}>
+            {showMobileComments ? "접기" : `댓글 ${commentCount}개 더보기`}
+          </ToggleButton>
+
+          <CommentWrapperMobile show={showMobileComments}>
+            <CommentTop>
+              <CommentTitle>
+                댓글 <span>{commentCount}</span>
+              </CommentTitle>
+            </CommentTop>
+            <CommentList
+              key={videoId}
+              videoId={videoId}
+              onCountChange={setCommentCount}
+              limit={1} // 최신 댓글 1개만 표시
+            />
+          </CommentWrapperMobile>
+
           <Divider />
+
+          <RecoProductPart
+            videoTitle={videoInfo.title}
+            channelTitle={videoInfo.channelTitle}
+          />
 
           <CommentWrapper>
             <CommentTop>
@@ -260,15 +311,9 @@ const PlayDetail = () => {
               key={videoId}
               videoId={videoId}
               onCountChange={setCommentCount}
-              limit={1}
             />
             <PostCommentPart videoId={videoId} />
           </CommentWrapper>
-
-          <RecoProductPart
-            videoTitle={videoInfo.title}
-            channelTitle={videoInfo.channelTitle}
-          />
         </RightContent>
 
         <LeftContent>
