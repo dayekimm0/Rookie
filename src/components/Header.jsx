@@ -709,7 +709,7 @@ const Header = ({ mode }) => {
               <Link onClick={(e) => e.preventDefault()}>STORE</Link>
               <StoreContainer className="store-dropdown">
                 <Stores>
-                  <Link to="/store">
+                  <Link to="/store/rookie">
                     <RookieEmblem src={rookieemblem} alt="rookieemblem" />
                   </Link>
                   {teams.map((id) => {
@@ -860,7 +860,7 @@ const Header = ({ mode }) => {
                 <ul className="store_depth2">
                   <li>
                     <Link
-                      to={`/store/${getTeamJsonCode(0)}`}
+                      to={`/store/rookie`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       ROOKie
