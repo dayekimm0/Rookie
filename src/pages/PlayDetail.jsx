@@ -15,6 +15,7 @@ import {
 } from "../hook/useYoutubeContentList";
 import { playContents } from "../data/playcontents";
 import { parseISO8601Duration } from "../utils/youtube";
+import Spinner from "../components/Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -168,6 +169,13 @@ const CommentTop = styled.div`
   }
 `;
 
+const SlideLoaderWrapper = styled.div`
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const CommentListBoxMobile = styled.div`
   margin-top: 10px;
   max-height: ${({ $show }) => ($show ? "1000px" : "110px")};
@@ -259,7 +267,12 @@ const PlayDetail = () => {
     if (videoId) loadData();
   }, [videoId]);
 
-  if (!videoInfo) return <div>로딩 중...</div>;
+  if (!videoInfo)
+    return (
+      <SlideLoaderWrapper>
+        <Spinner />
+      </SlideLoaderWrapper>
+    );
 
   return (
     <Container>
