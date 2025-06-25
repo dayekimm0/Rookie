@@ -30,7 +30,6 @@ const Container = styled.div`
     padding: 0 3%;
   }
   @media screen and (max-width: 768px) {
-    padding: 0;
   }
   @media screen and (max-width: 500px) {
     padding: 0;
@@ -38,7 +37,6 @@ const Container = styled.div`
 `;
 
 const PlayContent = styled.div`
-  width: 100%;
   padding-top: 36px;
   display: flex;
   justify-content: center;
@@ -72,7 +70,6 @@ const RightContent = styled.div`
 `;
 
 const LeftContent = styled.div`
-  width: 498px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -89,14 +86,12 @@ const LeftContent = styled.div`
 `;
 
 const RecoPlayWrapper = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
 `;
 
 const Divider = styled.div`
-  width: 1200px;
   height: 2px;
   background: var(--gray6);
   margin-top: 18px;
@@ -111,7 +106,6 @@ const Divider = styled.div`
 const CommentWrapper = styled.div`
   margin-top: 24px;
   background: var(--gray2);
-  width: 100%;
   border-radius: 14px;
   color: var(--light);
   padding: 18px 20px;
@@ -119,7 +113,6 @@ const CommentWrapper = styled.div`
     min-height: 400px;
   }
   @media screen and (max-width: 768px) {
-    width: 94%;
     margin: 24px 3% 0 3%;
   }
   @media screen and (min-width: 501px) {

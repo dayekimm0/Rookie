@@ -1,12 +1,10 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 100%;
   display: flex;
   align-items: start;
   gap: 8px;
   @media screen and (max-width: 1024px) {
-    width: 320px;
     height: 106px;
   }
 
