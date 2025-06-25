@@ -1,64 +1,162 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { Outlet } from "react-router-dom";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+
 import authStore from "../stores/AuthStore";
-import { getEmblem, getTeamColor } from "../util";
-// FontAwesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import partnerLogo from "../images/logos/Partner_Logo.svg";
-import MypageModal from "../components/Loginon/MypageModal";
-import { getScrollbarWidth } from "../util";
+import { useVideoStore } from "../stores/videoStore";
+import { getTeamColor, getEmblem } from ".././util";
+import MyCoupon from "../components/Mypage/MyCouponModal";
+import coupon from ".././images/icons/coupon.svg";
+import partnerLogo from ".././images/logos/Partner_Logo.svg";
+import thumbs_up from ".././images/icons/thumbs-up.svg";
 
 const Container = styled.div`
-  width: 100%;
   display: flex;
   justify-content: center;
   background: var(--light);
-  @media screen and (max-width: 600px) {
+  padding: 50px 40px 0;
+  gap: 96px;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    padding: 40px 30px 0;
+    gap: 34px;
+  }
+  @media screen and (max-width: 500px) {
     padding: 0 15px;
+    flex-direction: column;
+    gap: 14px;
   }
 `;
 
-const Inner = styled.div`
-  width: 600px;
+const LeftInner = styled.div`
+  width: 280px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 12px;
   @media screen and (max-width: 1024px) {
-    width: 480px;
+    width: 230px;
+  }
+  @media screen and (max-width: 768px) {
+    width: 180px;
   }
   @media screen and (max-width: 600px) {
+    width: 160px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    margin-top: 24px;
+  }
+`;
+
+const RightInner = styled.div`
+  max-width: 944px;
+  width: calc(100% - 376px);
+  display: flex;
+  flex-direction: column;
+  @media screen and (max-width: 1024px) {
+    width: calc(100% - 264px);
+  }
+  @media screen and (max-width: 768px) {
+    width: calc(100% - 214px);
+  }
+  @media screen and (max-width: 600px) {
+    width: calc(100% - 194px);
+  }
+  @media screen and (max-width: 500px) {
     width: 100%;
   }
 `;
 
-const UpBox = styled.div`
+const Profile = styled.div`
   width: 100%;
-  height: 120px;
-  border: 1px solid var(--gray3);
-  border-radius: 4px;
+  height: 370px;
+  border: 1px solid var(--grayD);
+  border-radius: 8px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 30px;
-  margin: 50px 0 20px;
+
+  .userName {
+    h4 {
+      font-size: 2.4rem;
+      line-height: 1.5;
+      font-weight: 700;
+      text-align: center;
+    }
+    .favoriteTeam {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      h6 {
+        font-size: 1.6rem;
+        text-align: center;
+        color: var(--gray6);
+      }
+    }
+  }
+  & > span {
+    width: 86%;
+    height: 1px;
+    background: var(--gray1);
+    margin: 26px 0;
+  }
   @media screen and (max-width: 1024px) {
-    height: 96px;
-    padding: 24px;
-    margin: 30px 0 20px;
+    height: 296px;
+    .userName {
+      h4 {
+        font-size: 2.2rem;
+      }
+      h6 {
+        font-size: 1.2rem;
+      }
+    }
+    & > span {
+      margin: 21px 0;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+    border: none;
+    .user {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .userName {
+      margin-left: 20px;
+      margin-bottom: 20px;
+      .favoriteTeam {
+        justify-content: start;
+      }
+      h4 {
+        font-size: 1.8rem;
+        text-align: start;
+      }
+      h6 {
+        font-size: 1.2rem;
+      }
+    }
+    & > span {
+      display: none;
+    }
   }
 `;
 
-const UpBoxLeft = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`;
-
 const UserTeam = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 6px;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  margin-bottom: 16px;
   img {
     width: 100%;
     scale: ${({ $isTeam6 }) => ($isTeam6 ? "80%" : "100%")};
@@ -67,227 +165,119 @@ const UserTeam = styled.div`
     overflow: visible;
   }
   @media screen and (max-width: 1024px) {
-    width: 48px;
-    height: 48px;
-  }
-`;
-
-const PartnerLogo = styled.img`
-  position: absolute;
-  margin-left: 5px;
-`;
-
-const UpBoxTitle = styled.h4`
-  font-size: 2rem;
-  font-weight: 600;
-  span {
-    font-size: 1.2rem;
-    font-weight: 400;
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 1.6rem;
-    span {
-      font-size: 1rem;
-    }
-  }
-`;
-
-const UpBoxSub = styled.span`
-  font-size: 1.2rem;
-  color: var(--gray6);
-  cursor: pointer;
-  transition: color 0.3s;
-  &:hover {
-    color: var(--dark);
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 1rem;
-  }
-`;
-
-const MyShopping = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  gap: 30px;
-  margin-bottom: 30px;
-`;
-
-const MyShoppingTitle = styled.h4`
-  font-size: 2rem;
-  font-weight: bold;
-  @media screen and (max-width: 1024px) {
-    font-size: 1.6rem;
-  }
-`;
-
-const MyShoppingInner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  text-align: center;
-  gap: 60px;
-  @media screen and (max-width: 1024px) {
-    gap: 40px;
+    width: 80px;
+    height: 80px;
   }
   @media screen and (max-width: 500px) {
-    gap: 35px;
+    width: 58px;
+    height: 58px;
+    border-radius: 4px;
   }
 `;
 
-const MyShoppingDetail = styled.h6`
-  font-size: 1.2rem;
-  line-height: 2.5;
-  b {
-    font-size: 2rem;
-    font-weight: 600;
-    line-height: 1;
-  }
+const ProfileUnder = styled.div`
+  display: flex;
+  gap: 60px;
   @media screen and (max-width: 1024px) {
-    font-size: 1rem;
-    b {
-      font-size: 1.6rem;
-    }
+    gap: 50px;
+  }
+  @media screen and (max-width: 500px) {
+    gap: 0px;
   }
 `;
 
-const MyShoppingLine = styled.span`
-  width: 1px;
-  height: 54px;
-  background: var(--dark);
-  @media screen and (max-width: 1024px) {
-    height: 48px;
-  }
-`;
-
-const MyInfo = styled.div`
+const Icon = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const MyInfoTitle = styled.h4`
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  @media screen and (max-width: 1024px) {
-    font-size: 1.6rem;
-    margin-bottom: 16px;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  img {
+    width: 30px;
   }
-`;
-
-const MyInfoLine = styled.span`
-  width: 100%;
-  height: 1px;
-  background: var(--dark);
-`;
-
-const InfoElement = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  margin-bottom: 60px;
-  @media screen and (max-width: 1024px) {
-    margin-bottom: 40px;
-  }
-`;
-
-const InfoDetail = styled.h4`
-  font-size: 1.6rem;
-  line-height: 2;
-  b {
-    font-size: 1.8rem;
-    font-weight: 700;
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 1.4rem;
-    b {
-      font-size: 1.6rem;
-    }
-  }
-  @media screen and (max-width: 600px) {
+  p {
     font-size: 1.2rem;
-    b {
+    color: var(--gray6);
+  }
+  span {
+    font-weight: bold;
+  }
+  @media screen and (max-width: 1024px) {
+    img {
+      width: 24px;
+    }
+    p {
+      font-size: 1rem;
+    }
+    span {
       font-size: 1.4rem;
     }
   }
-`;
-
-const InfoDetailDetail = styled.p`
-  font-size: 1.4rem;
-  color: var(--gray8);
-  @media screen and (max-width: 1024px) {
-    font-size: 1.2rem;
+  @media screen and (max-width: 500px) {
+    width: 80px;
+    span {
+      font-size: 1.2rem;
+    }
   }
 `;
 
-const InfoButton = styled.button`
-  width: 80px;
-  height: 40px;
-  background: var(--dark);
-  color: var(--light);
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s;
-  &:hover {
-    background: var(--gray3);
-  }
-  @media screen and (max-width: 1024px) {
-    width: 60px;
-    height: 30px;
-    font-size: 1.2rem;
-  }
-`;
-
-const Delete = styled.div`
+const Nav = styled.div`
   width: 100%;
+  height: 240px;
+  border: 1px solid var(--grayD);
+  border-radius: 8px;
   display: flex;
-  flex-direction: column;
-  align-items: end;
-  h6 {
-    margin-top: 17px;
-    font-size: 1.2rem;
-    color: var(--gray8);
-    cursor: pointer;
-  }
-  h6:hover + span {
-    opacity: 1;
-  }
-`;
-
-const DeleteLine = styled.span`
-  width: 66px;
-  height: 1px;
-  background: var(--gray8);
-  margin-top: 2px;
-  opacity: 0;
-  transition: opacity 0.3s;
-`;
-
-const InquiryLink = styled.a`
-  padding: 10px 20px;
-  background: var(--light);
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  &:hover {
-    background: var(--grayF5);
-  }
-  svg {
-    margin-right: 10px;
+  justify-content: start;
+  ul {
+    width: 100%;
+    padding: 0 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    span {
+      width: 100%;
+      height: 1px;
+      background: var(--grayD);
+    }
   }
   @media screen and (max-width: 1024px) {
+    height: 192px;
+    ul {
+      gap: 16px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    height: 42px;
+    justify-content: center;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--grayD);
+    border-bottom: 1px solid var(--grayD);
+    ul {
+      width: auto;
+      flex-direction: row;
+      gap: 58px;
+    }
+    span {
+      display: none;
+    }
+  }
+`;
+
+const NavItem = styled.li`
+  margin-right: 10px;
+  font-size: 1.8rem;
+  font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
+  cursor: pointer;
+  @media screen and (max-width: 1024px) {
+    font-size: 1.6rem;
+    margin-right: 8px;
+  }
+  @media screen and (max-width: 500px) {
     font-size: 1.2rem;
-    height: 40px;
+    margin-right: 0px;
   }
 `;
 
@@ -367,37 +357,111 @@ const teamToEmblemId = {
 };
 
 const Mypage = () => {
-  const { userProfile, isLoading } = authStore();
-  const [teamModal, setTeamModal] = useState(false);
+  const [modalState, setModalState] = useState(false);
+  const [coupons, setCoupons] = useState([]);
+  const [likesLoading, setLikesLoading] = useState(true);
+  const { userProfile } = authStore();
+  const { videoIds, setVideoIds } = useVideoStore();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const TeamEmblem = ({ emblemId }) => {
     const emblem = getEmblem(emblemId);
     return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
   };
 
-  const openTeamModal = () => {
-    setTeamModal(true);
-  };
+  const menuItem = [
+    { path: "/mypage", label: "나의 쇼핑" },
+    { path: "/mypage/myvideo", label: "나의 동영상" },
+    { path: "/mypage/mysetting", label: "프로필 설정" },
+  ];
 
-  const closeTeamModal = () => {
-    setTeamModal(false);
-  };
-
-  //mobile 스토어 스크롤 막기
   useEffect(() => {
-    if (teamModal) {
-      const scrollbarWidth = getScrollbarWidth();
-      document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
+    const fetchCoupons = async () => {
+      if (!userProfile?.uid) return;
+
+      const db = getFirestore();
+      const wonCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "wonCoupons"
+      );
+      const welcomeCouponsRef = collection(
+        db,
+        "users",
+        userProfile.uid,
+        "welcomeCoupons"
+      );
+
+      try {
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        const wonCoupons = wonSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const welcomeCoupons = welcomeSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // 두 쿠폰 배열 합치기
+        setCoupons([...wonCoupons, ...welcomeCoupons]);
+      } catch (error) {
+        console.error("쿠폰 데이터 불러오기 실패:", error);
+      }
+    };
+
+    fetchCoupons();
+  }, [userProfile]);
+
+  // 좋아요 누른 영상 수
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setLikesLoading(false);
+        return;
+      }
+
+      const snap = await getDoc(doc(db, "userLikes", user.uid));
+      setVideoIds(snap.data()?.likes || []);
+      setLikesLoading(false);
+    };
+    fetchLikes();
+  }, []);
+
+  useEffect(() => {
+    if (!userProfile) {
+      navigate("/", { replace: true });
     }
-  }, [teamModal]);
+  }, [userProfile, navigate]);
+
+  if (!userProfile) {
+    return (
+      <SlideLoaderWrapper>
+        <SvgSpinner viewBox="0 0 50 50">
+          <circle
+            className="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </SvgSpinner>
+      </SlideLoaderWrapper>
+    );
+  }
 
   return (
     <Container>
-      {isLoading ? (
+      {authStore().isLoading ? (
         <SlideLoaderWrapper>
           <SvgSpinner viewBox="0 0 50 50">
             <circle
@@ -411,145 +475,84 @@ const Mypage = () => {
           </SvgSpinner>
         </SlideLoaderWrapper>
       ) : (
-        <Inner>
-          <UpBox>
-            <UpBoxLeft>
-              <UserTeam
-                $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
-                style={{
-                  backgroundColor: getTeamColor(
-                    teamToEmblemId[userProfile.favoriteTeam] || "#fff"
-                  ),
-                }}
-              >
-                <TeamEmblem
-                  emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
-                />
-              </UserTeam>
-              <UpBoxTitle>
-                {userProfile.username}
-                {userProfile.email === "gosim@naver.com" ||
-                "mangom@daum.net" ? (
-                  <PartnerLogo src={partnerLogo} alt="" />
-                ) : null}
-                <br />
-                <span>계정 생성일 {userProfile.createdAt}</span>
-              </UpBoxTitle>
-            </UpBoxLeft>
-            <UpBoxSub onClick={openTeamModal}>구단변경 ›</UpBoxSub>
-          </UpBox>
-          <MyShopping>
-            <MyShoppingTitle>마이 쇼핑</MyShoppingTitle>
-            <MyShoppingInner>
-              <MyShoppingDetail>
-                <b>2</b>
-                <br />
-                장바구니
-              </MyShoppingDetail>
-              <MyShoppingLine />
-              <MyShoppingDetail>
-                <b>1</b>
-                <br />
-                구매완료
-              </MyShoppingDetail>
-              <MyShoppingLine />
-              <MyShoppingDetail>
-                <b>0</b>
-                <br />
-                배송완료
-              </MyShoppingDetail>
-              <MyShoppingLine />
-              <MyShoppingDetail>
-                <b>1</b>
-                <br />
-                쿠폰
-              </MyShoppingDetail>
-            </MyShoppingInner>
-          </MyShopping>
-          <MyInfo>
-            <MyInfoTitle>계정 상세정보</MyInfoTitle>
-            <MyInfoLine style={{ marginBottom: "40px" }} />
-            <InfoElement>
-              <InfoDetail>
-                <b> 이메일</b>
-                <br />
-                {userProfile.email}
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <InfoElement>
-              <InfoDetail>
-                <b> 비밀번호</b>
-                <br />
-                *********
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <InfoElement>
-              <InfoDetail>
-                <b>닉네임</b>
-                <br />
-                {userProfile.nickname}
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <InfoElement>
-              <InfoDetail>
-                <b>주소</b>
-                {userProfile.address ? (
-                  <>
-                    <br />
-                    {userProfile.address}
-                    <br />
-                    <InfoDetailDetail>
-                      {userProfile.detailedAddress}
-                    </InfoDetailDetail>
-                  </>
-                ) : (
-                  <InfoDetailDetail>주소를 등록해 주세요.</InfoDetailDetail>
-                )}
-              </InfoDetail>
-              <InfoButton>변경</InfoButton>
-            </InfoElement>
-            <Delete>
-              <h6
-                onClick={() => {
-                  alert("준비중인 서비스 입니다.");
-                }}
-              >
-                계정 삭제하기
-              </h6>
-              <DeleteLine />
-            </Delete>
-          </MyInfo>
-          {userProfile.email === "gosim@naver.com" || "mangom@daum.net" ? (
-            <>
-              <InquiryLink
-                href="https://docs.google.com/forms/d/e/1FAIpQLScLQEzsdPMIHZiFxtQlq50tSpVLsZtvmxE3anLsND5uvQAQiw/viewform?usp=header"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FontAwesomeIcon icon={faEdit} />
-                상품등록
-              </InquiryLink>
-            </>
-          ) : (
-            <>
-              <InquiryLink
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfS2-2IsVBBub-rmSk97nz1Fsw0eYLMsd5iOHtNdUNwH1HgKQ/viewform?usp=header"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ROOKie 파트너 입점신청 관련 공지
-              </InquiryLink>
-            </>
-          )}
-        </Inner>
+        <>
+          <LeftInner>
+            <Profile>
+              <div className="user">
+                <UserTeam
+                  $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                  style={{
+                    backgroundColor: getTeamColor(
+                      teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                    ),
+                  }}
+                >
+                  <TeamEmblem
+                    emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+                  />
+                </UserTeam>
+
+                <div className="userName">
+                  <h4>{userProfile.nickname}</h4>
+                  <div className="favoriteTeam">
+                    <h6>{userProfile.favoriteTeam}</h6>
+                    {userProfile.email === "gosim@naver.com" ||
+                    userProfile.email === "mangom@daum.net" ? (
+                      <img src={partnerLogo} alt="" />
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+              <span />
+              <ProfileUnder>
+                <Icon onClick={() => setModalState(true)}>
+                  <img src={coupon} alt="coupon" />
+                  <p>내 쿠폰</p>
+                  <span>{coupons.length}</span>
+                </Icon>
+                <Icon onClick={() => navigate("/mypage/myvideo")}>
+                  <img src={thumbs_up} alt="thumbs_up" />
+                  <p>좋아요</p>
+                  <span>{videoIds.length}</span>
+                </Icon>
+              </ProfileUnder>
+            </Profile>
+
+            <Nav>
+              <ul>
+                {menuItem.map((item, index) => {
+                  const isActive =
+                    item.path === "/mypage/myvideo"
+                      ? location.pathname.startsWith(item.path)
+                      : location.pathname === item.path;
+
+                  return (
+                    <React.Fragment key={item.path}>
+                      <NavItem
+                        $isActive={isActive}
+                        onClick={() => navigate(item.path)}
+                      >
+                        {item.label}
+                      </NavItem>
+                      {index < menuItem.length - 1 && <span />}
+                    </React.Fragment>
+                  );
+                })}
+              </ul>
+            </Nav>
+          </LeftInner>
+          <RightInner>
+            <Outlet />
+          </RightInner>
+        </>
       )}
-      {teamModal && (
-        <MypageModal isOpen={teamModal} closeTeamModal={closeTeamModal} />
-      )}
+      <MyCoupon
+        coupons={coupons}
+        isOpen={modalState}
+        closeModal={() => setModalState(false)}
+      />
     </Container>
   );
 };
+
 export default Mypage;

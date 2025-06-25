@@ -1,30 +1,42 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { motion, LayoutGroup } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faChevronDown,
+  faChevronUp,
+} from "@fortawesome/free-solid-svg-icons";
 import SortSelect from "./SortSelect";
 import useProductStore from "../../stores/ProductStore";
 
 const CategoryWrapper = styled.div`
   width: 100%;
+  @media screen and (max-width: 1440px) {
+    width: 68%;
+  }
 `;
 
 const CategoryContainer = styled.div`
   width: 100%;
-  background: var(--light);
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media screen and (max-width: 1440px) {
+    gap: 10px;
+  }
   @media screen and (max-width: 1024px) {
     display: none;
   }
 `;
 
 const Category = styled.div`
-  height: 50px;
-  background: var(--dark);
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
+  @media screen and (max-width: 1440px) {
+    gap: 4px;
+  }
 `;
 
 const CategoryItem = styled.div`
@@ -32,65 +44,89 @@ const CategoryItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.8rem;
-  color: ${({ active }) => (active ? "var(--dark)" : "var(--gray8)")};
-  background: ${({ active }) => (active ? "var(--main)" : "transparent")};
-  font-weight: ${({ active }) => (active ? 600 : 400)};
-  padding: 10px 30px;
+  background: var(--grayF5);
+  border-radius: 50px;
+  color: ${({ $active }) => ($active ? "var(--main)" : "var(--gray1)")};
+  background: ${({ $active }) => ($active ? "var(--gray1)" : "var(--grayF5)")};
+  padding: 10px 16px;
+  transition: all 0.3s;
   cursor: pointer;
-  transition: 0.3s;
-  &:hover {
-    background: var(--main);
-    color: var(--dark);
-    font-weight: 600;
-  }
+  word-break: keep-all;
 
+  @media screen and (max-width: 1440px) {
+    font-size: 1.4rem;
+  }
   @media screen and (max-width: 1024px) {
-    font-size: 1.6rem;
   }
 `;
 
-const CollaboCategory = styled.div`
-  position: absolute;
-  width: 680px;
-  height: 50px;
+const SearchPart = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--grayF5);
-  border-radius: 26px;
-  margin-top: 2%;
-  left: 50%;
-  transform: translateX(-50%);
-`;
-
-const CollaboBrand = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 10px 18px;
-  cursor: pointer;
-  z-index: 2;
-
-  span {
-    width: 100%;
-    color: var(--gray8);
-    font-weight: 400;
-    transition: all 0.3s ease;
-
-    &.active {
-      color: var(--main);
-      font-weight: 600;
-    }
+  gap: 20px;
+  @media screen and (max-width: 1440px) {
+    gap: 0px;
   }
 `;
 
-const MotionBg = styled(motion.div)`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  background: var(--dark);
-  border-radius: 26px;
-  z-index: 1;
+const SearchBar = styled.div`
+  .search_bar {
+    position: relative;
+    border-bottom: 1px solid var(--gray1);
+    padding-bottom: 4px;
+    #search_form_mb {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      button,
+      input {
+        border: none;
+        background: none;
+      }
+      font-size: 0;
+      position: relative;
+      .search_txt {
+        border-radius: 100px;
+        background: var(--light);
+        width: 100%;
+        overflow: hidden;
+        transition: all 0.3s;
+        font-size: 1.4rem;
+        color: var(--gray1);
+        &::placeholder {
+          font-size: 1.4rem;
+          font-family: "pretendard";
+          transition: all 0.3s;
+          color: var(--grayC);
+        }
+        &:focus {
+          outline: none;
+          &::placeholder {
+            color: transparent;
+          }
+        }
+      }
+      .search_btn {
+        cursor: pointer;
+        font-size: 16px;
+      }
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    width: 80%;
+    margin-bottom: 20%;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 70%;
+    margin-bottom: 10%;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    padding: 0 15px;
+    margin-bottom: 10px;
+  }
 `;
 
 const TabletContainer = styled.div`
@@ -98,6 +134,10 @@ const TabletContainer = styled.div`
 
   @media screen and (max-width: 1024px) {
     display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
     position: absolute;
     left: 3%;
     margin-top: 5%;
@@ -117,14 +157,19 @@ const Sidebar = styled.div`
   flex-direction: column;
   gap: 12px;
 
+  @media screen and (max-width: 768px) {
+    width: 150px;
+  }
   @media screen and (max-width: 500px) {
     width: 100%;
-    padding: 0 3%;
+    padding: 0 15px;
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    gap: 0;
-    span:first-child {
+    flex-wrap: wrap;
+    gap: 8px;
+
+    & > div:first-child {
       display: none;
     }
     svg {
@@ -138,52 +183,35 @@ const SidebarToggle = styled.div`
   span {
     font-weight: bold;
   }
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const SidebarItem = styled.div`
   font-size: 1.6rem;
-  color: ${({ active }) => (active ? "var(--bg)" : "var(--gray8)")};
-  font-weight: ${({ active }) => (active ? 600 : 400)};
-  cursor: pointer;
+  color: ${({ $active }) => ($active ? "var(--bg)" : "var(--gray8)")};
+  font-weight: ${({ $active }) => ($active ? 600 : 400)};
   transition: all 0.3s;
+  cursor: pointer;
+  word-break: keep-all;
   &:hover {
     color: var(--bg);
   }
-  @media screen and (max-width: 500px) {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  @media screen and (max-width: 768px) {
     font-size: 1.4rem;
-    padding: 12px 0;
   }
-`;
-
-const Dropdown = styled.div`
-  position: absolute;
-  top: 100%; /* 사이드바 바로 아래 */
-  left: 0;
-  background: #fff;
-  border: 1px solid var(--gray5);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  width: 180px;
-
   @media screen and (max-width: 500px) {
-    position: fixed; /* 화면에 고정 */
-    top: 50px; /* 적절히 조절 (필요시 조정) */
-    left: 0;
-    right: 0;
-    margin: 0 10px;
-    border-radius: 8px;
+    font-size: 1.4rem;
+    padding-top: 6px;
   }
 `;
 
 const Sort = styled.div`
   margin-top: 10px;
+
   @media screen and (max-width: 500px) {
-    margin-left: 3%;
+    margin-left: 15px;
   }
 `;
 
@@ -196,7 +224,7 @@ const Categories = [
   "COLLABORATION",
 ];
 
-const ProductCategory = ({ products = [] }) => {
+const ProductCategory = ({ products = [], searchTerm, setSearchTerm }) => {
   const {
     selectCollabo,
     setSelectCollabo,
@@ -207,10 +235,7 @@ const ProductCategory = ({ products = [] }) => {
     setSelectedCategory,
   } = useProductStore();
 
-  // const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
   const [showCategories, setShowCategories] = useState(true);
-  // const [showCollaborationBrands, setShowCollaborationBrands] = useState(true);
   const brandRefs = useRef({});
 
   const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
@@ -235,13 +260,6 @@ const ProductCategory = ({ products = [] }) => {
     }
   };
 
-  // ▼ 브랜드 클릭 시 드롭다운 닫고 브랜드 선택
-  // const handleBrandClick = (brand) => {
-  //   setSelectedBrand(brand);
-  //   setSelectedCategory("COLLABORATION");
-  //   setDropdownOpen(false);
-  // };
-
   useEffect(() => {
     if (
       selectCollabo === "COLLABORATION" &&
@@ -264,50 +282,66 @@ const ProductCategory = ({ products = [] }) => {
     <CategoryWrapper>
       {/* PC */}
       <CategoryContainer>
-        <SortSelect value={sort} onChange={setSort} />
         <Category>
           {Categories.map((category) => (
             <CategoryItem
               key={category}
-              active={selectCollabo === category ? "active" : ""}
+              $active={selectCollabo === category ? "active" : ""}
               onClick={() => handleCategoryClick(category)}
             >
               {category}
             </CategoryItem>
           ))}
         </Category>
-        {/* 
-        {selectCollabo === "COLLABORATION" && dropdownOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <LayoutGroup>
-              <CollaboCategory>
-                <MotionBg
-                  animate={bgStyle}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
+        <SearchPart>
+          <SearchBar>
+            <div className="search_bar">
+              <form
+                id="search_form_mb"
+                name="search_bar_mb"
+                className="search_form_mb"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <input
+                  className="search_txt"
+                  type="text"
+                  placeholder="상품을 검색해주세요"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                {subBrands.map((brand) => (
-                  <CollaboBrand
-                    key={brand}
-                    ref={(el) => (brandRefs.current[brand] = el)}
-                    onClick={() => handleBrandClick(brand)}
-                  >
-                    <span className={selectedBrand === brand ? "active" : ""}>
-                      {brand}
-                    </span>
-                  </CollaboBrand>
-                ))}
-              </CollaboCategory>
-            </LayoutGroup>
-          </motion.div>
-        )} */}
+                <button className="search_btn">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </button>
+              </form>
+            </div>
+          </SearchBar>
+          <SortSelect value={sort} onChange={setSort} />
+        </SearchPart>
       </CategoryContainer>
 
       {/* Mobile/Tablet */}
       <TabletContainer>
+        <SearchBar>
+          <div className="search_bar">
+            <form
+              id="search_form_mb"
+              name="search_bar_mb"
+              className="search_form_mb"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                className="search_txt"
+                type="text"
+                placeholder="상품을 검색해주세요"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button className="search_btn">
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </button>
+            </form>
+          </div>
+        </SearchBar>
         <Sidebar>
           <SidebarToggle onClick={() => setShowCategories((prev) => !prev)}>
             <span>CATEGORY</span>
@@ -320,27 +354,14 @@ const ProductCategory = ({ products = [] }) => {
             Categories.map((cat) => (
               <SidebarItem
                 key={cat}
-                active={selectCollabo === cat}
+                $active={selectCollabo === cat}
                 onClick={() => {
-                  setSelectCollabo(cat);
-                  if (cat === "COLLABORATION") setShowCollaborationBrands(true);
+                  handleCategoryClick(cat); // 통일된 동작
                 }}
               >
                 {cat}
               </SidebarItem>
             ))}
-
-          {/* {selectCollabo === "COLLABORATION" &&
-            showCollaborationBrands &&
-            subBrands.map((brand) => (
-              <SidebarItem
-                key={brand}
-                active={selectedBrand === brand}
-                onClick={() => setSelectedBrand(brand)}
-              >
-                {brand}
-              </SidebarItem>
-            ))} */}
         </Sidebar>
         <Sort>
           <SortSelect value={sort} onChange={setSort} />

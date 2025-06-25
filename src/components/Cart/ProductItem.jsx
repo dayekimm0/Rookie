@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import CustomCheckbox from "./CustomCheckbox";
 import useCartStore from "../../stores/cartStore";
@@ -15,14 +16,15 @@ const DeskTopGrid = `
 const TabletGrid = `
   100px
   minmax(100px, 250px) 
-  minmax(70px, 80px) 
-  minmax(80px, 90px)
-  minmax(90px, 100px)
+  minmax(50px, 80px) 
+  minmax(60px, 90px)
+  minmax(70px, 100px)
 `;
 
 const Item = styled.div`
   width: 100%;
   display: grid;
+  column-gap: 20px;
   grid-template-columns: ${DeskTopGrid};
   justify-content: space-between;
   align-items: center;
@@ -54,7 +56,7 @@ const Item = styled.div`
     width: 100%;
     max-height: 220px;
     min-height: 100px;
-    grid-template-columns: minmax(100px, 200px) minmax(200px, 400px);
+    grid-template-columns: minmax(0, 200px) minmax(0, 400px);
     grid-auto-rows: min-content;
     justify-content: space-between;
     align-items: center;
@@ -121,8 +123,8 @@ const Thumbnail = styled.div`
   overflow: hidden;
   input {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 4px;
+    left: 4px;
   }
 `;
 
@@ -177,7 +179,7 @@ const ProductName = styled.li`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;
@@ -213,7 +215,7 @@ const ItemOption = styled.ul`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;
@@ -230,7 +232,7 @@ const SinglePrice = styled.li`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;
@@ -247,34 +249,42 @@ const MultiPrice = styled.li`
     font-size: 1.6rem;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 600px) {
     font-size: 1.4rem;
   }
 `;
 
 const ProductItem = ({ item, isChecked, onToggle }) => {
   const { id, thumbnail, team, name, option, quantity, price } = item;
+  const { pathname } = useLocation();
 
   return (
     <Item key={id}>
       <Thumbnail>
-        <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        {pathname === "/mypage" ? null : (
+          <CustomCheckbox checked={isChecked} onChange={onToggle} />
+        )}
+
         <ItemImage src={thumbnail} />
       </Thumbnail>
       <ItemName>
         <TeamName>{getTeamNameKor(team)}</TeamName>
         <ProductName>{name}</ProductName>
       </ItemName>
+
       <ItemOption>
-        <li>
-          <p className="mobile">옵션</p>
-          <p className="option">{option}</p>
-        </li>
+        {option && option.length > 0 && option[0] && (
+          <li>
+            <p className="mobile">옵션</p>
+            <p className="option">{option[0]}</p>
+          </li>
+        )}
         <li>
           <p className="mobile">수량</p>
           <p className="quantity">{quantity}개</p>
         </li>
       </ItemOption>
+
       <SinglePrice>
         <p className="mobile">상품가격</p>
         <p>{price.toLocaleString()}원</p>

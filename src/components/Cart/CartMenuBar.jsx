@@ -13,9 +13,9 @@ const DeskTopGrid = `
 const TabletGrid = `
   100px
   minmax(100px, 250px) 
-  minmax(70px, 80px) 
-  minmax(80px, 90px)
-  minmax(90px, 100px)
+  minmax(50px, 80px) 
+  minmax(60px, 90px)
+  minmax(70px, 100px)
 `;
 
 const MenuBar = styled.div`
@@ -25,6 +25,7 @@ const MenuBar = styled.div`
   ul {
     width: 100%;
     display: grid;
+    column-gap: 20px;
     grid-template-columns: ${DeskTopGrid};
     justify-content: space-between;
     align-items: center;
@@ -34,6 +35,7 @@ const MenuBar = styled.div`
     :nth-child(1) {
       display: flex;
       align-items: center;
+      padding-left: 4px;
       gap: 5%;
     }
     :nth-child(2) {
@@ -56,6 +58,7 @@ const MenuBar = styled.div`
   @media screen and (max-width: 1024px) {
     ul {
       grid-template-columns: ${TabletGrid};
+      column-gap: 20px;
       font-size: 1.6rem;
     }
   }

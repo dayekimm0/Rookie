@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 const ContentOne = styled.div`
-  font-family: "Gmarketsans";
+  font-family: "GmarketSans";
   font-weight: bold;
   padding: 30px;
   user-select: none;
@@ -59,9 +59,11 @@ const MediumText = styled.div`
     color: var(--main);
   }
 `;
+
 const LastText = styled.div`
   font-size: 1.8rem;
-  font-family: "Pretendard";
+  font-family: "Pretendard", sans-serif;
+  font-weight: 300;
   @media screen and (max-width: 1024px) {
     font-size: 1.6rem;
     margin-bottom: 5%;
@@ -81,7 +83,6 @@ const LastText = styled.div`
 
 const ContentTwo = styled.div`
   margin-bottom: 50px;
-  font-family: "Pretendard";
   user-select: none;
   @media screen and (max-width: 1024px) {
     margin-bottom: 3%;
@@ -111,11 +112,19 @@ const TextLast = styled.div`
 `;
 
 const CouponBox = styled.div`
-  img {
-    margin-right: 30px;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (max-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 16px;
+    justify-content: center;
+    align-content: center;
+    padding: 0 16px;
   }
 
-  @media screen and (max-width: 1176px) {
+  /* @media screen and (max-width: 1176px) {
     display: grid;
     grid-template-columns: repeat(2, 0fr);
     grid-template-rows: repeat(2, 130px);
@@ -153,7 +162,7 @@ const CouponBox = styled.div`
     img {
       margin-right: 0px;
     }
-  }
+  } */
 `;
 
 const ContentsTitle = () => {
@@ -170,7 +179,7 @@ const ContentsTitle = () => {
       </ContentOne>
       <ContentTwo>
         <TextFirst>
-          <b>할인 쿠폰</b>을 얻을수 있는 단 한번의 기회!
+          <b>할인 쿠폰</b>을 얻을 수 있는 단 한번의 기회!
         </TextFirst>
         <TextLast>그 한번의 기회에 당신의 운을 확인해보세요!</TextLast>
       </ContentTwo>

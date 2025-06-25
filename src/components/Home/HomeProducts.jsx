@@ -13,11 +13,16 @@ const Container = styled.div`
   @media screen and (max-width: 1024px) {
     gap: 14px;
   }
-  @media screen and (max-width: 600px) {
-    gap: 8px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    row-gap: 25px;
+    /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
   }
-  @media screen and (max-width: 450px) {
+  /* @media screen and (max-width: 450px) {
+    grid-template-columns: repeat(1, 1fr);
+  } */
+  @media screen and (max-width: 375px) {
     grid-template-columns: repeat(1, 1fr);
   }
 `;
@@ -26,7 +31,7 @@ const HomeProducts = ({ products }) => {
   return (
     <Container>
       {products.map((item) => (
-        <ProductCard key={item.id} data={item} />
+        <ProductCard key={`${item.team} ${item.id}`} data={item} />
       ))}
     </Container>
   );

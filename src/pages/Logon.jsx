@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import RGarrow from "../images/icons/RGarrow_logo.svg";
-import RBarrow from "../images/icons/RBarrow_logo.svg";
 import LogonFirst from "../components/Loginon/LogonFirst";
 import LogonSecond from "../components/Loginon/LogonSecond";
 import LogonThird from "../components/Loginon/LogonThird";
+import LogonFourth from "../components/Loginon/LogonFourth";
 import logonStore from "../stores/LogonStore";
 
 const Container = styled.div`
@@ -25,66 +24,54 @@ const Inner = styled.div`
   gap: 40px;
   @media screen and (max-width: 1024px) {
     width: 480px;
+    gap: 36px;
   }
   @media screen and (max-width: 600px) {
     width: 100%;
+    max-width: 462px;
+    gap: 32px;
   }
 `;
 
 const LogonTitleWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 30px;
   @media screen and (max-width: 1024px) {
-    gap: 32px;
+    gap: 26px;
   }
   @media screen and (max-width: 600px) {
-    gap: 24px;
+    gap: 20px;
   }
 `;
 
 const LogonTitle = styled.div`
-  font-size: 3rem;
+  font-size: 2.6rem;
   font-weight: bold;
   @media screen and (max-width: 1024px) {
     font-size: 2.4rem;
   }
   @media screen and (max-width: 600px) {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
   }
 `;
 
 const TitleSWrapper = styled.div`
-  width: 350px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media screen and (max-width: 1024px) {
-    width: 320px;
-  }
   @media screen and (max-width: 600px) {
-    width: 240px;
+    max-width: 462px;
   }
 `;
 
 const LogonTitleS = styled.span`
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: var(--grayC);
-  @media screen and (max-width: 1024px) {
-    font-size: 1.2rem;
-  }
-  @media screen and (max-width: 600px) {
-    font-size: 0.9rem;
-  }
-`;
-
-const Line = styled.span`
-  display: inline-block;
-  width: 100%;
-  height: 1px;
-  background: var(--gray1);
+  width: 33.3333334%;
+  height: 5px;
+  background: var(--grayF5);
 `;
 
 const Logon = () => {
@@ -93,45 +80,35 @@ const Logon = () => {
   return (
     <Container
       style={{
-        height: step === 2 ? "100%" : "100vh",
-        margin: step === 2 ? "40px 0" : "0",
+        height: step === 3 ? "100%" : "100vh",
+        margin: step === 3 ? "40px 0" : "0",
       }}
     >
       <Inner>
         <LogonTitleWrapper>
-          <LogonTitle>정보입력</LogonTitle>
+          <LogonTitle>회원가입</LogonTitle>
           <TitleSWrapper>
             <LogonTitleS
-              style={{ color: step >= 1 ? "var(--dark)" : "var(--grayC)" }}
-            >
-              1. 정보입력
-            </LogonTitleS>
-            {step >= 2 ? (
-              <img src={RBarrow} alt="RBarrow" />
-            ) : (
-              <img src={RGarrow} alt="RBarrow" />
-            )}
+              style={{
+                backgroundColor: step > 1 ? "var(--dark)" : "var(--grayE)",
+              }}
+            />
             <LogonTitleS
-              style={{ color: step >= 2 ? "var(--dark)" : "var(--grayC)" }}
-            >
-              2. 계정생성
-            </LogonTitleS>
-            {step >= 3 ? (
-              <img src={RBarrow} alt="RBarrow" />
-            ) : (
-              <img src={RGarrow} alt="RBarrow" />
-            )}
+              style={{
+                backgroundColor: step > 2 ? "var(--dark)" : "var(--grayE)",
+              }}
+            />
             <LogonTitleS
-              style={{ color: step >= 3 ? "var(--dark)" : "var(--grayC)" }}
-            >
-              3. 가입완료
-            </LogonTitleS>
+              style={{
+                backgroundColor: step > 3 ? "var(--dark)" : "var(--grayE)",
+              }}
+            />
           </TitleSWrapper>
         </LogonTitleWrapper>
-        <Line />
         {step === 1 && <LogonFirst />}
         {step === 2 && <LogonSecond />}
         {step === 3 && <LogonThird />}
+        {step === 4 && <LogonFourth />}
       </Inner>
     </Container>
   );

@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getTeamJsonCode, getTeamNameKor } from "../util";
+import { getTeamNameKor } from "../util";
 
 const CardContainer = styled.div`
   width: 290px;
@@ -17,11 +16,13 @@ const CardContainer = styled.div`
     width: 270px;
   }
   @media screen and (max-width: 1024px) {
-    width: 250px;
+    /* width: 250px; */
+    width: 100%;
   }
 
   @media screen and (max-width: 500px) {
     width: 100%;
+    padding: 0px;
   }
 `;
 
@@ -30,17 +31,18 @@ const ProductImg = styled.div`
   max-width: 100%;
   height: 310px;
   margin-bottom: 24px;
-
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 4px;
     filter: brightness(0.95);
     cursor: pointer;
-    transition: scale 0.3s;
+    transition: transform 0.3s ease;
     &:hover {
-      scale: 1.08;
+      transform: scale(1.06);
     }
   }
   @media screen and (max-width: 1440px) {
@@ -49,16 +51,17 @@ const ProductImg = styled.div`
   }
   @media screen and (max-width: 1024px) {
     width: 100%;
-    height: 270px;
+    /* height: 250px; */
+    height: auto;
+    aspect-ratio: 4/5;
   }
 
   @media screen and (max-width: 500px) {
     width: 100%;
-    height: 290px;
+    height: auto;
   }
   @media screen and (max-width: 450px) {
     width: 100%;
-    height: calc(230px + 25vw);
   }
 `;
 
@@ -83,17 +86,26 @@ const ProductInfo = styled.div`
     }
   }
   .brand {
+    font-size: 1.6rem;
   }
   .name {
     height: 48px;
-    cursor: pointer;
     font-size: 1.8rem;
-    line-height: 1.3;
+    div {
+      line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: keep-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
   .price {
     font-size: 1.8rem;
     cursor: pointer;
   }
+
   @media screen and (max-width: 1024px) {
     width: 100%;
 
@@ -115,6 +127,7 @@ const ProductInfo = styled.div`
     }
     .name {
       font-size: 1.4rem;
+      height: 38px;
     }
     .price {
       font-size: 1.5rem;
@@ -129,6 +142,7 @@ const ProductInfo = styled.div`
     }
     .name {
       font-size: 1.3rem;
+      height: 35px;
     }
     .price {
       font-size: 1.4rem;
@@ -140,12 +154,12 @@ const ProductCard = ({ data }) => {
   const navigate = useNavigate();
 
   if (!data) return null;
-  const { thumbnail, name, price, team, id } = data;
 
   const handleClick = () => {
-    const teamCode = getTeamJsonCode(team); // ← 함수 호출로 수정!
     navigate(`/store/${team}/${id}`);
   };
+
+  const { thumbnail, name, price, team, id } = data;
 
   return (
     <CardContainer onClick={handleClick}>
@@ -163,7 +177,9 @@ const ProductCard = ({ data }) => {
             />
           </svg>
         </div>
-        <div className="name">{name}</div>
+        <div className="name">
+          <div>{name}</div>
+        </div>
         <div className="price">{price}</div>
       </ProductInfo>
     </CardContainer>

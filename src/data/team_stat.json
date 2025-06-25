@@ -1,0 +1,192 @@
+[
+  {
+    "teamCode": "ds_bas",
+    "teamName": "두산 베어스",
+    "games": 74,
+    "wins": 29,
+    "losses": 42,
+    "ties": 3,
+    "winRate": "0.408",
+    "stats": {
+      "battingAverage": "0.256",
+      "era": "4.54",
+      "hits": 777,
+      "homeRuns": 46,
+      "steals": 62,
+      "strikeouts": 597,
+      "doublePlay": 48,
+      "errors": 47
+    }
+  },
+  {
+    "teamCode": "lg_twins",
+    "teamName": "LG 트윈스",
+    "games": 74,
+    "wins": 42,
+    "losses": 30,
+    "ties": 2,
+    "winRate": "0.583",
+    "stats": {
+      "battingAverage": "0.265",
+      "era": "3.69",
+      "hits": 767,
+      "homeRuns": 72,
+      "steals": 59,
+      "strikeouts": 533,
+      "doublePlay": 49,
+      "errors": 33
+    }
+  },
+  {
+    "teamCode": "ssg_lds",
+    "teamName": "SSG 랜더스",
+    "games": 73,
+    "wins": 36,
+    "losses": 34,
+    "ties": 3,
+    "winRate": "0.514",
+    "stats": {
+      "battingAverage": "0.245",
+      "era": "5.53",
+      "hits": 710,
+      "homeRuns": 50,
+      "steals": 69,
+      "strikeouts": 611,
+      "doublePlay": 39,
+      "errors": 50
+    }
+  },
+  {
+    "teamCode": "kia_tgs",
+    "teamName": "KIA 타이거즈",
+    "games": 73,
+    "wins": 38,
+    "losses": 33,
+    "ties": 2,
+    "winRate": "0.535",
+    "stats": {
+      "battingAverage": "0.255",
+      "era": "4.15",
+      "hits": 776,
+      "homeRuns": 66,
+      "steals": 44,
+      "strikeouts": 581,
+      "doublePlay": 48,
+      "errors": 49
+    }
+  },
+  {
+    "teamCode": "kt_wiz",
+    "teamName": "KT 위즈",
+    "games": 75,
+    "wins": 37,
+    "losses": 35,
+    "ties": 3,
+    "winRate": "0.514",
+    "stats": {
+      "battingAverage": "0.256",
+      "era": "3.61",
+      "hits": 775,
+      "homeRuns": 49,
+      "steals": 29,
+      "strikeouts": 525,
+      "doublePlay": 53,
+      "errors": 39
+    }
+  },
+  {
+    "teamCode": "lt_gnt",
+    "teamName": "롯데 자이언츠",
+    "games": 75,
+    "wins": 41,
+    "losses": 31,
+    "ties": 3,
+    "winRate": "0.569",
+    "stats": {
+      "battingAverage": "0.285",
+      "era": "4.72",
+      "hits": 895,
+      "homeRuns": 43,
+      "steals": 48,
+      "strikeouts": 521,
+      "doublePlay": 72,
+      "errors": 52
+    }
+  },
+  {
+    "teamCode": "nc_dns",
+    "teamName": "NC 다이노스",
+    "games": 71,
+    "wins": 32,
+    "losses": 35,
+    "ties": 4,
+    "winRate": "0.478",
+    "stats": {
+      "battingAverage": "0.255",
+      "era": "4.64",
+      "hits": 720,
+      "homeRuns": 59,
+      "steals": 72,
+      "strikeouts": 533,
+      "doublePlay": 38,
+      "errors": 54
+    }
+  },
+  {
+    "teamCode": "ss_lns",
+    "teamName": "삼성 라이온즈",
+    "games": 74,
+    "wins": 38,
+    "losses": 35,
+    "ties": 1,
+    "winRate": "0.521",
+    "stats": {
+      "battingAverage": "0.268",
+      "era": "4.18",
+      "hits": 802,
+      "homeRuns": 83,
+      "steals": 63,
+      "strikeouts": 595,
+      "doublePlay": 52,
+      "errors": 32
+    }
+  },
+  {
+    "teamCode": "hw_egs",
+    "teamName": "한화 이글스",
+    "games": 73,
+    "wins": 43,
+    "losses": 29,
+    "ties": 1,
+    "winRate": "0.597",
+    "stats": {
+      "battingAverage": "0.258",
+      "era": "3.41",
+      "hits": 773,
+      "homeRuns": 54,
+      "steals": 67,
+      "strikeouts": 555,
+      "doublePlay": 45,
+      "errors": 40
+    }
+  },
+  {
+    "teamCode": "kw_hrs",
+    "teamName": "키움 히어로즈",
+    "games": 76,
+    "wins": 21,
+    "losses": 53,
+    "ties": 2,
+    "winRate": "0.284",
+    "stats": {
+      "battingAverage": "0.231",
+      "era": "5.61",
+      "hits": 704,
+      "homeRuns": 51,
+      "steals": 31,
+      "strikeouts": 660,
+      "doublePlay": 53,
+      "errors": 62
+    }
+  }
+]

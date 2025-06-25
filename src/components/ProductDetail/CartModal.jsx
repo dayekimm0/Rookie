@@ -56,15 +56,44 @@ const ConfirmationText = styled.p`
   }
 `;
 
+// 버튼
+
+const Buttons = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
 // 장바구니 버튼
 const CartButton = styled.button`
+  background: var(--main);
+  color: var(--dark);
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  /* transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--gray3);
+  } */
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    font-size: 12px;
+  }
+`;
+
+// 쇼핑하기 버튼
+const ShoppingButton = styled.button`
   background-color: var(--gray1);
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 12px 30px;
-  font-size: 16px;
-  font-weight: 600;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 300;
   cursor: pointer;
   transition: background-color 0.2s;
 
@@ -83,6 +112,7 @@ const CartModal = ({
   onClose,
   message = "상품이 장바구니에 담겼습니다!",
   buttonText = "장바구니로 이동",
+  shoppingText = "계속 쇼핑하기",
 }) => {
   const navigate = useNavigate();
 
@@ -100,7 +130,10 @@ const CartModal = ({
           <img src={RookieLogo} alt="루키 로고" />
         </LogoContainer>
         <ConfirmationText>{message}</ConfirmationText>
-        <CartButton onClick={handleGoToCart}>{buttonText}</CartButton>
+        <Buttons>
+          <ShoppingButton onClick={onClose}>{shoppingText}</ShoppingButton>
+          <CartButton onClick={handleGoToCart}>{buttonText}</CartButton>
+        </Buttons>
       </ModalContainer>
     </ModalOverlay>
   );

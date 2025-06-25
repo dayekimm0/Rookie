@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProductItem from "../components/Cart/ProductItem";
 import WingBanner from "../components/Cart/WingBanner";
 import CartMenuBar from "../components/Cart/CartMenuBar";
-import { mockItems } from "../components/Cart/MockupData";
 import useCartStore from "../stores/cartStore";
-
+import authStore from "../stores/AuthStore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -85,7 +86,6 @@ const Items = styled.div`
   overscroll-behavior: contain;
   touch-action: auto;
   scroll-behavior: auto;
-
   scrollbar-gutter: stable;
   &::-webkit-scrollbar {
     width: 5px;
@@ -166,36 +166,64 @@ const DeleteButton = styled.div`
 
 const Cart = () => {
   const navigate = useNavigate();
-
   const { cartItems, setCartItems, toggleCheckItem } = useCartStore();
-
   const checkedItems = cartItems.filter((item) => item.checked);
 
-  // 쿠폰 목록
-  const [coupons, setCoupons] = useState([]);
+  const user = authStore((state) => state.user);
+  const userUid = user?.uid || null;
 
-  // 목업 쿠폰
-  const MOCK_COUPONS = [
-    { id: "c10", label: "10% 할인 쿠폰", discountRate: 0.1 },
-    { id: "c20", label: "20% 할인 쿠폰", discountRate: 0.2 },
-    { id: "c30", label: "30% 할인 쿠폰", discountRate: 0.3 },
-  ];
+  // 파이어베이스에서 불러온 쿠폰 목록 상태
+  const [coupons, setCoupons] = useState([]);
 
   // 선택된 쿠폰 상태
   const [selectedCoupon, setSelectedCoupon] = useState(null);
 
-  // 로컬스토리지에서 쿠폰 불러오기 + 없으면 MOCK_COUPONS 세팅
+  // 쿠폰 불러오기 (파이어베이스)
   useEffect(() => {
-    const storedCoupons = localStorage.getItem("coupons");
-    if (storedCoupons) {
-      setCoupons(JSON.parse(storedCoupons));
-    } else {
-      setCoupons(MOCK_COUPONS);
-      localStorage.setItem("coupons", JSON.stringify(MOCK_COUPONS));
-    }
-  }, []);
+    const fetchCoupons = async () => {
+      if (!userUid) {
+        setCoupons([]);
+        return;
+      }
+      try {
+        // wonCoupons 와 welcomeCoupons 두 컬렉션 불러오기
+        const wonCouponsRef = collection(db, "users", userUid, "wonCoupons");
+        const welcomeCouponsRef = collection(
+          db,
+          "users",
+          userUid,
+          "welcomeCoupons"
+        );
 
-  // 상품 체크
+        // 병렬로 두 컬렉션 문서 가져오기
+        const [wonSnapshot, welcomeSnapshot] = await Promise.all([
+          getDocs(wonCouponsRef),
+          getDocs(welcomeCouponsRef),
+        ]);
+
+        // 각각 문서 배열로 변환
+        const wonCouponList = wonSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const welcomeCouponList = welcomeSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // 두 배열 합치기
+        const allCoupons = [...wonCouponList, ...welcomeCouponList];
+
+        setCoupons(allCoupons);
+      } catch (error) {
+        console.error("쿠폰 불러오기 실패", error);
+        setCoupons([]);
+      }
+    };
+    fetchCoupons();
+  }, [userUid]);
+
+  // 상품 체크된 항목
   const selectedItems = checkedItems;
 
   // 체크된 상품 삭제
@@ -210,22 +238,41 @@ const Cart = () => {
     0
   );
 
+  // 할인금액 계산 함수
+  const getDiscountPercent = (title) => {
+    switch (title) {
+      case "HOME RUN !":
+        return 80;
+      case "TRIPLE !":
+        return 50;
+      case "DOUBLE !":
+        return 30;
+      case "SINGLE !":
+        return 10;
+      case "WELCOME!":
+      case "WELCOME !":
+        return 10;
+      default:
+        return 0;
+    }
+  };
+
   // 할인금액
   const discount = selectedCoupon
-    ? productPrice * selectedCoupon.discountRate
+    ? Math.floor(
+        productPrice * (getDiscountPercent(selectedCoupon.title) / 100)
+      )
     : 0;
 
   // 총 결제금액
   const totalPrice = productPrice - discount;
 
   // 쿠폰 변경
-  const handleCouponChange = (e) => {
-    const couponId = e.target.value;
-    const coupon = coupons.find((c) => c.id === couponId);
-    setSelectedCoupon(coupon || null);
+  const handleCouponChange = (coupon) => {
+    setSelectedCoupon(coupon);
   };
 
-  // 선택상품주문
+  // 선택상품 주문
   const handleOrderSelected = () => {
     if (selectedItems.length === 0) return;
     navigate("/payment", {
@@ -233,14 +280,14 @@ const Cart = () => {
     });
   };
 
-  // 전체상품주문
+  // 전체상품 주문
   const handleOrderAll = () => {
     navigate("/payment", {
       state: { orderItems: cartItems, coupon: selectedCoupon },
     });
   };
 
-  // 체크박스
+  // 전체 체크박스 토글
   const handleToggleAll = (isChecked) => {
     const updateAllChecked = cartItems.map((item) => ({
       ...item,
@@ -248,15 +295,6 @@ const Cart = () => {
     }));
     setCartItems(updateAllChecked);
   };
-
-  useEffect(() => {
-    console.log("cartItems:", cartItems);
-    console.log("checkedItems:", checkedItems);
-    console.log(
-      "allChecked:",
-      cartItems.length > 0 && checkedItems.length === cartItems.length
-    );
-  }, [cartItems, checkedItems]);
 
   return (
     <Container>
@@ -276,7 +314,7 @@ const Cart = () => {
                   key={item.id}
                   item={item}
                   isChecked={item.checked}
-                  onToggle={() => toggleCheckItem(item.id)}
+                  onToggle={() => toggleCheckItem(item.id, item.option)}
                 />
               ))
             ) : (
@@ -294,8 +332,6 @@ const Cart = () => {
       <WingBanner
         page="cart"
         productPrice={productPrice}
-        discount={discount}
-        totalPrice={totalPrice}
         coupons={coupons}
         selectedCoupon={selectedCoupon}
         onCouponChange={handleCouponChange}

@@ -14,12 +14,12 @@ const Section = styled.section`
   }
 
   .rdt_Table {
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
+    border-top: 1px solid #2b2b2b;
+    border-right: 1px solid #2b2b2b;
   }
 
   .rdt_TableHead {
-    background-color: var(--dark);
+    background-color: #1a1a1a;
   }
 
   .rdt_TableHeadRow {
@@ -28,9 +28,9 @@ const Section = styled.section`
   }
 
   .rdt_TableCol {
-    background-color: var(--dark);
-    border-left: 1px solid #333;
-    border-bottom: 1px solid #333;
+    background-color: #1a1a1a;
+    border-left: 1px solid #2b2b2b;
+    border-bottom: 1px solid #2b2b2b;
     color: #ddd;
     font-size: 1.7rem;
   }
@@ -38,13 +38,13 @@ const Section = styled.section`
   .rdt_TableRow {
     background-color: var(--bg);
     color: var(--light);
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #2b2b2b;
     min-height: 64px;
   }
 
   .rdt_TableCell {
     background-color: var(--bg);
-    border-left: 1px solid #333;
+    border-left: 1px solid #2b2b2b;
     color: #eee;
     font-size: 1.6rem;
     padding: 0;
@@ -74,7 +74,6 @@ const Section = styled.section`
     }
   }
   .table {
-    /* border-right: 1px solid #333; */
     &::-webkit-scrollbar {
       height: 6px;
     }
@@ -178,7 +177,7 @@ const RankingTable = () => {
   return (
     <Section>
       <div className="inner">
-        <h3>리그 순위표</h3>
+        <h3>RANK</h3>
 
         <ScrollWrap ref={tableRef}>
           <DataTable

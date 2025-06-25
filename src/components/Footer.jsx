@@ -1,19 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import lenis from "../lenisInstance";
 import LogoSvg from "./LogoSvg";
+import Footerbtns from "./FooterItem/Footerbtns";
 
 const Container = styled.footer`
   padding-top: ${({ $pathname }) => ($pathname !== "/event" ? "95px" : "0")};
-  background: ${({ mode }) => (mode === "light" ? "#fff" : "#222")};
+  background: ${({ mode }) => (mode === "light" ? "#fff" : "var(--bg)")};
   position: relative;
   color: var(--gray8);
+  @media screen and (max-width: 1600px) {
+    padding-top: ${({ $pathname }) => ($pathname === "/event" ? "0" : "95px")};
+  }
   @media screen and (max-width: 1024px) {
-    padding-top: ${({ $pathname }) => ($pathname !== "/event" ? "75px" : "0")};
+    padding-top: ${({ $pathname }) => ($pathname === "/event" ? "0" : "75px")};
   }
   @media screen and (max-width: 768px) {
-    padding-top: ${({ $pathname }) => ($pathname !== "/event" ? "65px" : "0")};
+    padding-top: ${({ $pathname }) => ($pathname === "/event" ? "0" : "60px")};
   }
 
   .inner {
@@ -214,58 +217,10 @@ const Container = styled.footer`
   }
 `;
 
-const Upbtn = styled.div.attrs((props) => ({
-  style: {
-    bottom: `${props.$bottom}px`,
-  },
-}))`
-  position: fixed;
-  z-index: 88;
-  right: 5%;
-  width: 48px;
-  aspect-ratio: 1;
-  border-radius: 4px;
-  border: 1px solid;
-  border-color: ${({ mode }) => (mode === "light" ? "#aaa" : "#fff")};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(2px);
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
-  visibility: ${({ $isVisible }) => ($isVisible ? "visible" : "hidden")};
-  transition: opacity 0.3s;
-  cursor: pointer;
-  svg {
-    width: 22px;
-    path {
-      stroke: ${({ mode }) => (mode === "light" ? "#888" : "#fff")};
-    }
-  }
-  @media screen and (max-width: 1024px) {
-    right: 3%;
-    width: 44px;
-    svg {
-      width: 18px;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    width: 37px;
-    bottom: 20px;
-    svg {
-      width: 16px;
-    }
-  }
-  @media screen and (max-width: 500px) {
-    right: 15px;
-  }
-`;
-
 const Footer = ({ mode }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [bottomOffset, setBottomOffset] = useState(30);
+
   const { pathname } = useLocation();
-  const footerRef = useRef();
-  const topBtnRef = useRef();
 
   const isPaymentPage = pathname === "/payment";
   const isCartPage = pathname === "/cart";
@@ -274,26 +229,8 @@ const Footer = ({ mode }) => {
     let frame;
 
     const loop = () => {
-      const current = window.scrollY;
-      const overThreshold = current > 300;
-
-      setIsVisible((prev) => (prev !== overThreshold ? overThreshold : prev));
-
-      const footer = footerRef.current;
-      const topBtn = topBtnRef.current;
-
-      if (footer && topBtn) {
-        const footerTop = footer.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
-
-        if (footerTop < windowHeight - 20) {
-          const distanceFromBottom = windowHeight - footerTop + 20;
-          setBottomOffset(distanceFromBottom);
-        } else {
-          setBottomOffset(30);
-        }
-      }
-
+      const currentY = window.scrollY;
+      setIsVisible((prev) => (prev !== currentY > 300 ? currentY > 300 : prev));
       frame = requestAnimationFrame(loop);
     };
 
@@ -301,39 +238,12 @@ const Footer = ({ mode }) => {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const scrollToTop = () => {
-    lenis.scrollTo(0); // Lenis scrollTop
-  };
-
   return (
     <Container mode={mode} $pathname={pathname}>
       {!isPaymentPage && !isCartPage && (
-        <Upbtn
-          onClick={scrollToTop}
-          ref={topBtnRef}
-          mode={mode}
-          $isVisible={isVisible}
-          $bottom={bottomOffset}
-          data-lenis-prevent
-        >
-          <svg width="24" height="26" viewBox="0 0 24 26" fill="none">
-            <path
-              d="M22.8333 12.4206L12 1.58728L1.16667 12.4206"
-              stroke="#666666"
-              strokeWidth="1.66667"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M12 1.95544V24.4126"
-              stroke="#666666"
-              strokeWidth="1.66667"
-              strokeLinecap="round"
-            />
-          </svg>
-        </Upbtn>
+        <Footerbtns mode={mode} isVisible={isVisible} />
       )}
-      <div className="inner" ref={footerRef}>
+      <div className="inner">
         <div className="footer_wrap">
           <figure>
             <LogoSvg />

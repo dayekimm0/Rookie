@@ -4,8 +4,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import MainCard from "./MainCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
-import { NaviLeftBtn, NaviRightBtn } from "./NaviBtnStyles";
-import { getTodayMatches } from "../../util";
+import { NaviLeftBtn, NaviRightBtn } from "../Slides/NaviBtnStyles";
+import { useMatchedGameVideos } from "../../hook/useYoutubePlayList";
+import Spinner from "../Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -17,13 +18,6 @@ const Container = styled.div`
   }
   @media screen and (max-width: 500px) {
     padding-top: 15px;
-  }
-
-  .slider-container {
-    position: relative;
-  }
-  .swiper {
-    overflow: visible !important;
   }
 
   .timeLine {
@@ -45,9 +39,48 @@ const Container = styled.div`
   }
 `;
 
+const SliderContainerwrap = styled.div`
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+`;
+
+const SlideContainer = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  position: relative;
+  .swiper {
+    overflow: visible !important;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 94%;
+  }
+  @media screen and (max-width: 500px) {
+    width: calc(100% - 30px);
+  }
+`;
+
+const SlideLoaderWrapper = styled.div`
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 250px;
+  }
+`;
+
 const MainSlide = () => {
   const [swiper, setSwiper] = useState();
-  const [offset, setOffset] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [timeString, setTimeString] = useState("");
@@ -58,23 +91,6 @@ const MainSlide = () => {
   const handleNext = () => {
     swiper?.slideNext();
   };
-
-  useEffect(() => {
-    const updateOffset = () => {
-      const width = window.innerWidth;
-
-      if (width <= 500) {
-        setOffset(15);
-      } else if (width <= 1024) {
-        setOffset(width * 0.03);
-      } else {
-        setOffset(width * 0.05);
-      }
-    };
-    updateOffset();
-    window.addEventListener("resize", updateOffset);
-    return () => window.removeEventListener("resize", updateOffset);
-  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -95,76 +111,90 @@ const MainSlide = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const gameDay = getTodayMatches();
+  const { date, day, matches, isLoading, isError } = useMatchedGameVideos();
+
+  if (isLoading)
+    return (
+      <SlideLoaderWrapper>
+        <Spinner />
+      </SlideLoaderWrapper>
+    );
+  if (isError)
+    return (
+      <SlideLoaderWrapper>
+        <div>문제가 발생하였습니다.</div>
+      </SlideLoaderWrapper>
+    );
 
   return (
     <Container>
-      <div className="slider-container">
-        <Swiper
-          observer={true}
-          observeParents={true}
-          slidesPerView={4}
-          spaceBetween={20}
-          slidesOffsetBefore={offset}
-          slidesOffsetAfter={offset}
-          onSlideChange={(e) => {
-            setIsBeginning(e.isBeginning);
-            setIsEnd(e.isEnd);
-          }}
-          onSwiper={(e) => {
-            setSwiper(e);
-          }}
-          onReachEnd={() => setIsEnd(true)}
-          onFromEdge={() => setIsEnd(false)}
-          breakpoints={{
-            0: {
-              slidesPerView: 1.1,
-              spaceBetween: 6,
-            },
-            400: {
-              slidesPerView: 1.1,
-              spaceBetween: 6,
-            },
-            500: {
-              slidesPerView: 1.7,
-              spaceBetween: 14,
-            },
-            768: {
-              slidesPerView: 2.5,
-              spaceBetween: 14,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-            1440: {
-              slidesPerView: 4,
-              spaceBetween: 20,
-            },
-          }}
-        >
-          {gameDay.matches.map((match, index) => (
-            <SwiperSlide key={index}>
-              <MainCard
-                hometeam={match.homeTeam.code}
-                awayteam={match.awayTeam.code}
-                stadium={match.stadium}
-                date={gameDay.date}
-                day={gameDay.day}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-
+      <SliderContainerwrap>
+        <SlideContainer>
+          <Swiper
+            slidesPerView={4}
+            spaceBetween={20}
+            onSlideChange={(e) => {
+              if (e.isBeginning !== isBeginning) setIsBeginning(e.isBeginning);
+              if (e.isEnd !== isEnd) setIsEnd(e.isEnd);
+            }}
+            onSwiper={(e) => {
+              setSwiper(e);
+            }}
+            onReachEnd={() => setIsEnd(true)}
+            onFromEdge={() => setIsEnd(false)}
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+                spaceBetween: 6,
+              },
+              400: {
+                slidesPerView: 1.1,
+                spaceBetween: 6,
+              },
+              500: {
+                slidesPerView: 1.5,
+                spaceBetween: 14,
+              },
+              768: {
+                slidesPerView: 2.3,
+                spaceBetween: 14,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
+              1440: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+              },
+            }}
+          >
+            {matches.map((match, index) => (
+              <SwiperSlide key={index}>
+                <MainCard
+                  hometeam={match.homeTeam.code}
+                  awayteam={match.awayTeam.code}
+                  stadium={match.stadium}
+                  date={date}
+                  day={day}
+                  videoId={match.videoId}
+                  thumbnail={match.thumbnail}
+                  nextVideos={match.nextVideos}
+                  time={match.time}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </SlideContainer>
         <NaviLeftBtn onClick={handlePrev} disabled={isBeginning}>
           <img src={Arrow} alt="button" />
         </NaviLeftBtn>
         <NaviRightBtn onClick={handleNext} disabled={isEnd}>
           <img src={Arrow} alt="button" />
         </NaviRightBtn>
-      </div>
+      </SliderContainerwrap>
 
-      <h6 className="timeLine inner">{timeString}</h6>
+      {/* <h6 className="timeLine inner">{timeString}</h6> */}
     </Container>
   );
 };

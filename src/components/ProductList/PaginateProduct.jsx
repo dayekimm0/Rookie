@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import useProductStore from "../../stores/ProductStore";
 import styled from "styled-components";
 import ProductCard from "../ProductCard";
 
 const ProductsList = styled.div`
   width: 100%;
-  margin-top: 100px;
+  min-width: 100%;
+  min-height: 100%;
+  margin-top: 1%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 3%;
+  /* padding: 0 3%; */
 
   @media screen and (max-width: 1024px) {
     width: 100%;
@@ -20,7 +21,7 @@ const ProductsList = styled.div`
 
   @media screen and (max-width: 500px) {
     width: 100%;
-    margin-top: 80px;
+    margin-top: 130px;
   }
 `;
 
@@ -36,14 +37,21 @@ const Products = styled.div`
   @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
     gap: 14px;
+    width: calc(100% - 180px);
   }
 
   @media screen and (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0px;
+    row-gap: 15px;
+    width: calc(100% - 140px);
   }
 
   @media screen and (max-width: 500px) {
     grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 15px;
+    row-gap: 25px;
   }
   @media screen and (max-width: 375px) {
     grid-template-columns: repeat(1, 1fr);

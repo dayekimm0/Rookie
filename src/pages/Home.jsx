@@ -6,14 +6,16 @@ import MainSlide from "../components/Home/MainSlide";
 import MyhomeMainSlide from "../components/Home/MyhomeMainSlide";
 import bannerStrike from "../images/banners/banner-strike.png";
 import bannerStrike_m from "../images/banners/bannerStrike_mh.png";
-import PlaySlide from "../components/Home/PlaySlide";
+import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
 import HomeList from "../components/Home/HomeList";
-import HighlightSlide from "../components/Home/HighlightSlide";
+import ShortsSlide from "../components/Slides/ShortsSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
 import HomeProducts from "../components/Home/HomeProducts";
 import authStore from "../stores/AuthStore";
 import useAllProductsQuery from "../hook/useAllProductsQuery";
+import { homeSlideTab } from "../data/playTabs";
+import Spinner from "../components/Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -80,7 +82,7 @@ const ProductCardWrap = styled.div`
 `;
 
 const Banner = styled.div`
-  margin-top: 40px;
+  margin-top: 80px;
   a {
     display: inline-block;
   }
@@ -94,8 +96,11 @@ const Banner = styled.div`
       display: none;
     }
   }
+  @media screen and (max-width: 1024px) {
+    margin-top: 60px;
+  }
   @media screen and (max-width: 768px) {
-    margin-top: 35px;
+    margin-top: 50px;
     img {
       &:nth-of-type(1) {
         display: none;
@@ -104,6 +109,9 @@ const Banner = styled.div`
         display: block;
       }
     }
+  }
+  @media screen and (max-width: 500px) {
+    margin-top: 40px;
   }
 `;
 
@@ -126,49 +134,6 @@ const SlideLoaderWrapper = styled.div`
   }
 `;
 
-const SvgSpinner = styled.svg`
-  animation: rotate 2s linear infinite;
-  width: 50px;
-  height: 50px;
-
-  .path {
-    stroke: #fff;
-    stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
-  }
-
-  @media screen and (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-  }
-
-  @media screen and (max-width: 480px) {
-    width: 30px;
-    height: 30px;
-  }
-
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes dash {
-    0% {
-      stroke-dasharray: 1, 150;
-      stroke-dashoffset: 0;
-    }
-    50% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -35;
-    }
-    100% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -124;
-    }
-  }
-`;
-
 const Home = () => {
   const { isLoading: isUserLoading, userProfile } = authStore();
   const { data: allProducts = [], isLoading: isProductLoading } =
@@ -176,8 +141,6 @@ const Home = () => {
 
   const { kiaTinypingCollabo, newest, popular } = useMemo(() => {
     const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
-
-    // const collabo = shuffled.filter((item) => item.collaboration).slice(0, 4);
 
     const kiaTinypingCollabo = allProducts
       .filter(
@@ -206,37 +169,37 @@ const Home = () => {
     <Container>
       {isUserLoading ? (
         <SlideLoaderWrapper>
-          <SvgSpinner viewBox="0 0 50 50">
-            <circle
-              className="path"
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              strokeWidth="5"
-            />
-          </SvgSpinner>
+          <Spinner />
         </SlideLoaderWrapper>
       ) : userProfile?.favoriteTeam ? (
         <MyhomeMainSlide isMyhome={userProfile.favoriteTeam} />
       ) : (
         <MainSlide />
       )}
+      <HomeList title={"TEAMHOME"} />
       <Banner className="inner">
         <Link to={"/event"}>
           <img src={bannerStrike} alt="banner" />
           <img src={bannerStrike_m} alt="banner" />
         </Link>
       </Banner>
-      <HighlightSlide />
-      <PlaySlide />
-      <HomeList />
+      <ShortsSlide
+        playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
+        title={"HIGHLIGHT"}
+        max={21}
+      />
+
+      <PlaySlidewithTabs
+        allTab={homeSlideTab.allTab}
+        tabs={homeSlideTab.tabs}
+      />
+
       <RankingTable />
       <PopularPlayer />
       <CollaboBanner />
       <div className="home_products">
         <ProductCardWrap>
-          <h3>Season 콜라보</h3>
+          <h3>COLLABORATION</h3>
           {isProductLoading ? (
             "Loading"
           ) : (
@@ -244,11 +207,11 @@ const Home = () => {
           )}
         </ProductCardWrap>
         <ProductCardWrap>
-          <h3>New 신상품</h3>
+          <h3>RELEASE</h3>
           {isProductLoading ? "Loading" : <HomeProducts products={newest} />}
         </ProductCardWrap>
         <ProductCardWrap>
-          <h3>Best 인기상품</h3>
+          <h3>FAVORITE</h3>
           {isProductLoading ? "Loading" : <HomeProducts products={popular} />}
         </ProductCardWrap>
       </div>
