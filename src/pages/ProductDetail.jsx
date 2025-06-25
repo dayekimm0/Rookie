@@ -2453,7 +2453,7 @@ const ProductDetail = () => {
                   />
                 </SelectArrowContainer>
 
-                <DropdownMenu $isOpen={isOptionDropdownOpen}>
+                <DropdownMenu isOpen={isOptionDropdownOpen}>
                   {product?.options?.map((option, index) => (
                     <DropdownItem
                       key={index}
@@ -2512,7 +2512,7 @@ const ProductDetail = () => {
 
       {/* 리뷰 작성 모달창 - 분리된 컴포넌트 사용 */}
       <ReviewModal
-        $isOpen={showReviewModal}
+        isOpen={showReviewModal}
         onClose={closeReviewModal}
         product={product}
         onSubmit={handleReviewSubmit}
@@ -2520,7 +2520,7 @@ const ProductDetail = () => {
 
       {/* 문의하기 모달창 - 분리된 컴포넌트 사용 */}
       <InquiryModal
-        $isOpen={showInquiryModal}
+        isOpen={showInquiryModal}
         onClose={closeInquiryModal}
         product={product}
         onSubmit={handleInquirySubmit}
@@ -2528,7 +2528,7 @@ const ProductDetail = () => {
 
       {/* CartModal 추가 */}
       <CartModal
-        $isOpen={showCartModal}
+        isOpen={showCartModal}
         onClose={() => setShowCartModal(false)}
         message="상품이 장바구니에 담겼습니다!"
         buttonText="장바구니로 이동"
@@ -2536,14 +2536,14 @@ const ProductDetail = () => {
 
       {/* 바로 구매 모달 */}
       <BuyNowModal
-        $isOpen={showBuyModal}
+        isOpen={showBuyModal}
         onClose={() => setShowBuyModal(false)}
         message="잠시 후 결제 페이지로 이동합니다!"
       />
 
       {/* 옵션 경고 모달 */}
       <OptionModal
-        $isOpen={showOptionModal}
+        isOpen={showOptionModal}
         onClose={() => setShowOptionModal(false)}
         message="옵션을 선택해주세요."
       />
