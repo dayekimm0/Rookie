@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
-import SlideTabNav from "./slideTabNav";
+import SlideTabNav from "./SlideTabNav";
 import AllTabSlide from "./AllTabSlide";
 import SingleTabSlide from "./SingleTabSlide";
 
