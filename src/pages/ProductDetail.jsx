@@ -260,9 +260,9 @@ const TabButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 16px;
-  font-weight: ${(props) => (props.active ? "700" : "400")};
-  color: ${(props) => (props.active ? "#333" : "#888")};
-  border-bottom: ${(props) => (props.active ? "2px solid #333" : "none")};
+  font-weight: ${(props) => (props.$active ? "700" : "400")};
+  color: ${(props) => (props.$active ? "#333" : "#888")};
+  border-bottom: ${(props) => (props.$active ? "2px solid #333" : "none")};
   transition: all 0.2s;
 
   &:hover {
@@ -449,8 +449,8 @@ const Sentinel = styled.div`
 `;
 const StickyBox = styled.div`
   width: 100%;
-  ${({ isFixed }) =>
-    isFixed
+  ${({ $isFixed }) =>
+    $isFixed
       ? `
     position: fixed;
     bottom: 0px;
@@ -478,7 +478,7 @@ const PurchaseSection = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 85px;
-  display: ${({ isContent }) => isContent && "none"};
+  display: ${({ $isContent }) => $isContent && "none"};
 
   @media (max-width: 1200px) {
     width: 300px;
@@ -497,7 +497,7 @@ const PurchaseSection = styled.div`
     top: 0;
     margin-top: 0;
     margin-bottom: 10px;
-    display: ${({ isContent }) => (isContent ? "block" : "none")};
+    display: ${({ $isContent }) => ($isContent ? "block" : "none")};
   }
 
   @media (max-width: 375px) {
@@ -741,7 +741,7 @@ const DropdownItem = styled.div`
 
   // 선택된 아이템 스타일
   ${(props) =>
-    props.isSelected &&
+    props.$isSelected &&
     `
     background-color: var(--grayF5);
     font-weight: 500;
@@ -1617,29 +1617,40 @@ const ProductDetail = () => {
       : parseInt(price.toString().replace(/[^\d]/g, ""), 10);
   };
 
+  // fetchProductData 함수 내의 제품 데이터 설정 부분 수정
   const fetchProductData = async () => {
     setLoading(true);
     try {
       setError(null);
 
       const url = TEAM_JSON_URLS[teamCode];
+      if (!url) {
+        setError("지원하지 않는 팀 코드입니다.");
+        setLoading(false);
+        return;
+      }
+
+      console.log("Fetching from URL:", url);
       const response = await axios.get(url);
       const allProducts = response.data;
 
-      // const allProducts = teamProducts;
+      console.log("All products:", allProducts);
 
-      // 해당 ID의 상품이 있는지 확인
       const selectedProduct = allProducts.find(
         (product) => product.id === parseInt(id)
       );
-      // if (!selectedProduct) {
-      //   setError("해당 상품을 찾을 수 없습니다.");
-      //   setLoading(false);
-      //   return;
-      // }
 
-      // 제품 데이터 설정
-      setProduct({
+      if (!selectedProduct) {
+        console.log("Product not found for ID:", id);
+        setError("해당 상품을 찾을 수 없습니다.");
+        setLoading(false);
+        return;
+      }
+
+      console.log("Selected product:", selectedProduct);
+
+      // 제품 데이터 설정 - influencer 필드 추가
+      const productData = {
         id: selectedProduct.id,
         name: selectedProduct.name,
         price: parsePrice(selectedProduct, teamCode),
@@ -1648,12 +1659,11 @@ const ProductDetail = () => {
         options: selectedProduct.detail?.options || [],
         category: selectedProduct.category,
         thumbnail: selectedProduct.thumbnail,
-      });
+        influencer: selectedProduct.influencer || "", // 인플루언서 필드 추가
+      };
 
-      // console.warn(`${teamCode} 데이터 로드 실패:`, error);
-      // continue; // 실패해도 다음 구단 계속 시도
-
-      // }
+      console.log("Product data:", productData);
+      setProduct(productData);
 
       // 같은 카테고리의 추천 상품 설정 (현재 상품과 같은 팀의 다른 상품)
       const sameTeamProducts = allProducts.filter(
@@ -1941,13 +1951,13 @@ const ProductDetail = () => {
             </ImageContainer>
           </SliderContainer>
 
-          <PurchaseSection ref={purchaseSectionRef} isContent>
+          <PurchaseSection ref={purchaseSectionRef} $isContent>
             <PurchaseSectionContent>
               {/* 제품 구매 정보와 버튼 */}
               <ProductMeta>
                 <EmblemContainer
-                  bgColor={getTeamColor(getTeamIdFromCode(teamCode))}
-                  isTeam6={getTeamIdFromCode(teamCode) === "6"}
+                  $bgColor={getTeamColor(getTeamIdFromCode(teamCode))}
+                  $isTeam6={getTeamIdFromCode(teamCode) === "6"}
                 >
                   {teamCode ? (
                     <img
@@ -1966,10 +1976,10 @@ const ProductDetail = () => {
                     </div>
                   )}
                 </EmblemContainer>
+                {/* 첫 번째 위치 - 모바일용 PurchaseSection */}
                 <LicenseText>
-                  {" "}
                   {teamCode === "rookie"
-                    ? "인플루언서 콜라보 제품"
+                    ? `${product?.influencer || ""} X ROOKie`
                     : "공식 라이선스 제품"}
                 </LicenseText>
               </ProductMeta>
@@ -1998,11 +2008,11 @@ const ProductDetail = () => {
                     />
                   </SelectArrowContainer>
 
-                  <DropdownMenu isOpen={isOptionDropdownOpen}>
+                  <DropdownMenu $isOpen={isOptionDropdownOpen}>
                     {product?.options?.map((option, index) => (
                       <DropdownItem
                         key={index}
-                        isSelected={selectedOption === option}
+                        $isSelected={selectedOption === option}
                         onClick={() => selectOption(option)}
                       >
                         {option}
@@ -2013,7 +2023,7 @@ const ProductDetail = () => {
               ) : null}
               {/* 배송 정보 */}
               <ShippingInfo>배송비 무료 / 주문 시 결제(선결제)</ShippingInfo>
-              <StickyBox isFixed={isFixed}>
+              <StickyBox $isFixed={isFixed}>
                 {/* 수량 선택 */}
                 <QuantitySection>
                   <QuantityControl>
@@ -2053,19 +2063,19 @@ const ProductDetail = () => {
           {/* 탭 메뉴 */}
           <TabMenu ref={tabMenuRef}>
             <TabButton
-              active={activeTab === "details"}
+              $active={activeTab === "details"}
               onClick={() => setActiveTab("details")}
             >
               상세정보
             </TabButton>
             <TabButton
-              active={activeTab === "reviews"}
+              $active={activeTab === "reviews"}
               onClick={() => setActiveTab("reviews")}
             >
               리뷰
             </TabButton>
             <TabButton
-              active={activeTab === "questions"}
+              $active={activeTab === "questions"}
               onClick={() => setActiveTab("questions")}
             >
               문의
@@ -2391,8 +2401,8 @@ const ProductDetail = () => {
             {/* 제품 구매 정보와 버튼 */}
             <ProductMeta>
               <EmblemContainer
-                bgColor={getTeamColor(getTeamIdFromCode(teamCode))}
-                isTeam6={getTeamIdFromCode(teamCode) === "6"}
+                $bgColor={getTeamColor(getTeamIdFromCode(teamCode))}
+                $isTeam6={getTeamIdFromCode(teamCode) === "6"}
               >
                 {teamCode ? (
                   <img
@@ -2413,7 +2423,7 @@ const ProductDetail = () => {
               </EmblemContainer>
               <LicenseText>
                 {teamCode === "rookie"
-                  ? "인플루언서 콜라보 제품"
+                  ? `${product?.influencer || ""} X ROOKie`
                   : "공식 라이선스 제품"}
               </LicenseText>
             </ProductMeta>
@@ -2443,11 +2453,11 @@ const ProductDetail = () => {
                   />
                 </SelectArrowContainer>
 
-                <DropdownMenu isOpen={isOptionDropdownOpen}>
+                <DropdownMenu $isOpen={isOptionDropdownOpen}>
                   {product?.options?.map((option, index) => (
                     <DropdownItem
                       key={index}
-                      isSelected={selectedOption === option}
+                      $isSelected={selectedOption === option}
                       onClick={() => selectOption(option)}
                     >
                       {option}
@@ -2502,7 +2512,7 @@ const ProductDetail = () => {
 
       {/* 리뷰 작성 모달창 - 분리된 컴포넌트 사용 */}
       <ReviewModal
-        isOpen={showReviewModal}
+        $isOpen={showReviewModal}
         onClose={closeReviewModal}
         product={product}
         onSubmit={handleReviewSubmit}
@@ -2510,7 +2520,7 @@ const ProductDetail = () => {
 
       {/* 문의하기 모달창 - 분리된 컴포넌트 사용 */}
       <InquiryModal
-        isOpen={showInquiryModal}
+        $isOpen={showInquiryModal}
         onClose={closeInquiryModal}
         product={product}
         onSubmit={handleInquirySubmit}
@@ -2518,7 +2528,7 @@ const ProductDetail = () => {
 
       {/* CartModal 추가 */}
       <CartModal
-        isOpen={showCartModal}
+        $isOpen={showCartModal}
         onClose={() => setShowCartModal(false)}
         message="상품이 장바구니에 담겼습니다!"
         buttonText="장바구니로 이동"
@@ -2526,14 +2536,14 @@ const ProductDetail = () => {
 
       {/* 바로 구매 모달 */}
       <BuyNowModal
-        isOpen={showBuyModal}
+        $isOpen={showBuyModal}
         onClose={() => setShowBuyModal(false)}
         message="잠시 후 결제 페이지로 이동합니다!"
       />
 
       {/* 옵션 경고 모달 */}
       <OptionModal
-        isOpen={showOptionModal}
+        $isOpen={showOptionModal}
         onClose={() => setShowOptionModal(false)}
         message="옵션을 선택해주세요."
       />

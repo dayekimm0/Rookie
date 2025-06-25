@@ -177,7 +177,7 @@ const RankingTable = () => {
   return (
     <Section>
       <div className="inner">
-        <h3>리그 순위표</h3>
+        <h3>RANK</h3>
 
         <ScrollWrap ref={tableRef}>
           <DataTable
