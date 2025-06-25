@@ -70,6 +70,7 @@ const RecoPlayInfo = styled.div`
   }
   @media screen and (max-width: 500px) {
     width: 100%;
+    margin-left: 0px;
   }
 `;
 

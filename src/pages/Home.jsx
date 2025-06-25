@@ -85,6 +85,7 @@ const Banner = styled.div`
   margin-top: 80px;
   a {
     display: inline-block;
+    width: 100%;
   }
   img {
     width: 100%;
