@@ -725,7 +725,7 @@ const DropdownMenu = styled.div`
   border-radius: 0 0 4px 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  display: ${(props) => (props.isOpen ? "block" : "none")};
+  display: ${(props) => (props.$isOpen ? "block" : "none")};
 `;
 
 // 드롭다운 메뉴 아이템
@@ -1529,9 +1529,9 @@ const ProductDetail = () => {
 
     setShowCartModal(true);
 
-    setTimeout(() => {
-      console.log("업데이트된 장바구니:", useCartStore.getState().product);
-    }, 100);
+    // setTimeout(() => {
+    //   console.log("업데이트된 장바구니:", useCartStore.getState().product);
+    // }, 100);
   };
   // 바로 구매 처리 함수 추가
   const handleBuyNow = () => {
@@ -1630,11 +1630,11 @@ const ProductDetail = () => {
         return;
       }
 
-      console.log("Fetching from URL:", url);
+      // console.log("Fetching from URL:", url);
       const response = await axios.get(url);
       const allProducts = response.data;
 
-      console.log("All products:", allProducts);
+      // console.log("All products:", allProducts);
 
       const selectedProduct = allProducts.find(
         (product) => product.id === parseInt(id)
@@ -1647,7 +1647,7 @@ const ProductDetail = () => {
         return;
       }
 
-      console.log("Selected product:", selectedProduct);
+      // console.log("Selected product:", selectedProduct);
 
       // 제품 데이터 설정 - influencer 필드 추가
       const productData = {
@@ -1662,7 +1662,7 @@ const ProductDetail = () => {
         influencer: selectedProduct.influencer || "", // 인플루언서 필드 추가
       };
 
-      console.log("Product data:", productData);
+      // console.log("Product data:", productData);
       setProduct(productData);
 
       // 같은 카테고리의 추천 상품 설정 (현재 상품과 같은 팀의 다른 상품)
@@ -2453,7 +2453,7 @@ const ProductDetail = () => {
                   />
                 </SelectArrowContainer>
 
-                <DropdownMenu isOpen={isOptionDropdownOpen}>
+                <DropdownMenu $isOpen={isOptionDropdownOpen}>
                   {product?.options?.map((option, index) => (
                     <DropdownItem
                       key={index}
