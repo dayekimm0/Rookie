@@ -96,6 +96,11 @@ const TeamLogo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   img {
     width: 100%;
     height: 100%;
@@ -168,7 +173,9 @@ const MainPlay = ({
       <PlayInfoWrapper>
         <PlayInfo>
           <TeamLogo>
-            <img src={teamLogo} alt="채널 썸네일" />
+            <div>
+              <img src={teamLogo} alt="채널 썸네일" />
+            </div>
           </TeamLogo>
           <TeamInfo>
             <TeamName>{channelTitle}</TeamName>

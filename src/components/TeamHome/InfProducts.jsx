@@ -40,15 +40,12 @@ const Cardwrap = styled.div`
       width: 100%;
       height: 310px;
     }
+
     .brandGo {
-      .brand {
-        font-size: 1.4rem;
-      }
       svg {
         stroke: white;
       }
     }
-
     .name {
       font-size: 1.6rem;
       div {
@@ -66,21 +63,15 @@ const Cardwrap = styled.div`
         height: 250px;
         margin-bottom: 18px;
       }
-      .brand {
-        font-size: 1.4rem;
-      }
-      .name {
-        height: 45px;
-        font-size: 1.5rem;
-      }
-      .price {
-        font-size: 1.6rem;
-      }
     }
 
     @media screen and (max-width: 1024px) {
       & > div:first-of-type {
         height: 300px;
+        margin-bottom: 15px;
+      }
+      .name {
+        font-size: 1.5rem;
       }
     }
     @media screen and (max-width: 600px) {
@@ -92,28 +83,18 @@ const Cardwrap = styled.div`
     @media screen and (max-width: 500px) {
       & > div:first-of-type {
         height: 340px;
-      }
-      .brand {
-        font-size: 1.2rem;
+        margin-bottom: 12px;
       }
       .name {
         font-size: 1.4rem;
-      }
-      .price {
-        font-size: 1.5rem;
+        height: 39px;
       }
     }
     @media screen and (max-width: 375px) {
       width: 100%;
-
-      .brand {
-        font-size: 1.1rem;
-      }
       .name {
         font-size: 1.3rem;
-      }
-      .price {
-        font-size: 1.4rem;
+        height: 35px;
       }
     }
   }

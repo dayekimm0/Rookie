@@ -114,9 +114,7 @@ const RecoPlayTeam = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    font-size: 1.6rem;
-  }
-  @media screen and (max-width: 500px) {
+    font-size: 1.4rem;
   }
 `;
 
