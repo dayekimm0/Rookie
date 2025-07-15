@@ -32,6 +32,7 @@ const Container = styled.div`
   }
 
   figure {
+    width: 100%;
     img {
       width: 100%;
       height: auto;

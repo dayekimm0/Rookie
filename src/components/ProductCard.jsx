@@ -48,17 +48,20 @@ const ProductImg = styled.div`
   @media screen and (max-width: 1440px) {
     width: 100%;
     height: 290px;
+    margin-bottom: 18px;
   }
   @media screen and (max-width: 1024px) {
     width: 100%;
     /* height: 250px; */
     height: auto;
     aspect-ratio: 4/5;
+    margin-bottom: 15px;
   }
 
   @media screen and (max-width: 500px) {
     width: 100%;
     height: auto;
+    margin-bottom: 12px;
   }
   @media screen and (max-width: 450px) {
     width: 100%;
@@ -92,7 +95,7 @@ const ProductInfo = styled.div`
     height: 48px;
     font-size: 1.8rem;
     div {
-      line-height: 1.3;
+      line-height: 1.2;
       overflow: hidden;
       text-overflow: ellipsis;
       word-break: keep-all;
@@ -127,7 +130,7 @@ const ProductInfo = styled.div`
     }
     .name {
       font-size: 1.4rem;
-      height: 38px;
+      height: 39px;
     }
     .price {
       font-size: 1.5rem;
