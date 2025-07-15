@@ -21,6 +21,9 @@ const Description = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  @media screen and (max-width: 1024px) {
+    gap: 2px;
+  }
 `;
 
 const ChannelName = styled.p`

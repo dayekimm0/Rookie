@@ -725,7 +725,7 @@ const DropdownMenu = styled.div`
   border-radius: 0 0 4px 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  display: ${(props) => (props.isOpen ? "block" : "none")};
+  display: ${(props) => (props.$isOpen ? "block" : "none")};
 `;
 
 // 드롭다운 메뉴 아이템
@@ -1529,9 +1529,9 @@ const ProductDetail = () => {
 
     setShowCartModal(true);
 
-    setTimeout(() => {
-      console.log("업데이트된 장바구니:", useCartStore.getState().product);
-    }, 100);
+    // setTimeout(() => {
+    //   console.log("업데이트된 장바구니:", useCartStore.getState().product);
+    // }, 100);
   };
   // 바로 구매 처리 함수 추가
   const handleBuyNow = () => {
@@ -1630,11 +1630,11 @@ const ProductDetail = () => {
         return;
       }
 
-      console.log("Fetching from URL:", url);
+      // console.log("Fetching from URL:", url);
       const response = await axios.get(url);
       const allProducts = response.data;
 
-      console.log("All products:", allProducts);
+      // console.log("All products:", allProducts);
 
       const selectedProduct = allProducts.find(
         (product) => product.id === parseInt(id)
@@ -1647,7 +1647,7 @@ const ProductDetail = () => {
         return;
       }
 
-      console.log("Selected product:", selectedProduct);
+      // console.log("Selected product:", selectedProduct);
 
       // 제품 데이터 설정 - influencer 필드 추가
       const productData = {
@@ -1662,7 +1662,7 @@ const ProductDetail = () => {
         influencer: selectedProduct.influencer || "", // 인플루언서 필드 추가
       };
 
-      console.log("Product data:", productData);
+      // console.log("Product data:", productData);
       setProduct(productData);
 
       // 같은 카테고리의 추천 상품 설정 (현재 상품과 같은 팀의 다른 상품)
@@ -2512,7 +2512,7 @@ const ProductDetail = () => {
 
       {/* 리뷰 작성 모달창 - 분리된 컴포넌트 사용 */}
       <ReviewModal
-        $isOpen={showReviewModal}
+        isOpen={showReviewModal}
         onClose={closeReviewModal}
         product={product}
         onSubmit={handleReviewSubmit}
@@ -2520,7 +2520,7 @@ const ProductDetail = () => {
 
       {/* 문의하기 모달창 - 분리된 컴포넌트 사용 */}
       <InquiryModal
-        $isOpen={showInquiryModal}
+        isOpen={showInquiryModal}
         onClose={closeInquiryModal}
         product={product}
         onSubmit={handleInquirySubmit}
@@ -2528,7 +2528,7 @@ const ProductDetail = () => {
 
       {/* CartModal 추가 */}
       <CartModal
-        $isOpen={showCartModal}
+        isOpen={showCartModal}
         onClose={() => setShowCartModal(false)}
         message="상품이 장바구니에 담겼습니다!"
         buttonText="장바구니로 이동"
@@ -2536,14 +2536,14 @@ const ProductDetail = () => {
 
       {/* 바로 구매 모달 */}
       <BuyNowModal
-        $isOpen={showBuyModal}
+        isOpen={showBuyModal}
         onClose={() => setShowBuyModal(false)}
         message="잠시 후 결제 페이지로 이동합니다!"
       />
 
       {/* 옵션 경고 모달 */}
       <OptionModal
-        $isOpen={showOptionModal}
+        isOpen={showOptionModal}
         onClose={() => setShowOptionModal(false)}
         message="옵션을 선택해주세요."
       />

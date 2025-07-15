@@ -15,6 +15,7 @@ import {
 } from "../hook/useYoutubeContentList";
 import { playContents } from "../data/playcontents";
 import { parseISO8601Duration } from "../utils/youtube";
+import Spinner from "../components/Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -166,6 +167,31 @@ const CommentTop = styled.div`
     font-size: 1.4rem;
     cursor: pointer;
   }
+  @media screen and (max-width: 1024px) {
+    h2 {
+      font-size: 1.8rem;
+      span {
+        font-size: 1.6rem;
+        margin-left: 4px;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    h2 {
+      font-size: 1.6rem;
+      span {
+        font-size: 1.4rem;
+        margin-left: 4px;
+      }
+    }
+  }
+`;
+
+const SlideLoaderWrapper = styled.div`
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CommentListBoxMobile = styled.div`
@@ -259,7 +285,12 @@ const PlayDetail = () => {
     if (videoId) loadData();
   }, [videoId]);
 
-  if (!videoInfo) return <div>로딩 중...</div>;
+  if (!videoInfo)
+    return (
+      <SlideLoaderWrapper>
+        <Spinner />
+      </SlideLoaderWrapper>
+    );
 
   return (
     <Container>

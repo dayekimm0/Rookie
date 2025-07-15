@@ -44,7 +44,6 @@ const ModalProducts = styled.div`
 
 const ModalProduct = styled.div`
   width: 160px;
-  width: 100%;
   cursor: pointer;
   @media screen and (max-width: 1440px) {
     width: 130px;
@@ -80,9 +79,12 @@ const ProductThumbnail = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    background: none;
     img {
+      border-radius: 4px;
       width: auto;
       height: 100%;
+      aspect-ratio: 1;
     }
   }
   @media screen and (max-width: 375px) {
@@ -104,8 +106,10 @@ const ProductInfo = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
+  line-height: 1.1;
   @media screen and (max-width: 500px) {
     width: 100%;
+    -webkit-line-clamp: 1;
   }
 `;
 
