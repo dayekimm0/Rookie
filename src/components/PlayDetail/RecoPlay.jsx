@@ -70,6 +70,7 @@ const RecoPlayInfo = styled.div`
   }
   @media screen and (max-width: 500px) {
     width: 100%;
+    margin-left: 0px;
   }
 `;
 
@@ -113,9 +114,7 @@ const RecoPlayTeam = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    font-size: 1.6rem;
-  }
-  @media screen and (max-width: 500px) {
+    font-size: 1.4rem;
   }
 `;
 

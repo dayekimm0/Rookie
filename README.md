@@ -1,12 +1,155 @@
-# React + Vite
+# 🧢 ROOKie
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+_KBO 팬을 위한 OTT+커머스 통합 플랫폼_
 
-Currently, two official plugins are available:
+🔗 [ROOKie 사이트 바로가기](https://rookie-dd013.firebaseapp.com/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+ROOKie는 KBO 야구 팬을 위한 **하이라이트 중심 영상 큐레이션**과 **굿즈 커머스 기능**을 통합한 웹 서비스입니다.  
+팬의 ‘지금 보고 싶은 순간’을 중심으로 콘텐츠를 큐레이션하고, 자연스럽게 굿즈 소비로 이어지는 구조를 설계했습니다.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 👥 팀 프로젝트 정보
+
+- **진행 기간**: 2025.04.17 ~ 2025.06.25
+- **참여 인원**: 총 6명
+
+본 프로젝트는 팀원 전원이 **UXUI 기획부터 퍼블리싱, 프론트엔드 개발**까지 전 과정을 함께한 협업 프로젝트입니다.  
+각 팀원은 아래와 같이 주요 페이지와 기능 구현을 담당했습니다:
+
+- **김다예 (PM)**
+
+  - 전체 일정 관리 및 팀 커뮤니케이션 총괄
+  - PLAY 영상 디테일 페이지 (16:9 / 9:16 비율) 개발
+  - STORE 상품 리스트 페이지 구현
+  - 상품 데이터 크롤링 및 API 연동
+
+- **장효아 (부PM)**
+
+  - 전체 UI 통일화 및 디자인 리딩 (로고 제작 포함)
+  - 로그인, 회원가입, 마이페이지 전반
+  - Firebase 인증 및 DB 연동 로직 구현
+
+- **구여진**
+
+  - 메인 HOME 페이지
+  - TEAM HOME: 영상 슬라이드, 업커밍 매치, 인플루언서 존
+  - 헤더 및 푸터 공통 UI
+
+- **송명관**
+
+  - 장바구니 및 결제 페이지
+  - PLAY 페이지 메인 슬라이드형 리스트
+  - 인플루언서 상품 데이터 구성
+
+- **이성일**
+
+  - 이벤트 페이지
+  - PLAY 페이지 전체 영상 리스트 구성 (더보기 페이지)
+  - 상품 데이터 크롤링 및 API 연동
+
+- **현윤섭**
+
+  - 상품 상세 페이지 (PRODUCT DETAIL)
+  - TEAM HOME: 구단 인트로 영상, 구단 정보, 구단 스토어
+  - 구단별 굿즈 영상과 연동된 상품 추천 구조 설계
+
+---
+
+## 🛠️ 기술 스택
+
+- **Frontend**: React, Vite, React Router, Zustand, styled-components, Swiper
+- **Backend/Infra**: Firebase (Auth / Firestore / Hosting), Netlify Functions (REST API)
+- **Design & Tooling**: Figma, Illustrator, GSAP
+- **API Integration**: Kakao 주소 API
+
+---
+
+## 📌 주요 기능
+
+### 🏠 HOME
+
+- 로그인 시 마이홈 구단 영상이 상단에 우선 노출
+- 비로그인 시 리그 중심의 하이라이트 영상 제공
+- 리그 순위, 슈퍼 루키 소개, 인기 굿즈 등 큐레이션
+- 콘텐츠 → 커머스로 자연스럽게 이어지는 구조 설계
+
+### 🧢 TEAM HOME
+
+- 10개 구단별 팬 전용 페이지 제공
+- 경기 영상, 클립, 굿즈, 인플루언서 콘텐츠 구성
+- 굿즈 관련 영상과 상품 자동 연동
+- 하단 엠블럼 네비게이션으로 빠른 구단 이동
+
+### 🎬 PLAY
+
+- 요일별 경기 하이라이트 ‘WEEKLY PLAY’
+- 클립, 인터뷰, 핫클립, 팀별/인플루언서 영상 큐레이션
+- ‘더보기’ 클릭 시 전체 영상 리스트로 확장
+
+### ▶️ VIDEO DETAIL (16:9 영상)
+
+- 영상 클릭 시 진입하는 디테일 페이지
+- 유튜브 임베드 재생, 좋아요, 댓글 기능 제공
+- 관련 굿즈 추천 영역 포함 (페이지 하단)
+
+### 📱 SHORTS CLIP MODAL (9:16 클립 영상)
+
+- 풀스크린 모달 기반 9:16 클립 영상 전용 뷰어
+- 스크롤로 상하 영상 이동
+- 좋아요 및 상품 연동 기능
+
+### 🛍️ STORE
+
+- 구단별 / 루키 인플루언서 / KBO 굿즈 분기 구성
+- 카테고리 및 정렬 필터링 기능 제공
+- 상품 데이터는 각 구단 스토어에서 크롤링 후 API화
+
+### 🧾 PRODUCT DETAIL
+
+- 어디서든 접근 가능한 상품 상세 페이지
+- 가격, 수량, 구매 버튼, 리뷰/문의 포함
+- 결제 시 마이페이지에 구매 내역 반영
+
+### 🛒 장바구니 & 결제
+
+- 장바구니 모달을 통해 담긴 상품 확인 및 삭제 가능
+- 결제 진행 시 쿠폰 사용 및 총 결제금액 확인
+- 결제 후 마이페이지에 구매내역 자동 반영
+
+### 🎁 EVENT PAGE
+
+- GSAP 기반 마우스 인터랙션 배경 (하늘 움직임)
+- 마이홈 구단 마스코트 등장 (로그인 필요)
+- 1회 참여로 쿠폰 발급, 장바구니 결제 시 사용 가능
+
+### 👤 로그인 / 회원가입
+
+- Firebase Auth 기반 이메일 로그인
+- 구단 선택 + Kakao 주소 API 기반 배송지 등록
+- SNS 로그인 버튼은 UI만 구현
+
+### 🙋‍♂️ 마이페이지
+
+- 나의 쇼핑: 장바구니, 구매 내역, 쿠폰, 배송 상태
+- 나의 영상: 좋아요한 영상 목록 (전체 / PLAY / CLIP)
+- 프로필 수정: 닉네임, 구단, 주소 정보 변경 가능
+
+---
+
+## 🔄 사용자 데이터 흐름 요약
+
+1. **회원가입** → 마이홈 구단/주소 설정
+2. **로그인** → 홈, 이벤트, 마이페이지 등에 정보 반영
+3. **영상 좋아요** → 마이페이지 동영상 탭에 저장
+4. **굿즈 클릭** → 상세 → 장바구니 → 결제 시도 → 마이페이지에 반영
+5. **이벤트 참여** → 쿠폰 발급 → 마이페이지 쿠폰함 → 결제 시 사용 가능
+
+---
+
+## ✅ 구현 포인트
+
+- 콘텐츠 기반 UX 흐름을 설계하고 실제 API/데이터 연동까지 연결
+- 실결제 없이도 결제 흐름과 구매내역 반영이 가능하도록 설계
+- Firebase 기반 인증/데이터 연동 → 브라우저를 바꿔도 정보 유지
+- GSAP, Kakao 주소 API 등 외부 서비스도 적극 활용

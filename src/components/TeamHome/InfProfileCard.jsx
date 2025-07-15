@@ -122,17 +122,21 @@ const Desc = styled.p`
   text-align: center;
   white-space: pre-line;
   @media screen and (max-width: 1440px) {
+    font-size: 1.4rem;
     width: 90%;
     margin: 30px 0;
   }
   @media screen and (max-width: 1024px) {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     width: 40%;
   }
   @media screen and (max-width: 600px) {
     margin: 20px 0;
     font-size: 1.2rem;
     width: 80%;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
   }
 `;
 

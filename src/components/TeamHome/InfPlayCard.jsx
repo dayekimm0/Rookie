@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   cursor: pointer;
 
   h5 {

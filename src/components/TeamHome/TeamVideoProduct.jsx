@@ -360,7 +360,7 @@ const ProductItem = styled.div`
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    gap: 10px;
+    gap: 2px;
     margin-bottom: 0;
     flex-shrink: 0;
     width: 100px;
