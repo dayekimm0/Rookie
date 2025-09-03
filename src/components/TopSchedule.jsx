@@ -124,11 +124,36 @@ const TopSchedule = () => {
   const baseIndex = scheduleData.findIndex((item) => item.date >= today);
   const safeIndex = baseIndex !== -1 ? baseIndex : scheduleData.length - 1;
 
-  const threeDaySlice = [
-    scheduleData[safeIndex - 1],
-    scheduleData[safeIndex],
-    scheduleData[safeIndex + 1],
-  ].filter(Boolean);
+  // 첫째날, 마지막날 일정 체크
+  const isFirstDay = safeIndex === 0;
+  const isLastDay = safeIndex === scheduleData.length - 1;
+
+  // const threeDaySlice = [
+  //   scheduleData[safeIndex - 1],
+  //   scheduleData[safeIndex],
+  //   scheduleData[safeIndex + 1],
+  // ].filter(Boolean);
+
+  // 보여줄 3일 계산
+  const displayedDays = isLastDay
+    ? [
+        scheduleData[safeIndex - 2],
+        scheduleData[safeIndex - 1],
+        scheduleData[safeIndex],
+      ]
+    : isFirstDay
+    ? [
+        scheduleData[safeIndex],
+        scheduleData[safeIndex + 1],
+        scheduleData[safeIndex + 2],
+      ]
+    : [
+        scheduleData[safeIndex - 1],
+        scheduleData[safeIndex],
+        scheduleData[safeIndex + 1],
+      ];
+
+  const threeDaySlice = displayedDays.filter(Boolean);
 
   useEffect(() => {
     const updateScroll = ({ scroll }) => {
