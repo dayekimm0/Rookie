@@ -1,7 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import styled from "styled-components";
-import ProductCard from "../ProductCard";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import BArrow from "../../images/icons/arrow_small_w.svg";
 import { useCallback, useEffect, useState } from "react";
