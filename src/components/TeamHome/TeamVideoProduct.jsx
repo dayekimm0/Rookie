@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import { useQuery } from "@tanstack/react-query";
