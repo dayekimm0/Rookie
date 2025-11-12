@@ -125,9 +125,11 @@ const SlideLoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 40px;
 
   @media screen and (max-width: 1024px) {
     height: 320px;
+    margin-top: 30px;
   }
 
   @media screen and (max-width: 768px) {
@@ -136,6 +138,7 @@ const SlideLoaderWrapper = styled.div`
 
   @media screen and (max-width: 500px) {
     height: 250px;
+    margin-top: 15px;
   }
 `;
 
@@ -145,7 +148,7 @@ const MyhomeMainSlide = ({ isMyhome }) => {
   const [retryKey, setRetryKey] = useState(0);
 
   return (
-    <Container>
+    <>
       <ErrorBoundary
         FallbackComponent={(props) => (
           <SlideErrorFallback
@@ -171,7 +174,7 @@ const MyhomeMainSlide = ({ isMyhome }) => {
           <SlideContent isMyhome={isMyhome} key={retryKey}></SlideContent>
         </Suspense>
       </ErrorBoundary>
-    </Container>
+    </>
   );
 };
 

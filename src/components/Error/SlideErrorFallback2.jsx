@@ -4,7 +4,7 @@ import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 const ErrorContainer = styled.div`
   width: 100%;
-  height: 420px;
+  height: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,13 +12,13 @@ const ErrorContainer = styled.div`
   text-align: center;
 
   @media screen and (max-width: 1024px) {
-    height: 400px;
+    height: 250px;
   }
   @media screen and (max-width: 768px) {
-    height: 300px;
+    height: 200px;
   }
   @media screen and (max-width: 500px) {
-    height: 230px;
+    height: 150px;
   }
 `;
 
@@ -98,7 +98,7 @@ const RetryButton = styled.button`
   }
 `;
 
-const SlideErrorFallback = ({ resetErrorBoundary, onRetry }) => {
+const SlideErrorFallback = () => {
   return (
     <ErrorContainer>
       <ErrorIcon>
@@ -106,15 +106,6 @@ const SlideErrorFallback = ({ resetErrorBoundary, onRetry }) => {
       </ErrorIcon>
       <ErrorTitle>영상을 불러올 수 없습니다</ErrorTitle>
       <ErrorMessage>잠시 후 다시 시도해주세요</ErrorMessage>
-
-      <RetryButton
-        onClick={() => {
-          onRetry();
-          resetErrorBoundary();
-        }}
-      >
-        다시 시도
-      </RetryButton>
     </ErrorContainer>
   );
 };

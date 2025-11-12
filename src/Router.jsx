@@ -23,11 +23,14 @@ import TeamHome from "./pages/TeamHome";
 import InfluencerPlayContent from "./pages/InfluencerPlayContent";
 import InfluencerProductList from "./pages/InfluencerProductList";
 import TeamplayAll from "./pages/TeamplayAll";
+import ErrorPage from "./pages/Error/ErrorPage";
+import NotFound from "./pages/Error/NotFound";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -132,6 +135,10 @@ const router = createBrowserRouter([
       {
         path: "payment",
         element: <Payment />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },

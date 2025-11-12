@@ -54,7 +54,7 @@ const Container = styled.div`
 `;
 
 const Banner = styled.div`
-  margin-top: 80px;
+  padding-top: 80px;
   a {
     display: inline-block;
     width: 100%;
@@ -70,10 +70,10 @@ const Banner = styled.div`
     }
   }
   @media screen and (max-width: 1024px) {
-    margin-top: 60px;
+    padding-top: 60px;
   }
   @media screen and (max-width: 768px) {
-    margin-top: 50px;
+    padding-top: 50px;
     img {
       &:nth-of-type(1) {
         display: none;
@@ -84,7 +84,7 @@ const Banner = styled.div`
     }
   }
   @media screen and (max-width: 500px) {
-    margin-top: 40px;
+    padding-top: 40px;
   }
 `;
 
@@ -93,9 +93,11 @@ const SlideLoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 40px;
 
   @media screen and (max-width: 1024px) {
     height: 320px;
+    margin-top: 30px;
   }
 
   @media screen and (max-width: 768px) {
@@ -104,6 +106,7 @@ const SlideLoaderWrapper = styled.div`
 
   @media screen and (max-width: 500px) {
     height: 250px;
+    margin-top: 15px;
   }
 `;
 

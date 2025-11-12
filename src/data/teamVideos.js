@@ -46,13 +46,13 @@ export const TEAM_ROOKIE_STORE_VIDEOS = {
     videoId: "8QF-7Mlgwys",
   },
   kt_wiz: {
-    videoId: "XoeMqLgp9uE",
+    videoId: "9H0bm2dwPCo",
   },
   ssg_lds: {
     videoId: "et8LPJCLWqM",
   },
   lt_gnt: {
-    videoId: "qn9QTzII8VM",
+    videoId: "Csz_DwGoMNE",
   },
   hw_egs: {
     videoId: "aNBOAOYvIKM",

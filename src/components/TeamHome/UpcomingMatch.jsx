@@ -3,32 +3,32 @@ import scheduleData from "../../data/gameList_final.json";
 import MatchCard from "./MatchCard";
 
 const Container = styled.div`
-  margin-top: 110px;
+  padding-top: 110px;
   .title {
     font-size: 3rem;
     font-weight: bold;
-    margin-bottom: 40px;
+    padding-bottom: 40px;
   }
 
   @media screen and (max-width: 1024px) {
-    margin-top: 90px;
+    padding-top: 90px;
     .title {
       font-size: 2.5rem;
-      margin-bottom: 30px;
+      padding-bottom: 30px;
     }
   }
   @media screen and (max-width: 768px) {
-    margin-top: 80px;
+    padding-top: 80px;
     .title {
       font-size: 2rem;
-      margin-bottom: 20px;
+      padding-bottom: 20px;
     }
   }
   @media screen and (max-width: 500px) {
-    margin-top: 60px;
+    padding-top: 60px;
     .title {
       font-size: 1.6rem;
-      margin-bottom: 15px;
+      padding-bottom: 15px;
     }
   }
 `;

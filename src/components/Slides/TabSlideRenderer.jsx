@@ -18,7 +18,7 @@ const SlideContainer = styled.div`
   margin: 0 auto;
   position: relative;
   .swiper {
-    overflow: visible !important;
+    overflow: visible;
   }
   @media screen and (max-width: 1024px) {
     width: 94%;

@@ -49,14 +49,7 @@ const ShortsCard = ({
   return (
     <Container onClick={handleCardClick}>
       <CardWrapper>
-        <img
-          src={thumbnail}
-          alt={title}
-          loading="lazy"
-          onError={(e) => {
-            e.target.src = "/fallback.jpg"; // 필요 시 fallback 이미지 설정
-          }}
-        />
+        <img src={thumbnail} alt={title} loading="lazy" />
       </CardWrapper>
       <p>{title}</p>
     </Container>

@@ -3,6 +3,8 @@ import axios from "axios";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
+// axios 인스턴스
+
 export const fetchYoutubePlaylist = async ({ queryKey }) => {
   const [_key, playlistId, maxResults] = queryKey;
 
@@ -43,7 +45,8 @@ export const fetchVideoDetails = async ({ queryKey }) => {
 export const useYoutubePlaylist = (
   playlistId,
   maxResults = 12,
-  enabled = true
+  enabled = true,
+  suspense = false
 ) => {
   if (!playlistId) return { data: null };
   return useQuery({
@@ -54,6 +57,7 @@ export const useYoutubePlaylist = (
     cacheTime: 1000 * 60 * 10, // 10분간 쿼리 캐시 유지
     retry: 1,
     refetchOnWindowFocus: false, // 탭 이동 시 재요청 방지
+    suspense, //서스펜스 추가
   });
 };
 

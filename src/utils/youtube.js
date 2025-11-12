@@ -150,3 +150,18 @@ export const parseISO8601Duration = (duration) => {
     parseInt(seconds || "0", 10)
   );
 };
+
+export const filterValidVideos = (items) => {
+  return items.filter(
+    (item) =>
+      item.snippet.title?.toLowerCase() !== "private video" &&
+      item.snippet.thumbnails?.default
+  );
+};
+
+export const filterByTeam = (items, teamKeyword) => {
+  if (!teamKeyword || teamKeyword === "Unknown") return items;
+  return items.filter((item) =>
+    item.snippet.title?.toLowerCase().includes(teamKeyword.toLowerCase())
+  );
+};

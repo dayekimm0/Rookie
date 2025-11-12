@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
   getEmblem,
   getTeamJsonCode,
@@ -108,12 +107,13 @@ const Item = styled.div`
   }
 `;
 
-const Line = styled(motion.span)`
+const Line = styled.span`
   position: absolute;
   height: 6px;
   bottom: 0;
   background: var(--dark);
   pointer-events: none;
+  transition: all 0.3s ease-out;
 `;
 
 const Profile = styled.div`
@@ -511,45 +511,81 @@ const MobileMenuWrap = styled.div`
   }
 `;
 
+const teams = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const teamToEmblemId = {
+  "기아 타이거즈": "1",
+  "삼성 라이온즈": "2",
+  "LG 트윈스": "3",
+  "두산 베어스": "4",
+  "KT 위즈": "5",
+  "SSG 랜더스": "6",
+  "롯데 자이언츠": "7",
+  "한화 이글스": "8",
+  "NC 다이노스": "9",
+  "키움 히어로즈": "10",
+};
+
+const teamStores = [
+  { name: "KBO", code: "kbo" },
+  { name: "기아 타이거즈", code: "kia_tgs" },
+  { name: "삼성 라이온즈", code: "ss_lns" },
+  { name: "LG 트윈스", code: "lg_twins" },
+  { name: "두산 베어스", code: "ds_bas" },
+  { name: "KT 위즈", code: "kt_wiz" },
+  { name: "SSG 랜더스", code: "ssg_lds" },
+  { name: "롯데 자이언츠", code: "lt_gnt" },
+  { name: "한화 이글스", code: "hw_egs" },
+  { name: "NC 다이노스", code: "nc_dns" },
+  { name: "키움 히어로즈", code: "kw_hrs" },
+];
+
 const Header = ({ mode }) => {
   const setHeaderHeight = useHeaderStore((state) => state.setHeaderHeight);
   const headerHeight = useHeaderStore((state) => state.headerHeight);
   const isFolded = useHeaderStore((state) => state.isHeaderFolded);
+  const { user, userProfile, isLoading } = authStore();
+  const { resetForm } = logonStore();
   const isTeamMode = useToggleStore((state) => state.isTeamMode);
+  const { searchOpen, toggleSearch, closeSearch } = useSearchStore();
+  const [isToggleUseropen, setIsToggleUserOpen] = useState(false);
+  const [mobileStoreOpen, setMobileStoreOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [lineVisible, setLineVisible] = useState(true);
+  const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
 
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const pathname = location.pathname;
+  const goToMain = () => navigate("/");
   const headerRef = useRef(null);
+  const itemRefs = useRef([]);
 
-  const teamToEmblemId = {
-    "기아 타이거즈": "1",
-    "삼성 라이온즈": "2",
-    "LG 트윈스": "3",
-    "두산 베어스": "4",
-    "KT 위즈": "5",
-    "SSG 랜더스": "6",
-    "롯데 자이언츠": "7",
-    "한화 이글스": "8",
-    "NC 다이노스": "9",
-    "키움 히어로즈": "10",
-  };
+  //팀 엠블럼
+  const TeamEmblem = React.memo(({ emblemId }) => {
+    const emblem = getEmblem(emblemId);
+    return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
+  });
 
-  const teamStores = [
-    { name: "KBO", code: "kbo" },
-    { name: "기아 타이거즈", code: "kia_tgs" },
-    { name: "삼성 라이온즈", code: "ss_lns" },
-    { name: "LG 트윈스", code: "lg_twins" },
-    { name: "두산 베어스", code: "ds_bas" },
-    { name: "KT 위즈", code: "kt_wiz" },
-    { name: "SSG 랜더스", code: "ssg_lds" },
-    { name: "롯데 자이언츠", code: "lt_gnt" },
-    { name: "한화 이글스", code: "hw_egs" },
-    { name: "NC 다이노스", code: "nc_dns" },
-    { name: "키움 히어로즈", code: "kw_hrs" },
-  ];
+  //현재 메뉴 위치 체크
+  const activeIndex = useMemo(() => {
+    if (
+      (!isTeamMode && pathname === "/") ||
+      (isTeamMode && pathname.startsWith("/teamhome"))
+    ) {
+      return 0;
+    } else if (pathname.startsWith("/play")) {
+      return 1;
+    } else if (pathname.startsWith("/store")) {
+      return 2;
+    } else if (pathname.startsWith("/event")) {
+      return 3;
+    }
+    return -1;
+  }, [pathname, isTeamMode]);
 
+  // 헤더 높이 체크
   useLayoutEffect(() => {
     const headerEl = headerRef.current;
     if (!headerEl) return;
@@ -557,39 +593,15 @@ const Header = ({ mode }) => {
     const resizeObserver = new ResizeObserver(() => {
       setHeaderHeight(headerEl.offsetHeight);
     });
-
     resizeObserver.observe(headerEl);
-
-    // 초기 측정 (필요할 수 있음)
+    // 초기 측정
     setHeaderHeight(headerEl.offsetHeight);
-
     return () => {
       resizeObserver.disconnect();
     };
   }, [setHeaderHeight]);
 
-  const { user, userProfile, isLoading } = authStore();
-
-  const goToMain = () => navigate("/");
-
-  //메뉴 Line 스타일
-  const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
-  const [lineVisible, setLineVisible] = useState(true);
-  const itemRefs = useRef([]);
-  let activeIndex = -1;
-  if (
-    (!isTeamMode && pathname === "/") || // ROOKie일 때 메인 홈
-    (isTeamMode && pathname.startsWith("/teamhome")) // TEAM일 때 구단 홈
-  ) {
-    activeIndex = 0;
-  } else if (pathname.startsWith("/play")) {
-    activeIndex = 1;
-  } else if (pathname.startsWith("/store")) {
-    activeIndex = 2;
-  } else if (pathname.startsWith("/event")) {
-    activeIndex = 3;
-  }
-
+  //메뉴 라인 그리기
   useLayoutEffect(() => {
     const updateLineStyle = () => {
       const activeEl = itemRefs.current[activeIndex];
@@ -603,25 +615,17 @@ const Header = ({ mode }) => {
         setLineVisible(false);
       }
     };
-
     updateLineStyle();
     window.addEventListener("resize", updateLineStyle);
     return () => window.removeEventListener("resize", updateLineStyle);
   }, [location.pathname, activeIndex]);
 
   // 토글 버튼을 누르면 유저 정보 오픈
-  const [isopen, setIsOpen] = useState(false);
   const toggleUserBox = () => {
-    setIsOpen((prev) => !prev);
+    setIsToggleUserOpen((prev) => !prev);
   };
 
-  const TeamEmblem = ({ emblemId }) => {
-    const emblem = getEmblem(emblemId);
-    return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
-  };
-
-  const { resetForm } = logonStore();
-
+  //로그아웃 버튼 클릭
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -636,19 +640,31 @@ const Header = ({ mode }) => {
     }
   };
 
-  //searchPc 버튼 토글
-  const { searchOpen, toggleSearch, closeSearch } = useSearchStore();
-
   //mobile 메뉴 토글
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const handleClickMobileMenu = () => {
     setMobileMenuOpen((prev) => !prev);
   };
 
   //mobile 스토어메뉴 토글
-  const [mobileStoreOpen, setMobileStoreOpen] = useState(false);
   const handleClickMobileStore = () => {
     setMobileStoreOpen((prev) => !prev);
+  };
+
+  //헤더-팀 전환토글 클릭 시
+  const handleClickHome = (e) => {
+    if (isTeamMode && user && userProfile) {
+      e.preventDefault();
+      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
+      if (teamCode) navigate(`/teamhome/${teamCode}`);
+    }
+  };
+  const handleClickMobileHome = (e) => {
+    setMobileMenuOpen(false);
+    if (isTeamMode && user && userProfile) {
+      e.preventDefault();
+      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
+      if (teamCode) navigate(`/teamhome/${teamCode}`);
+    }
   };
 
   //mobile 스토어 스크롤 막기
@@ -666,29 +682,10 @@ const Header = ({ mode }) => {
   // 페이지 이동 시 search, user dropdown 닫기
   useEffect(() => {
     closeSearch();
-    setIsOpen(false);
+    setIsToggleUserOpen(false);
     setMobileMenuOpen(false);
     setMobileStoreOpen(false);
   }, [location.pathname]);
-  const teams = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-  //헤더 팀 토글 클릭 시
-
-  const handleClickHome = (e) => {
-    if (isTeamMode && user && userProfile) {
-      e.preventDefault();
-      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
-      if (teamCode) navigate(`/teamhome/${teamCode}`);
-    }
-  };
-  const handleClickMobileHome = (e) => {
-    setMobileMenuOpen(false);
-    if (isTeamMode && user && userProfile) {
-      e.preventDefault();
-      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
-      if (teamCode) navigate(`/teamhome/${teamCode}`);
-    }
-  };
 
   return (
     <Container ref={headerRef}>
@@ -732,15 +729,10 @@ const Header = ({ mode }) => {
             <Link to="/event">EVENT</Link>
           </Item>
           <Line
-            as={motion.div}
-            initial={false}
-            animate={lineStyle}
-            transition={
-              lineVisible ? { duration: 0.3, ease: "easeOut" } : { duration: 0 }
-            }
             style={{
+              left: `${lineStyle.left}px`,
+              width: `${lineStyle.width}px`,
               opacity: lineVisible ? 1 : 0,
-              transition: "opacity 0.2s ease",
             }}
           />
         </Items>
@@ -767,11 +759,11 @@ const Header = ({ mode }) => {
                 <UserName>
                   <Link to="/mypage">{userProfile.nickname}</Link>
                   <InfoBtn className="info-btn" onClick={toggleUserBox}>
-                    {isopen ? "▲" : "▼"}
+                    {isToggleUseropen ? "▲" : "▼"}
                   </InfoBtn>
                 </UserName>
               </UserWrap>
-              <User $isopen={isopen}>
+              <User $isopen={isToggleUseropen}>
                 <UserInfo>
                   <UserTeam
                     $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
