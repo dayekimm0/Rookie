@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import toggleBtn from "../../images/icons/header_toggle_btn.svg";
 import { useToggleStore } from "../../stores/headersStore";
-import authStore from "../../stores/authStore";
+import authStore from "../../stores/AuthStore";
 import { getTeamCodeEng } from "../../util";
 
 const ToggleWrapper = styled.div`
@@ -41,7 +41,7 @@ const ToggleWrapper = styled.div`
   }
 `;
 
-// 회전 애니메이션 정의 (시계방향)
+// 회전 애니메이션
 const rollRight = keyframes`
   from {
     transform: rotate(0deg);

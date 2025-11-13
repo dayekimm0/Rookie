@@ -1,8 +1,9 @@
-import styled from "styled-components";
+import { useRef } from "react";
+import styled, { StyleSheetManager } from "styled-components";
+import isPropValid from "@emotion/is-prop-valid";
 import DataTable from "react-data-table-component";
 import { kboTableCol, kboTableData } from "./kboTableDB";
 import useDragScroll from "../../hook/useDragScroll";
-import { useRef } from "react";
 
 const Section = styled.section`
   margin-top: 120px;
@@ -174,21 +175,24 @@ const ScrollWrap = styled.div`
 const RankingTable = () => {
   const tableRef = useRef(null);
   useDragScroll(tableRef);
-  return (
-    <Section>
-      <div className="inner">
-        <h3>RANK</h3>
 
-        <ScrollWrap ref={tableRef}>
-          <DataTable
-            className="table"
-            columns={kboTableCol}
-            data={kboTableData}
-            responsive={false}
-          />
-        </ScrollWrap>
-      </div>
-    </Section>
+  return (
+    <StyleSheetManager shouldForwardProp={isPropValid}>
+      <Section>
+        <div className="inner">
+          <h3>RANK</h3>
+
+          <ScrollWrap ref={tableRef}>
+            <DataTable
+              className="table"
+              columns={kboTableCol}
+              data={kboTableData}
+              responsive={false}
+            />
+          </ScrollWrap>
+        </div>
+      </Section>
+    </StyleSheetManager>
   );
 };
 

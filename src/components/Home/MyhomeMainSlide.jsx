@@ -11,7 +11,7 @@ import { MyhomeNaviLeftBtn, MyhomeNaviRightBtn } from "../Slides/NaviBtnStyles";
 import { getTeamShortName } from "../../util";
 import useMatchedGameVideos from "../../hook/useMatchedGameVideos";
 import Spinner from "../Spinner";
-import SlideErrorFallback from "../Error/SlideErrorFallback";
+import SlideErrorBtnFallback from "../Error/SlideErrorFallback";
 
 const Container = styled.div`
   width: 100%;
@@ -151,7 +151,7 @@ const MyhomeMainSlide = ({ isMyhome }) => {
     <>
       <ErrorBoundary
         FallbackComponent={(props) => (
-          <SlideErrorFallback
+          <SlideErrorBtnFallback
             {...props}
             onRetry={() => setRetryKey((k) => k + 1)}
           />

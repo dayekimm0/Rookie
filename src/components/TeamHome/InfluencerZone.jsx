@@ -1,8 +1,12 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
 import InfClipSlide from "./InfClipSlide";
 import InfSlide from "./InfSlide";
 import InfProducts from "./InfProducts";
 import InfProfileCard from "./InfProfileCard";
+import Spinner from "../Spinner";
+import SlideErrorFallback from "../Error/SlideErrorFallback2";
 
 const Inner = styled.div`
   padding-top: 100px;
@@ -104,10 +108,34 @@ const ContentTitle = styled.h4`
   }
 `;
 
+const ErrorFallback = styled.div`
+  padding: 100px 0;
+  text-align: center;
+
+  p {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background: var(--main);
+    color: var(--dark);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.6rem;
+  }
+`;
+
+const LoadingFallback = styled.div`
+  padding: 100px 0;
+  display: flex;
+  justify-content: center;
+`;
+
 const InfluencerZone = ({ influencer, teamCode }) => {
   const { name, profile, description, play, clip, products } = influencer;
-  // const { data: allProducts = [], isLoading: isProductLoading } =
-  //   useAllProductsQuery();
 
   return (
     <Inner className="inner">
@@ -117,13 +145,33 @@ const InfluencerZone = ({ influencer, teamCode }) => {
             {clip && (
               <div className="clipWrap">
                 <ContentTitle>ROOKie CLIP</ContentTitle>
-                <InfClipSlide playlistId={clip} max={21} />
+                <ErrorBoundary fallbackRender={SlideErrorFallback}>
+                  <Suspense
+                    fallback={
+                      <LoadingFallback>
+                        <Spinner />
+                      </LoadingFallback>
+                    }
+                  >
+                    <InfClipSlide playlistId={clip} max={21} />
+                  </Suspense>
+                </ErrorBoundary>
               </div>
             )}
             {play && (
               <div className="playWrap">
                 <ContentTitle>ROOKie PLAY</ContentTitle>
-                <InfSlide playlistId={play} max={21} />
+                <ErrorBoundary fallbackRender={SlideErrorFallback}>
+                  <Suspense
+                    fallback={
+                      <LoadingFallback>
+                        <Spinner />
+                      </LoadingFallback>
+                    }
+                  >
+                    <InfSlide playlistId={play} max={21} />
+                  </Suspense>
+                </ErrorBoundary>
               </div>
             )}
           </div>

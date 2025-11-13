@@ -9,7 +9,7 @@ import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "../Slides/NaviBtnStyles";
 import useMatchedGameVideos from "../../hook/useMatchedGameVideos";
 import Spinner from "../Spinner";
-import SlideErrorFallback from "../Error/SlideErrorFallback";
+import SlideErrorBtnFallback from "../Error/SlideErrorFallback";
 
 const Container = styled.div`
   width: 100%;
@@ -93,7 +93,7 @@ const MainSlide = () => {
     <>
       <ErrorBoundary
         FallbackComponent={(props) => (
-          <SlideErrorFallback
+          <SlideErrorBtnFallback
             {...props}
             onRetry={() => {
               setFailMode(false);

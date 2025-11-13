@@ -57,12 +57,18 @@ export const useYoutubePlaylist = (
     cacheTime: 1000 * 60 * 10, // 10분간 쿼리 캐시 유지
     retry: 1,
     refetchOnWindowFocus: false, // 탭 이동 시 재요청 방지
+    refetchOnMount: false,
+    refetchOnReconnect: false,
     suspense, //서스펜스 추가
   });
 };
 
 //유튜브 영상 디테일 정보
-export const useYoutubeVideoDetails = (videoIds, enabled = true) => {
+export const useYoutubeVideoDetails = (
+  videoIds,
+  enabled = true,
+  suspense = false
+) => {
   return useQuery({
     queryKey: ["youtubeVideoDetails", videoIds],
     queryFn: fetchVideoDetails,
@@ -71,6 +77,7 @@ export const useYoutubeVideoDetails = (videoIds, enabled = true) => {
     cacheTime: 1000 * 60 * 10,
     retry: 1,
     refetchOnWindowFocus: false,
+    suspense,
   });
 };
 

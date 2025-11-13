@@ -3,7 +3,7 @@ import "swiper/css";
 import styled from "styled-components";
 import { UpNaviLeftBtn, UpNaviRightBtn } from "../Slides/NaviBtnStyles";
 import BArrow from "../../images/icons/arrow_small_w.svg";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import InfProductCard from "./InfProductCard";
 
 const SlideContainer = styled.div`
@@ -99,7 +99,7 @@ const Cardwrap = styled.div`
   }
 `;
 
-const InfProducts = ({ products, name }) => {
+const InfProducts = memo(({ products, name }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -198,6 +198,6 @@ const InfProducts = ({ products, name }) => {
       </Swiper>
     </SlideContainer>
   );
-};
+});
 
 export default InfProducts;

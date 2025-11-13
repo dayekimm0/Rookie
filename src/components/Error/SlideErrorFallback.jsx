@@ -98,7 +98,7 @@ const RetryButton = styled.button`
   }
 `;
 
-const SlideErrorFallback = ({ resetErrorBoundary, onRetry }) => {
+const SlideErrorBtnFallback = ({ resetErrorBoundary, onRetry }) => {
   return (
     <ErrorContainer>
       <ErrorIcon>
@@ -119,4 +119,4 @@ const SlideErrorFallback = ({ resetErrorBoundary, onRetry }) => {
   );
 };
 
-export default SlideErrorFallback;
+export default SlideErrorBtnFallback;
