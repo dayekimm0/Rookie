@@ -1,10 +1,8 @@
-import { useMemo } from "react";
 import styled from "styled-components";
 import InfClipSlide from "./InfClipSlide";
 import InfSlide from "./InfSlide";
 import InfProducts from "./InfProducts";
 import InfProfileCard from "./InfProfileCard";
-import useAllProductsQuery from "../../hook/useAllProductsQuery";
 
 const Inner = styled.div`
   padding-top: 100px;
