@@ -390,7 +390,7 @@ const MainCard = React.memo(
               )}
               {isTransitioning && (
                 <div className="transition-overlay">
-                  <p>잠시 후 다음 컨텐츠가 이어집니다...</p>
+                  <p>잠시 후 다음 콘텐츠가 이어집니다...</p>
                 </div>
               )}
               <YouTube
@@ -420,22 +420,6 @@ const MainCard = React.memo(
               onClick={() => setTryPlay(true)}
             />
           ) : (
-            // <div
-            //   style={{
-            //     width: "100%",
-            //     height: "100%",
-            //     backgroundColor: "#000",
-            //     display: "flex",
-            //     justifyContent: "center",
-            //     alignItems: "center",
-            //     cursor: "pointer",
-            //     color: "#fff",
-            //     fontSize: "1.4rem",
-            //   }}
-            //   onClick={() => setTryPlay(true)}
-            // >
-            //   영상 시작하기
-            // </div>
             <VideoInner $bg={awayColor}>
               <HomeBg $bg={homeColor}>
                 <svg
@@ -453,22 +437,6 @@ const MainCard = React.memo(
             </VideoInner>
           )}
         </div>
-
-        {/* <VideoInner $bg={awayColor}>
-            <HomeBg $bg={homeColor}>
-              <svg
-                preserveAspectRatio="none"
-                width="277"
-                height="289"
-                viewBox="0 0 277 289"
-                fill="none"
-              >
-                <path d="M0.5 0H276.5L195.35 289H0.5V0Z" />
-              </svg>
-              <img className="homeEmblem" src={homeEmblem} alt="emblem" />
-            </HomeBg>
-            <img className="awayEmblem" src={awayEmblem} alt="emblem" />
-          </VideoInner> */}
       </Card>
     );
   }

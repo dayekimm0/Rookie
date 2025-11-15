@@ -1,8 +1,10 @@
-import { memo } from "react";
-import { Link } from "react-router-dom";
+import { memo, useState, useLayoutEffect, useCallback, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getEmblem, getTeamJsonCode } from "../../util";
+import { getEmblem, getTeamJsonCode, getTeamCodeEng } from "../../util";
 import rookieemblem from "../../images/logos/emblem_rookie.svg";
+import authStore from "../../stores/AuthStore";
+import { useToggleStore } from "../../stores/headersStore";
 
 const Items = styled.div`
   position: absolute;
@@ -115,53 +117,105 @@ const TeamEmblem = memo(({ emblemId }) => {
   return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
 });
 
-const NavigationItems = memo(
-  ({ isTeamMode, handleClickHome, itemRefs, lineStyle, lineVisible }) => {
-    return (
-      <Items>
-        <Item ref={(el) => (itemRefs.current[0] = el)}>
-          <Link to="/" onClick={handleClickHome}>
-            {isTeamMode ? "TEAM" : "HOME"}
-          </Link>
-        </Item>
-        <Item ref={(el) => (itemRefs.current[1] = el)}>
-          <Link to="/play">PLAY</Link>
-        </Item>
+const NavigationItems = memo(() => {
+  const { user, userProfile } = authStore();
+  const isTeamMode = useToggleStore((state) => state.isTeamMode);
+  const [lineVisible, setLineVisible] = useState(true);
+  const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
+  const navigate = useNavigate();
+  const location = useLocation();
+  const itemRefs = useRef([]);
+  const pathname = location.pathname;
 
-        <Item ref={(el) => (itemRefs.current[2] = el)}>
-          <StoreWrapper>
-            <Link onClick={(e) => e.preventDefault()}>STORE</Link>
-            <StoreContainer className="store-dropdown">
-              <Stores>
-                <Link to="/store/rookie">
-                  <RookieEmblem src={rookieemblem} alt="rookieemblem" />
-                </Link>
-                {teams.map((id) => {
-                  const teamCode = getTeamJsonCode(id);
-                  return (
-                    <Link key={id} to={`/store/${teamCode}`}>
-                      <TeamEmblem emblemId={id} />
-                    </Link>
-                  );
-                })}
-              </Stores>
-            </StoreContainer>
-          </StoreWrapper>
-        </Item>
+  const activeIndex = (() => {
+    if (
+      (!isTeamMode && pathname === "/") ||
+      (isTeamMode && pathname.startsWith("/teamhome"))
+    ) {
+      return 0;
+    } else if (pathname.startsWith("/play")) {
+      return 1;
+    } else if (pathname.startsWith("/store")) {
+      return 2;
+    } else if (pathname.startsWith("/event")) {
+      return 3;
+    }
+    return -1;
+  })();
 
-        <Item ref={(el) => (itemRefs.current[3] = el)}>
-          <Link to="/event">EVENT</Link>
-        </Item>
-        <Line
-          style={{
-            left: `${lineStyle.left}px`,
-            width: `${lineStyle.width}px`,
-            opacity: lineVisible ? 1 : 0,
-          }}
-        />
-      </Items>
-    );
-  }
-);
+  const handleClickHome = useCallback(
+    (e) => {
+      if (isTeamMode && user && userProfile) {
+        e.preventDefault();
+        const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
+        if (teamCode) navigate(`/teamhome/${teamCode}`);
+      }
+    },
+    [isTeamMode, user, userProfile, navigate]
+  );
+
+  useLayoutEffect(() => {
+    const updateLineStyle = () => {
+      const activeEl = itemRefs.current[activeIndex];
+      if (activeEl) {
+        setLineStyle({
+          left: activeEl.offsetLeft,
+          width: activeEl.offsetWidth,
+        });
+        setLineVisible(true);
+      } else {
+        setLineVisible(false);
+      }
+    };
+    updateLineStyle();
+    window.addEventListener("resize", updateLineStyle);
+    return () => window.removeEventListener("resize", updateLineStyle);
+  }, [pathname, activeIndex, itemRefs]);
+
+  return (
+    <Items>
+      <Item ref={(el) => (itemRefs.current[0] = el)}>
+        <Link to="/" onClick={handleClickHome}>
+          {isTeamMode ? "TEAM" : "HOME"}
+        </Link>
+      </Item>
+      <Item ref={(el) => (itemRefs.current[1] = el)}>
+        <Link to="/play">PLAY</Link>
+      </Item>
+
+      <Item ref={(el) => (itemRefs.current[2] = el)}>
+        <StoreWrapper>
+          <Link onClick={(e) => e.preventDefault()}>STORE</Link>
+          <StoreContainer className="store-dropdown">
+            <Stores>
+              <Link to="/store/rookie">
+                <RookieEmblem src={rookieemblem} alt="rookieemblem" />
+              </Link>
+              {teams.map((id) => {
+                const teamCode = getTeamJsonCode(id);
+                return (
+                  <Link key={id} to={`/store/${teamCode}`}>
+                    <TeamEmblem emblemId={id} />
+                  </Link>
+                );
+              })}
+            </Stores>
+          </StoreContainer>
+        </StoreWrapper>
+      </Item>
+
+      <Item ref={(el) => (itemRefs.current[3] = el)}>
+        <Link to="/event">EVENT</Link>
+      </Item>
+      <Line
+        style={{
+          left: `${lineStyle.left}px`,
+          width: `${lineStyle.width}px`,
+          opacity: lineVisible ? 1 : 0,
+        }}
+      />
+    </Items>
+  );
+});
 
 export default NavigationItems;

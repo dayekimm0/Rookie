@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -52,10 +52,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const SearchMobile = ({ setMobileMenuOpen }) => {
+const SearchMobile = memo(({ onClose }) => {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -63,14 +62,9 @@ const SearchMobile = ({ setMobileMenuOpen }) => {
     if (!trimmed) return;
 
     navigate(`/play/search?keyword=${encodeURIComponent(trimmed)}`);
-    setMobileMenuOpen(false);
+    onClose();
     setKeyword("");
   };
-
-  useEffect(() => {
-    setMobileMenuOpen(false);
-    setKeyword("");
-  }, [location.pathname]);
 
   return (
     <Wrapper>
@@ -91,6 +85,6 @@ const SearchMobile = ({ setMobileMenuOpen }) => {
       </div>
     </Wrapper>
   );
-};
+});
 
 export default SearchMobile;

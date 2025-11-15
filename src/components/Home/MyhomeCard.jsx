@@ -432,7 +432,7 @@ const MyhomeCard = React.memo(
               )}
               {isTransitioning && (
                 <div className="transition-overlay">
-                  <p>잠시 후 다음 컨텐츠가 이어집니다...</p>
+                  <p>잠시 후 다음 콘텐츠가 이어집니다...</p>
                 </div>
               )}
               <YouTube

@@ -1,9 +1,14 @@
-import { memo } from "react";
-import { Link } from "react-router-dom";
+import { memo, useState, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 import { getEmblem, getTeamColor } from "../../util";
 import kbologo2 from "../../images/emblem/emblem_kbo2.svg";
 import HeaderToggle from "./HeaderToggle";
+import authStore from "../../stores/AuthStore";
+import logonStore from "../../stores/LogonStore";
+import { useToggleStore } from "../../stores/headersStore";
 
 const UserWrap = styled.div`
   display: flex;
@@ -181,82 +186,98 @@ const TeamEmblem = memo(({ emblemId }) => {
   return emblem ? <img src={emblem} alt="Team Emblem" /> : <p>엠블럼 없음</p>;
 });
 
-const HeaderProfile = memo(
-  ({
-    user,
-    userProfile,
-    isLoading,
-    isToggleUseropen,
-    toggleUserBox,
-    handleLogout,
-  }) => {
-    return (
-      <>
-        {isLoading ? (
-          <>
-            <Emblem2>
-              <img src={kbologo2} alt="kbologo2" />
-            </Emblem2>
+const HeaderProfile = memo(() => {
+  const { user, userProfile, isLoading } = authStore();
+  const { resetForm } = logonStore();
+  const [isToggleUseropen, setIsToggleUserOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // 토글 버튼을 누르면 유저 정보 오픈
+  const toggleUserBox = () => {
+    setIsToggleUserOpen((prev) => !prev);
+  };
+
+  //로그아웃 버튼 클릭
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      authStore.getState().clearUser();
+      alert("로그아웃 되었습니다.");
+      resetForm();
+      useToggleStore.getState().setTeamMode(false);
+      localStorage.removeItem("toggle-mode");
+      navigate("/");
+    } catch (e) {
+      alert("로그아웃 실패", e);
+    }
+  };
+
+  return (
+    <>
+      {isLoading ? (
+        <>
+          <Emblem2>
+            <img src={kbologo2} alt="kbologo2" />
+          </Emblem2>
+          <UserName>
+            <Link>로딩중..</Link>
+          </UserName>
+        </>
+      ) : user && userProfile ? (
+        <>
+          <HeaderToggle />
+          <UserWrap>
+            <Emblem>
+              <TeamEmblem
+                emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
+              />
+            </Emblem>
             <UserName>
-              <Link>로딩중..</Link>
+              <Link to="/mypage">{userProfile.nickname}</Link>
+              <InfoBtn className="info-btn" onClick={toggleUserBox}>
+                {isToggleUseropen ? "▲" : "▼"}
+              </InfoBtn>
             </UserName>
-          </>
-        ) : user && userProfile ? (
-          <>
-            <HeaderToggle />
-            <UserWrap>
-              <Emblem>
+          </UserWrap>
+          <User $isopen={isToggleUseropen}>
+            <UserInfo>
+              <UserTeam
+                $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
+                style={{
+                  backgroundColor: getTeamColor(
+                    teamToEmblemId[userProfile.favoriteTeam] || "#fff"
+                  ),
+                }}
+              >
                 <TeamEmblem
                   emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
                 />
-              </Emblem>
-              <UserName>
-                <Link to="/mypage">{userProfile.nickname}</Link>
-                <InfoBtn className="info-btn" onClick={toggleUserBox}>
-                  {isToggleUseropen ? "▲" : "▼"}
-                </InfoBtn>
-              </UserName>
-            </UserWrap>
-            <User $isopen={isToggleUseropen}>
-              <UserInfo>
-                <UserTeam
-                  $isTeam6={teamToEmblemId[userProfile.favoriteTeam] === "6"}
-                  style={{
-                    backgroundColor: getTeamColor(
-                      teamToEmblemId[userProfile.favoriteTeam] || "#fff"
-                    ),
-                  }}
-                >
-                  <TeamEmblem
-                    emblemId={teamToEmblemId[userProfile.favoriteTeam] || "2"}
-                  />
-                </UserTeam>
-                <UserDesc>
-                  <UserId>{userProfile.nickname}</UserId>
-                  <SelectTeam>{userProfile.favoriteTeam}</SelectTeam>
-                </UserDesc>
-              </UserInfo>
-              <hr />
-              <Gnb>
-                <Link to="/mypage">마이페이지</Link>
-                <Link to="/cart">장바구니</Link>
-                <Link onClick={handleLogout}>로그아웃</Link>
-              </Gnb>
-            </User>
-          </>
-        ) : (
-          <>
-            <Emblem2>
-              <img src={kbologo2} alt="kbologo2" />
-            </Emblem2>
-            <UserName>
-              <Link to="/login">로그인</Link>
-            </UserName>
-          </>
-        )}
-      </>
-    );
-  }
-);
+              </UserTeam>
+              <UserDesc>
+                <UserId>{userProfile.nickname}</UserId>
+                <SelectTeam>{userProfile.favoriteTeam}</SelectTeam>
+              </UserDesc>
+            </UserInfo>
+            <hr />
+            <Gnb>
+              <Link to="/mypage">마이페이지</Link>
+              <Link to="/cart">장바구니</Link>
+              <Link onClick={handleLogout}>로그아웃</Link>
+            </Gnb>
+          </User>
+        </>
+      ) : (
+        <>
+          <Emblem2>
+            <img src={kbologo2} alt="kbologo2" />
+          </Emblem2>
+          <UserName>
+            <Link to="/login">로그인</Link>
+          </UserName>
+        </>
+      )}
+    </>
+  );
+});
 
 export default HeaderProfile;

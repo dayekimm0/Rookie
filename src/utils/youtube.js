@@ -66,10 +66,8 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
       }
 
       let thumbnail = null;
-      if (matchedVideo?.snippet?.thumbnails?.maxres?.url) {
-        thumbnail = matchedVideo.snippet.thumbnails.maxres.url;
-      } else if (matchedVideo?.snippet?.thumbnails?.standard?.url) {
-        thumbnail = matchedVideo.snippet.thumbnails.standard.url;
+      if (matchedVideo?.snippet?.thumbnails?.standard?.url) {
+        thumbnail = matchedVideo.snippet.thumbnails.standard.url; // 640x480
       } else if (matchedVideo?.snippet?.thumbnails?.high?.url) {
         thumbnail = matchedVideo.snippet.thumbnails.high.url;
       } else if (matchedVideo?.snippet?.thumbnails?.medium?.url) {

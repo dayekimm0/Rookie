@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   memo,
+  useCallback,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getScrollbarWidth, getTeamCodeEng } from "../util";
@@ -70,40 +71,11 @@ const Profile = styled.div`
 
 const Header = memo(({ mode }) => {
   const setHeaderHeight = useHeaderStore((state) => state.setHeaderHeight);
-  const headerHeight = useHeaderStore((state) => state.headerHeight);
-  const isFolded = useHeaderStore((state) => state.isHeaderFolded);
-  const { user, userProfile, isLoading } = authStore();
-  const { resetForm } = logonStore();
-  const isTeamMode = useToggleStore((state) => state.isTeamMode);
+
   const { searchOpen, toggleSearch, closeSearch } = useSearchStore();
-  const [isToggleUseropen, setIsToggleUserOpen] = useState(false);
-  const [mobileStoreOpen, setMobileStoreOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [lineVisible, setLineVisible] = useState(true);
-  const [lineStyle, setLineStyle] = useState({ left: 0, width: 0 });
-
   const location = useLocation();
-  const navigate = useNavigate();
-  const pathname = location.pathname;
   const headerRef = useRef(null);
-  const itemRefs = useRef([]);
-
-  //현재 메뉴 위치 체크
-  const activeIndex = useMemo(() => {
-    if (
-      (!isTeamMode && pathname === "/") ||
-      (isTeamMode && pathname.startsWith("/teamhome"))
-    ) {
-      return 0;
-    } else if (pathname.startsWith("/play")) {
-      return 1;
-    } else if (pathname.startsWith("/store")) {
-      return 2;
-    } else if (pathname.startsWith("/event")) {
-      return 3;
-    }
-    return -1;
-  }, [pathname, isTeamMode]);
 
   // 헤더 높이 체크
   useLayoutEffect(() => {
@@ -121,90 +93,15 @@ const Header = memo(({ mode }) => {
     };
   }, [setHeaderHeight]);
 
-  //메뉴 라인 그리기
-  useLayoutEffect(() => {
-    const updateLineStyle = () => {
-      const activeEl = itemRefs.current[activeIndex];
-      if (activeEl) {
-        setLineStyle({
-          left: activeEl.offsetLeft,
-          width: activeEl.offsetWidth,
-        });
-        setLineVisible(true);
-      } else {
-        setLineVisible(false);
-      }
-    };
-    updateLineStyle();
-    window.addEventListener("resize", updateLineStyle);
-    return () => window.removeEventListener("resize", updateLineStyle);
-  }, [location.pathname, activeIndex]);
-
-  // 토글 버튼을 누르면 유저 정보 오픈
-  const toggleUserBox = () => {
-    setIsToggleUserOpen((prev) => !prev);
-  };
-
-  //로그아웃 버튼 클릭
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      authStore.getState().clearUser();
-      alert("로그아웃 되었습니다.");
-      resetForm();
-      useToggleStore.getState().setTeamMode(false);
-      localStorage.removeItem("toggle-mode");
-      navigate("/");
-    } catch (e) {
-      alert("로그아웃 실패", e);
-    }
-  };
-
-  //헤더-팀 전환토글 클릭 시
-  const handleClickHome = (e) => {
-    if (isTeamMode && user && userProfile) {
-      e.preventDefault();
-      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
-      if (teamCode) navigate(`/teamhome/${teamCode}`);
-    }
-  };
-  const handleClickMobileHome = (e) => {
-    setMobileMenuOpen(false);
-    if (isTeamMode && user && userProfile) {
-      e.preventDefault();
-      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
-      if (teamCode) navigate(`/teamhome/${teamCode}`);
-    }
-  };
-
   //mobile 메뉴 토글
-  const handleClickMobileMenu = () => {
+  const handleToggleMobileMenu = useCallback(() => {
     setMobileMenuOpen((prev) => !prev);
-  };
-
-  //mobile 스토어메뉴 토글
-  const handleClickMobileStore = () => {
-    setMobileStoreOpen((prev) => !prev);
-  };
-
-  //mobile 스토어 스크롤 막기
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      const scrollbarWidth = getScrollbarWidth();
-      document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    }
-  }, [mobileMenuOpen]);
+  }, []);
 
   // 페이지 이동 시 search, user dropdown 닫기
   useEffect(() => {
     closeSearch();
-    setIsToggleUserOpen(false);
     setMobileMenuOpen(false);
-    setMobileStoreOpen(false);
   }, [location.pathname]);
 
   return (
@@ -212,49 +109,23 @@ const Header = memo(({ mode }) => {
       <TopSchedule />
       <Nav>
         <HeaderLogo />
-        <NavigationItems
-          isTeamMode={isTeamMode}
-          handleClickHome={handleClickHome}
-          itemRefs={itemRefs}
-          lineStyle={lineStyle}
-          lineVisible={lineVisible}
-        />
+        <NavigationItems />
         <Profile>
           {/* 프로필 / 로그인 관련 */}
-          <HeaderProfile
-            user={user}
-            userProfile={userProfile}
-            isLoading={isLoading}
-            isToggleUseropen={isToggleUseropen}
-            toggleUserBox={toggleUserBox}
-            handleLogout={handleLogout}
-          />
+          <HeaderProfile />
           <HeaderSearchBtn
             searchOpen={searchOpen}
             toggleSearch={toggleSearch}
           />
           <MobileMenuBtn
             mobileMenuOpen={mobileMenuOpen}
-            handleClickMobileMenu={handleClickMobileMenu}
+            handleClickMobileMenu={handleToggleMobileMenu}
           />
         </Profile>
       </Nav>
       <SearchPc mode={mode} />
-      <MobileMenu
-        handleClickMobileMenu={handleClickMobileMenu}
-        mobileMenuOpen={mobileMenuOpen}
-        headerHeight={headerHeight}
-        isFolded={isFolded}
-        setMobileMenuOpen={setMobileMenuOpen}
-        isTeamMode={isTeamMode}
-        handleClickMobileHome={handleClickMobileHome}
-        handleClickMobileStore={handleClickMobileStore}
-        mobileStoreOpen={mobileStoreOpen}
-        isLoading={isLoading}
-        user={user}
-        userProfile={userProfile}
-        handleLogout={handleLogout}
-      />
+
+      <MobileMenu isOpen={mobileMenuOpen} onToggle={handleToggleMobileMenu} />
     </Container>
   );
 });

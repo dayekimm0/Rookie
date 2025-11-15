@@ -1,8 +1,15 @@
-import { memo } from "react";
-import { Link } from "react-router-dom";
+import { memo, useState, useEffect, useCallback } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 import arrowSmall from "../../images/icons/RBarrow_logo.svg";
 import SearchMobile from "../Search/SearchMobile";
+import authStore from "../../stores/AuthStore";
+import logonStore from "../../stores/LogonStore";
+import useHeaderStore from "../../stores/headerHeightStore";
+import { useToggleStore } from "../../stores/headersStore";
+import { getScrollbarWidth, getTeamCodeEng } from "../../util";
 
 const MobileMenuWrap = styled.div`
   position: fixed;
@@ -72,9 +79,11 @@ const MobileMenuWrap = styled.div`
       & > li {
         font-size: 1.6rem;
         font-weight: 700;
-        a {
+        a,
+        .storeBtn {
           display: flex;
           align-items: center;
+          cursor: pointer;
           img {
             margin-left: 10px;
             width: 6px;
@@ -83,7 +92,8 @@ const MobileMenuWrap = styled.div`
           }
         }
         &.active {
-          a {
+          a,
+          .storeBtn {
             img {
               transform: rotate(-90deg);
             }
@@ -122,106 +132,136 @@ const teamStores = [
   { name: "키움 히어로즈", code: "kw_hrs" },
 ];
 
-const MobileMenu = memo(
-  ({
-    handleClickMobileMenu,
-    mobileMenuOpen,
-    headerHeight,
-    isFolded,
-    setMobileMenuOpen,
-    isTeamMode,
-    handleClickMobileHome,
-    handleClickMobileStore,
-    mobileStoreOpen,
-    isLoading,
-    user,
-    userProfile,
-    handleLogout,
-  }) => {
-    return (
-      <MobileMenuWrap
-        className={mobileMenuOpen ? "active" : ""}
-        $headerHeight={headerHeight}
-        $folded={isFolded}
-        data-lenis-prevent
-      >
-        <div className="bg_black" onClick={handleClickMobileMenu}></div>
-        <div className="menu_inner">
-          <div className="inner_wrap">
-            <SearchMobile setMobileMenuOpen={setMobileMenuOpen} />
-            <ul className="mb_menus">
-              <li>
-                <Link to={"/"} onClick={handleClickMobileHome}>
-                  {isTeamMode ? "TEAM" : "HOME"}
-                </Link>
-              </li>
-              <li>
-                <Link to={"/play"} onClick={() => setMobileMenuOpen(false)}>
-                  PLAY
-                </Link>
-              </li>
-              <li
-                onClick={handleClickMobileStore}
-                className={mobileStoreOpen ? "active" : null}
-              >
-                <Link to={"#"} disabled>
-                  STORE
-                  <img src={arrowSmall} alt="arrow" />
-                </Link>
-                <ul className="store_depth2">
-                  <li>
-                    <Link
-                      to={`/store/rookie`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      ROOKie
+const MobileMenu = memo(({ isOpen, onToggle }) => {
+  const headerHeight = useHeaderStore((state) => state.headerHeight);
+  const isFolded = useHeaderStore((state) => state.isHeaderFolded);
+  const { user, userProfile, isLoading } = authStore();
+  const { resetForm } = logonStore();
+  const isTeamMode = useToggleStore((state) => state.isTeamMode);
+
+  const [mobileStoreOpen, setMobileStoreOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleClickMobileStore = useCallback(() => {
+    setMobileStoreOpen((prev) => !prev);
+  }, []);
+
+  const handleClickMobileHome = (e) => {
+    if (isTeamMode && user && userProfile) {
+      e.preventDefault();
+      const teamCode = getTeamCodeEng(userProfile.favoriteTeam);
+      if (teamCode) {
+        navigate(`/teamhome/${teamCode}`);
+        onToggle();
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      authStore.getState().clearUser();
+      alert("로그아웃 되었습니다.");
+      resetForm();
+      useToggleStore.getState().setTeamMode(false);
+      localStorage.removeItem("toggle-mode");
+      navigate("/");
+    } catch (e) {
+      alert("로그아웃 실패", e);
+    }
+  };
+
+  useEffect(() => {
+    setMobileStoreOpen(false);
+  }, [location.pathname]);
+
+  // 메뉴 열릴 때 스크롤 막기
+  useEffect(() => {
+    if (isOpen) {
+      const scrollbarWidth = getScrollbarWidth();
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+  }, [isOpen]);
+
+  return (
+    <MobileMenuWrap
+      className={isOpen ? "active" : ""}
+      $headerHeight={headerHeight}
+      $folded={isFolded}
+      data-lenis-prevent
+    >
+      <div className="bg_black" onClick={onToggle}></div>
+      <div className="menu_inner">
+        <div className="inner_wrap">
+          <SearchMobile onClose={onToggle} />
+          <ul className="mb_menus">
+            <li>
+              <Link to={"/"} onClick={handleClickMobileHome}>
+                {isTeamMode ? "TEAM" : "HOME"}
+              </Link>
+            </li>
+            <li>
+              <Link to={"/play"} onClick={onToggle}>
+                PLAY
+              </Link>
+            </li>
+            <li
+              onClick={handleClickMobileStore}
+              className={mobileStoreOpen ? "active" : null}
+            >
+              <span className="storeBtn">
+                STORE
+                <img src={arrowSmall} alt="arrow" />
+              </span>
+              <ul className="store_depth2">
+                <li>
+                  <Link to={`/store/rookie`} onClick={onToggle}>
+                    ROOKie
+                  </Link>
+                </li>
+                {teamStores.map(({ name, code }) => (
+                  <li key={code}>
+                    <Link to={`/store/${code}`} onClick={onToggle}>
+                      {name}
                     </Link>
                   </li>
-                  {teamStores.map(({ name, code }) => (
-                    <li key={code}>
-                      <Link
-                        to={`/store/${code}`}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-              <li>
-                <Link to={"/event"} onClick={() => setMobileMenuOpen(false)}>
-                  EVENT
-                </Link>
-              </li>
-              {isLoading ? (
-                <></>
-              ) : user && userProfile ? (
-                <>
-                  <li>
-                    <Link
-                      to={"/mypage"}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      ACCOUNT
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={"/cart"} onClick={() => setMobileMenuOpen(false)}>
-                      CART
-                    </Link>
-                  </li>
-                  <li>
-                    <Link onClick={handleLogout}>LOGOUT</Link>
-                  </li>
-                </>
-              ) : null}
-            </ul>
-          </div>
+                ))}
+              </ul>
+            </li>
+            <li>
+              <Link to={"/event"} onClick={onToggle}>
+                EVENT
+              </Link>
+            </li>
+            {isLoading ? (
+              <></>
+            ) : user && userProfile ? (
+              <>
+                <li>
+                  <Link to={"/mypage"} onClick={onToggle}>
+                    ACCOUNT
+                  </Link>
+                </li>
+                <li>
+                  <Link to={"/cart"} onClick={onToggle}>
+                    CART
+                  </Link>
+                </li>
+                <li>
+                  <Link onClick={handleLogout}>LOGOUT</Link>
+                </li>
+              </>
+            ) : null}
+          </ul>
         </div>
-      </MobileMenuWrap>
-    );
-  }
-);
+      </div>
+    </MobileMenuWrap>
+  );
+});
 
 export default MobileMenu;
