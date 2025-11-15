@@ -108,26 +108,6 @@ const ContentTitle = styled.h4`
   }
 `;
 
-const ErrorFallback = styled.div`
-  padding: 100px 0;
-  text-align: center;
-
-  p {
-    font-size: 1.6rem;
-    margin-bottom: 20px;
-  }
-
-  button {
-    padding: 10px 20px;
-    background: var(--main);
-    color: var(--dark);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1.6rem;
-  }
-`;
-
 const LoadingFallback = styled.div`
   padding: 100px 0;
   display: flex;
