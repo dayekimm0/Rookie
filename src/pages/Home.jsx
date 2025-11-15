@@ -15,7 +15,7 @@ import CollaboBanner from "../components/Home/CollaboBanner";
 import authStore from "../stores/AuthStore";
 import { homeSlideTab } from "../data/playTabs";
 import Spinner from "../components/Spinner";
-import HomeProductSection from "../components/Home/ProductSection";
+import HomeProductSection from "../components/Home/HomeProductSection";
 import HomeProductSkeleton from "../components/Skeleton/HomeProductSkeleton";
 import ProductErrorFallback from "../components/Error/ProductErrorFallback";
 

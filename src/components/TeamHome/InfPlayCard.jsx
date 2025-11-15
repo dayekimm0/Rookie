@@ -39,14 +39,7 @@ const Card = styled.div`
   }
 `;
 
-const InfPlayCard = ({
-  thumbnail,
-  title,
-  onClick,
-  channelTitle,
-  views,
-  likes,
-}) => {
+const InfPlayCard = ({ thumbnail, title, onClick }) => {
   return (
     <Container>
       <Card onClick={onClick}>

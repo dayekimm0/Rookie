@@ -1,4 +1,3 @@
-// src/pages/error/ErrorPage.jsx
 import { useNavigate, useRouteError } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,21 +6,46 @@ import {
   faHouse,
   faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
+import GlobalStyles from "../../styles/Globalstyles.styles";
+
+const Wrapper = styled.div`
+  min-height: 100vh;
+  background: var(--dark);
+  display: flex;
+  flex-direction: column;
+`;
 
 const Container = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: var(--dark);
-  color: var(--light);
   padding: 60px 20px;
+  color: var(--light);
+
+  @media screen and (max-width: 768px) {
+    padding: 40px 20px;
+  }
+`;
+
+const TopLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background: var(--gray6);
+  margin-top: auto;
+`;
+
+const BottomLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background: var(--gray6);
+  margin-bottom: auto;
 `;
 
 const IconWrapper = styled.div`
   font-size: 6rem;
-  color: #ff6b6b;
+  color: var(--main);
   margin-bottom: 32px;
 
   @media screen and (max-width: 768px) {
@@ -78,8 +102,8 @@ const SubDescription = styled.p`
 `;
 
 const ErrorDetails = styled.details`
-  margin-bottom: 40px;
-  padding: 20px;
+  margin-bottom: 32px;
+  padding: 16px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--gray3);
   border-radius: 8px;
@@ -108,7 +132,7 @@ const ErrorDetails = styled.details`
   }
 
   @media screen and (max-width: 768px) {
-    padding: 16px;
+    padding: 14px;
   }
 `;
 
@@ -177,41 +201,47 @@ const ErrorPage = () => {
   };
 
   return (
-    <Container>
-      <IconWrapper>
-        <FontAwesomeIcon icon={faCircleExclamation} />
-      </IconWrapper>
+    <>
+      <GlobalStyles />
+      <Wrapper>
+        <TopLine />
+        <Container>
+          <IconWrapper>
+            <FontAwesomeIcon icon={faCircleExclamation} />
+          </IconWrapper>
 
-      <Title>일시적인 오류가 발생했습니다</Title>
+          <Title>일시적인 오류가 발생했습니다</Title>
 
-      <Description>페이지를 불러오는 중 문제가 발생했습니다.</Description>
+          <Description>페이지를 불러오는 중 문제가 발생했습니다.</Description>
 
-      <SubDescription>
-        잠시 후 다시 시도해 주시거나, 페이지를 새로고침해 주세요.
-      </SubDescription>
+          <SubDescription>
+            잠시 후 다시 시도해 주시거나, 페이지를 새로고침해 주세요.
+          </SubDescription>
 
-      {/* 개발 환경에서만 에러 상세 표시 */}
-      {import.meta.env.DEV && error && (
-        <ErrorDetails>
-          <summary>에러 상세 정보 (개발 모드)</summary>
-          <pre>
-            {error.message || error.statusText || "알 수 없는 오류"}
-            {error.stack && `\n\n${error.stack}`}
-          </pre>
-        </ErrorDetails>
-      )}
+          {import.meta.env.DEV && error && (
+            <ErrorDetails>
+              <summary>에러 상세 정보 (개발 모드)</summary>
+              <pre>
+                {error.message || error.statusText || "알 수 없는 오류"}
+                {error.stack && `\n\n${error.stack}`}
+              </pre>
+            </ErrorDetails>
+          )}
 
-      <ButtonGroup>
-        <Button className="primary" onClick={handleReload}>
-          <FontAwesomeIcon icon={faRotateRight} />
-          새로고침
-        </Button>
-        <Button className="secondary" onClick={() => navigate("/")}>
-          <FontAwesomeIcon icon={faHouse} />
-          홈으로 가기
-        </Button>
-      </ButtonGroup>
-    </Container>
+          <ButtonGroup>
+            <Button className="primary" onClick={handleReload}>
+              <FontAwesomeIcon icon={faRotateRight} />
+              새로고침
+            </Button>
+            <Button className="secondary" onClick={() => navigate("/")}>
+              <FontAwesomeIcon icon={faHouse} />
+              홈으로 가기
+            </Button>
+          </ButtonGroup>
+        </Container>
+        <BottomLine />
+      </Wrapper>
+    </>
   );
 };
 

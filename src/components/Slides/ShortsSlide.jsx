@@ -307,7 +307,8 @@ const SlideContent = React.memo(({ playlistId, max }) => {
               <SwiperSlide key={video.id}>
                 <Shortscard
                   thumbnail={
-                    video.snippet.thumbnails?.maxres?.url ||
+                    video.snippet.thumbnails?.standard?.url ||
+                    video.snippet.thumbnails?.high?.url ||
                     video.snippet.thumbnails?.medium?.url
                   }
                   title={video.snippet.title}

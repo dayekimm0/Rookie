@@ -1,5 +1,5 @@
-import { memo, useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { memo, useEffect, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -191,6 +191,11 @@ const HeaderProfile = memo(() => {
   const { resetForm } = logonStore();
   const [isToggleUseropen, setIsToggleUserOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsToggleUserOpen(false);
+  }, [location.pathname]);
 
   // 토글 버튼을 누르면 유저 정보 오픈
   const toggleUserBox = () => {

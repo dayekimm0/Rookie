@@ -272,7 +272,6 @@ const MainCard = React.memo(
     thumbnail,
     time,
   }) => {
-    const [isVideo, setIsVideo] = useState(false);
     const [isReady, setIsReady] = useState(false);
     const [tryPlay, setTryPlay] = useState(false);
     const [videoQueue, setVideoQueue] = useState([]);
@@ -301,12 +300,6 @@ const MainCard = React.memo(
         day: "numeric",
       });
     }, [date]);
-
-    useEffect(() => {
-      if (videoId) {
-        setIsVideo(true);
-      }
-    }, [videoId]);
 
     //다음 영상 재생
     useEffect(() => {
@@ -410,7 +403,7 @@ const MainCard = React.memo(
           ) : currentIndex === 0 && currentVideo?.thumbnail ? (
             <img
               src={currentVideo.thumbnail}
-              alt="thumbnail"
+              alt="thumbnail2"
               style={{
                 width: "100%",
                 height: "100%",

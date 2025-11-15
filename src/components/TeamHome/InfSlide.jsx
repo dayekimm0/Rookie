@@ -80,7 +80,7 @@ const InfSlide = memo(({ playlistId, max }) => {
         <SwiperSlide key={id}>
           <InfPlayCard
             thumbnail={
-              snippet.thumbnails?.maxres?.url || snippet.thumbnails?.medium?.url
+              snippet.thumbnails?.high?.url || snippet.thumbnails?.medium?.url
             }
             title={snippet.title}
             channelTitle={snippet.channelTitle}

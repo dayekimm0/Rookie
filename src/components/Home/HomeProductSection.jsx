@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import useAllProductsQuery from "../../hook/useAllProductsQuery";
 import HomeProducts from "./HomeProducts";
 import styled from "styled-components";
@@ -33,10 +33,14 @@ const ProductCardWrap = styled.div`
   }
 `;
 
-const HomeProductSection = () => {
+const HomeProductSection = memo(() => {
+  const [products, setProducts] = useState(null);
+
   const { data: allProducts } = useAllProductsQuery();
 
-  const { kiaTinypingCollabo, newest, popular } = useMemo(() => {
+  useEffect(() => {
+    if (products || !allProducts?.length) return;
+
     const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
 
     const kiaTinypingCollabo = allProducts
@@ -56,25 +60,27 @@ const HomeProductSection = () => {
       .filter((item) => !usedIds.has(item.id))
       .slice(0, 8);
 
-    return { kiaTinypingCollabo, newest, popular };
-  }, [allProducts]);
+    setProducts({ kiaTinypingCollabo, newest, popular });
+  }, [allProducts, products]);
+
+  if (!products) return null;
 
   return (
     <>
       <ProductCardWrap>
         <h3>COLLABORATION</h3>
-        <HomeProducts products={kiaTinypingCollabo} />
+        <HomeProducts products={products.kiaTinypingCollabo} />
       </ProductCardWrap>
       <ProductCardWrap>
         <h3>RELEASE</h3>
-        <HomeProducts products={newest} />
+        <HomeProducts products={products.newest} />
       </ProductCardWrap>
       <ProductCardWrap>
         <h3>FAVORITE</h3>
-        <HomeProducts products={popular} />
+        <HomeProducts products={products.popular} />
       </ProductCardWrap>
     </>
   );
-};
+});
 
 export default HomeProductSection;

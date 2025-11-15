@@ -453,7 +453,7 @@ const MyhomeCard = React.memo(
             <img
               src={`https://i.ytimg.com/vi/${currentVideo.videoId}/maxresdefault.jpg`}
               onError={(e) => {
-                e.currentTarget.src = `https://i.ytimg.com/vi/${currentVideo.videoId}/hqdefault.jpg`;
+                e.currentTarget.src = `https://i.ytimg.com/vi/${currentVideo.videoId}/sddefault.jpg`;
               }}
               alt="thumbnail"
               style={{

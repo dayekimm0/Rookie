@@ -60,7 +60,7 @@ const TabSlideRenderer = ({ items, onSwiperReady }) => {
       return (
         <SwiperSlide key={videoId}>
           <PlayCard
-            thumbnail={thumbnails?.maxres?.url || thumbnails?.medium?.url}
+            thumbnail={thumbnails?.high?.url || thumbnails?.medium?.url}
             title={title}
             onClick={() => handleDetailClick(videoId)}
           />
