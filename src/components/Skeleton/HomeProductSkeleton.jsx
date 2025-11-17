@@ -1,4 +1,3 @@
-// components/Skeleton/ProductLoadingSkeleton.jsx
 import styled, { keyframes } from "styled-components";
 
 // 펄스 애니메이션
@@ -72,7 +71,7 @@ const SkeletonCard = styled.div`
 
 const SkeletonImage = styled.div`
   width: 100%;
-  padding-top: 100%; /* 1:1 비율 */
+  padding-top: 100%;
   background: rgba(255, 255, 255, 0.08);
 `;
 
@@ -130,7 +129,7 @@ const HomeProductSkeleton = () => {
         </SkeletonGrid>
       </ProductCardWrap>
 
-      {/* FAVORITE 섹션 (8개) */}
+      {/* FAVORITE 섹션 */}
       <ProductCardWrap>
         <h3>FAVORITE</h3>
         <SkeletonGrid>
