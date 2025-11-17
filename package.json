@@ -5,7 +5,9 @@
   "main": "eslint.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/dayekimm0/Rookie/issues"
   },
-  "homepage": "https://github.com/dayekimm0/Rookie#readme",
+  "homepage": "https://dayekimm0.github.io/Rookie",
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
