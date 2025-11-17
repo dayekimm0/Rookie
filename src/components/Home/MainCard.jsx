@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { getEmblem, getTeamName, getTeamColor } from "../../util";
 import YouTube from "react-youtube";
@@ -276,15 +276,10 @@ const MainCard = React.memo(
     const [tryPlay, setTryPlay] = useState(false);
     const [videoQueue, setVideoQueue] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const isTransitioningRef = useRef(false);
 
-    const handleReady = () => {
-      setIsReady(true);
-    };
-
-    const handleError = () => {
-      console.warn("YouTube player error 발생");
-      setIsReady(false);
-    };
+    const currentVideo = videoQueue[currentIndex];
 
     const homeEmblem = useMemo(() => getEmblem(hometeam), [hometeam]);
     const awayEmblem = useMemo(() => getEmblem(awayteam), [awayteam]);
@@ -313,22 +308,51 @@ const MainCard = React.memo(
         setVideoQueue(fullQueue);
         setCurrentIndex(0);
       }
-    }, [videoId, nextVideos]);
-
-    const [isTransitioning, setIsTransitioning] = useState(false);
+    }, [videoId, nextVideos, thumbnail]);
 
     const handleEnd = () => {
+      if (isTransitioningRef.current) {
+        return;
+      }
+      if (!isReady) {
+        console.warn("영상이 준비되지 않았는데 종료됨 (재생 불가 영상)");
+      }
+
       if (currentIndex + 1 < videoQueue.length) {
+        isTransitioningRef.current = true;
         setIsTransitioning(true);
         setTimeout(() => {
           setCurrentIndex((prev) => prev + 1);
           setTryPlay(true); // 다음 영상도 자동 재생
           setIsTransitioning(false);
+          setIsReady(false);
+          setTimeout(() => {
+            isTransitioningRef.current = false;
+          }, 500);
         }, 2000);
       }
     };
 
-    const currentVideo = videoQueue[currentIndex];
+    const handleReady = () => {
+      setIsReady(true);
+    };
+
+    const handleError = (error) => {
+      console.warn("YouTube player error 발생:", error);
+
+      // 에러 나면 다음 영상으로 넘어가기
+      if (currentIndex + 1 < videoQueue.length) {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentIndex((prev) => prev + 1);
+          setIsReady(false);
+          setIsTransitioning(false);
+        }, 1000); // 1초 대기 후 다음 영상
+      } else {
+        // 마지막 영상이었으면 정지
+        setIsReady(false);
+      }
+    };
 
     return (
       <Card>
