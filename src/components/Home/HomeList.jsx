@@ -3,28 +3,28 @@ import styled from "styled-components";
 import { getEmblem, getTeamJsonCode } from "../../util";
 
 const Container = styled.div`
-  margin-top: 120px;
+  padding-top: 120px;
   h3 {
     font-size: 3rem;
     font-weight: 700;
     margin-bottom: 40px;
   }
   @media screen and (max-width: 1024px) {
-    margin-top: 100px;
+    padding-top: 100px;
     h3 {
       font-size: 2.5rem;
       margin-bottom: 30px;
     }
   }
   @media screen and (max-width: 768px) {
-    margin-top: 80px;
+    padding-top: 80px;
     h3 {
       font-size: 2rem;
       margin-bottom: 20px;
     }
   }
   @media screen and (max-width: 500px) {
-    margin-top: 50px;
+    padding-top: 50px;
     h3 {
       font-size: 1.6rem;
       margin-bottom: 15px;

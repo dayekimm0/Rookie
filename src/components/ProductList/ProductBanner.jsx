@@ -1,12 +1,14 @@
+import { memo, useEffect, useRef } from "react";
 import styled from "styled-components";
-import ReactPlayer from "react-player";
-import headerbg from "/src/images/banners/banner-headerbg.png";
 import bannerLinks from "../../data/bannerLinks";
 
 const BannerBox = styled.div`
   position: relative;
   width: 100%;
   height: 500px;
+  z-index: 1;
+  transform: translateZ(0);
+  will-change: transform;
 
   @media screen and (max-width: 1440px) {
     height: 400px;
@@ -19,90 +21,74 @@ const BannerBox = styled.div`
     height: 200px;
   }
 `;
-const BannerPlayer = styled(ReactPlayer)`
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+
+const BannerVideo = styled.video`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   pointer-events: none;
-
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  @media (max-width: 1440px) {
-    width: 100% !important;
-    height: 400px !important;
-  }
-
-  @media (max-width: 1024px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-
-  @media (max-width: 768px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-  @media (max-width: 500px) {
-    width: 100% !important;
-    height: 200px !important;
-  }
+  backface-visibility: hidden;
+  display: block;
 `;
 
 const BannerImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
   pointer-events: none;
-  @media (max-width: 1440px) {
-    width: 100% !important;
-    height: 400px !important;
-  }
-  @media (max-width: 1024px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-  @media (max-width: 768px) {
-    width: 100% !important;
-    height: 300px !important;
-  }
-
-  @media (max-width: 500px) {
-    width: 100% !important;
-    height: 200px !important;
-  }
+  backface-visibility: hidden;
+  display: block;
 `;
 
-const ProductBanner = ({ team = "kbo" }) => {
+const ProductBanner = memo(({ team = "kbo" }) => {
   const banner = bannerLinks[team] || bannerLinks["kbo"];
+  const videoRef = useRef(null);
+
+  // 영상 재생 보장
+  useEffect(() => {
+    if (videoRef.current && banner.type === "video") {
+      const video = videoRef.current;
+
+      // 재생 실패 시 재시도
+      const playPromise = video.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.warn("비디오 자동재생 실패:", error);
+          // 재시도
+          setTimeout(() => {
+            video.play().catch(() => {});
+          }, 100);
+        });
+      }
+    }
+  }, [banner.type]);
+
+  if (banner.type === "image") {
+    return (
+      <BannerBox>
+        <BannerImg
+          src={banner.src}
+          alt={`${team} 배너 이미지`}
+          fetchPriority="high"
+        />
+      </BannerBox>
+    );
+  }
 
   return (
     <BannerBox>
-      {banner.type === "video" ? (
-        <BannerPlayer
-          url={banner.src}
-          playing
-          loop
-          muted
-          controls={false}
-          width="100%"
-          height="100%"
-          playsinline
-        />
-      ) : (
-        <BannerImg src={banner.src} alt={`${team} 배너 이미지`} />
-      )}
+      <BannerVideo
+        ref={videoRef}
+        key={banner.src}
+        src={banner.src}
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+      />
     </BannerBox>
   );
-};
+});
 
 export default ProductBanner;

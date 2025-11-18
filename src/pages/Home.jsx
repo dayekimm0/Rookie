@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { Suspense } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import RankingTable from "../components/Home/RankingTable";
@@ -11,11 +12,12 @@ import HomeList from "../components/Home/HomeList";
 import ShortsSlide from "../components/Slides/ShortsSlide";
 import PopularPlayer from "../components/Home/PopularPlayer";
 import CollaboBanner from "../components/Home/CollaboBanner";
-import HomeProducts from "../components/Home/HomeProducts";
 import authStore from "../stores/AuthStore";
-import useAllProductsQuery from "../hook/useAllProductsQuery";
 import { homeSlideTab } from "../data/playTabs";
 import Spinner from "../components/Spinner";
+import HomeProductSection from "../components/Home/HomeProductSection";
+import HomeProductSkeleton from "../components/Skeleton/HomeProductSkeleton";
+import ProductErrorFallback from "../components/Error/ProductErrorFallback";
 
 const Container = styled.div`
   width: 100%;
@@ -51,38 +53,8 @@ const Container = styled.div`
   }
 `;
 
-const ProductCardWrap = styled.div`
-  margin-top: 120px;
-  h3 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 40px;
-  }
-  @media screen and (max-width: 1024px) {
-    margin-top: 90px;
-    h3 {
-      font-size: 2.5rem;
-      margin-bottom: 30px;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    margin-top: 80px;
-    h3 {
-      font-size: 2rem;
-      margin-bottom: 15px;
-    }
-  }
-  @media screen and (max-width: 500px) {
-    margin-top: 50px;
-    h3 {
-      font-size: 1.6rem;
-      margin-bottom: 10px;
-    }
-  }
-`;
-
 const Banner = styled.div`
-  margin-top: 80px;
+  padding-top: 80px;
   a {
     display: inline-block;
     width: 100%;
@@ -98,10 +70,10 @@ const Banner = styled.div`
     }
   }
   @media screen and (max-width: 1024px) {
-    margin-top: 60px;
+    padding-top: 60px;
   }
   @media screen and (max-width: 768px) {
-    margin-top: 50px;
+    padding-top: 50px;
     img {
       &:nth-of-type(1) {
         display: none;
@@ -112,7 +84,7 @@ const Banner = styled.div`
     }
   }
   @media screen and (max-width: 500px) {
-    margin-top: 40px;
+    padding-top: 40px;
   }
 `;
 
@@ -121,9 +93,11 @@ const SlideLoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 40px;
 
   @media screen and (max-width: 1024px) {
     height: 320px;
+    margin-top: 30px;
   }
 
   @media screen and (max-width: 768px) {
@@ -132,39 +106,12 @@ const SlideLoaderWrapper = styled.div`
 
   @media screen and (max-width: 500px) {
     height: 250px;
+    margin-top: 15px;
   }
 `;
 
 const Home = () => {
   const { isLoading: isUserLoading, userProfile } = authStore();
-  const { data: allProducts = [], isLoading: isProductLoading } =
-    useAllProductsQuery();
-
-  const { kiaTinypingCollabo, newest, popular } = useMemo(() => {
-    const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
-
-    const kiaTinypingCollabo = allProducts
-      .filter(
-        (item) =>
-          item.team === "kia_tgs" &&
-          item.collaboration &&
-          item.collaboration.includes("티니핑")
-      )
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 4);
-
-    const usedIds = new Set(kiaTinypingCollabo.map((p) => p.id));
-
-    const newest = shuffled.filter((item) => !usedIds.has(item.id)).slice(0, 4);
-
-    newest.forEach((p) => usedIds.add(p.id));
-
-    const popular = shuffled
-      .filter((item) => !usedIds.has(item.id))
-      .slice(0, 8);
-
-    return { kiaTinypingCollabo, newest, popular };
-  }, [allProducts]);
 
   return (
     <Container>
@@ -177,44 +124,39 @@ const Home = () => {
       ) : (
         <MainSlide />
       )}
+      {/* 팀 엠블럼 */}
       <HomeList title={"TEAMHOME"} />
+      {/* 이벤트배너 */}
       <Banner className="inner">
         <Link to={"/event"}>
           <img src={bannerStrike} alt="banner" />
           <img src={bannerStrike_m} alt="banner" />
         </Link>
       </Banner>
+      {/* 숏츠 슬라이드 */}
       <ShortsSlide
         playlistId={"PLQPJYlrXc1__Lq54IZocnGImt8Ays8Y9W"}
         title={"HIGHLIGHT"}
         max={21}
       />
-
+      {/* 탭 영상 슬라이드 */}
       <PlaySlidewithTabs
         allTab={homeSlideTab.allTab}
         tabs={homeSlideTab.tabs}
       />
-
+      {/* 랭킹표 */}
       <RankingTable />
+      {/* 인기선수 커머스 연결*/}
       <PopularPlayer />
+      {/* 커머스 콜라보배너 */}
       <CollaboBanner />
+      {/* 커머스 상품 섹션 */}
       <div className="home_products">
-        <ProductCardWrap>
-          <h3>COLLABORATION</h3>
-          {isProductLoading ? (
-            "Loading"
-          ) : (
-            <HomeProducts products={kiaTinypingCollabo} />
-          )}
-        </ProductCardWrap>
-        <ProductCardWrap>
-          <h3>RELEASE</h3>
-          {isProductLoading ? "Loading" : <HomeProducts products={newest} />}
-        </ProductCardWrap>
-        <ProductCardWrap>
-          <h3>FAVORITE</h3>
-          {isProductLoading ? "Loading" : <HomeProducts products={popular} />}
-        </ProductCardWrap>
+        <ErrorBoundary fallback={<ProductErrorFallback />}>
+          <Suspense fallback={<HomeProductSkeleton />}>
+            <HomeProductSection />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </Container>
   );

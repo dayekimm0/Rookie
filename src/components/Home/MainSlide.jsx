@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import MainCard from "./MainCard";
 import Arrow from "../../images/icons/main_banner_arr.svg";
 import { NaviLeftBtn, NaviRightBtn } from "../Slides/NaviBtnStyles";
-import { useMatchedGameVideos } from "../../hook/useYoutubePlayList";
+import useMatchedGameVideos from "../../hook/useMatchedGameVideos";
 import Spinner from "../Spinner";
+import SlideErrorBtnFallback from "../Error/SlideErrorFallback";
 
 const Container = styled.div`
   width: 100%;
@@ -65,9 +68,11 @@ const SlideLoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 40px;
 
   @media screen and (max-width: 1024px) {
     height: 320px;
+    margin-top: 30px;
   }
 
   @media screen and (max-width: 768px) {
@@ -76,55 +81,60 @@ const SlideLoaderWrapper = styled.div`
 
   @media screen and (max-width: 500px) {
     height: 250px;
+    margin-top: 15px;
   }
 `;
 
 const MainSlide = () => {
+  const queryClient = useQueryClient();
+  const [retryKey, setRetryKey] = useState(0);
+
+  return (
+    <>
+      <ErrorBoundary
+        FallbackComponent={(props) => (
+          <SlideErrorBtnFallback
+            {...props}
+            onRetry={() => {
+              setFailMode(false);
+              setRetryKey((k) => k + 1);
+            }}
+          />
+        )}
+        onReset={() => {
+          queryClient.invalidateQueries({
+            queryKey: ["matchedGameVideos"],
+            exact: false,
+          });
+        }}
+        resetKeys={[retryKey]}
+      >
+        <Suspense
+          fallback={
+            <SlideLoaderWrapper>
+              <Spinner />
+            </SlideLoaderWrapper>
+          }
+        >
+          <SlideContent key={retryKey} />
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  );
+};
+
+const SlideContent = () => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  const [timeString, setTimeString] = useState("");
 
-  const handlePrev = () => {
-    swiper?.slidePrev();
-  };
-  const handleNext = () => {
-    swiper?.slideNext();
-  };
+  // 데이터 패칭 (suspense 쿼리)
+  const { data } = useMatchedGameVideos();
+  const { date, day, matches } = data;
 
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const formatted = now.toLocaleString("ko-KR", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      });
-      setTimeString(`${formatted} 기준`);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const { date, day, matches, isLoading, isError } = useMatchedGameVideos();
-
-  if (isLoading)
-    return (
-      <SlideLoaderWrapper>
-        <Spinner />
-      </SlideLoaderWrapper>
-    );
-  if (isError)
-    return (
-      <SlideLoaderWrapper>
-        <div>문제가 발생하였습니다.</div>
-      </SlideLoaderWrapper>
-    );
+  // 슬라이드 이벤트
+  const handlePrev = () => swiper?.slidePrev();
+  const handleNext = () => swiper?.slideNext();
 
   return (
     <Container>
@@ -193,8 +203,6 @@ const MainSlide = () => {
           <img src={Arrow} alt="button" />
         </NaviRightBtn>
       </SliderContainerwrap>
-
-      {/* <h6 className="timeLine inner">{timeString}</h6> */}
     </Container>
   );
 };

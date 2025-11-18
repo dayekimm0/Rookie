@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { getEmblem, getTeamName, getTeamColor } from "../../util";
 import YouTube from "react-youtube";
@@ -272,20 +272,14 @@ const MainCard = React.memo(
     thumbnail,
     time,
   }) => {
-    const [isVideo, setIsVideo] = useState(false);
     const [isReady, setIsReady] = useState(false);
     const [tryPlay, setTryPlay] = useState(false);
     const [videoQueue, setVideoQueue] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const isTransitioningRef = useRef(false);
 
-    const handleReady = () => {
-      setIsReady(true);
-    };
-
-    const handleError = () => {
-      console.warn("YouTube player error 발생");
-      setIsReady(false);
-    };
+    const currentVideo = videoQueue[currentIndex];
 
     const homeEmblem = useMemo(() => getEmblem(hometeam), [hometeam]);
     const awayEmblem = useMemo(() => getEmblem(awayteam), [awayteam]);
@@ -302,12 +296,6 @@ const MainCard = React.memo(
       });
     }, [date]);
 
-    useEffect(() => {
-      if (videoId) {
-        setIsVideo(true);
-      }
-    }, [videoId]);
-
     //다음 영상 재생
     useEffect(() => {
       if (videoId || nextVideos?.length > 0) {
@@ -320,22 +308,51 @@ const MainCard = React.memo(
         setVideoQueue(fullQueue);
         setCurrentIndex(0);
       }
-    }, [videoId, nextVideos]);
-
-    const [isTransitioning, setIsTransitioning] = useState(false);
+    }, [videoId, nextVideos, thumbnail]);
 
     const handleEnd = () => {
+      if (isTransitioningRef.current) {
+        return;
+      }
+      if (!isReady) {
+        console.warn("영상이 준비되지 않았는데 종료됨 (재생 불가 영상)");
+      }
+
       if (currentIndex + 1 < videoQueue.length) {
+        isTransitioningRef.current = true;
         setIsTransitioning(true);
         setTimeout(() => {
           setCurrentIndex((prev) => prev + 1);
           setTryPlay(true); // 다음 영상도 자동 재생
           setIsTransitioning(false);
+          setIsReady(false);
+          setTimeout(() => {
+            isTransitioningRef.current = false;
+          }, 500);
         }, 2000);
       }
     };
 
-    const currentVideo = videoQueue[currentIndex];
+    const handleReady = () => {
+      setIsReady(true);
+    };
+
+    const handleError = (error) => {
+      console.warn("YouTube player error 발생:", error);
+
+      // 에러 나면 다음 영상으로 넘어가기
+      if (currentIndex + 1 < videoQueue.length) {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentIndex((prev) => prev + 1);
+          setIsReady(false);
+          setIsTransitioning(false);
+        }, 1000); // 1초 대기 후 다음 영상
+      } else {
+        // 마지막 영상이었으면 정지
+        setIsReady(false);
+      }
+    };
 
     return (
       <Card>
@@ -390,7 +407,7 @@ const MainCard = React.memo(
               )}
               {isTransitioning && (
                 <div className="transition-overlay">
-                  <p>잠시 후 다음 컨텐츠가 이어집니다...</p>
+                  <p>잠시 후 다음 콘텐츠가 이어집니다...</p>
                 </div>
               )}
               <YouTube
@@ -410,7 +427,7 @@ const MainCard = React.memo(
           ) : currentIndex === 0 && currentVideo?.thumbnail ? (
             <img
               src={currentVideo.thumbnail}
-              alt="thumbnail"
+              alt="thumbnail2"
               style={{
                 width: "100%",
                 height: "100%",
@@ -420,22 +437,6 @@ const MainCard = React.memo(
               onClick={() => setTryPlay(true)}
             />
           ) : (
-            // <div
-            //   style={{
-            //     width: "100%",
-            //     height: "100%",
-            //     backgroundColor: "#000",
-            //     display: "flex",
-            //     justifyContent: "center",
-            //     alignItems: "center",
-            //     cursor: "pointer",
-            //     color: "#fff",
-            //     fontSize: "1.4rem",
-            //   }}
-            //   onClick={() => setTryPlay(true)}
-            // >
-            //   영상 시작하기
-            // </div>
             <VideoInner $bg={awayColor}>
               <HomeBg $bg={homeColor}>
                 <svg
@@ -453,22 +454,6 @@ const MainCard = React.memo(
             </VideoInner>
           )}
         </div>
-
-        {/* <VideoInner $bg={awayColor}>
-            <HomeBg $bg={homeColor}>
-              <svg
-                preserveAspectRatio="none"
-                width="277"
-                height="289"
-                viewBox="0 0 277 289"
-                fill="none"
-              >
-                <path d="M0.5 0H276.5L195.35 289H0.5V0Z" />
-              </svg>
-              <img className="homeEmblem" src={homeEmblem} alt="emblem" />
-            </HomeBg>
-            <img className="awayEmblem" src={awayEmblem} alt="emblem" />
-          </VideoInner> */}
       </Card>
     );
   }

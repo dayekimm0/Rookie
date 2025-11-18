@@ -97,7 +97,7 @@ export const playContents = {
       },
       {
         name: "추신영",
-        playlistId: "PLPuT2QymG4qXnhU0yMOYaPxiUOAx-od-I",
+        playlistId: "PLR9TDYZHxlTI2m7kth4EXqwj4VcfuaBSA",
         max: 50,
         team: "nc_dns",
       },

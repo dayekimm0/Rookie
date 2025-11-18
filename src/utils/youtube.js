@@ -54,21 +54,56 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
       let nextVideos = [];
 
       if (homePlaylistId && awayPlaylistId) {
-        const [homeVideos, awayVideos] = await Promise.all([
-          getPlaylistVideos(homePlaylistId, 4),
-          getPlaylistVideos(awayPlaylistId, 4),
-        ]);
+        try {
+          let homeVideos = [];
+          let awayVideos = [];
 
-        for (let i = 0; i < 4; i++) {
-          homeVideos[i] && nextVideos.push({ ...homeVideos[i], from: "home" });
-          awayVideos[i] && nextVideos.push({ ...awayVideos[i], from: "away" });
+          // 홈팀 영상 가져오기 (6개 요청 → 필터링 → 4개 사용)
+          try {
+            const rawHomeVideos = await getPlaylistVideos(homePlaylistId, 6);
+            homeVideos = rawHomeVideos
+              .filter(
+                (v) =>
+                  v.title?.toLowerCase() !== "private video" &&
+                  v.title?.toLowerCase() !== "deleted video" &&
+                  v.thumbnail
+              )
+              .slice(0, 4);
+          } catch (error) {
+            console.error(`${home} 플레이리스트 에러:`, error);
+            homeVideos = [];
+          }
+
+          // 원정팀 영상 가져오기 (6개 요청 → 필터링 → 4개 사용)
+          try {
+            const rawAwayVideos = await getPlaylistVideos(awayPlaylistId, 6);
+            awayVideos = rawAwayVideos
+              .filter(
+                (v) =>
+                  v.title?.toLowerCase() !== "private video" &&
+                  v.title?.toLowerCase() !== "deleted video" &&
+                  v.thumbnail
+              )
+              .slice(0, 4);
+          } catch (error) {
+            console.error(`${away} 플레이리스트 에러:`, error);
+            awayVideos = [];
+          }
+
+          // 홈/원정 영상 교대로 배치
+          for (let i = 0; i < 4; i++) {
+            homeVideos[i] &&
+              nextVideos.push({ ...homeVideos[i], from: "home" });
+            awayVideos[i] &&
+              nextVideos.push({ ...awayVideos[i], from: "away" });
+          }
+        } catch (error) {
+          console.error(`${home} vs ${away} 영상 처리 에러:`, error);
         }
       }
 
       let thumbnail = null;
-      if (matchedVideo?.snippet?.thumbnails?.maxres?.url) {
-        thumbnail = matchedVideo.snippet.thumbnails.maxres.url;
-      } else if (matchedVideo?.snippet?.thumbnails?.standard?.url) {
+      if (matchedVideo?.snippet?.thumbnails?.standard?.url) {
         thumbnail = matchedVideo.snippet.thumbnails.standard.url;
       } else if (matchedVideo?.snippet?.thumbnails?.high?.url) {
         thumbnail = matchedVideo.snippet.thumbnails.high.url;
@@ -90,7 +125,6 @@ export const matchHighlightToGames = async (date, games, highlightVideos) => {
 
   return matchedGames;
 };
-
 export const fetchAllTeamVideos = async (playlists) => {
   const allItems = await Promise.all(
     playlists.map(async ({ playlistId, max, type }) => {
@@ -148,5 +182,20 @@ export const parseISO8601Duration = (duration) => {
     parseInt(hours || "0", 10) * 3600 +
     parseInt(minutes || "0", 10) * 60 +
     parseInt(seconds || "0", 10)
+  );
+};
+
+export const filterValidVideos = (items) => {
+  return items.filter(
+    (item) =>
+      item.snippet.title?.toLowerCase() !== "private video" &&
+      item.snippet.thumbnails?.default
+  );
+};
+
+export const filterByTeam = (items, teamKeyword) => {
+  if (!teamKeyword || teamKeyword === "Unknown") return items;
+  return items.filter((item) =>
+    item.snippet.title?.toLowerCase().includes(teamKeyword.toLowerCase())
   );
 };

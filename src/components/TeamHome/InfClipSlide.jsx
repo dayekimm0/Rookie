@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo, useState, useEffect } from "react";
+import { memo, useCallback, useMemo, useState, useEffect } from "react";
 import styled from "styled-components";
-import { Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/virtual";
@@ -13,13 +12,11 @@ import {
 import Shortscard from "../Slides/Shortscard";
 import ClipDetail from "../ClipDetail";
 import useHeaderStore from "../../stores/headerHeightStore";
-import Spinner from "../Spinner";
 import { fetchClipProducts } from "../../utils/fetchClipProducts";
 
 const Container = styled.div`
   position: relative;
   width: 100%;
-  z-index: 2;
   .btns {
     position: absolute;
     display: flex;
@@ -51,14 +48,7 @@ const SlideContainer = styled.div`
   }
 `;
 
-const SpinnerWrap = styled.div`
-  padding: 100px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const InfClipSlide = React.memo(({ playlistId, max }) => {
+const InfClipSlide = memo(({ playlistId, max }) => {
   const [swiper, setSwiper] = useState();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -76,11 +66,7 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
   };
 
   //유튜브 리스트 설정
-  const {
-    data: shorts = [],
-    isLoading,
-    isError,
-  } = useYoutubePlaylist(playlistId, max);
+  const { data: shorts = [] } = useYoutubePlaylist(playlistId, max, true, true);
 
   const videoIds = useMemo(() => {
     return shorts
@@ -89,7 +75,11 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
       .join(",");
   }, [shorts]);
 
-  const { data: details = [] } = useYoutubeVideoDetails(videoIds, !!videoIds);
+  const { data: details = [] } = useYoutubeVideoDetails(
+    videoIds,
+    !!videoIds,
+    true
+  );
 
   const handlePrev = useCallback(() => {
     swiper?.slidePrev();
@@ -108,7 +98,7 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
 
   // console.log("shorts", shorts);
 
-  // //클립 모달 스크롤 막기
+  //클립 모달 스크롤 막기
   useEffect(() => {
     if (selectedVideoId) {
       const y = window.scrollY;
@@ -143,15 +133,21 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
     }
   }, [selectedVideoId]);
 
+  //숏츠클립모달 연관상품 관련
   useEffect(() => {
     const fetchAllProducts = async () => {
+      const newVideos = details.filter(
+        (video) => !videosWithProducts.some((v) => v.id === video.id)
+      );
+      if (newVideos.length === 0) return;
+
       const results = await Promise.all(
-        details.map(async (video) => {
+        newVideos.map(async (video) => {
           const products = await fetchClipProducts(video.snippet.title);
           return { ...video, products };
         })
       );
-      setVideosWithProducts(results);
+      setVideosWithProducts((prev) => [...prev, ...results]);
     };
 
     if (details.length > 0) fetchAllProducts();
@@ -159,10 +155,11 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
 
   const renderedSlides = useMemo(() => {
     return details.map((video, index) => (
-      <SwiperSlide key={video.id} virtualIndex={index}>
+      <SwiperSlide key={video.id}>
         <Shortscard
           thumbnail={
-            video.snippet.thumbnails?.maxres?.url ||
+            video.snippet.thumbnails?.standard?.url ||
+            video.snippet.thumbnails?.high?.url ||
             video.snippet.thumbnails?.medium?.url
           }
           title={video.snippet.title}
@@ -175,19 +172,6 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
       </SwiperSlide>
     ));
   }, [details, handleOpenModal]);
-
-  if (isLoading)
-    return (
-      <SpinnerWrap>
-        <Spinner />
-      </SpinnerWrap>
-    );
-  if (isError)
-    return (
-      <SpinnerWrap>
-        <div>문제가 발생하였습니다.</div>
-      </SpinnerWrap>
-    );
 
   return (
     <>
@@ -202,8 +186,6 @@ const InfClipSlide = React.memo(({ playlistId, max }) => {
         </div>
         <SlideContainer>
           <Swiper
-            modules={[Virtual]}
-            virtual
             slidesPerView={4}
             slidesPerGroup={4}
             spaceBetween={20}

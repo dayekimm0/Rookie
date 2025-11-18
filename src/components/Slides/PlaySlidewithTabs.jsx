@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "swiper/css";
 import PlusIcon from "../../images/icons/plusIcon.svg";
-import SlideTabNav from "./SlideTabNav";
-import AllTabSlide from "./AllTabSlide";
-import SingleTabSlide from "./SingleTabSlide";
+import SlideTabNav from "./slideTabNav";
+import TabSlideContent from "./TabSlideContent";
+import Spinner from "../Spinner";
+import SlideErrorFallback from "../Error/SlideErrorFallback2";
 
 const Title = styled.div`
-  margin-top: 120px;
+  padding-top: 120px;
   display: flex;
   justify-content: space-between;
   align-items: start;
@@ -31,7 +33,7 @@ const Title = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    margin-top: 90px;
+    padding-top: 90px;
     h3 {
       font-size: 2.5rem;
       margin-bottom: 30px;
@@ -46,14 +48,14 @@ const Title = styled.div`
     }
   }
   @media screen and (max-width: 768px) {
-    margin-top: 80px;
+    padding-top: 80px;
     h3 {
       font-size: 2rem;
       margin-bottom: 20px;
     }
   }
   @media screen and (max-width: 500px) {
-    margin-top: 60px;
+    padding-top: 60px;
     h3 {
       font-size: 1.6rem;
       margin-bottom: 15px;
@@ -66,6 +68,23 @@ const Title = styled.div`
         width: 13px;
       }
     }
+  }
+`;
+
+const SlideLoaderWrapper = styled.div`
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    height: 230px;
+  }
+  @media screen and (max-width: 768px) {
+    height: 200px;
+  }
+  @media screen and (max-width: 500px) {
+    height: 160px;
   }
 `;
 
@@ -114,7 +133,28 @@ const PlaySlidewithTabs = ({ allTab, tabs, title = "TODAY KBO", teamCode }) => {
         selectedTab={selectedTab}
         onSelectTab={handleTabSelect}
       />
-      {isAll ? (
+      {/* 서스펜스 쿼리 슬라이드 교체 */}
+      <ErrorBoundary
+        FallbackComponent={SlideErrorFallback}
+        resetKeys={[isAll, selectedTab]}
+      >
+        <Suspense
+          fallback={
+            <SlideLoaderWrapper>
+              <Spinner />
+            </SlideLoaderWrapper>
+          }
+        >
+          <TabSlideContent
+            isAll={isAll}
+            allTab={allTab}
+            selectedTab={selectedTab}
+            onSwiperReady={(s) => (swiperRef.current = s)}
+          />
+        </Suspense>
+      </ErrorBoundary>
+      {/* 레거시 코드 */}
+      {/* {isAll ? (
         <AllTabSlide
           allTab={allTab}
           onSwiperReady={(s) => (swiperRef.current = s)}
@@ -124,7 +164,7 @@ const PlaySlidewithTabs = ({ allTab, tabs, title = "TODAY KBO", teamCode }) => {
           selectedTab={selectedTab}
           onSwiperReady={(s) => (swiperRef.current = s)}
         />
-      )}
+      )} */}
     </>
   );
 };

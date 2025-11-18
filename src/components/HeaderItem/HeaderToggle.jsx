@@ -41,7 +41,7 @@ const ToggleWrapper = styled.div`
   }
 `;
 
-// 회전 애니메이션 정의 (시계방향)
+// 회전 애니메이션
 const rollRight = keyframes`
   from {
     transform: rotate(0deg);

@@ -9,10 +9,11 @@ import PlaySlidewithTabs from "../components/Slides/PlaySlidewithTabs";
 import { teamSlideTabs } from "../data/playTabs";
 import UpcomingMatch from "../components/TeamHome/UpcomingMatch";
 import InfluencerZone from "../components/TeamHome/InfluencerZone";
-import HomeProducts from "../components/Home/HomeProducts"; // 추가
-import useAllProductsQuery from "../hook/useAllProductsQuery"; // 추가
+import HomeProducts from "../components/Home/HomeProducts";
+import useAllProductsQuery from "../hook/useAllProductsQuery";
 import HomeList from "../components/Home/HomeList";
 import influencerData from "../data/influencer_playlist.json";
+import NotFound from "./Error/NotFound";
 
 const Container = styled.div`
   color: var(--light);
@@ -37,7 +38,6 @@ const ProductSection = styled.div`
   }
 `;
 
-// Home.jsx와 동일한 스타일 (.home_products)
 const TeamProducts = styled.div`
   width: 1240px;
   margin: 0 auto;
@@ -100,28 +100,44 @@ const ProductCardWrap = styled.div`
   }
 `;
 
+// teamCode를 bannerKey로 변환하는 매핑
+const teamCodeToBannerKey = {
+  ssg_lds: "ssg",
+  ds_bas: "doosan",
+  hw_egs: "hanwha",
+  kw_hrs: "kiwoom",
+  lg_twins: "lg",
+  lt_gnt: "lotte",
+  nc_dns: "nc",
+  ss_lns: "samsung",
+  kia_tgs: "kia",
+  kt_wiz: "kt",
+};
+
 const TeamHome = () => {
   const { teamCode } = useParams();
+
+  const validTeamCodes = Object.keys(teamSlideTabs);
+
+  // 유효하지 않은 팀 코드면 NotFound 렌더링
+  if (teamCode && !validTeamCodes.includes(teamCode)) {
+    return <NotFound />;
+  }
+
+  // teamCode가 없으면 NotFound
+  if (!teamCode) {
+    return <NotFound />;
+  }
+
+  // teamCode는 있지만 데이터가 없으면 에러 처리
+  const teamSlideTab = teamSlideTabs[teamCode];
+  if (!teamSlideTab) {
+    throw new Error(`존재하지 않는 팀입니다: ${teamCode}`);
+  }
 
   // useAllProductsQuery로 전체 상품 데이터 로드
   const { data: allProducts = [], isLoading: isProductLoading } =
     useAllProductsQuery();
-
-  // teamCode를 bannerKey로 변환하는 매핑 (ProductList.jsx와 동일)
-  const teamCodeToBannerKey = {
-    ssg_lds: "ssg",
-    ds_bas: "doosan",
-    hw_egs: "hanwha",
-    kw_hrs: "kiwoom",
-    lg_twins: "lg",
-    lt_gnt: "lotte",
-    nc_dns: "nc",
-    ss_lns: "samsung",
-    kia_tgs: "kia",
-    kt_wiz: "kt",
-  };
-
-  const teamSlideTab = teamSlideTabs[teamCode];
 
   const bannerKey = teamCodeToBannerKey[teamCode] || "kbo";
 

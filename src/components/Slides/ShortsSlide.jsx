@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,9 +21,11 @@ import Spinner from "../Spinner";
 import ClipDetail from "../ClipDetail";
 import useHeaderStore from "../../stores/headerHeightStore";
 import { fetchClipProducts } from "../../utils/fetchClipProducts";
+import SlideErrorFallback from "../Error/SlideErrorFallback2";
+import { ErrorBoundary } from "react-error-boundary";
 
 const Title = styled.div`
-  margin-top: 120px;
+  padding-top: 120px;
   display: flex;
   justify-content: space-between;
   align-items: start;
@@ -40,7 +48,7 @@ const Title = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    margin-top: 90px;
+    padding-top: 90px;
     h3 {
       font-size: 2.5rem;
       margin-bottom: 30px;
@@ -55,14 +63,14 @@ const Title = styled.div`
     }
   }
   @media screen and (max-width: 768px) {
-    margin-top: 80px;
+    padding-top: 80px;
     h3 {
       font-size: 2rem;
       margin-bottom: 20px;
     }
   }
   @media screen and (max-width: 500px) {
-    margin-top: 60px;
+    padding-top: 60px;
     h3 {
       font-size: 1.6rem;
       margin-bottom: 15px;
@@ -119,11 +127,6 @@ const SlideLoaderWrapper = styled.div`
 `;
 
 const ShortsSlide = React.memo(({ playlistId, title, max }) => {
-  const [swiper, setSwiper] = useState();
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
-  const [selectedVideoId, setSelectedVideoId] = useState(null);
-  const [videosWithProducts, setVideosWithProducts] = useState([]);
   const navigate = useNavigate();
 
   const handleMoreClick = () => {
@@ -137,31 +140,41 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
     });
   };
 
-  const handleOpenModal = (id) => {
-    console.log("open modal for videoId:", id);
-    setSelectedVideoId(id);
-    swiper?.autoplay?.stop();
-  };
+  return (
+    <>
+      <Title className="inner">
+        <h3>{title}</h3>
+        <div className="more" onClick={handleMoreClick}>
+          <span>더보기</span>
+          <img src={PlusIcon} alt="icon" />
+        </div>
+      </Title>
+      <Container>
+        <ErrorBoundary FallbackComponent={SlideErrorFallback}>
+          <Suspense
+            fallback={
+              <SlideLoaderWrapper>
+                <Spinner />
+              </SlideLoaderWrapper>
+            }
+          >
+            <SlideContent playlistId={playlistId} max={max} />
+          </Suspense>
+        </ErrorBoundary>
+      </Container>
+    </>
+  );
+});
 
-  const handleCloseModal = () => {
-    setSelectedVideoId(null);
-    swiper?.autoplay?.start();
-  };
+const SlideContent = React.memo(({ playlistId, max }) => {
+  const [swiper, setSwiper] = useState();
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [videosWithProducts, setVideosWithProducts] = useState([]);
 
-  const handlePrev = useCallback(() => {
-    swiper?.slidePrev();
-  }, [swiper]);
-
-  const handleNext = useCallback(() => {
-    swiper?.slideNext();
-  }, [swiper]);
-
-  //유튜브 리스트 설정
-  const {
-    data: shorts = [],
-    isLoading,
-    isError,
-  } = useYoutubePlaylist(playlistId, max);
+  const { setScrollLocked } = useHeaderStore.getState();
+  const { data: shorts = [] } = useYoutubePlaylist(playlistId, max, true, true);
 
   const videoIds = useMemo(() => {
     return shorts
@@ -170,7 +183,29 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
       .join(",");
   }, [shorts]);
 
+  // videoIds를 받아서 디테일 넣기
   const { data: details = [] } = useYoutubeVideoDetails(videoIds, !!videoIds);
+
+  const handleOpenModal = useCallback(
+    (id) => {
+      setSelectedVideoId(id);
+      swiper?.autoplay?.stop();
+    },
+    [swiper]
+  );
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedVideoId(null);
+    swiper?.autoplay?.start();
+  }, [swiper]);
+
+  const handlePrev = useCallback(() => {
+    swiper?.slidePrev();
+  }, [swiper]);
+
+  const handleNext = useCallback(() => {
+    swiper?.slideNext();
+  }, [swiper]);
 
   useEffect(() => {
     if (selectedVideoId) {
@@ -196,8 +231,6 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
     }
   }, [selectedVideoId]);
 
-  const { setScrollLocked } = useHeaderStore.getState();
-
   useEffect(() => {
     if (selectedVideoId) {
       setScrollLocked(true);
@@ -220,30 +253,8 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
     if (details.length > 0) fetchAllProducts();
   }, [details]);
 
-  if (isLoading)
-    return (
-      <SlideLoaderWrapper>
-        <Spinner />
-      </SlideLoaderWrapper>
-    );
-  if (isError)
-    return (
-      <SlideLoaderWrapper>
-        <div>문제가 발생하였습니다.</div>
-      </SlideLoaderWrapper>
-    );
-
-  // console.log("shorts", shorts);
-
   return (
     <>
-      <Title className="inner">
-        <h3>{title}</h3>
-        <div className="more" onClick={handleMoreClick}>
-          <span>더보기</span>
-          <img src={PlusIcon} alt="icon" />
-        </div>
-      </Title>
       <Container>
         <SlideContainer>
           <Swiper
@@ -296,7 +307,8 @@ const ShortsSlide = React.memo(({ playlistId, title, max }) => {
               <SwiperSlide key={video.id}>
                 <Shortscard
                   thumbnail={
-                    video.snippet.thumbnails?.maxres?.url ||
+                    video.snippet.thumbnails?.standard?.url ||
+                    video.snippet.thumbnails?.high?.url ||
                     video.snippet.thumbnails?.medium?.url
                   }
                   title={video.snippet.title}

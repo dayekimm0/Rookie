@@ -18,7 +18,7 @@ const SlideContainer = styled.div`
   margin: 0 auto;
   position: relative;
   .swiper {
-    overflow: visible !important;
+    overflow: visible;
   }
   @media screen and (max-width: 1024px) {
     width: 94%;
@@ -60,7 +60,7 @@ const TabSlideRenderer = ({ items, onSwiperReady }) => {
       return (
         <SwiperSlide key={videoId}>
           <PlayCard
-            thumbnail={thumbnails?.maxres?.url || thumbnails?.medium?.url}
+            thumbnail={thumbnails?.high?.url || thumbnails?.medium?.url}
             title={title}
             onClick={() => handleDetailClick(videoId)}
           />

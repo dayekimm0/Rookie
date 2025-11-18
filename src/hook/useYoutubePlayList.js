@@ -1,11 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { HIGHLIGHT_PLAYLIST_ID } from "../data/teamPlaylists";
-import { getPreviousMatchDay } from "../util";
-import { matchHighlightToGames } from "../utils/youtube";
-import { useEffect, useState } from "react";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
+
+// axios 인스턴스
+const youtubeApi = axios.create({
+  baseURL: "https://www.googleapis.com/youtube/v3",
+  params: {
+    key: API_KEY, // 모든 요청에 자동으로 API_KEY 추가
+  },
+  timeout: 10000, // 10초 타임아웃
+});
 
 export const fetchYoutubePlaylist = async ({ queryKey }) => {
   const [_key, playlistId, maxResults] = queryKey;
@@ -14,17 +19,14 @@ export const fetchYoutubePlaylist = async ({ queryKey }) => {
     throw new Error("Invalid playlistId");
   }
 
-  const res = await axios.get(
-    "https://www.googleapis.com/youtube/v3/playlistItems",
-    {
-      params: {
-        part: "snippet",
-        playlistId,
-        maxResults,
-        key: API_KEY,
-      },
-    }
-  );
+  const res = await youtubeApi.get("/playlistItems", {
+    params: {
+      part: "snippet",
+      playlistId,
+      maxResults,
+      // key는 인스턴스에서 자동추가
+    },
+  });
 
   return res.data.items || [];
 };
@@ -32,11 +34,11 @@ export const fetchYoutubePlaylist = async ({ queryKey }) => {
 export const fetchVideoDetails = async ({ queryKey }) => {
   const [_key, videoIds] = queryKey;
 
-  const res = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
+  const res = await youtubeApi.get("/videos", {
     params: {
       part: "snippet,statistics,contentDetails",
       id: videoIds,
-      key: API_KEY,
+      // key는 인스턴스에서 자동추가
     },
   });
 
@@ -47,7 +49,8 @@ export const fetchVideoDetails = async ({ queryKey }) => {
 export const useYoutubePlaylist = (
   playlistId,
   maxResults = 12,
-  enabled = true
+  enabled = true,
+  suspense = false
 ) => {
   if (!playlistId) return { data: null };
   return useQuery({
@@ -55,88 +58,31 @@ export const useYoutubePlaylist = (
     queryFn: fetchYoutubePlaylist,
     enabled,
     staleTime: 1000 * 60 * 5, // 5분간 데이터 캐시
-    cacheTime: 1000 * 60 * 10, // 10분간 쿼리 캐시 유지
+    gcTime: 1000 * 60 * 10,
     retry: 1,
     refetchOnWindowFocus: false, // 탭 이동 시 재요청 방지
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    suspense, //서스펜스 추가
   });
 };
 
 //유튜브 영상 디테일 정보
-export const useYoutubeVideoDetails = (videoIds, enabled = true) => {
+export const useYoutubeVideoDetails = (
+  videoIds,
+  enabled = true,
+  suspense = false
+) => {
   return useQuery({
     queryKey: ["youtubeVideoDetails", videoIds],
     queryFn: fetchVideoDetails,
     enabled: !!videoIds && enabled,
     staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 10,
     retry: 1,
     refetchOnWindowFocus: false,
+    suspense,
   });
-};
-
-// 메인홈 슬라이드
-export const useHighlightVideos = (maxResults = 30) => {
-  return useQuery({
-    queryKey: ["highlightVideos", maxResults],
-    queryFn: () =>
-      fetchYoutubePlaylist({
-        queryKey: ["youtubePlaylist", HIGHLIGHT_PLAYLIST_ID, maxResults],
-      }),
-    staleTime: 1000 * 60 * 5,
-    onError: (err) => {
-      console.error("❗ useHighlightVideos 에러 발생", err);
-    },
-  });
-};
-
-//메인홈2
-export const getHighlightVideos = async (maxResults = 15) => {
-  try {
-    const videos = await fetchYoutubePlaylist({
-      queryKey: ["youtubePlaylist", HIGHLIGHT_PLAYLIST_ID, maxResults],
-    });
-    return videos;
-  } catch (err) {
-    console.error("❗ getHighlightVideos 에러 발생", err);
-    return [];
-  }
-};
-
-// 메인홈 최상단 하이라이트 -> 구단 컨텐츠 영상
-export const useMatchedGameVideos = () => {
-  const matchDay = getPreviousMatchDay();
-  const {
-    data: highlights,
-    isLoading: highlightsLoading,
-    isError,
-  } = useHighlightVideos(10);
-
-  const [matches, setMatches] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!highlights) return;
-
-    const fetchMatchedGames = async () => {
-      const matched = await matchHighlightToGames(
-        matchDay.date,
-        matchDay.matches,
-        highlights
-      );
-      setMatches(matched);
-      setIsLoading(false);
-    };
-
-    fetchMatchedGames();
-  }, [highlights, matchDay.date, matchDay.matches]);
-
-  return {
-    date: matchDay.date,
-    day: matchDay.day,
-    matches,
-    isLoading: highlightsLoading || isLoading,
-    isError,
-  };
 };
 
 export const usePlaylistCount = (playlistId, enabled = true) => {
@@ -145,23 +91,20 @@ export const usePlaylistCount = (playlistId, enabled = true) => {
     queryFn: async () => {
       if (!playlistId) return 0;
 
-      const res = await axios.get(
-        "https://www.googleapis.com/youtube/v3/playlistItems",
-        {
-          params: {
-            part: "id", // 최소한의 정보만 요청
-            playlistId,
-            maxResults: 1, // 속도 빠르게
-            key: API_KEY,
-          },
-        }
-      );
+      const res = await youtubeApi.get("/playlistItems", {
+        params: {
+          part: "id",
+          playlistId,
+          maxResults: 1,
+          // key는 인스턴스에서 자동추가
+        },
+      });
 
       return res.data.pageInfo?.totalResults || 0;
     },
     enabled: !!playlistId && enabled,
     staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 10,
     retry: 1,
     refetchOnWindowFocus: false,
   });

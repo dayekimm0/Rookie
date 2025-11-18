@@ -1,4 +1,5 @@
-const LogoSvg = () => {
+import { memo } from "react";
+const LogoSvg = memo(() => {
   return (
     <svg width="130" height="41" viewBox="0 0 130 41" fill="none">
       <path
@@ -23,6 +24,6 @@ const LogoSvg = () => {
       />
     </svg>
   );
-};
+});
 
 export default LogoSvg;
