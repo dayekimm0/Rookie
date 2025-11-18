@@ -1,3 +1,4 @@
+import { memo } from "react";
 import styled from "styled-components";
 
 const Box = styled.div`
@@ -148,7 +149,7 @@ const BoxTeams = styled.dd`
   }
 `;
 
-const ScheduleBox = ({ schedule }) => {
+const ScheduleBox = memo(({ schedule }) => {
   if (!schedule) return null;
   const { date, day, matches } = schedule;
   const dateObj = new Date(date);
@@ -181,6 +182,6 @@ const ScheduleBox = ({ schedule }) => {
       </BoxWrap>
     </Box>
   );
-};
+});
 
 export default ScheduleBox;

@@ -5,7 +5,7 @@ const TabNav = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  margin-bottom: 24px;
+  padding-bottom: 24px;
   flex-wrap: wrap;
 
   button {
@@ -26,6 +26,7 @@ const TabNav = styled.div`
   }
   @media screen and (max-width: 1024px) {
     gap: 10px;
+    padding-bottom: 18px;
     button {
       padding: 7px 16px;
       font-size: 1.3rem;
@@ -33,6 +34,7 @@ const TabNav = styled.div`
   }
   @media screen and (max-width: 500px) {
     gap: 8px;
+    padding-bottom: 14px;
     button {
       padding: 6px 14px;
       font-size: 1.2rem;
@@ -48,7 +50,7 @@ const SlideTabNav = ({
   onSelectTab,
 }) => {
   return (
-    <TabNav className="inner test">
+    <TabNav className="inner">
       <button
         className={isAllTab ? "active" : ""}
         onClick={() => onSelectTab("all", null)}

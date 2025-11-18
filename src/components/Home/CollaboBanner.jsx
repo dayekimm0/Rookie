@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import styled from "styled-components";
@@ -176,7 +176,7 @@ const Container = styled.div`
   }
 `;
 
-const CollaboBanner = () => {
+const CollaboBanner = memo(() => {
   const [swiper, setSwiper] = useState();
   const handlePrev = () => {
     swiper?.slidePrev();
@@ -224,6 +224,6 @@ const CollaboBanner = () => {
       </button>
     </Container>
   );
-};
+});
 
 export default CollaboBanner;

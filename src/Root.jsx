@@ -68,17 +68,6 @@ function Root() {
   const [scrollY, setScrollY] = useState(0);
   const location = useLocation();
 
-  useEffect(() => {
-    const onScroll = ({ scroll }) => setScrollY(scroll);
-    lenis.on("scroll", onScroll);
-    return () => lenis.off("scroll", onScroll);
-  }, []);
-
-  const foldState = useMemo(
-    () => getFoldState(scrollY, isFolded, isScrollLocked, isManuallyClosed),
-    [scrollY, isFolded, isScrollLocked, isManuallyClosed]
-  );
-
   const hideHeaderPath = ["/login", "/logon"];
   const isVisible = !hideHeaderPath.includes(location.pathname);
 
@@ -90,6 +79,11 @@ function Root() {
     return null;
   }
 
+  const foldState = useMemo(
+    () => getFoldState(scrollY, isFolded, isScrollLocked, isManuallyClosed),
+    [scrollY, isFolded, isScrollLocked, isManuallyClosed]
+  );
+
   //페이지 이동 시 헤더 헤더 펼치기
   useEffect(() => {
     unfold();
@@ -98,6 +92,12 @@ function Root() {
       enableTransition();
     }, 50);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const onScroll = ({ scroll }) => setScrollY(scroll);
+    lenis.on("scroll", onScroll);
+    return () => lenis.off("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const handleScroll = ({ scroll }) => {

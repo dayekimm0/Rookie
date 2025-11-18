@@ -87,7 +87,7 @@ export const fetchPlaylistVideos = async (
 
     return finalVideos;
   } catch (error) {
-    console.error("YouTube API 에러:", error);
+    console.error("YouTube API 에러:", playlistId, error);
     return [];
   }
 };

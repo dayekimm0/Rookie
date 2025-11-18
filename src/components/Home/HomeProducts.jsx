@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ProductCard from "../ProductCard";
+import { memo } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -27,7 +28,7 @@ const Container = styled.div`
   }
 `;
 
-const HomeProducts = ({ products }) => {
+const HomeProducts = memo(({ products }) => {
   return (
     <Container>
       {products.map((item) => (
@@ -35,6 +36,6 @@ const HomeProducts = ({ products }) => {
       ))}
     </Container>
   );
-};
+});
 
 export default HomeProducts;

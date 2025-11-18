@@ -5,7 +5,9 @@
   "main": "eslint.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -17,8 +19,9 @@
   "bugs": {
     "url": "https://github.com/dayekimm0/Rookie/issues"
   },
-  "homepage": "https://github.com/dayekimm0/Rookie#readme",
+  "homepage": "https://dayekimm0.github.io/Rookie",
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.4.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -33,6 +36,7 @@
     "react-data-table-component": "^7.7.0",
     "react-daum-postcode": "^3.2.0",
     "react-dom": "^19.1.0",
+    "react-error-boundary": "^6.0.0",
     "react-modal": "^3.16.3",
     "react-paginate": "^8.3.0",
     "react-player": "^2.16.0",

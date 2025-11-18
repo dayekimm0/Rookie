@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import styled from "styled-components";
 import { getTeamName, getEmblem, getTeamNameShortEng } from "../../util";
 
@@ -172,74 +172,70 @@ const Card = styled.div`
   }
 `;
 
-const MatchCard = ({ match, teamCode }) => {
+const MatchCard = memo(({ match, teamCode }) => {
   const matchDay = match;
 
-  const shortName = getTeamNameShortEng(teamCode);
+  const matchInfo = useMemo(() => {
+    const shortName = getTeamNameShortEng(teamCode);
+    //홈경기 찾기
+    const homeMatch = matchDay.matches.find(
+      (match) =>
+        match.awayTeam.name === shortName || match.homeTeam.name === shortName
+    );
 
-  const homeMatch = matchDay.matches.find(
-    (match) =>
-      match.awayTeam.name === shortName || match.homeTeam.name === shortName
-  );
+    const isHome = homeMatch.homeTeam.name === shortName;
+    const leftTeam = isHome ? homeMatch.homeTeam : homeMatch.awayTeam;
+    const rightTeam = isHome ? homeMatch.awayTeam : homeMatch.homeTeam;
 
-  const isHome = homeMatch.homeTeam.name === shortName;
-
-  const leftTeam = isHome ? homeMatch.homeTeam : homeMatch.awayTeam;
-  const rightTeam = isHome ? homeMatch.awayTeam : homeMatch.homeTeam;
-
-  const leftEmblem = useMemo(() => getEmblem(leftTeam.code), [leftTeam.code]);
-  const rightEmblem = useMemo(
-    () => getEmblem(rightTeam.code),
-    [rightTeam.code]
-  );
-  const leftName = useMemo(() => getTeamName(leftTeam.code), [leftTeam.code]);
-  const rightName = useMemo(
-    () => getTeamName(rightTeam.code),
-    [rightTeam.code]
-  );
-
-  const formattedDate = useMemo(() => {
+    //날짜 포맷
     const d = new Date(matchDay.date);
-    return d.toLocaleDateString("ko-KR", {
+    const formattedDate = d.toLocaleDateString("ko-KR", {
       month: "long",
       day: "numeric",
     });
-  }, [matchDay]);
-  const formattedDay = useMemo(() => {
-    const d = new Date(matchDay.date);
-    return d.toLocaleDateString("en-US", {
+    const formattedDay = d.toLocaleDateString("en-US", {
       weekday: "long",
     });
-  }, [matchDay]);
+
+    return {
+      leftEmblem: getEmblem(leftTeam.code),
+      rightEmblem: getEmblem(rightTeam.code),
+      leftName: getTeamName(leftTeam.code),
+      rightName: getTeamName(rightTeam.code),
+      formattedDate,
+      formattedDay,
+      homeMatch,
+    };
+  }, [matchDay, teamCode]);
 
   return (
     <CardWrap>
-      <h4 className="day">{formattedDay.toUpperCase()}</h4>
+      <h4 className="day">{matchInfo.formattedDay.toUpperCase()}</h4>
       <Card className="card">
         <ul>
           <li className="teams">
             <figure>
-              <img src={leftEmblem} alt="emblem" />
+              <img src={matchInfo.leftEmblem} alt="emblem" />
             </figure>
-            <p>{leftName}</p>
+            <p>{matchInfo.leftName}</p>
           </li>
           <li className="teams">
             <figure>
-              <img src={rightEmblem} alt="emblem" />
+              <img src={matchInfo.rightEmblem} alt="emblem" />
             </figure>
-            <p>{rightName}</p>
+            <p>{matchInfo.rightName}</p>
           </li>
         </ul>
         <div className="timetable">
           <p className="date">
-            {formattedDate} ({matchDay.day})
+            {matchInfo.formattedDate} ({matchDay.day})
           </p>
-          <p className="time">{homeMatch.time}</p>
-          <p className="ground">{homeMatch.stadium}</p>
+          <p className="time">{matchInfo.homeMatch.time}</p>
+          <p className="ground">{matchInfo.homeMatch.stadium}</p>
         </div>
       </Card>
     </CardWrap>
   );
-};
+});
 
 export default MatchCard;
